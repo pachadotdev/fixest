@@ -2014,3 +2014,4 @@ test(feols(y ~ sw(x1, x2), base, only.coef = TRUE), "err")
 
 
 
+
