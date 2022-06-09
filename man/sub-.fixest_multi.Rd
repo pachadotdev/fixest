@@ -2,9 +2,9 @@
 % Please edit documentation in R/fixest_multi.R
 \name{[.fixest_multi}
 \alias{[.fixest_multi}
-\title{Subsets a fixest_multi object}
+\title{Subset a fixest_multi object}
 \usage{
-\method{[}{fixest_multi}(x, i, sample, lhs, rhs, fixef, iv, I, reorder = TRUE, drop = FALSE)
+\method{[}{fixest_multi}(x, i, sample, lhs, rhs, fixef, iv, I, reorder = TRUE, drop = TRUE)
 }
 \arguments{
 \item{x}{A \code{fixest_multi} object, obtained from a \code{fixest} estimation leading to multiple results.}
@@ -19,19 +19,19 @@
 
 \item{fixef}{An integer vector or a logical scalar. It represents the fixed-effects identifiers for which the results should be extracted. Only valid when the \code{fixest} estimation contained fixed-effects in a stepwise fashion. You can use \code{.N} to refer to the last element. If logical, all elements are selected in both cases, but \code{FALSE} leads \code{fixef} to become the rightmost key (just try it out).}
 
-\item{iv}{An integer vector or a logical scalar. It represent the stages of the IV. Note that the length can be greater than 2 when there are multiple endogenous regressors (the first stage corresponding to multiple estimations). Note that the order of the stages depends on the \code{stage} argument from \code{\link{summary.fixest}}. If logical, all elements are selected in both cases, but \code{FALSE} leads \code{iv} to become the rightmost key (just try it out).}
+\item{iv}{An integer vector or a logical scalar. It represent the stages of the IV. Note that the length can be greater than 2 when there are multiple endogenous regressors (the first stage corresponding to multiple estimations). Note that the order of the stages depends on the \code{stage} argument from \code{\link[fixest]{summary.fixest}}. If logical, all elements are selected in both cases, but \code{FALSE} leads \code{iv} to become the rightmost key (just try it out).}
 
 \item{I}{An integer vector. Represents the root element to extract.}
 
 \item{reorder}{Logical, default is \code{TRUE}. Indicates whether reordering of the results should be performed depending on the user input.}
 
-\item{drop}{Logical, default is \code{FALSE}. If the result contains only one estimation, then if \code{drop = TRUE} it will be transformed into a \code{fixest} object (instead of \code{fixest_multi}).}
+\item{drop}{Logical, default is \code{TRUE}. If the result contains only one estimation, then if \code{drop = TRUE} it will be transformed into a \code{fixest} object (instead of \code{fixest_multi}).}
 }
 \value{
 It returns a \code{fixest_multi} object. If there is only one estimation left in the object, then the result is simplified into a \code{fixest} object.
 }
 \description{
-Subsets a fixest_multi object using different keys.
+Subset a fixest_multi object using different keys.
 }
 \details{
 The order with we we use the keys matter. Every time a key \code{sample}, \code{lhs}, \code{rhs}, \code{fixef} or \code{iv} is used, a reordering is performed to consider the leftmost-side key to be the new root.
@@ -62,5 +62,5 @@ etable(est_split[i = c(1, .N)])
 
 }
 \seealso{
-The main fixest estimation functions: \code{\link{feols}}, \code{\link[=feglm]{fepois}}, \code{\link[=femlm]{fenegbin}}, \code{\link{feglm}}, \code{\link{feNmlm}}. Tools for mutliple fixest estimations: \code{\link{summary.fixest_multi}}, \code{\link{print.fixest_multi}}, \code{\link{as.list.fixest_multi}}, \code{\link[fixest]{sub-sub-.fixest_multi}}, \code{\link[fixest]{sub-.fixest_multi}}.
+The main fixest estimation functions: \code{\link[fixest]{feols}}, \code{\link[fixest:feglm]{fepois}}, \code{\link[fixest:femlm]{fenegbin}}, \code{\link[fixest]{feglm}}, \code{\link[fixest]{feNmlm}}. Tools for mutliple fixest estimations: \code{\link[fixest]{summary.fixest_multi}}, \code{\link[fixest]{print.fixest_multi}}, \code{\link[fixest]{as.list.fixest_multi}}, \code{\link[fixest]{sub-sub-.fixest_multi}}, \code{\link[fixest]{sub-.fixest_multi}}, \code{\link[fixest]{cash-.fixest_multi}}.
 }

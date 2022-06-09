@@ -1,4 +1,4 @@
-#include <Rcpp.h>
+#include <cpp11.hpp>
 #include <math.h>
 #include <vector>
 #include <stdint.h>
@@ -8,13 +8,10 @@
 #define omp_get_thread_num() 0
 #endif
 
-// [[Rcpp::plugins(openmp)]]
+using namespace cpp11;
 
-using namespace Rcpp;
-
-
-// [[Rcpp::export]]
-NumericMatrix cpp_newey_west(NumericMatrix S, NumericVector w, int nthreads){
+[[cpp11::register]]
+doubles_matrix cpp_newey_west(doubles_matrix S, doubles w, int nthreads){
     // Basic NeweyWest for time series
     // note that the data MUST be sorted by period beforehand
     // S: scores
@@ -40,11 +37,11 @@ NumericMatrix cpp_newey_west(NumericMatrix S, NumericVector w, int nthreads){
         }
     }
 
-    NumericMatrix meat(K, K);
+    doubles_matrix meat(K, K);
 
     if(par_on_col){
 
-        NumericMatrix mat_prod(K, K);
+        doubles_matrix mat_prod(K, K);
 
         for(int l=0 ; l<L ; ++l){
 
@@ -68,7 +65,7 @@ NumericMatrix cpp_newey_west(NumericMatrix S, NumericVector w, int nthreads){
 
         // we avoid race conditions that way
 
-        // I still don't know how to conveniently do the same with Rcpp::NumericMatrix...
+        // I still don't know how to conveniently do the same with Rcpp::doubles_matrix...
         int K_sq = K * K;
         std::vector<double> mat_all_stacked(K_sq * step_size);
         std::vector<double*> p_mat_prods(step_size);
@@ -123,7 +120,7 @@ NumericMatrix cpp_newey_west(NumericMatrix S, NumericVector w, int nthreads){
 
     // Finishing
     // we add the transpose
-    NumericMatrix res = clone(meat);
+    doubles_matrix res = clone(meat);
 #pragma omp parallel for num_threads(nthreads)
     for(int k1=0 ; k1<K ; ++k1){
         for(int k2=0 ; k2<K ; ++k2){
@@ -134,9 +131,9 @@ NumericMatrix cpp_newey_west(NumericMatrix S, NumericVector w, int nthreads){
     return res;
 }
 
-// [[Rcpp::export]]
-NumericMatrix cpp_newey_west_panel(NumericMatrix S, NumericVector w, IntegerVector unit,
-                                        int G, IntegerVector time, int T, int nthreads){
+[[cpp11::register]]
+doubles_matrix cpp_newey_west_panel(doubles_matrix S, doubles w, integers unit,
+                                        int G, integers time, int T, int nthreads){
     // Newey West,  but for panels
     // S: scores
     // w: weights
@@ -152,16 +149,16 @@ NumericMatrix cpp_newey_west_panel(NumericMatrix S, NumericVector w, IntegerVect
     if(w[L - 1] == 0) L -= 1;
     if(L > T - 1) L = T - 1;
 
-    NumericMatrix meat(K, K);
+    doubles_matrix meat(K, K);
 
     // utilities
-    NumericVector time_table(T);
+    doubles time_table(T);
     for(int i=0 ; i<N ; ++i){
         ++time_table[time[i] - 1];
     }
 
-    NumericVector time_start(T);
-    NumericVector time_end(T);
+    doubles time_start(T);
+    doubles time_end(T);
     time_end[0] = time_table[0];
     for(int t=1 ; t<T ; ++t){
         time_start[t] = time_start[t - 1] + time_table[t - 1];
@@ -299,7 +296,7 @@ NumericMatrix cpp_newey_west_panel(NumericMatrix S, NumericVector w, IntegerVect
 
     // Finishing
     // we add the transpose
-    NumericMatrix res = clone(meat);
+    doubles_matrix res = clone(meat);
 #pragma omp parallel for num_threads(nthreads)
     for(int k1=0 ; k1<K ; ++k1){
         for(int k2=0 ; k2<K ; ++k2){
@@ -312,9 +309,9 @@ NumericMatrix cpp_newey_west_panel(NumericMatrix S, NumericVector w, IntegerVect
 }
 
 
-// [[Rcpp::export]]
-NumericMatrix cpp_driscoll_kraay(NumericMatrix S, NumericVector w,
-                                      IntegerVector time, int T, int nthreads){
+[[cpp11::register]]
+doubles_matrix cpp_driscoll_kraay(doubles_matrix S, doubles w,
+                                      integers time, int T, int nthreads){
     // Driscoll and Kraay
     // S: scores
     // w: weights
@@ -329,10 +326,10 @@ NumericMatrix cpp_driscoll_kraay(NumericMatrix S, NumericVector w,
     if(w[L - 1] == 0) L -= 1;
     if(L > T - 1) L = T - 1;
 
-    NumericMatrix meat(K, K);
+    doubles_matrix meat(K, K);
 
     // Scores
-    NumericMatrix time_scores(T, K);
+    doubles_matrix time_scores(T, K);
 
     // we sum the scores by period
 #pragma omp parallel for num_threads(nthreads)
@@ -373,7 +370,7 @@ NumericMatrix cpp_driscoll_kraay(NumericMatrix S, NumericVector w,
 
     // Finishing
     // we add the transpose
-    NumericMatrix res = clone(meat);
+    doubles_matrix res = clone(meat);
 #pragma omp parallel for num_threads(nthreads)
     for(int k1=0 ; k1<K ; ++k1){
         for(int k2=0 ; k2<K ; ++k2){
@@ -406,7 +403,7 @@ public:
 
     mat_row_scheme() = delete;
     mat_row_scheme(mat_row_scheme&);
-    mat_row_scheme(Rcpp::NumericMatrix&);
+    mat_row_scheme(Rcpp::doubles_matrix&);
     mat_row_scheme(int, int);
 
     double& operator()(int64_t i, int64_t k){
@@ -438,7 +435,7 @@ public:
 
 };
 
-mat_row_scheme::mat_row_scheme(Rcpp::NumericMatrix &x){
+mat_row_scheme::mat_row_scheme(Rcpp::doubles_matrix &x){
 
     this->N = x.nrow();
     this->K = x.ncol();
@@ -517,8 +514,8 @@ inline double fabs_lat(double x, double y){
 }
 
 
-// [[Rcpp::export]]
-NumericMatrix cpp_vcov_conley(NumericMatrix S, NumericVector lon_rad, NumericVector lat_rad,
+[[cpp11::register]]
+doubles_matrix cpp_vcov_conley(doubles_matrix S, doubles lon_rad, doubles lat_rad,
                                    const int distance, const double cutoff, int nthreads){
     // S: scores
     // lon_rad/lat_rad: longitude/latitude
@@ -557,7 +554,7 @@ NumericMatrix cpp_vcov_conley(NumericMatrix S, NumericVector lon_rad, NumericVec
     //
 
     if(distance <= 0 || distance > 2){
-        Rcpp::stop("'distance' is not valid (internal error).");
+        stop("'distance' is not valid (internal error).");
     }
 
     int K = S.ncol();
@@ -566,7 +563,7 @@ NumericMatrix cpp_vcov_conley(NumericMatrix S, NumericVector lon_rad, NumericVec
     mat_row_scheme scores(S);
 
     // utilities
-    NumericVector cos_lat(N);
+    doubles cos_lat(N);
     for(int i=0 ; i<N ; ++i){
         cos_lat[i] = cos(lat_rad[i]);
     }
@@ -646,7 +643,7 @@ NumericMatrix cpp_vcov_conley(NumericMatrix S, NumericVector lon_rad, NumericVec
 
     // Rcout << "total done: " << ++n_done << "\n";
 
-    NumericMatrix res(K, K);
+    doubles_matrix res(K, K);
 
     for(int i=0 ; i<N ; ++i){
         for(int k1=0 ; k1<K ; ++k1){
@@ -673,100 +670,3 @@ NumericMatrix cpp_vcov_conley(NumericMatrix S, NumericVector lon_rad, NumericVec
 
     return res;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

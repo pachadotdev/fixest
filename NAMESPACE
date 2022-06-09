@@ -21,6 +21,8 @@ export(check_conv_feols)
 export(did_means)
 # graph
 export(coefplot, iplot)
+# small funs
+export(coeftable, se, tstat, pvalue)
 # dof
 export(dof, ssc, degrees_freedom)
 # Lag related
@@ -29,34 +31,15 @@ export(panel, unpanel, f, l, d, lag_fml)
 export(i, bin, ref)
 # macro
 export(xpd)
-# multiple estimations
-export(models)
 # utilities
 export(to_integer, demean, obs)
-export(as.dict)
 # setters & getters
 exportPattern("^(s|g)etFixest")
-
-# coeftable and co
-export(coeftable, se, pvalue, tstat)
-S3method(coeftable, default)
-S3method(coeftable, fixest)
-S3method(coeftable, fixest_multi)
-S3method(se, default)
-S3method(se, matrix)
-S3method(se, fixest)
-S3method(se, fixest_multi)
-S3method(pvalue, default)
-S3method(pvalue, fixest)
-S3method(pvalue, fixest_multi)
-S3method(tstat, default)
-S3method(tstat, fixest)
-S3method(tstat, fixest_multi)
 
 # VCOV funs
 export(vcov_cluster, vcov_DK, vcov_NW, vcov_conley)
 
-# Data manipulation
+# other stuff
 export(n_unik, osize, sample_df)
 
 # dsb
@@ -82,6 +65,7 @@ S3method("[", fixest_panel) # Lag related
 # fixest_multi
 S3method("[", fixest_multi)
 S3method("[[", fixest_multi)
+S3method("$", fixest_multi)
 S3method(print, fixest_multi)
 S3method(summary, fixest_multi)
 S3method(as.list, fixest_multi)
@@ -147,8 +131,7 @@ export(estfun, bread)
 
 importFrom(stats, cor, dnorm, lm, nlminb, optim,
 			  pnorm, qnorm, as.formula, var, sd, formula,
-			  na.omit, model.frame, "na.pass", poisson, pt, hatvalues,
-			  quasibinomial)
+			  na.omit, model.frame, "na.pass", poisson, pt, hatvalues)
 
 # stats methods
 importFrom(stats, model.matrix, sigma, deviance, weights, terms,

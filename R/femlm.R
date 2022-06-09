@@ -1,3 +1,5 @@
+# load("data/trade.RData") ; load("data/base_did.RData")
+# roxygen2::roxygenise(roclets = "rd")
 
 femlm_only_clusters <- function(env){
 	# Estimation with only the cluster coefficients
@@ -701,9 +703,7 @@ get_model_null <- function(env, theta.init){
 
 		# I set up a limit of 0.05, because when it is too close to 0, convergence isnt great
 
-		opt <- nlminb(start=theta.guess, objective=famFuns$ll0_theta, y=y,
-		              gradient=famFuns$grad0_theta, lower=1e-3, mean_y=mean_y,
-		              invariant=invariant, hessian = famFuns$hess0_theta, env=env)
+		opt <- nlminb(start=theta.guess, objective=famFuns$ll0_theta, y=y, gradient=famFuns$grad0_theta, lower=1e-3, mean_y=mean_y, invariant=invariant, hessian = famFuns$hess0_theta, env=env)
 
 		loglik = -opt$objective
 		theta = opt$par

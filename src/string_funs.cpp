@@ -1,10 +1,9 @@
-#include <Rcpp.h>
+#include <cpp11.hpp>
 #include <string>
 #include <cstring>
 #include <vector>
-using namespace Rcpp;
 
-
+using namespace cpp11;
 
 std::string colon_to_star_single(const char * str){
   // we change a:b into a*b
@@ -55,12 +54,12 @@ std::string colon_to_star_single(const char * str){
 }
 
 
-// [[Rcpp::export]]
-StringVector cpp_colon_to_star(SEXP Rstr){
+[[cpp11::register]]
+strings cpp_colon_to_star(SEXP Rstr){
 
   int n = LENGTH(Rstr);
 
-  StringVector res(n);
+  strings res(n);
   for(int i = 0; i < n; ++i){
     const char *str = CHAR(STRING_ELT(Rstr, i));
     res[i] = colon_to_star_single(str);
@@ -68,7 +67,3 @@ StringVector cpp_colon_to_star(SEXP Rstr){
 
   return res;
 }
-
-
-
-

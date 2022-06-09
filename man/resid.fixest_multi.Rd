@@ -22,17 +22,17 @@
 \arguments{
 \item{object}{A \code{fixes_multi} object.}
 
-\item{type}{A character scalar, either \code{"response"} (default), \code{"deviance"}, \code{"pearson"}, or \code{"working"}. Note that the \code{"working"} corresponds to the residuals from the weighted least square and only applies to \code{\link{feglm}} models.}
+\item{type}{A character scalar, either \code{"response"} (default), \code{"deviance"}, \code{"pearson"}, or \code{"working"}. Note that the \code{"working"} corresponds to the residuals from the weighted least square and only applies to \code{\link[fixest]{feglm}} models.}
 
 \item{na.rm}{Logical, default is \code{FALSE}. Should the NAs be kept? If \code{TRUE}, they are removed.}
 
 \item{...}{Not currently used.}
 }
 \value{
-If all the models return residuals of the same length, a matrix is returned. Otherwise, a \code{list} is returned.
+If all the models return residuals of the same length, a matrix is returned. Otherwise, a \code{data.frame} is returned.
 }
 \description{
-Utility to extract the residuals from multiple \code{fixest} estimations. If possible, all the residuals are coerced into a matrix.
+Utility to extract the residuals from multiple \code{fixest} estimations. If possible, all the residuals are coerced into
 }
 \examples{
 

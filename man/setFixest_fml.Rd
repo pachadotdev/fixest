@@ -18,7 +18,7 @@ getFixest_fml()
 The function \code{getFixest_fml()} returns a list of character strings, the names corresponding to the macro variable names, the character strings corresponding to their definition.
 }
 \description{
-You can set formula macros globally with \code{setFixest_fml}. These macros can then be used in \code{fixest} estimations or when using the function \code{\link[=setFixest_fml]{xpd}}.
+You can set formula macros globally with \code{setFixest_fml}. These macros can then be used in \code{fixest} estimations or when using the function \code{\link[fixest:setFixest_fml]{xpd}}.
 }
 \details{
 In \code{xpd}, the default macro variables are taken from \code{getFixest_fml}. Any value in the \code{...} argument of \code{xpd} will replace these default values.
@@ -52,19 +52,6 @@ lm(xpd(y ~ x.[2:3] + .[z]), base)
 
 # No xpd() needed in feols
 feols(y ~ x.[2:3] + .[z], base)
-
-#
-# Auto completion with '..' suffix
-#
-
-# You can trigger variables autocompletion with the '..' suffix
-# You need to provide the argument data
-base = setNames(iris, c("y", "x1", "x2", "x3", "species"))
-xpd(y ~ x.., data = base)
-
-# In fixest estimations, this is automatically taken care of
-feols(y ~ x.., data = base)
-
 
 #
 # You can use xpd for stepwise estimations
@@ -132,34 +119,15 @@ xpd(y ~ 1, rhs = vars)
 # To create a two sided formula
 xpd(lhs = "y", rhs = vars)
 
-#
-# argument 'add'
-#
-
-xpd(~x1, add = ~ x2 + x3)
-
-# also works with character vectors
-xpd(~x1, add = c("x2", "x3"))
-
-# only adds to the RHS
-xpd(y ~ x, add = ~bon + jour)
 
 #
 # Dot square bracket operator
 #
 
-# The basic use id to add variables in the formula
-x = c("x1", "x2")
-xpd(y ~ .[x])
-
-# Alternatively, one-sided formulas can be used and their content will be inserted verbatim
-x = ~x1 + x2
-xpd(y ~ .[x])
-
 # You can create multiple variables at once
 xpd(y ~ x.[1:5] + z.[2:3])
 
-# You can summon variables from the environment to complete variables names
+# You can summon variables from the environment
 var = "a"
 xpd(y ~ x.[var])
 
@@ -212,20 +180,7 @@ etable(res_compact)
 #       sw(poly(Temp, 1), poly(Temp, 2), poly(Temp, 3))
 
 
-#
-# In non-fixest functions: guessing the data allows to use regex
-#
-
-# When used in non-fixest functions, the algorithm tries to "guess" the data
-# so that ..("regex") can be directly evaluated without passing the argument 'data'
-data(longley)
-lm(xpd(Armed.Forces ~ Population + ..("GNP|ployed")), longley)
-
-# same for the auto completion with '..'
-lm(xpd(Armed.Forces ~ Population + GN..), longley)
-
-
 }
 \seealso{
-\code{\link{xpd}} to make use of formula macros.
+\code{\link[fixest]{xpd}} to make use of formula macros.
 }

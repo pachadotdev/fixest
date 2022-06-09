@@ -14,8 +14,7 @@
 .datatable.aware = TRUE
 
 
-panel_setup = function(data, panel.id, time.step = NULL, duplicate.method = "none",
-                       DATA_MISSING = FALSE, from_fixest = FALSE){
+panel_setup = function(data, panel.id, time.step = NULL, duplicate.method = "none", DATA_MISSING = FALSE, from_fixest = FALSE){
     # Function to setup the panel.
     # Used in lag.formula, panel, and fixest_env (with argument panel.id and panel.args)
     # DATA_MISSING: arg used in lag.formula
@@ -159,7 +158,7 @@ panel_setup = function(data, panel.id, time.step = NULL, duplicate.method = "non
 
         } else {
             all_steps = unique(diff(time_unik))
-            my_step = cpp_pgcd(all_steps)
+            my_step = cpp_pgcd(unique(all_steps))
 
             # we rescale time_unik
             time_unik_new = (time_unik - min(time_unik)) / my_step
@@ -224,31 +223,31 @@ panel_setup = function(data, panel.id, time.step = NULL, duplicate.method = "non
 }
 
 
-#' @describeIn l Forwards a variable (inverse of lagging) in a `fixest` estimation
+#' @describeIn l Forwards a variable (inverse of lagging) in a \code{fixest} estimation
 f = function(x, lead = 1, fill = NA){
     l(x, -lead, fill)
 }
 
-#' @describeIn l Creates differences (i.e. x - lag(x)) in a `fixest` estimation
+#' @describeIn l Creates differences (i.e. x - lag(x)) in a \code{fixest} estimation
 d = function(x, lag = 1, fill = NA){
     x - l(x, lag, fill)
 }
 
 
-#' Lags a variable in a `fixest` estimation
+#' Lags a variable in a \code{fixest} estimation
 #'
-#' Produce lags or leads in the formulas of `fixest` estimations or when creating variables in a [`data.table::data.table`]. The data must be set as a panel beforehand (either with the function [`panel`] or with the argument `panel.id` in the estimation).
+#' Produce lags or leads in the formulas of \code{fixest} estimations or when creating variables in a \code{\link[data.table]{data.table}}. The data must be set as a panel beforehand (either with the function \code{\link[fixest]{panel}} or with the argument \code{panel.id} in the estimation).
 #'
 #' @param x The variable.
-#' @param lag A vector of integers giving the number of lags. Negative values lead to leads. This argument can be a vector when using it in fixest estimations. When creating variables in a [`data.table::data.table`], it **must** be of length one.
-#' @param lead A vector of integers giving the number of leads. Negative values lead to lags. This argument can be a vector when using it in fixest estimations. When creating variables in a [`data.table::data.table`], it **must** be of length one.
-#' @param fill A scalar, default is `NA`. How to fill the missing values due to the lag/lead? Note that in a `fixest` estimation, 'fill' must be numeric (not required when creating new variables).
+#' @param lag A vector of integers giving the number of lags. Negative values lead to leads. This argument can be a vector when using it in fixest estimations. When creating variables in a \code{\link[data.table]{data.table}}, it **must** be of length one.
+#' @param lead A vector of integers giving the number of leads. Negative values lead to lags. This argument can be a vector when using it in fixest estimations. When creating variables in a \code{\link[data.table]{data.table}}, it **must** be of length one.
+#' @param fill A scalar, default is \code{NA}. How to fill the missing values due to the lag/lead? Note that in a \code{fixest} estimation, 'fill' must be numeric (not required when creating new variables).
 #'
 #' @return
-#' These functions can only be used i) in a formula of a `fixest` estimation, or ii) when creating variables within a `fixest_panel` object (obtained with function [`panel`]) which is alaos a [`data.table::data.table`].
+#' These functions can only be used i) in a formula of a \code{fixest} estimation, or ii) when creating variables within a \code{fixest_panel} object (obtained with function \code{\link[fixest]{panel}}) which is alaos a \code{\link[data.table]{data.table}}.
 #'
 #' @seealso
-#' The function [`panel`] changes `data.frames` into a panel from which the functions `l` and `f` can be called. Otherwise you can set the panel 'live' during the estimation using the argument `panel.id` (see for example in the function [`feols`]).
+#' The function \code{\link[fixest]{panel}} changes \code{data.frames} into a panel from which the functions \code{l} and \code{f} can be called. Otherwise you can set the panel 'live' during the estimation using the argument \code{panel.id} (see for example in the function \code{\link[fixest]{feols}}).
 #'
 #' @examples
 #'
@@ -493,10 +492,10 @@ d__expand = function(x, k = 1, fill){
 #' @inheritParams panel
 #'
 #'
-#' @param x A formula of the type `var ~ id + time` where `var` is the variable to be lagged, `id` is a variable representing the panel id, and `time` is the time variable of the panel.
+#' @param x A formula of the type \code{var ~ id + time} where \code{var} is the variable to be lagged, \code{id} is a variable representing the panel id, and \code{time} is the time variable of the panel.
 #' @param k An integer giving the number of lags. Default is 1. For leads, just use a negative number.
 #' @param data Optional, the data.frame in which to evaluate the formula. If not provided, variables will be fetched in the current environment.
-#' @param fill Scalar. How to fill the observations without defined lead/lag values. Default is `NA`.
+#' @param fill Scalar. How to fill the observations without defined lead/lag values. Default is \code{NA}.
 #' @param ... Not currently used.
 #'
 #' @return
@@ -506,7 +505,7 @@ d__expand = function(x, k = 1, fill){
 #' Laurent Berge
 #'
 #' @seealso
-#' Alternatively, the function [`panel`] changes a `data.frame` into a panel from which the functions `l` and `f` (creating leads and lags) can be called. Otherwise you can set the panel 'live' during the estimation using the argument `panel.id` (see for example in the function [`feols`]).
+#' Alternatively, the function \code{\link[fixest]{panel}} changes a \code{data.frame} into a panel from which the functions \code{l} and \code{f} (creating leads and lags) can be called. Otherwise you can set the panel 'live' during the estimation using the argument \code{panel.id} (see for example in the function \code{\link[fixest]{feols}}).
 #'
 #' @examples
 #' # simple example with an unbalanced panel
@@ -568,8 +567,7 @@ d__expand = function(x, k = 1, fill){
 #'
 #'
 #'
-lag.formula = function(x, k = 1, data, time.step = NULL, fill = NA,
-                       duplicate.method = c("none", "first"), ...){
+lag.formula = function(x, k = 1, data, time.step = NULL, fill = NA, duplicate.method = c("none", "first"), ...){
     # Arguments:
     # time.step: default: "consecutive", other option: "unitary" (where you find the most common step and use it -- if the data is numeric), other option: a number, of course the time must be numeric
 
@@ -606,8 +604,7 @@ lag.formula = function(x, k = 1, data, time.step = NULL, fill = NA,
     vars = all.vars(x)
     qui_pblm = setdiff(vars, existing_vars)
     if(length(qui_pblm) > 0){
-        stop("In the formula the variable", enumerate_items(qui_pblm, "s.is.quote"),
-             " not in the ", ifelse(DATA_MISSING, "environment. Add argument data?", "data."))
+        stop("In the formula the variable", enumerate_items(qui_pblm, "s.is.quote"), " not in the ", ifelse(DATA_MISSING, "environment. Add argument data?", "data."))
     }
 
 
@@ -632,8 +629,7 @@ lag.formula = function(x, k = 1, data, time.step = NULL, fill = NA,
         # I could go further in checking but it's enough
     }
 
-    meta_info = panel_setup(data, panel.id = x, time.step = time.step,
-                            duplicate.method = duplicate.method, DATA_MISSING = DATA_MISSING)
+    meta_info = panel_setup(data, panel.id = x, time.step = time.step, duplicate.method = duplicate.method, DATA_MISSING = DATA_MISSING)
 
     # we get the observation id!
     obs_lagged = cpp_lag_obs(id = meta_info$id_sorted, time = meta_info$time_sorted, nlag = k)
@@ -662,26 +658,26 @@ lag.formula = function(x, k = 1, data, time.step = NULL, fill = NA,
     res
 }
 
-#' @describeIn lag.formula Lags a variable using a formula syntax
+#' @rdname lag.formula
 lag_fml = lag.formula
 
 
 
-#' Constructs a `fixest` panel data base
+#' Constructs a \code{fixest} panel data base
 #'
-#' Constructs a `fixest` panel data base out of a data.frame which allows to use leads and lags in `fixest` estimations and to create new variables from leads and lags if the data.frame was also a [`data.table::data.table`].
+#' Constructs a \code{fixest} panel data base out of a data.frame which allows to use leads and lags in \code{fixest} estimations and to create new variables from leads and lags if the data.frame was also a \code{\link[data.table]{data.table}}.
 #'
 #' @param data A data.frame.
-#' @param panel.id The panel identifiers. Can either be: i) a one sided formula (e.g. `panel.id = ~id+time`), ii) a character vector of length 2 (e.g. `panel.id=c('id', 'time')`, or iii) a character scalar of two variables separated by a comma (e.g. `panel.id='id,time'`). Note that you can combine variables with `^` only inside formulas (see the dedicated section in [`feols`]).
-#' @param time.step The method to compute the lags, default is `NULL` (which means automatically set). Can be equal to: `"unitary"`, `"consecutive"`, `"within.consecutive"`, or to a number. If `"unitary"`, then the largest common divisor between consecutive time periods is used (typically if the time variable represents years, it will be 1). This method can apply only to integer (or convertible to integer) variables. If `"consecutive"`, then the time variable can be of any type: two successive time periods represent a lag of 1. If `"witihn.consecutive"` then **within a given id**, two successive time periods represent a lag of 1. Finally, if the time variable is numeric, you can provide your own numeric time step.
-#' @param duplicate.method If several observations have the same id and time values, then the notion of lag is not defined for them. If `duplicate.method = "none"` (default) and duplicate values are found, this leads to an error. You can use `duplicate.method = "first"` so that the first occurrence of identical id/time observations will be used as lag.
+#' @param panel.id The panel identifiers. Can either be: i) a one sided formula (e.g. \code{panel.id = ~id+time}), ii) a character vector of length 2 (e.g. \code{panel.id=c('id', 'time')}, or iii) a character scalar of two variables separated by a comma (e.g. \code{panel.id='id,time'}). Note that you can combine variables with \code{^} only inside formulas (see the dedicated section in \code{\link[fixest]{feols}}).
+#' @param time.step The method to compute the lags, default is \code{NULL} (which means automatically set). Can be equal to: \code{"unitary"}, \code{"consecutive"}, \code{"within.consecutive"}, or to a number. If \code{"unitary"}, then the largest common divisor between consecutive time periods is used (typically if the time variable represents years, it will be 1). This method can apply only to integer (or convertible to integer) variables. If \code{"consecutive"}, then the time variable can be of any type: two successive time periods represent a lag of 1. If \code{"witihn.consecutive"} then **within a given id**, two successive time periods represent a lag of 1. Finally, if the time variable is numeric, you can provide your own numeric time step.
+#' @param duplicate.method If several observations have the same id and time values, then the notion of lag is not defined for them. If \code{duplicate.method = "none"} (default) and duplicate values are found, this leads to an error. You can use \code{duplicate.method = "first"} so that the first occurrence of identical id/time observations will be used as lag.
 #'
 #' @details
-#' This function allows you to use leads and lags in a `fixest` estimation without having to provide the argument `panel.id`. It also offers more options on how to set the panel (with the additional arguments 'time.step' and 'duplicate.method').
+#' This function allows you to use leads and lags in a \code{fixest} estimation without having to provide the argument \code{panel.id}. It also offers more options on how to set the panel (with the additional arguments 'time.step' and 'duplicate.method').
 #'
-#' When the initial data set was also a `data.table`, not all operations are supported and some may dissolve the `fixest_panel`. This is the case when creating subselections of the initial data with additional attributes (e.g. `pdt[x>0, .(x, y, z)]` would dissolve the `fixest_panel`, meaning only a data.table would be the result of the call).
+#' When the initial data set was also a \code{data.table}, not all operations are supported and some may dissolve the \code{fixest_panel}. This is the case when creating subselections of the initial data with additional attributes (e.g. pdt[x>0, .(x, y, z)] would dissolve the \code{fixest_panel}, meaning only a data.table would be the result of the call).
 #'
-#' If the initial data set was also a `data.table`, then you can create new variables from lags and leads using the functions [`l`]() and [`f`][fixest::l](). See the example.
+#' If the initial data set was also a \code{data.table}, then you can create new variables from lags and leads using the functions \code{\link[fixest]{l}}() and \code{\link[fixest:l]{f}}(). See the example.
 #'
 #'
 #' @return
@@ -691,9 +687,9 @@ lag_fml = lag.formula
 #' Laurent Berge
 #'
 #' @seealso
-#' The estimation methods [`feols`], [`fepois`][fixest::feglm] and [`feglm`].
+#' The estimation methods \code{\link[fixest]{feols}}, \code{\link[fixest:feglm]{fepois}} and \code{\link[fixest]{feglm}}.
 #'
-#' The functions [`l`] and [`f`][fixest::l] to create lags and leads within `fixest_panel` objects.
+#' The functions \code{\link[fixest]{l}} and \code{\link[fixest:l]{f}} to create lags and leads within \code{}fixest_panel objects.
 #'
 #' @examples
 #'
@@ -740,8 +736,7 @@ panel = function(data, panel.id, time.step = NULL, duplicate.method = c("none", 
 
     mc = match.call()
 
-    meta_info = panel_setup(data, panel.id = panel.id, time.step = time.step,
-                            duplicate.method = duplicate.method)
+    meta_info = panel_setup(data, panel.id = panel.id, time.step = time.step, duplicate.method = duplicate.method)
     meta_info$call = mc
 
     # R makes a shallow copy of data => need to do it differently with DT
@@ -760,11 +755,11 @@ panel = function(data, panel.id, time.step = NULL, duplicate.method = c("none", 
 }
 
 
-#' Dissolves a `fixest` panel
+#' Dissolves a \code{fixest} panel
 #'
-#' Transforms a `fixest_panel` object into a regular data.frame.
+#' Transforms a \code{fixest_panel} object into a regular data.frame.
 #'
-#' @param x A `fixest_panel` object (obtained from function [`panel`]).
+#' @param x A \code{fixest_panel} object (obtained from function \code{\link[fixest]{panel}}).
 #'
 #' @return
 #' Returns a data set of the exact same dimension. Only the attribute 'panel_info' is erased.
@@ -773,7 +768,7 @@ panel = function(data, panel.id, time.step = NULL, duplicate.method = c("none", 
 #' Laurent Berge
 #'
 #' @seealso
-#' Alternatively, the function [`panel`] changes a `data.frame` into a panel from which the functions `l` and `f` (creating leads and lags) can be called. Otherwise you can set the panel 'live' during the estimation using the argument `panel.id` (see for example in the function [`feols`]).
+#' Alternatively, the function \code{\link[fixest]{panel}} changes a \code{data.frame} into a panel from which the functions \code{l} and \code{f} (creating leads and lags) can be called. Otherwise you can set the panel 'live' during the estimation using the argument \code{panel.id} (see for example in the function \code{\link[fixest]{feols}}).
 #'
 #' @examples
 #'
@@ -808,26 +803,26 @@ unpanel = function(x){
 }
 
 
-#' Method to subselect from a `fixest_panel`
+#' Method to subselect from a \code{fixest_panel}
 #'
-#' Subselection from a `fixest_panel` which has been created with the function [`panel`]. Also allows to create lag/lead variables with functions [`l`]()/[`f`][fixest::l]() if the `fixest_panel` is also a [`data.table::data.table`].
+#' Subselection from a \code{fixest_panel} which has been created with the function \code{\link[fixest]{panel}}. Also allows to create lag/lead variables with functions \code{\link[fixest]{l}}()/\code{\link[fixest:l]{f}}() if the \code{fixest_panel} is also a \code{\link[data.table]{data.table}}.
 #'
-#' @param x A `fixest_panel` object, created with the function [`panel`].
-#' @param i Row subselection. Allows [`data.table::data.table`] style selection (provided the data is also a data.table).
-#' @param j Variable selection. Allows [`data.table::data.table`] style selection/variable creation (provided the data is also a data.table).
-#' @param ... Other arguments to be passed to `[.data.frame` or [`data.table::data.table`] (or whatever the class of the initial data).
+#' @param x A \code{fixest_panel} object, created with the function \code{\link[fixest]{panel}}.
+#' @param i Row subselection. Allows \code{\link[data.table]{data.table}} style selection (provided the data is also a data.table).
+#' @param j Variable selection. Allows \code{\link[data.table]{data.table}} style selection/variable creation (provided the data is also a data.table).
+#' @param ... Other arguments to be passed to \code{[.data.frame} or \code{\link[data.table]{data.table}} (or whatever the class of the initial data).
 #'
 #' @details
-#' If the original data was also a data.table, some calls to `[.fixest_panel` may dissolve the `fixest_panel` object and return a regular data.table. This is the case for subselections with additional arguments. If so, a note is displayed on the console.
+#' If the original data was also a data.table, some calls to \code{[.fixest_panel} may dissolve the \code{fixest_panel} object and return a regular data.table. This is the case for subselections with additional arguments. If so, a note is displayed on the console.
 #'
 #' @return
-#' It returns a `fixest_panel` data base, with the attributes allowing to create lags/leads properly bookkeeped.
+#' It returns a \code{fixest_panel} data base, with the attributes allowing to create lags/leads properly bookkeeped.
 #'
 #' @author
 #' Laurent Berge
 #'
 #' @seealso
-#' Alternatively, the function [`panel`] changes a `data.frame` into a panel from which the functions `l` and `f` (creating leads and lags) can be called. Otherwise you can set the panel 'live' during the estimation using the argument `panel.id` (see for example in the function [`feols`]).
+#' Alternatively, the function \code{\link[fixest]{panel}} changes a \code{data.frame} into a panel from which the functions \code{l} and \code{f} (creating leads and lags) can be called. Otherwise you can set the panel 'live' during the estimation using the argument \code{panel.id} (see for example in the function \code{\link[fixest]{feols}}).
 #'
 #' @examples
 #'
@@ -959,10 +954,7 @@ unpanel = function(x){
         order_it = order(id, time)
         order_inv = order(order_it)
 
-        new_info = list(order_it = order_it, order_inv=order_inv,
-                        id_sorted=id[order_it], time_sorted=time[order_it],
-                        na_flag = na_flag, panel.id = info$panel.id, call = info$call)
-
+        new_info = list(order_it = order_it, order_inv=order_inv, id_sorted=id[order_it], time_sorted=time[order_it], na_flag = na_flag, panel.id = info$panel.id, call = info$call)
         if(na_flag) new_info$is_na = is_na
         attr(res, "panel_info") = new_info
     }

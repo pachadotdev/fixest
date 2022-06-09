@@ -11,8 +11,7 @@
  *                                                                 *
  ******************************************************************/
 
-
-#include <Rcpp.h>
+#include <cpp11.hpp>
 #include <cfloat>
 #include <math.h>
 #include <vector>
@@ -26,9 +25,7 @@
 #include <stdio.h>
 #include <Rmath.h>
 
-using namespace Rcpp;
-
-// [[Rcpp::plugins(openmp)]]
+using namespace cpp11;
 
 // This file contains misc fixest functions parallelized with the omp library
 
@@ -49,7 +46,7 @@ using namespace Rcpp;
 //   fixest_in_fork = false;
 // }
 //
-// // [[Rcpp::export]]
+// [[cpp11::register]]
 // void cpp_setup_fork_presence() {
 //  // Called only once at startup
 //  #ifdef _OPENMP
@@ -57,13 +54,13 @@ using namespace Rcpp;
 //  #endif
 // }
 //
-// // [[Rcpp::export]]
+// [[cpp11::register]]
 // bool cpp_is_in_fork(){
 //     return fixest_in_fork;
 // }
 
 
-// [[Rcpp::export]]
+[[cpp11::register]]
 int cpp_get_nb_threads(){
     return omp_get_max_threads();
 }
@@ -88,12 +85,12 @@ std::vector<int> set_parallel_scheme_bis(int N, int nthreads){
 }
 
 
-// [[Rcpp::export]]
-NumericVector cpppar_exp(NumericVector x, int nthreads){
+[[cpp11::register]]
+doubles cpppar_exp(doubles x, int nthreads){
 	// parallel exponentiation using omp
 
 	int n = x.length();
-	NumericVector res(n);
+	doubles res(n);
 
 	#pragma omp parallel for num_threads(nthreads)
 	for(int i = 0 ; i < n ; ++i) {
@@ -103,12 +100,12 @@ NumericVector cpppar_exp(NumericVector x, int nthreads){
 	return(res);
 }
 
-// [[Rcpp::export]]
-NumericVector cpppar_log(NumericVector x, int nthreads){
+[[cpp11::register]]
+doubles cpppar_log(doubles x, int nthreads){
 	// parallel exponentiation using omp
 
 	int n = x.length();
-	NumericVector res(n);
+	doubles res(n);
 
 	#pragma omp parallel for num_threads(nthreads)
 	for(int i = 0 ; i < n ; ++i) {
@@ -118,12 +115,12 @@ NumericVector cpppar_log(NumericVector x, int nthreads){
 	return(res);
 }
 
-// [[Rcpp::export]]
-NumericVector cpppar_log_a_exp(int nthreads, double a, NumericVector mu, NumericVector exp_mu){
+[[cpp11::register]]
+doubles cpppar_log_a_exp(int nthreads, double a, doubles mu, doubles exp_mu){
 	// faster this way
 
 	int n = mu.length();
-	NumericVector res(n);
+	doubles res(n);
 
 	#pragma omp parallel for num_threads(nthreads)
 	for(int i=0 ; i<n ; ++i) {
@@ -137,12 +134,12 @@ NumericVector cpppar_log_a_exp(int nthreads, double a, NumericVector mu, Numeric
 	return(res);
 }
 
-// [[Rcpp::export]]
-NumericVector cpppar_lgamma(NumericVector x, int nthreads){
+[[cpp11::register]]
+doubles cpppar_lgamma(doubles x, int nthreads){
 	// parallel lgamma using omp
 
 	int n = x.length();
-	NumericVector res(n);
+	doubles res(n);
 
 	#pragma omp parallel for num_threads(nthreads)
 	for(int i = 0 ; i < n ; ++i) {
@@ -152,12 +149,12 @@ NumericVector cpppar_lgamma(NumericVector x, int nthreads){
 	return(res);
 }
 
-// [[Rcpp::export]]
-NumericVector cpppar_digamma(NumericVector x, int nthreads){
+[[cpp11::register]]
+doubles cpppar_digamma(doubles x, int nthreads){
 	// parallel digamma using omp
 
 	int n = x.length();
-	NumericVector res(n);
+	doubles res(n);
 
 	#pragma omp parallel for num_threads(nthreads)
 	for(int i = 0 ; i < n ; ++i) {
@@ -167,12 +164,12 @@ NumericVector cpppar_digamma(NumericVector x, int nthreads){
 	return(res);
 }
 
-// [[Rcpp::export]]
-NumericVector cpppar_trigamma(NumericVector x, int nthreads){
+[[cpp11::register]]
+doubles cpppar_trigamma(doubles x, int nthreads){
 	// parallel trigamma using omp
 
 	int n = x.length();
-	NumericVector res(n);
+	doubles res(n);
 
 	#pragma omp parallel for num_threads(nthreads)
 	for(int i = 0 ; i < n ; ++i) {
@@ -186,11 +183,11 @@ inline double poisson_linkinv(double x){
     return x < -36 ? DBL_EPSILON : exp(x);
 }
 
-// [[Rcpp::export]]
-NumericVector cpppar_poisson_linkinv(NumericVector x, int nthreads){
+[[cpp11::register]]
+doubles cpppar_poisson_linkinv(doubles x, int nthreads){
 
     int n = x.length();
-    NumericVector res(n);
+    doubles res(n);
 
     #pragma omp parallel for num_threads(nthreads)
     for(int i = 0 ; i < n ; ++i) {
@@ -201,7 +198,7 @@ NumericVector cpppar_poisson_linkinv(NumericVector x, int nthreads){
 }
 
 
-// [[Rcpp::export]]
+[[cpp11::register]]
 bool cpppar_poisson_validmu(SEXP x, int nthreads){
 
     int n = Rf_length(x);
@@ -220,12 +217,12 @@ bool cpppar_poisson_validmu(SEXP x, int nthreads){
 }
 
 
-// [[Rcpp::export]]
-NumericVector cpppar_logit_linkfun(NumericVector x, int nthreads){
+[[cpp11::register]]
+doubles cpppar_logit_linkfun(doubles x, int nthreads){
 	// parallel trigamma using omp
 
 	int n = x.length();
-	NumericVector res(n);
+	doubles res(n);
 
 	#pragma omp parallel for num_threads(nthreads)
 	for(int i = 0 ; i < n ; ++i) {
@@ -240,12 +237,12 @@ inline double logit_linkinv(double x){
     return x < -30 ? DBL_EPSILON : (x > 30) ? 1-DBL_EPSILON : 1 / (1 + 1 / exp(x));
 }
 
-// [[Rcpp::export]]
-NumericVector cpppar_logit_linkinv(NumericVector x, int nthreads){
+[[cpp11::register]]
+doubles cpppar_logit_linkinv(doubles x, int nthreads){
 	// parallel trigamma using omp
 
 	int n = x.length();
-	NumericVector res(n);
+	doubles res(n);
 
 #pragma omp parallel for num_threads(nthreads)
 	for(int i = 0 ; i < n ; ++i) {
@@ -265,12 +262,12 @@ inline double logit_mueta(double x){
     }
 }
 
-// [[Rcpp::export]]
-NumericVector cpppar_logit_mueta(NumericVector x, int nthreads){
+[[cpp11::register]]
+doubles cpppar_logit_mueta(doubles x, int nthreads){
 	// parallel trigamma using omp
 
 	int n = x.length();
-	NumericVector res(n);
+	doubles res(n);
 
 #pragma omp parallel for num_threads(nthreads)
 	for(int i = 0 ; i < n ; ++i) {
@@ -282,11 +279,11 @@ NumericVector cpppar_logit_mueta(NumericVector x, int nthreads){
 	return(res);
 }
 
-// [[Rcpp::export]]
-NumericVector cpppar_logit_devresids(NumericVector y, NumericVector mu, NumericVector wt, int nthreads){
+[[cpp11::register]]
+doubles cpppar_logit_devresids(doubles y, doubles mu, doubles wt, int nthreads){
 
 	int n = mu.length();
-	NumericVector res(n);
+	doubles res(n);
 	bool isWeight = wt.length() != 1;
 
 	#pragma omp parallel for num_threads(nthreads)
@@ -307,8 +304,8 @@ NumericVector cpppar_logit_devresids(NumericVector y, NumericVector mu, NumericV
 }
 
 
-// // [[Rcpp::export]]
-// NumericMatrix cpppar_crossprod(NumericMatrix X, NumericVector w, int nthreads){
+// [[cpp11::register]]
+// doubles_matrix cpppar_crossprod(doubles_matrix X, doubles w, int nthreads){
 //
 // 	int N = X.nrow();
 // 	int K = X.ncol();
@@ -318,10 +315,10 @@ NumericVector cpppar_logit_devresids(NumericVector y, NumericVector mu, NumericV
 // 		isWeight = true;
 // 	}
 //
-// 	NumericMatrix res(K, K);
+// 	doubles_matrix res(K, K);
 //
 // 	int nValues = K * K;
-// 	NumericVector values(nValues);
+// 	doubles values(nValues);
 //
 // 	// computation
 // #pragma omp parallel for num_threads(nthreads)
@@ -366,8 +363,8 @@ NumericVector cpppar_logit_devresids(NumericVector y, NumericVector mu, NumericV
 
 
 
-// [[Rcpp::export]]
-NumericVector cpppar_xwy(NumericMatrix X, NumericVector y, NumericVector w, int nthreads){
+[[cpp11::register]]
+doubles cpppar_xwy(doubles_matrix X, doubles y, doubles w, int nthreads){
 
 	int N = X.nrow();
 	int K = X.ncol();
@@ -377,7 +374,7 @@ NumericVector cpppar_xwy(NumericMatrix X, NumericVector y, NumericVector w, int 
 		isWeight = true;
 	}
 
-	NumericVector res(K);
+	doubles res(K);
 
 	// computation
 #pragma omp parallel for num_threads(nthreads)
@@ -402,13 +399,13 @@ NumericVector cpppar_xwy(NumericMatrix X, NumericVector y, NumericVector w, int 
 
 
 
-// [[Rcpp::export]]
-NumericVector cpppar_xbeta(NumericMatrix X, NumericVector beta, int nthreads){
+[[cpp11::register]]
+doubles cpppar_xbeta(doubles_matrix X, doubles beta, int nthreads){
 
 	int N = X.nrow();
 	int K = X.ncol();
 
-	NumericVector res(N);
+	doubles res(N);
 
 	// computation
 #pragma omp parallel for num_threads(nthreads)
@@ -425,14 +422,14 @@ NumericVector cpppar_xbeta(NumericMatrix X, NumericVector beta, int nthreads){
 }
 
 
-// [[Rcpp::export]]
-NumericMatrix cpppar_matprod(NumericMatrix x, NumericMatrix y, int nthreads){
+[[cpp11::register]]
+doubles_matrix cpppar_matprod(doubles_matrix x, doubles_matrix y, int nthreads){
 	// => simply x %*% y
 
 	int N = x.nrow();
 	int K = x.ncol();
 
-	NumericMatrix xy(N, K);
+	doubles_matrix xy(N, K);
 
 	// computing xy
 #pragma omp parallel for num_threads(nthreads)
@@ -450,8 +447,8 @@ NumericMatrix cpppar_matprod(NumericMatrix x, NumericMatrix y, int nthreads){
 }
 
 
-// [[Rcpp::export]]
-List cpppar_which_na_inf_vec(SEXP x, int nthreads){
+[[cpp11::register]]
+list cpppar_which_na_inf_vec(SEXP x, int nthreads){
     /*
         This function takes a vector and looks at whether it contains NA or infinite values
         return: flag for na/inf + logical vector of obs that are na/inf
@@ -506,7 +503,7 @@ List cpppar_which_na_inf_vec(SEXP x, int nthreads){
     }
 
     // Return
-    List res;
+    list res;
     res["any_na"] = any_na;
     res["any_inf"] = any_inf;
     res["any_na_inf"] = any_na || any_inf;
@@ -515,10 +512,10 @@ List cpppar_which_na_inf_vec(SEXP x, int nthreads){
     return res;
 }
 
-// [[Rcpp::export]]
-List cpppar_which_na_inf_mat(NumericMatrix mat, int nthreads){
+[[cpp11::register]]
+list cpppar_which_na_inf_mat(doubles_matrix mat, int nthreads){
     // almost identical to cpppar_which_na_inf_vec but for R matrices. Changes:
-    // - main argument becomes NumericMatrix
+    // - main argument becomes doubles_matrix
     // - k-for loop within the i-for loop
     /*
        This function takes a matrix and looks at whether it contains NA or infinite values
@@ -579,7 +576,7 @@ List cpppar_which_na_inf_mat(NumericMatrix mat, int nthreads){
     }
 
     // Return
-    List res;
+    list res;
     res["any_na"] = any_na;
     res["any_inf"] = any_inf;
     res["any_na_inf"] = any_na || any_inf;
@@ -588,8 +585,8 @@ List cpppar_which_na_inf_mat(NumericMatrix mat, int nthreads){
     return res;
 }
 
-// [[Rcpp::export]]
-List cpppar_which_na_inf_df(SEXP df, int nthreads){
+[[cpp11::register]]
+list cpppar_which_na_inf_df(SEXP df, int nthreads){
     // almost identical to cpppar_which_na_inf_vec but for R **numeric** data frames. Changes:
     // - main argument becomes SEXP
     // - k-for loop within the i-for loop
@@ -658,7 +655,7 @@ List cpppar_which_na_inf_df(SEXP df, int nthreads){
     }
 
     // Return
-    List res;
+    list res;
     res["any_na"] = any_na;
     res["any_inf"] = any_inf;
     res["any_na_inf"] = any_na || any_inf;
@@ -669,19 +666,19 @@ List cpppar_which_na_inf_df(SEXP df, int nthreads){
 
 
 
-// [[Rcpp::export]]
-List cpppar_cond_means(NumericMatrix mat_vars, IntegerVector treat, int nthreads = 1){
+[[cpp11::register]]
+list cpppar_cond_means(doubles_matrix mat_vars, integers treat, int nthreads = 1){
     // conditional means: function did_means
 
     int N = mat_vars.nrow();
     int K = mat_vars.ncol();
 
     // objects to return:
-    IntegerVector na_vect(K);
-    NumericMatrix mean_mat(K, 2);
-    NumericMatrix sd_mat(K, 2);
-    IntegerMatrix n_mat(K, 2);
-    IntegerVector n_01(2);
+    integers na_vect(K);
+    doubles_matrix mean_mat(K, 2);
+    doubles_matrix sd_mat(K, 2);
+    integers_matrix n_mat(K, 2);
+    integers n_01(2);
 
 
     // computation
@@ -736,7 +733,7 @@ List cpppar_cond_means(NumericMatrix mat_vars, IntegerVector treat, int nthreads
         }
     }
 
-    List res;
+    list res;
     res["means"] = mean_mat;
     res["sd"] = sd_mat;
     res["n"] = n_mat;
@@ -746,14 +743,14 @@ List cpppar_cond_means(NumericMatrix mat_vars, IntegerVector treat, int nthreads
     return res;
 }
 
-// [[Rcpp::export]]
-IntegerVector cpppar_check_only_0(NumericMatrix x_mat, int nthreads){
+[[cpp11::register]]
+integers cpppar_check_only_0(doubles_matrix x_mat, int nthreads){
     // returns a 0/1 vectors => 1 means only 0
 
     int n = x_mat.nrow();
     int K = x_mat.ncol();
 
-    IntegerVector res(K);
+    integers res(K);
 
     #pragma omp parallel for num_threads(nthreads)
     for(int k=0 ; k<K ; ++k){
@@ -773,15 +770,15 @@ IntegerVector cpppar_check_only_0(NumericMatrix x_mat, int nthreads){
 }
 
 
-// // [[Rcpp::export]]
-// List cpppar_scale(SEXP x, int nthreads){
+// [[cpp11::register]]
+// list cpppar_scale(SEXP x, int nthreads){
 //     // x: List of numeric vectors
 //
 //     int Q = Rf_length(x);
 //     SEXP x0 = VECTOR_ELT(x, 0);
 //     int n = Rf_length(x0);
 //
-//     List res;
+//     list res;
 //
 //     // We only have numerics: so either integer, either double
 // #pragma omp parallel for num_threads(nthreads)
@@ -813,7 +810,7 @@ IntegerVector cpppar_check_only_0(NumericMatrix x_mat, int nthreads){
 //         double sd_x = sqrt(sum_x2 / n - mean_x * mean_x);
 //         // ATTENTION AUX 0sd
 //
-//         NumericVector x_out(n);
+//         doubles x_out(n);
 //         if(TYPEOF(xq) == REALSXP){
 //             double *px = REAL(xq);
 //             for(int i=0 ; i<n ; ++i){
@@ -830,32 +827,3 @@ IntegerVector cpppar_check_only_0(NumericMatrix x_mat, int nthreads){
 //
 //     return res;
 // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

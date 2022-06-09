@@ -44,20 +44,13 @@
  *  the system is of no importance: whatever the order of bytes       *
  *  on which we sort, we obtain what we want.                         *
  *                                                                    *
- *                                                                    *
  *********************************************************************/
 
-#include <Rcpp.h>
+#include <cpp11.hpp>
 #include <vector>
 
-using namespace Rcpp;
+using namespace cpp11;
 using std::vector;
-
-// [[Rcpp::plugins(cpp11)]]
-// [[Rcpp::plugins(openmp)]]
-
-
-
 
 inline unsigned long long float_to_ull(void *u, int i) {
     unsigned long long *pu_ll = reinterpret_cast<unsigned long long*>(u);
@@ -333,8 +326,8 @@ void quf_int(int n, int *x_uf, void *px, vector<double> &x_unik, int x_min, int 
 }
 
 
-// [[Rcpp::export]]
-List cpp_quf_gnl(SEXP x){
+[[cpp11::register]]
+list cpp_quf_gnl(SEXP x){
 
     // INT: we try as possible to send the data to quf_int, the most efficient function
     // for data of large range, we have a separate algorithms that avoids the creation
@@ -460,7 +453,7 @@ List cpp_quf_gnl(SEXP x){
 
     UNPROTECT(1);
 
-    List res;
+    list res;
     res["x_uf"] = r_x_uf;
     res["x_unik"] = x_unik;
 
@@ -557,7 +550,7 @@ void quf_single(void *px_in, std::string &x_type, int n, int *x_uf, vector<doubl
 
 }
 
-void quf_refactor(int *px_in, int x_size, IntegerVector &obs2keep, int n, int *x_uf, vector<double> &x_unik, vector<int> &x_table){
+void quf_refactor(int *px_in, int x_size, integers &obs2keep, int n, int *x_uf, vector<double> &x_unik, vector<int> &x_table){
     // pxin: data that has been qufed already => so integer ranging from 1 to nber of unique elements
     // obs2keep => optional, observations to keep
 
@@ -603,7 +596,7 @@ void quf_table_sum_single(void *px_in, std::string &x_type, int n, int q, int *x
                           vector<double> &x_unik, vector<int> &x_table, double *py,
                           vector<double> &sum_y, bool do_sum_y, bool rm_0, bool rm_1,
                           bool rm_single, vector<int> &any_pblm, vector<bool> &id_pblm,
-                          bool check_pblm, bool do_refactor, int x_size, IntegerVector &obs2keep){
+                          bool check_pblm, bool do_refactor, int x_size, integers &obs2keep){
 
     // check_pblm => FALSE only if only_slope = TRUE
 
@@ -779,7 +772,7 @@ void quf_refactor_table_sum_single(int n, int *quf_old, int *quf_new, vector<boo
         // is there a problem?
         bool any_pblm = false;
         // we check only if needed (if !rm_single && !rm_1 && length(id_pblm) == 0 => means no problem)
-        if(!id_pblm.empty()){
+        if(id_pblm.size() > 0){
             for(int d=0 ; d<D ; ++d){
                 if(id_pblm[d]){
                     any_pblm = true;
@@ -853,10 +846,10 @@ void quf_refactor_table_sum_single(int n, int *quf_old, int *quf_new, vector<boo
 }
 
 
-// [[Rcpp::export]]
-List cpppar_quf_table_sum(SEXP x, SEXP y, bool do_sum_y, bool rm_0, bool rm_1,
-                          bool rm_single, IntegerVector only_slope, int nthreads,
-                          bool do_refactor, SEXP r_x_sizes, IntegerVector obs2keep){
+[[cpp11::register]]
+list cpppar_quf_table_sum(SEXP x, SEXP y, bool do_sum_y, bool rm_0, bool rm_1,
+                          bool rm_single, integers only_slope, int nthreads,
+                          bool do_refactor, SEXP r_x_sizes, integers obs2keep){
 
     // x: List of vectors of IDs (type int/num or char only)
     // y: dependent variable
@@ -904,7 +897,7 @@ List cpppar_quf_table_sum(SEXP x, SEXP y, bool do_sum_y, bool rm_0, bool rm_1,
     bool identical_x = do_refactor && obs2keep[0] == 0;
 
     // the vectors of qufed
-    List res_x_quf_all(Q);
+    list res_x_quf_all(Q);
     vector<int*> p_x_quf_all(Q);
     for(int q=0 ; q<Q ; ++q){
         if(identical_x){
@@ -1074,7 +1067,7 @@ List cpppar_quf_table_sum(SEXP x, SEXP y, bool do_sum_y, bool rm_0, bool rm_1,
         int n_removed = std::accumulate(obs_removed.begin(), obs_removed.end(), 0);
         int n_new = n - n_removed;
 
-        List res_x_new_quf_all(Q);
+        list res_x_new_quf_all(Q);
         vector<int*> p_x_new_quf_all(Q);
         for(int q=0 ; q<Q ; ++q){
             res_x_new_quf_all[q] = PROTECT(Rf_allocVector(INTSXP, n_new));
@@ -1107,13 +1100,13 @@ List cpppar_quf_table_sum(SEXP x, SEXP y, bool do_sum_y, bool rm_0, bool rm_1,
 
     // The object to be returned
 
-    List res;
+    list res;
 
     // x: UF (the largest object => no copy)
     res["quf"] = res_x_quf_all;
 
     // x: Unik
-    List res_tmp(Q);
+    list res_tmp(Q);
     for(int q=0 ; q<Q ; ++q){
         res_tmp[q] = x_unik_all[q];
     }

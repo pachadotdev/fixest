@@ -18,18 +18,18 @@
  * But for messy data (employee-company for instance), it matters    *
  * quite a bit.                                                      *
  *                                                                   *
- * In terms of functionnality it accomodate weights and coefficients *
+ * In terms of functionality it accommodate weights and coefficients *
  * with varying slopes.                                              *
  *                                                                   *
  * Of course any input is **strongly** checked before getting into   *
  * this function.                                                    *
  *                                                                   *
- * I had to apply a trick to accomodate user interrupt in a parallel *
- * setup. It costs a bit, but it's clearly worth it.                 *
+ * I had to apply a trick to accommodate user interrupt in a         *
+ * parallel setup. It costs a bit, but it's clearly worth it.        *
  *                                                                   *
  ********************************************************************/
 
-#include <Rcpp.h>
+#include <cpp11.hpp>
 #include <math.h>
 #include <vector>
 #include <stdint.h>
@@ -39,9 +39,7 @@
     #define omp_get_thread_num() 0
 #endif
 
-// [[Rcpp::plugins(openmp)]]
-
-using namespace Rcpp;
+using namespace cpp11;
 using std::vector;
 
 
@@ -92,15 +90,19 @@ inline bool stopping_crit(double a, double b, double diffMax){
 //
 
 // for interruption
-int pending_interrupt() {
-    return !(R_ToplevelExec(Rcpp::checkInterruptFn, NULL));
-}
+// int pending_interrupt() {
+//     if (check_user_interrupt()) {
+//         return 1;
+//     } else {
+//         return 0;
+//     }
+// }
+
 // Works but only the master thread can call that function!
 // What happens if the master thread has finished its job but the lower thread is in an "infinite" loop?
 // this is tricky, as such we cannot stop it.
 // Solution: create a function keeping the threads idle waiting for the complete job to be done
 // BUT I need to add static allocation of threads => performance cost
-
 
 //
 // We introduce a class that handles varying types of SEXP and behaves as a regular matrix
@@ -316,6 +318,7 @@ class FEClass{
 
     int Q;
     int n_obs;
+    int slope_index;
     bool is_weight;
     bool is_slope;
 
@@ -1201,11 +1204,12 @@ void demean_single_1(int v, PARAM_DEMEAN* args){
     // interruption handling
     bool isMaster = omp_get_thread_num() == 0;
     bool *pStopNow = args->stopnow;
-    if(isMaster){
-        if(pending_interrupt()){
-            *pStopNow = true;
-        }
-    }
+
+    // if(isMaster){
+    //     if(pending_interrupt()){
+    //         *pStopNow = true;
+    //     }
+    // }
 
     // the input & output
     sVec &input = p_input[v];
@@ -1323,12 +1327,12 @@ void demean_acc_2(int v, int iterMax, PARAM_DEMEAN *args){
     int iter = 1;
     while(!*pStopNow && keepGoing && iter<=iterMax){
 
-        if(isMaster && iter % iterSecond == 0){
-            if(pending_interrupt()){
-                *pStopNow = true;
-                break;
-            }
-        }
+        // if(isMaster && iter % iterSecond == 0){
+        //     if(pending_interrupt()){
+        //         *pStopNow = true;
+        //         break;
+        //     }
+        // }
 
         ++iter;
 
@@ -1627,12 +1631,12 @@ bool demean_acc_gnl(int v, int iterMax, PARAM_DEMEAN *args){
     bool numconv = false;
     while(!*pStopNow && keepGoing && iter<iterMax){
 
-        if(isMaster && iter % iterSecond == 0){
-            if(pending_interrupt()){
-                *pStopNow = true;
-                break;
-            }
-        }
+        // if(isMaster && iter % iterSecond == 0){
+        //     if(pending_interrupt()){
+        //         *pStopNow = true;
+        //         break;
+        //     }
+        // }
 
         iter++;
 
@@ -1772,14 +1776,15 @@ void stayIdleCheckingInterrupt(bool *stopnow, vector<int> &jobdone, int n_vars, 
         ++iter;
 
         if(iter % 500000000 == 0){
-            if(pending_interrupt()){
-                (*counterInside)++;
-                *stopnow = true;
-                break;
-            } else {
-                // to avoid int overflow:
-                iter = 0;
-            }
+            // if(pending_interrupt()){
+            //     (*counterInside)++;
+            //     *stopnow = true;
+            //     break;
+            // } else {
+            //     // to avoid int overflow:
+            //     iter = 0;
+            // }
+            iter = 0;
         }
 
         if(iter % 1000000 == 0){
@@ -1794,8 +1799,8 @@ void stayIdleCheckingInterrupt(bool *stopnow, vector<int> &jobdone, int n_vars, 
 }
 
 // Loop over demean_single
-// [[Rcpp::export]]
-List cpp_demean(SEXP y, SEXP X_raw, SEXP r_weights, int iterMax, double diffMax, SEXP r_nb_id_Q,
+[[cpp11::register]]
+list cpp_demean(SEXP y, SEXP X_raw, SEXP r_weights, int iterMax, double diffMax, SEXP r_nb_id_Q,
                    SEXP fe_id_list, SEXP table_id_I, SEXP slope_flag_Q, SEXP slope_vars_list,
                    SEXP r_init, int nthreads, bool save_fixef = false){
     // main fun that calls demean_single
@@ -1950,11 +1955,11 @@ List cpp_demean(SEXP y, SEXP X_raw, SEXP r_weights, int iterMax, double diffMax,
     // save
     //
 
-    List res; // a vector and a matrix
+    writable::list res; // a vector and a matrix
 
     int nrow = useX ? n_obs : 1;
     int ncol = useX ? n_vars_X : 1;
-    NumericMatrix X_demean(nrow, ncol);
+    writable::doubles_matrix<> X_demean(nrow, ncol);
 
     sVec p_input_tmp;
     double *p_output_tmp;
@@ -1972,13 +1977,13 @@ List cpp_demean(SEXP y, SEXP X_raw, SEXP r_weights, int iterMax, double diffMax,
 
 
     if(is_y_list && useY){
-        List y_demean(n_vars_y);
+        writable::list y_demean(n_vars_y);
 
         for(int v=0 ; v<n_vars_y ; ++v){
             p_input_tmp  = p_input[n_vars_X + v];
             p_output_tmp = p_output[n_vars_X + v];
 
-            NumericVector y_demean_tmp(n_obs);
+            writable::doubles y_demean_tmp(n_obs);
             for(int i=0 ; i < n_obs ; ++i){
                 y_demean_tmp[i] = p_input_tmp[i] - p_output_tmp[i];
             }
@@ -1986,10 +1991,10 @@ List cpp_demean(SEXP y, SEXP X_raw, SEXP r_weights, int iterMax, double diffMax,
             y_demean[v] = y_demean_tmp;
         }
 
-        res["y_demean"] = y_demean;
+        res.push_back({"y_demean"_nm = y_demean});
 
     } else {
-        NumericVector y_demean(useY ? n_obs : 1);
+        writable::doubles y_demean(useY ? n_obs : 1);
         if(useY){
             // y is always the last variable
             p_input_tmp = p_input[n_vars - 1];
@@ -1998,18 +2003,18 @@ List cpp_demean(SEXP y, SEXP X_raw, SEXP r_weights, int iterMax, double diffMax,
                 y_demean[i] = p_input_tmp[i] - p_output_tmp[i];
             }
         }
-        res["y_demean"] = y_demean;
+        res.push_back({"y_demean"_nm = y_demean});
     }
 
 
 
     // iterations
-    IntegerVector iter_final(n_vars);
+    writable::integers iter_final(n_vars);
     for(int v=0 ; v<n_vars ; ++v){
         iter_final[v] = p_iterations_all[v];
     }
 
-    res["iterations"] = iter_final;
+    res.push_back({"iterations"_nm = iter_final});
 
     // if save is requested
     if(saveInit){
@@ -2019,12 +2024,12 @@ List cpp_demean(SEXP y, SEXP X_raw, SEXP r_weights, int iterMax, double diffMax,
             res["means"] = output_values;
         }
     } else {
-        res["means"] = 0.0;
+        res.push_back({"means"_nm = 0.0});
     }
 
     // save fixef coef
     if(save_fixef){
-        res["fixef_coef"] = fixef_values;
+        res.push_back({"fixef_coef"_nm = fixef_values});
     }
 
     UNPROTECT(1);
@@ -2055,8 +2060,8 @@ std::vector<int> set_parallel_scheme_ter(int N, int nthreads){
 }
 
 
-// [[Rcpp::export]]
-List cpp_which_na_inf(SEXP x, int nthreads){
+[[cpp11::register]]
+list cpp_which_na_inf(SEXP x, int nthreads){
     // x: vector, matrix, data.frame // double or integer
 
     /*
@@ -2103,7 +2108,7 @@ List cpp_which_na_inf(SEXP x, int nthreads){
     }
 
     // object to return: is_na_inf
-    LogicalVector is_na_inf(anyNAInf ? nobs : 1);
+    writable::logicals is_na_inf(anyNAInf ? nobs : 1);
 
     if(anyNAInf){
         #pragma omp parallel for num_threads(nthreads)
@@ -2131,12 +2136,11 @@ List cpp_which_na_inf(SEXP x, int nthreads){
     }
 
     // Return
-    List res;
-    res["any_na"] = any_na;
-    res["any_inf"] = any_inf;
-    res["any_na_inf"] = any_na || any_inf;
-    res["is_na_inf"] = is_na_inf;
+    writable::list res;
+    res.push_back({"any_na"_nm = any_na});
+    res.push_back({"any_inf"_nm = any_inf});
+    res.push_back({"any_na_inf"_nm = any_na || any_inf});
+    res.push_back({"is_na_inf"_nm = is_na_inf});
 
     return res;
 }
-

@@ -1,9 +1,9 @@
-#include <Rcpp.h>
+#include <cpp11.hpp>
 #include <string>
 #include <cstring>
 #include <vector>
-using namespace Rcpp;
 
+using namespace cpp11;
 
 inline bool is_dsb_open(const char * str, int i, int n){
     if(i + 2 < n){
@@ -205,11 +205,11 @@ void extract_operator(const char * str, int &i, int n,
     }
 }
 
-// [[Rcpp::export]]
-List cpp_dsb(SEXP Rstr){
+[[cpp11::register]]
+list cpp_dsb(SEXP Rstr){
     // Rstr: string from R of length 1
 
-    List res;
+    writable::list res;
     const char *str = CHAR(STRING_ELT(Rstr, 0));
 
     // DSB open flag
@@ -230,7 +230,7 @@ List cpp_dsb(SEXP Rstr){
                 ++i;
             }
 
-            res.push_back(string_value);
+            res.push_back({"string_value"_nm = string_value});
 
             if(i < n){
                 // there was one open
@@ -241,14 +241,14 @@ List cpp_dsb(SEXP Rstr){
 
         } else {
 
-            List dsb_element;
+            writable::list dsb_element;
             std::vector<std::string> operator_vec;
 
             // modifies i and operator_vec "in place"
             bool is_eval = true;
             extract_operator(str, i, n, operator_vec, is_eval);
 
-            dsb_element.push_back(operator_vec);
+            dsb_element.push_back({"operator_vec"_nm = operator_vec});
 
             // init
             dsb_value = "";
@@ -295,7 +295,7 @@ List cpp_dsb(SEXP Rstr){
                 ++i;
             }
 
-            dsb_element.push_back(dsb_value);
+            dsb_element.push_back({"dsb_value"_nm = dsb_value});
 
             res.push_back(dsb_element);
         }
@@ -304,15 +304,15 @@ List cpp_dsb(SEXP Rstr){
     return res;
 }
 
-// [[Rcpp::export]]
-List cpp_dsb_full_string(SEXP Rstr){
+[[cpp11::register]]
+list cpp_dsb_full_string(SEXP Rstr){
     // When we consider the full string a verbatim within dsb
 
     const char *str = CHAR(STRING_ELT(Rstr, 0));
 
     int n = std::strlen(str);
 
-    List dsb_element;
+    writable::list dsb_element;
     std::vector<std::string> operator_vec;
 
     // is eval is not used here but is required in extract_operator
@@ -322,7 +322,7 @@ List cpp_dsb_full_string(SEXP Rstr){
     int i = 0;
     extract_operator(str, i, n, operator_vec, is_eval, true);
 
-    dsb_element.push_back(operator_vec);
+    dsb_element.push_back({"operator_vec"_nm = operator_vec});
 
     // init
     std::string dsb_value = "";
@@ -332,7 +332,7 @@ List cpp_dsb_full_string(SEXP Rstr){
         dsb_value += str[i];
     }
 
-    dsb_element.push_back(dsb_value);
+    dsb_element.push_back({"dsb_value"_nm = dsb_value});
 
     return dsb_element;
 }
@@ -345,13 +345,13 @@ inline bool is_if_separator(const char * str, int i, int n, bool semicolon = fal
     }
 }
 
-// [[Rcpp::export]]
-List cpp_dsb_if_extract(SEXP Rstr){
+[[cpp11::register]]
+list cpp_dsb_if_extract(SEXP Rstr){
 
     const char *str = CHAR(STRING_ELT(Rstr, 0));
     int n = std::strlen(str);
 
-    List if_elements;
+    writable::list if_elements;
     std::vector<std::string> operator_vec;
     std::vector<std::string> empty_vec;
     std::string operator_tmp = "";
@@ -419,8 +419,8 @@ List cpp_dsb_if_extract(SEXP Rstr){
         }
 
         if(any_problem){
-            List error;
-            error.push_back(false);
+            writable::list error;
+            error.push_back({"error"_nm = true});
             return(error);
         }
 
@@ -431,22 +431,21 @@ List cpp_dsb_if_extract(SEXP Rstr){
             operator_tmp = "";
         }
 
-        if_elements.push_back(operator_vec);
+        if_elements.push_back({"operator_vec"_nm = operator_vec});
         operator_vec = empty_vec;
     }
-
 
     return if_elements;
 }
 
 
 
-// [[Rcpp::export]]
-StringVector cpp_paste_conditional(StringVector x, IntegerVector id, int n){
+[[cpp11::register]]
+strings cpp_paste_conditional(strings x, integers id, int n){
 
-    StringVector res(n);
+    writable::strings res(n);
 
-    int n_x = x.length();
+    int n_x = x.size();
 
     if(n_x == 0){
         return res;
@@ -470,4 +469,3 @@ StringVector cpp_paste_conditional(StringVector x, IntegerVector id, int n){
 
     return res;
 }
-

@@ -4,22 +4,18 @@
 \alias{xpd}
 \title{Expands formula macros}
 \usage{
-xpd(fml, ..., add = NULL, lhs, rhs, data = NULL, frame = parent.frame())
+xpd(fml, ..., lhs, rhs, data = NULL)
 }
 \arguments{
-\item{fml}{A formula containing macros variables. Each macro variable must start with two dots. The macro variables can be set globally using \code{setFixest_fml}, or can be defined in \code{...}. Special macros of the form \code{..("regex")} can be used to fetch, through a regular expression, variables directly in a character vector (or in column names) given in the argument \code{data} (note that the algorithm tries to "guess" the argument data when nested in function calls [see example]). You can negate the regex by starting with a \code{"!"}. Square brackets have a special meaning: Values in them are evaluated and parsed accordingly. Example: \code{y~x.[1:2] + z.[i]} will lead to \code{y~x1+x2+z3} if \code{i==3}. You can trigger the auto-completion of variables by using the \code{'..'} suffix, like in \code{y ~ x..} which would include \code{x1} and \code{x2}, etc. See examples.}
+\item{fml}{A formula containing macros variables. Each macro variable must start with two dots. The macro variables can be set globally using \code{setFixest_fml}, or can be defined in \code{...}. Special macros of the form \code{..("regex")} can be used to fetch, through a regular expression, variables directly in a character vector (or in column names) given in the argument \code{data}. square brackets have a special meaning: Values in them are evaluated and parsed accordingly. Example: \code{y~x.[1:2] + z.[i]} will lead to \code{y~x1+x2+z3} if \code{i==3}. See examples.}
 
 \item{...}{Definition of the macro variables. Each argument name corresponds to the name of the macro variable. It is required that each macro variable name starts with two dots (e.g. \code{..ctrl}). The value of each argument must be a one-sided formula or a character vector, it is the definition of the macro variable. Example of a valid call: \code{setFixest_fml(..ctrl = ~ var1 + var2)}. In the function \code{xpd}, the default macro variables are taken from \code{getFixest_fml}, any variable in \code{...} will replace these values. You can enclose values in \code{.[]}, if so they will be evaluated from the current environment. For example \code{..ctrl = ~ x.[1:2] + .[z]} will lead to \code{~x1 + x2 + var} if \code{z} is equal to \code{"var"}.}
-
-\item{add}{Either a character scalar or a one-sided formula. The elements will be added to the right-hand-side of the formula, before any macro expansion is applied.}
 
 \item{lhs}{If present then a formula will be constructed with \code{lhs} as the full left-hand-side. The value of \code{lhs} can be a one-sided formula, a call, or a character vector. Note that the macro variables wont be applied. You can use it in combination with the argument \code{rhs}. Note that if \code{fml} is not missing, its LHS will be replaced by \code{lhs}.}
 
 \item{rhs}{If present, then a formula will be constructed with \code{rhs} as the full right-hand-side. The value of \code{rhs} can be a one-sided formula, a call, or a character vector. Note that the macro variables wont be applied. You can use it in combination with the argument \code{lhs}. Note that if \code{fml} is not missing, its RHS will be replaced by \code{rhs}.}
 
 \item{data}{Either a character vector or a data.frame. This argument will only be used if a macro of the type \code{..("regex")} is used in the formula of the argument \code{fml}. If so, any variable name from \code{data} that matches the regular expression will be added to the formula.}
-
-\item{frame}{The environment containing the values to be expanded with the dot square bracket operator. Default is \code{parent.frame()}.}
 }
 \value{
 It returns a formula where all macros have been expanded.
@@ -43,15 +39,13 @@ To summon values from the environment, simply put the variable in square bracket
 
 You can include a full variable from the environment in the same way: \code{for(y in c("a", "b")) xpd(.[y] ~ x)} will create the two formulas \code{a ~ x} and \code{b ~ x}.
 
-The DSB can even be used within variable names, but then the variable must be nested in character form. For example \code{y ~ .["x.[1:2]_sq"]} will create \code{y ~ x1_sq + x2_sq}. Using the character form is important to avoid a formula parsing error. Double quotes must be used. Note that the character string that is nested will be parsed with the function \code{\link{dsb}}, and thus it will return a vector.
+The DSB can even be used within variable names, but then the variable must be nested in character form. For example \code{y ~ .["x.[1:2]_sq"]} will create \code{y ~ x1_sq + x2_sq}. Using the character form is important to avoid a formula parsing error. Double quotes must be used. Note that the character string that is nested will be parsed with the function \code{\link[fixest]{dsb}}, and thus it will return a vector.
 
 By default, the DSB operator expands vectors into sums. You can add a comma, like in \code{.[, x]}, to expand with commas--the content can then be used within functions. For instance: \code{c(x.[, 1:2])} will create \code{c(x1, x2)} (and \emph{not} \code{c(x1 + x2)}).
 
 In all \code{fixest} estimations, this special parsing is enabled, so you don't need to use \code{xpd}.
 
-One-sided formulas can be expanded with the DSB operator: let \code{x = ~sepal + petal}, then \code{xpd(y ~ .[x])} leads to \code{color ~ sepal + petal}.
-
-You can even use multiple square brackets within a single variable, but then the use of nesting is required. For example, the following \code{xpd(y ~ .[".[letters[1:2]]_.[1:2]"])} will create \code{y ~ a_1 + b_2}. Remember that the nested character string is parsed with \code{\link{dsb}}, which explains this behavior.
+You can even use multiple square brackets within a single variable, but then the use of nesting is required. For example, the following \code{xpd(y ~ .[".[letters[1:2]]_.[1:2]"])} will create \code{y ~ a_1 + b_2}. Remember that the nested character string is parsed with \code{\link[fixest]{dsb}}, which explains this behavior.
 }
 
 \section{Regular expressions}{
@@ -59,7 +53,7 @@ You can even use multiple square brackets within a single variable, but then the
 
 You can catch several variable names at once by using regular expressions. To use regular expressions, you need to enclose it in the dot-dot or the regex function: \code{..("regex")} or \code{regex("regex")}. For example, \code{regex("Sepal")} will catch both the variables \code{Sepal.Length} and \code{Sepal.Width} from the \code{iris} data set. In a \code{fixest} estimation, the variables names from which the regex will be applied come from the data set. If you use \code{xpd}, you need to provide either a data set or a vector of names in the argument \code{data}.
 
-By default the variables are aggregated with a sum. For example in a data set with the variables x1 to x10, \verb{regex("x(1|2)"} will yield \code{x1 + x2 + x10}. You can instead ask for "comma" aggregation by using a comma first, just before the regular expression: \code{y ~ sw(regex(,"x(1|2)"))} would lead to \code{y ~ sw(x1, x2, x10)}.
+By default the variables are aggregated with a sum. For example in a data set with the variables x1 to x10, \code{regex("x(1|2)"} will yield \code{x1 + x2 + x10}. You can instead ask for "comma" aggregation by using a comma first, just before the regular expression: \code{y ~ sw(regex(,"x(1|2)"))} would lead to \code{y ~ sw(x1, x2, x10)}.
 
 Note that the dot square bracket operator (DSB, see before) is applied before the regular expression is evaluated. This means that \code{regex("x.[3:4]_sq")} will lead, after evaluation of the DSB, to \code{regex("x3_sq|x4_sq")}. It is a handy way to insert range of numbers in a regular expression.
 }
@@ -91,19 +85,6 @@ lm(xpd(y ~ x.[2:3] + .[z]), base)
 
 # No xpd() needed in feols
 feols(y ~ x.[2:3] + .[z], base)
-
-#
-# Auto completion with '..' suffix
-#
-
-# You can trigger variables autocompletion with the '..' suffix
-# You need to provide the argument data
-base = setNames(iris, c("y", "x1", "x2", "x3", "species"))
-xpd(y ~ x.., data = base)
-
-# In fixest estimations, this is automatically taken care of
-feols(y ~ x.., data = base)
-
 
 #
 # You can use xpd for stepwise estimations
@@ -171,34 +152,15 @@ xpd(y ~ 1, rhs = vars)
 # To create a two sided formula
 xpd(lhs = "y", rhs = vars)
 
-#
-# argument 'add'
-#
-
-xpd(~x1, add = ~ x2 + x3)
-
-# also works with character vectors
-xpd(~x1, add = c("x2", "x3"))
-
-# only adds to the RHS
-xpd(y ~ x, add = ~bon + jour)
 
 #
 # Dot square bracket operator
 #
 
-# The basic use id to add variables in the formula
-x = c("x1", "x2")
-xpd(y ~ .[x])
-
-# Alternatively, one-sided formulas can be used and their content will be inserted verbatim
-x = ~x1 + x2
-xpd(y ~ .[x])
-
 # You can create multiple variables at once
 xpd(y ~ x.[1:5] + z.[2:3])
 
-# You can summon variables from the environment to complete variables names
+# You can summon variables from the environment
 var = "a"
 xpd(y ~ x.[var])
 
@@ -251,22 +213,9 @@ etable(res_compact)
 #       sw(poly(Temp, 1), poly(Temp, 2), poly(Temp, 3))
 
 
-#
-# In non-fixest functions: guessing the data allows to use regex
-#
-
-# When used in non-fixest functions, the algorithm tries to "guess" the data
-# so that ..("regex") can be directly evaluated without passing the argument 'data'
-data(longley)
-lm(xpd(Armed.Forces ~ Population + ..("GNP|ployed")), longley)
-
-# same for the auto completion with '..'
-lm(xpd(Armed.Forces ~ Population + GN..), longley)
-
-
 }
 \seealso{
-\code{\link{setFixest_fml}} to set formula macros, and \code{\link{dsb}} to modify character strings with the DSB operator.
+\code{\link[fixest]{setFixest_fml}} to set formula macros, and \code{\link[fixest]{dsb}} to modify character strings with the DSB operator.
 }
 \author{
 Laurent Berge

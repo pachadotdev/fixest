@@ -13,7 +13,7 @@
  *                                                                         *
  * 2-FEs trick:                                                            *
  * For both the Poisson and the Gaussian methods I use a trick to hasten   *
- * computation. Instead of looping on the number of obsertvations, the     *
+ * computation. Instead of looping on the number of observations, the      *
  * loop is on the number of unique cases. For balanced panels, this is     *
  * not useful, but for strongly unbalanced panels, this makes a big        *
  * difference.                                                             *
@@ -25,13 +25,12 @@
  * situations).                                                            *
  *                                                                         *
  * Drawback:                                                               *
- * The big drawback of the ML methods is that, as opposed to GLM metohods, *
+ * The big drawback of the ML methods is that, as opposed to GLM methods,  *
  * parallel computing cannot be leveraged.                                 *
- *                                                                         *
  *                                                                         *
  **************************************************************************/
 
-#include <Rcpp.h>
+#include <cpp11.hpp>
 #include <math.h>
 #include <vector>
 #ifdef _OPENMP
@@ -40,10 +39,10 @@
     #define omp_get_thread_num() 0
 #endif
 
-// [[Rcpp::plugins(openmp)]]
-
-using namespace Rcpp;
+using namespace cpp11;
 using std::vector;
+
+namespace writable = cpp11::writable;
 
 // Stopping / continuing criteria
 // Functions used inside all loops
@@ -59,7 +58,7 @@ inline bool stopping_criterion(double a, double b, double diffMax){
     return ( (diff < diffMax) || (diff/(0.1 + fabs(a)) < diffMax) );
 }
 
-// List of objects that will be used to
+// list of objects that will be used to
 // lighten the writting of the functions
 // Contains only parameters that are fixed throguhout ALL the process
 struct PARAM_CCC{
@@ -507,8 +506,8 @@ void computeClusterCoef_single(int family, int n_obs, int nb_cluster, double the
 
 }
 
-// Function to delete => only for drbugging
-// [[Rcpp::export]]
+// Function to delete => only for debugging
+[[cpp11::register]]
 SEXP compute_cluster_coef_r(int family, int nb_coef, double theta, double diffMax_NR,
                             SEXP r_mu, SEXP r_lhs, SEXP r_sum_y, SEXP r_dum,
                             SEXP r_obsCluster, SEXP r_table, SEXP r_cumtable, int nthreads){
@@ -535,7 +534,7 @@ SEXP compute_cluster_coef_r(int family, int nb_coef, double theta, double diffMa
 	return(res);
 }
 
-// [[Rcpp::export]]
+[[cpp11::register]]
 SEXP update_mu_single_cluster(int family, int nb_cluster, double theta, double diffMax_NR, SEXP mu_in,
                               SEXP lhs, SEXP sum_y, SEXP dum, SEXP obsCluster, SEXP table,
                               SEXP cumtable, int nthreads){
@@ -755,8 +754,8 @@ void computeClusterCoef(vector<double*> &pcluster_origin, vector<double*> &pclus
 
 }
 
-// [[Rcpp::export]]
-List cpp_conv_acc_gnl(int family, int iterMax, double diffMax, double diffMax_NR, double theta, SEXP nb_cluster_all,
+[[cpp11::register]]
+list cpp_conv_acc_gnl(int family, int iterMax, double diffMax, double diffMax_NR, double theta, SEXP nb_cluster_all,
                  SEXP lhs, SEXP mu_init, SEXP dum_vector, SEXP tableCluster_vector,
                  SEXP sum_y_vector, SEXP cumtable_vector, SEXP obsCluster_vector, int nthreads){
 
@@ -1012,17 +1011,17 @@ List cpp_conv_acc_gnl(int family, int iterMax, double diffMax, double diffMax_NR
 
 	UNPROTECT(1);
 
-	List res;
+	writable::list res;
 	res["mu_new"] = mu;
-	res["iter"] = iter;
-	res["any_negative_poisson"] = any_negative_poisson;
+	res.push_back({"iter"_nm = iter});
+	res.push_back({"any_negative_poisson"_nm = any_negative_poisson});
 
 	return(res);
 }
 
 
-// [[Rcpp::export]]
-List cpp_conv_seq_gnl(int family, int iterMax, double diffMax, double diffMax_NR, double theta, SEXP nb_cluster_all,
+[[cpp11::register]]
+list cpp_conv_seq_gnl(int family, int iterMax, double diffMax, double diffMax_NR, double theta, SEXP nb_cluster_all,
                  SEXP lhs, SEXP mu_init, SEXP dum_vector, SEXP tableCluster_vector,
                  SEXP sum_y_vector, SEXP cumtable_vector, SEXP obsCluster_vector, int nthreads){
 
@@ -1196,17 +1195,17 @@ List cpp_conv_seq_gnl(int family, int iterMax, double diffMax, double diffMax_NR
 
 	UNPROTECT(1);
 
-	List res;
+	writable::list res;
 	res["mu_new"] = mu;
-	res["iter"] = iter;
+	res.push_back({"iter"_nm = iter});
 
 	return(res);
 }
 
-// [[Rcpp::export]]
-int get_n_cells(IntegerVector index_i, IntegerVector index_j){
+[[cpp11::register]]
+int get_n_cells(integers index_i, integers index_j){
 
-	int n = index_i.length();
+	int n = index_i.size();
 
 	// we count the nber of different elements
 	int index_current = 0;
@@ -1261,8 +1260,8 @@ void CCC_poisson_2(const vector<double> &pcluster_origin, vector<double> &pclust
 
 }
 
-// [[Rcpp::export]]
-List cpp_conv_acc_poi_2(int n_i, int n_j, int n_cells, SEXP index_i, SEXP index_j,
+[[cpp11::register]]
+list cpp_conv_acc_poi_2(int n_i, int n_j, int n_cells, SEXP index_i, SEXP index_j,
                         SEXP dum_vector, SEXP sum_y_vector,
                         int iterMax, double diffMax, SEXP exp_mu_in, SEXP order){
 
@@ -1449,17 +1448,17 @@ List cpp_conv_acc_poi_2(int n_i, int n_j, int n_cells, SEXP index_i, SEXP index_
 
 	UNPROTECT(1);
 
-	List res;
+	writable::list res;
 	res["mu_new"] = exp_mu;
-	res["iter"] = iter;
-	res["any_negative_poisson"] = any_negative_poisson;
+	res.push_back({"iter"_nm = iter});
+	res.push_back({"any_negative_poisson"_nm = any_negative_poisson});
 
 	return(res);
 }
 
 
-// [[Rcpp::export]]
-List cpp_conv_seq_poi_2(int n_i, int n_j, int n_cells, SEXP index_i, SEXP index_j,
+[[cpp11::register]]
+list cpp_conv_seq_poi_2(int n_i, int n_j, int n_cells, SEXP index_i, SEXP index_j,
                         SEXP dum_vector, SEXP sum_y_vector,
                         int iterMax, double diffMax, SEXP exp_mu_in, SEXP order){
 
@@ -1591,15 +1590,15 @@ List cpp_conv_seq_poi_2(int n_i, int n_j, int n_cells, SEXP index_i, SEXP index_
 
 	UNPROTECT(1);
 
-	List res;
+	writable::list res;
 	res["mu_new"] = exp_mu;
-	res["iter"] = iter;
+	res.push_back({"iter"_nm = iter});
 
 	return(res);
 }
 
-// [[Rcpp::export]]
-List cpp_fixed_cost_gaussian(int n_i, int n_cells, SEXP index_i, SEXP index_j, SEXP order,
+[[cpp11::register]]
+list cpp_fixed_cost_gaussian(int n_i, int n_cells, SEXP index_i, SEXP index_j, SEXP order,
                              SEXP invTableCluster_vector, SEXP dum_vector){
 
 	// conversion of R objects
@@ -1658,8 +1657,7 @@ List cpp_fixed_cost_gaussian(int n_i, int n_cells, SEXP index_i, SEXP index_j, S
 	mat_value_Ba[index_current] = value_Ba;
 
 	// the object returned
-	List res;
-
+	writable::list res;
 	res["mat_row"] = r_mat_row;
 	res["mat_col"] = r_mat_col;
 	res["mat_value_Ab"] = r_mat_value_Ab;
@@ -1716,8 +1714,8 @@ void CCC_gaussian_2(const vector<double> &pcluster_origin, vector<double> &pclus
 
 }
 
-// [[Rcpp::export]]
-List cpp_conv_acc_gau_2(int n_i, int n_j, int n_cells,
+[[cpp11::register]]
+list cpp_conv_acc_gau_2(int n_i, int n_j, int n_cells,
                         SEXP r_mat_row, SEXP r_mat_col, SEXP r_mat_value_Ab, SEXP r_mat_value_Ba,
                         SEXP dum_vector, SEXP lhs, SEXP invTableCluster_vector,
                         int iterMax, double diffMax, SEXP mu_in){
@@ -1963,16 +1961,16 @@ List cpp_conv_acc_gau_2(int n_i, int n_j, int n_cells,
 
 	UNPROTECT(1);
 
-	List res;
+	writable::list res;
 	res["mu_new"] = mu;
-	res["iter"] = iter;
+	res.push_back({"iter"_nm = iter});
 
 	return(res);
 }
 
 
-// [[Rcpp::export]]
-List cpp_conv_seq_gau_2(int n_i, int n_j, int n_cells,
+[[cpp11::register]]
+list cpp_conv_seq_gau_2(int n_i, int n_j, int n_cells,
                         SEXP r_mat_row, SEXP r_mat_col, SEXP r_mat_value_Ab, SEXP r_mat_value_Ba,
                         SEXP dum_vector, SEXP lhs, SEXP invTableCluster_vector,
                         int iterMax, double diffMax, SEXP mu_in){
@@ -2123,9 +2121,9 @@ List cpp_conv_seq_gau_2(int n_i, int n_j, int n_cells,
 
 	UNPROTECT(1);
 
-	List res;
+	writable::list res;
 	res["mu_new"] = mu;
-	res["iter"] = iter;
+	res.push_back({"iter"_nm = iter});
 
 	return(res);
 }
@@ -2137,8 +2135,8 @@ List cpp_conv_seq_gau_2(int n_i, int n_j, int n_cells,
 
 
 
-// [[Rcpp::export]]
-List cpp_derivconv_seq_gnl(int iterMax, double diffMax, int n_vars, SEXP nb_cluster_all, SEXP ll_d2,
+[[cpp11::register]]
+list cpp_derivconv_seq_gnl(int iterMax, double diffMax, int n_vars, SEXP nb_cluster_all, SEXP ll_d2,
                                     SEXP jacob_vector, SEXP deriv_init_vector, SEXP dum_vector){
 
 	int n_obs = Rf_length(ll_d2);
@@ -2284,7 +2282,7 @@ List cpp_derivconv_seq_gnl(int iterMax, double diffMax, int n_vars, SEXP nb_clus
 	// The result
 	//
 
-	NumericMatrix dxi_dbeta(n_obs, n_vars);
+	writable::doubles_matrix<> dxi_dbeta(n_obs, n_vars);
 
 	for(int v=0 ; v<n_vars ; ++v){
 		double *my_deriv = pderiv[v];
@@ -2293,9 +2291,9 @@ List cpp_derivconv_seq_gnl(int iterMax, double diffMax, int n_vars, SEXP nb_clus
 		}
 	}
 
-	List res;
+	writable::list res;
 	res["dxi_dbeta"] = dxi_dbeta;
-	res["iter"] = iter_all_max;
+	res.push_back({"iter"_nm = iter_all_max});
 
 	return(res);
 }
@@ -2415,8 +2413,8 @@ void computeDerivCoef(vector<double*> &pcoef_origin, vector<double*> &pcoef_dest
 
 
 
-// [[Rcpp::export]]
-List cpp_derivconv_acc_gnl(int iterMax, double diffMax, int n_vars, SEXP nb_cluster_all, SEXP ll_d2,
+[[cpp11::register]]
+list cpp_derivconv_acc_gnl(int iterMax, double diffMax, int n_vars, SEXP nb_cluster_all, SEXP ll_d2,
                                     SEXP jacob_vector, SEXP deriv_init_vector, SEXP dum_vector){
 
 
@@ -2533,7 +2531,7 @@ List cpp_derivconv_acc_gnl(int iterMax, double diffMax, int n_vars, SEXP nb_clus
 	// Loop
 	//
 
-	NumericMatrix dxi_dbeta(n_obs, n_vars);
+	writable::doubles_matrix<> dxi_dbeta(n_obs, n_vars);
 
 	bool keepGoing = true;
 	int iter = 0, iter_all_max = 0;
@@ -2632,10 +2630,9 @@ List cpp_derivconv_acc_gnl(int iterMax, double diffMax, int n_vars, SEXP nb_clus
 
 	}
 
-
-	List res;
+	writable::list res;
 	res["dxi_dbeta"] = dxi_dbeta;
-	res["iter"] = iter_all_max;
+	res.push_back({"iter"_nm = iter_all_max});
 
 	return(res);
 }
@@ -2668,8 +2665,8 @@ void computeDerivCoef_2(vector<double> &alpha_origin, vector<double> &alpha_dest
 }
 
 
-// [[Rcpp::export]]
-List cpp_derivconv_acc_2(int iterMax, double diffMax, int n_vars, SEXP nb_cluster_all,
+[[cpp11::register]]
+list cpp_derivconv_acc_2(int iterMax, double diffMax, int n_vars, SEXP nb_cluster_all,
                                   int n_cells, SEXP index_i, SEXP index_j, SEXP ll_d2, SEXP order,
                                   SEXP jacob_vector, SEXP deriv_init_vector, SEXP dum_vector){
 
@@ -2776,7 +2773,7 @@ List cpp_derivconv_acc_2(int iterMax, double diffMax, int n_vars, SEXP nb_cluste
 	// Loop
 	//
 
-	NumericMatrix dxi_dbeta(n_obs, n_vars);
+	writable::doubles_matrix<> dxi_dbeta(n_obs, n_vars);
 
 	bool keepGoing = true;
 	int iter = 0, iter_all_max = 0;
@@ -2896,16 +2893,16 @@ List cpp_derivconv_acc_2(int iterMax, double diffMax, int n_vars, SEXP nb_cluste
 	}
 
 
-	List res;
+	writable::list res;
 	res["dxi_dbeta"] = dxi_dbeta;
-	res["iter"] = iter_all_max;
+	res.push_back({"iter"_nm = iter_all_max});
 
 	return(res);
 }
 
 
-// [[Rcpp::export]]
-List cpp_derivconv_seq_2(int iterMax, double diffMax, int n_vars, SEXP nb_cluster_all,
+[[cpp11::register]]
+list cpp_derivconv_seq_2(int iterMax, double diffMax, int n_vars, SEXP nb_cluster_all,
                                   int n_cells, SEXP index_i, SEXP index_j, SEXP order, SEXP ll_d2,
                                   SEXP jacob_vector, SEXP deriv_init_vector, SEXP dum_vector){
 
@@ -3010,7 +3007,7 @@ List cpp_derivconv_seq_2(int iterMax, double diffMax, int n_vars, SEXP nb_cluste
 	// Loop
 	//
 
-	NumericMatrix dxi_dbeta(n_obs, n_vars);
+	writable::doubles_matrix<> dxi_dbeta(n_obs, n_vars);
 
 	bool keepGoing = true;
 	int iter = 0, iter_all_max = 0;
@@ -3118,20 +3115,19 @@ List cpp_derivconv_seq_2(int iterMax, double diffMax, int n_vars, SEXP nb_cluste
 		for(int obs=0 ; obs<n_obs ; ++obs){
 			dxi_dbeta(obs, v) = my_deriv_init[obs] + alpha_final[dum_i[obs]] + beta_final[dum_j[obs]];
 		}
-
 	}
 
 
-	List res;
+	writable::list res;
 	res["dxi_dbeta"] = dxi_dbeta;
-	res["iter"] = iter_all_max;
+	res.push_back({"iter"_nm = iter_all_max});
 
 	return(res);
 }
 
-// [[Rcpp::export]]
-NumericMatrix update_deriv_single(int n_vars, int nb_coef,
-                         SEXP r_ll_d2, SEXP r_jacob_vector, SEXP r_dum_vector){
+[[cpp11::register]]
+doubles_matrix<> update_deriv_single(int n_vars, int nb_coef,
+                         SEXP r_ll_d2, SEXP r_jacob_vector, SEXP r_dum_vector) {
 
 	int n_obs = Rf_length(r_ll_d2);
 
@@ -3155,7 +3151,7 @@ NumericMatrix update_deriv_single(int n_vars, int nb_coef,
 	vector<double> coef_deriv(nb_coef);
 
 	// the result
-	NumericMatrix res(n_obs, n_vars); // init at 0
+	writable::doubles_matrix<> res(n_obs, n_vars); // init at 0
 
 	for(int v=0 ; v<n_vars ; ++v){
 		double *my_jac = pjac[v];
@@ -3190,7 +3186,3 @@ NumericMatrix update_deriv_single(int n_vars, int nb_coef,
 
 	return(res);
 }
-
-
-
-

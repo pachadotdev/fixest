@@ -266,12 +266,6 @@ run_test = function(chunk, from){
             msg = paste0(index_names, ":", index_values, collapse = ", ")
             message("Loop values: ", msg, ".")
         }
-
-        # We assign the variables to the global env to facilitate debugging
-        for(var in names(env)){
-            assign(var, get(var, env), parent.frame())
-        }
-
     } else {
         print("tests performed successfully")
     }

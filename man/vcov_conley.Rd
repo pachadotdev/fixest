@@ -30,12 +30,12 @@ conley(cutoff = NULL, pixel = NULL, distance = NULL)
 
 \item{distance}{How to compute the distance between points. It can be equal to "triangular" (default) or "spherical". The latter case corresponds to the great circle distance and is more precise than triangular but is a bit more intensive computationally.}
 
-\item{ssc}{An object returned by the function \code{\link{ssc}}. It specifies how to perform the small sample correction.}
+\item{ssc}{An object returned by the function \code{\link[fixest]{ssc}}. It specifies how to perform the small sample correction.}
 }
 \value{
 If the first argument is a \code{fixest} object, then a VCOV is returned (i.e. a symmetric matrix).
 
-If the first argument is not a \code{fixest} object, then a) implicitly the arguments are shifted to the left (i.e. \code{vcov_conley("lat", "long")} is equivalent to \code{vcov_conley(lat = "lat", lon = "long")}) and b) a VCOV-\emph{request} is returned and NOT a VCOV. That VCOV-request can then be used in the argument \code{vcov} of various \code{fixest} functions (e.g. \code{\link{vcov.fixest}} or even in the estimation calls).
+If the first argument is not a \code{fixest} object, then a) implicitly the arguments are shifted to the left (i.e. \code{vcov_conley("lat", "long")} is equivalent to \code{vcov_conley(lat = "lat", lon = "long")}) and b) a VCOV-\emph{request} is returned and NOT a VCOV. That VCOV-request can then be used in the argument \code{vcov} of various \code{fixest} functions (e.g. \code{\link[fixest]{vcov.fixest}} or even in the estimation calls).
 }
 \description{
 Compute VCOVs robust to spatial correlation, a la Conley (1999).
@@ -47,7 +47,7 @@ The kernel is uniform.
 
 If the cutoff is not provided, an estimation of it is given. This cutoff ensures that a minimum of units lie within it and is robust to sub-sampling. This automatic cutoff is only here for convenience, the most appropriate cutoff shall depend on the application and shall be provided by the user.
 
-The function \code{conley} does not compute VCOVs directly but is meant to be used in the argument \code{vcov} of \code{fixest} functions (e.g. in \code{\link{vcov.fixest}} or even in the estimation calls).
+The function \code{conley} does not compute VCOVs directly but is meant to be used in the argument \code{vcov} of \code{fixest} functions (e.g. in \code{\link[fixest]{vcov.fixest}} or even in the estimation calls).
 }
 \examples{
 
