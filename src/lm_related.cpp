@@ -13,6 +13,7 @@
 **************************************************************/
 
 #include <cpp11.hpp>
+#include <cpp11/doubles.hpp>
 #include <cmath>
 #include <math.h>
 #include <vector>

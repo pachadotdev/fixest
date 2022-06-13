@@ -30,6 +30,7 @@
  ********************************************************************/
 
 #include <cpp11.hpp>
+#include <cpp11/doubles.hpp>
 #include <math.h>
 #include <vector>
 #include <stdint.h>
@@ -1202,8 +1203,14 @@ void demean_single_1(int v, PARAM_DEMEAN* args){
     double *p_fe_coef = fe_coef.data();
 
     // interruption handling
-    bool isMaster = omp_get_thread_num() == 0;
-    bool *pStopNow = args->stopnow;
+
+    // TODO: pending_interrupt is not supported in cpp11    
+    
+    // define boolean isMaster which is true if omp_get_thread_num() == 0
+    // and false otherwise
+    // bool isMaster = omp_get_thread_num() == 0;
+
+    // bool *pStopNow = args->stopnow;
 
     // if(isMaster){
     //     if(pending_interrupt()){
@@ -1276,11 +1283,13 @@ void demean_acc_2(int v, int iterMax, PARAM_DEMEAN *args){
 
     // Rprintf("a_tilde: %.3f, %.3f, %.3f, %.3f\n", a_tilde[0], a_tilde[1], a_tilde[2], a_tilde[3]);
 
-    // interruption handling
-    bool isMaster = omp_get_thread_num() == 0;
-    bool *pStopNow = args->stopnow;
-    double flop = 20.0 * static_cast<double>(n_obs); // rough estimate nber operation per iter
-    int iterSecond = ceil(2000000000 / flop / 5); // nber iter per 1/5 second
+    // TODO: interruption handling
+    // bool isMaster = omp_get_thread_num() == 0;
+    // bool *pStopNow = args->stopnow;
+    // double flop = 20.0 * static_cast<double>(n_obs); // rough estimate nber operation per iter
+    
+    // int iterSecond = ceil(2000000000 / flop / 5);
+    // nber iter per 1/5 second
 
     //
     // IT iteration (preparation)
@@ -1325,7 +1334,10 @@ void demean_acc_2(int v, int iterMax, PARAM_DEMEAN *args){
     bool numconv = false;
     bool keepGoing = true;
     int iter = 1;
-    while(!*pStopNow && keepGoing && iter<=iterMax){
+
+    // TODO: re-enable pStopNow
+    // while(!*pStopNow && keepGoing && iter<=iterMax){
+    while(keepGoing && iter<=iterMax){
 
         // if(isMaster && iter % iterSecond == 0){
         //     if(pending_interrupt()){
@@ -1562,12 +1574,13 @@ bool demean_acc_gnl(int v, int iterMax, PARAM_DEMEAN *args){
 
 
 
-    // interruption handling
-    bool isMaster = omp_get_thread_num() == 0;
-    bool *pStopNow = args->stopnow;
+    // TODO: interruption handling
+    // bool isMaster = omp_get_thread_num() == 0;
+    // bool *pStopNow = args->stopnow;
     // I overcast to remember the lesson
-    double flop = 4.0*(5 + 12*(Q-1) + 4*(Q-1)*(Q-1))*static_cast<double>(n_obs); // rough estimate nber operation per iter
-    int iterSecond = ceil(2000000000 / flop / 5); // nber iter per 1/5 second
+    // double flop = 4.0*(5 + 12*(Q-1) + 4*(Q-1)*(Q-1))*static_cast<double>(n_obs); 
+    // rough estimate nber operation per iter
+    // int iterSecond = ceil(2000000000 / flop / 5); // nber iter per 1/5 second
 
     //
     // IT iteration (preparation)
@@ -1629,7 +1642,9 @@ bool demean_acc_gnl(int v, int iterMax, PARAM_DEMEAN *args){
 
     int iter = 0;
     bool numconv = false;
-    while(!*pStopNow && keepGoing && iter<iterMax){
+    // TODO: re-enable pstopnow
+    // while(!*pStopNow && keepGoing && iter<iterMax){
+    while(keepGoing && iter<iterMax){
 
         // if(isMaster && iter % iterSecond == 0){
         //     if(pending_interrupt()){

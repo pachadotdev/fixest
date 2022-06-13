@@ -31,6 +31,7 @@
  **************************************************************************/
 
 #include <cpp11.hpp>
+#include <cpp11/doubles.hpp>
 #include <math.h>
 #include <vector>
 #ifdef _OPENMP
