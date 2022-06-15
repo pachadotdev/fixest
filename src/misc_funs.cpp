@@ -80,7 +80,12 @@ doubles cpp_partialDerivative_other(int iterMax,
     int sum_cases=0;
     bool ok;
     double new_value;
-    int start[Q], end[Q];
+
+    // OLD: int start[Q], end[Q];
+    // NEW: using ISO C++
+    std::vector <int> start, end;
+    start.reserve(Q);
+    end.reserve(Q);
 
     for(q=0 ; q<Q ; q++) {
         // the total number of clusters (eg if man/woman and 10 countries: total of 12 cases)
@@ -446,7 +451,15 @@ integers cpp_lag_obs(integers id, integers time, int nlag){
     int obs;
     int id_current;
     int time_current;
-    writable::integers res(nobs, NA_INTEGER);
+
+    //  OLD: res(nobs, NA_INTEGER)
+
+    // NEW: pre-allocate vector with NA integer
+    writable::integers res(nobs);
+    for (int i = 0; i < nobs; i++) {
+        res[i] = NA_INTEGER;
+    }
+
     int i, j, diff_time;
 
     if(nlag > 0){
@@ -932,7 +945,11 @@ list cpp_cut(doubles x_sorted, doubles cut_points, integers is_included){
         }
     }
 
-    writable::integers x_int(N, n_cuts + 1);
+    writable::integers x_int(N);
+    for (int i=0; i < N; i++) {
+        x_int[i] = n_cuts + 1;
+    }
+
     writable::integers isnt_empty(n_cuts + 1);
     writable::doubles value_min(n_cuts + 1);
     writable::doubles value_max(n_cuts + 1);
