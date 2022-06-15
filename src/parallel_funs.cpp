@@ -90,8 +90,9 @@ std::vector<int> set_parallel_scheme_bis(int N, int nthreads){
 doubles cpppar_exp(doubles x, int nthreads){
 	// parallel exponentiation using omp
 
-	int n = x.length();
-	doubles res(n);
+	// int n = x.length();
+	int n = x.size();
+	writable::doubles res(n);
 
 	#pragma omp parallel for num_threads(nthreads)
 	for(int i = 0 ; i < n ; ++i) {
@@ -105,8 +106,8 @@ doubles cpppar_exp(doubles x, int nthreads){
 doubles cpppar_log(doubles x, int nthreads){
 	// parallel exponentiation using omp
 
-	int n = x.length();
-	doubles res(n);
+	int n = x.size();
+	writable::doubles res(n);
 
 	#pragma omp parallel for num_threads(nthreads)
 	for(int i = 0 ; i < n ; ++i) {
@@ -120,8 +121,8 @@ doubles cpppar_log(doubles x, int nthreads){
 doubles cpppar_log_a_exp(int nthreads, double a, doubles mu, doubles exp_mu){
 	// faster this way
 
-	int n = mu.length();
-	doubles res(n);
+	int n = mu.size();
+	writable::doubles res(n);
 
 	#pragma omp parallel for num_threads(nthreads)
 	for(int i=0 ; i<n ; ++i) {
@@ -139,8 +140,8 @@ doubles cpppar_log_a_exp(int nthreads, double a, doubles mu, doubles exp_mu){
 doubles cpppar_lgamma(doubles x, int nthreads){
 	// parallel lgamma using omp
 
-	int n = x.length();
-	doubles res(n);
+	int n = x.size();
+	writable::doubles res(n);
 
 	#pragma omp parallel for num_threads(nthreads)
 	for(int i = 0 ; i < n ; ++i) {
@@ -154,12 +155,12 @@ doubles cpppar_lgamma(doubles x, int nthreads){
 doubles cpppar_digamma(doubles x, int nthreads){
 	// parallel digamma using omp
 
-	int n = x.length();
-	doubles res(n);
+	int n = x.size();
+	writable::doubles res(n);
 
 	#pragma omp parallel for num_threads(nthreads)
 	for(int i = 0 ; i < n ; ++i) {
-		res[i] = R::digamma(x[i]);
+		res[i] = Rf_digamma(x[i]);
 	}
 
 	return(res);
@@ -169,12 +170,12 @@ doubles cpppar_digamma(doubles x, int nthreads){
 doubles cpppar_trigamma(doubles x, int nthreads){
 	// parallel trigamma using omp
 
-	int n = x.length();
-	doubles res(n);
+	int n = x.size();
+	writable::doubles res(n);
 
 	#pragma omp parallel for num_threads(nthreads)
 	for(int i = 0 ; i < n ; ++i) {
-		res[i] = R::trigamma(x[i]);
+		res[i] = Rf_trigamma(x[i]);
 	}
 
 	return(res);
@@ -187,8 +188,8 @@ inline double poisson_linkinv(double x){
 [[cpp11::register]]
 doubles cpppar_poisson_linkinv(doubles x, int nthreads){
 
-    int n = x.length();
-    doubles res(n);
+    int n = x.size();
+    writable::doubles res(n);
 
     #pragma omp parallel for num_threads(nthreads)
     for(int i = 0 ; i < n ; ++i) {
@@ -222,8 +223,8 @@ bool cpppar_poisson_validmu(SEXP x, int nthreads){
 doubles cpppar_logit_linkfun(doubles x, int nthreads){
 	// parallel trigamma using omp
 
-	int n = x.length();
-	doubles res(n);
+	int n = x.size();
+	writable::doubles res(n);
 
 	#pragma omp parallel for num_threads(nthreads)
 	for(int i = 0 ; i < n ; ++i) {
@@ -242,8 +243,8 @@ inline double logit_linkinv(double x){
 doubles cpppar_logit_linkinv(doubles x, int nthreads){
 	// parallel trigamma using omp
 
-	int n = x.length();
-	doubles res(n);
+	int n = x.size();
+	writable::doubles res(n);
 
 #pragma omp parallel for num_threads(nthreads)
 	for(int i = 0 ; i < n ; ++i) {
@@ -267,8 +268,8 @@ inline double logit_mueta(double x){
 doubles cpppar_logit_mueta(doubles x, int nthreads){
 	// parallel trigamma using omp
 
-	int n = x.length();
-	doubles res(n);
+	int n = x.size();
+	writable::doubles res(n);
 
 #pragma omp parallel for num_threads(nthreads)
 	for(int i = 0 ; i < n ; ++i) {
@@ -283,9 +284,9 @@ doubles cpppar_logit_mueta(doubles x, int nthreads){
 [[cpp11::register]]
 doubles cpppar_logit_devresids(doubles y, doubles mu, doubles wt, int nthreads){
 
-	int n = mu.length();
-	doubles res(n);
-	bool isWeight = wt.length() != 1;
+	int n = mu.size();
+	writable::doubles res(n);
+	bool isWeight = wt.size() != 1;
 
 	#pragma omp parallel for num_threads(nthreads)
 	for(int i = 0 ; i < n ; ++i) {
@@ -365,17 +366,17 @@ doubles cpppar_logit_devresids(doubles y, doubles mu, doubles wt, int nthreads){
 
 
 [[cpp11::register]]
-doubles cpppar_xwy(doubles_matrix X, doubles y, doubles w, int nthreads){
+doubles cpppar_xwy(doubles_matrix<> X, doubles y, doubles w, int nthreads){
 
 	int N = X.nrow();
 	int K = X.ncol();
 
 	bool isWeight = false;
-	if(w.length() > 1){
+	if(w.size() > 1){
 		isWeight = true;
 	}
 
-	doubles res(K);
+	writable::doubles res(K);
 
 	// computation
 #pragma omp parallel for num_threads(nthreads)
@@ -401,12 +402,12 @@ doubles cpppar_xwy(doubles_matrix X, doubles y, doubles w, int nthreads){
 
 
 [[cpp11::register]]
-doubles cpppar_xbeta(doubles_matrix X, doubles beta, int nthreads){
+doubles cpppar_xbeta(doubles_matrix<> X, doubles beta, int nthreads){
 
 	int N = X.nrow();
 	int K = X.ncol();
 
-	doubles res(N);
+	writable::doubles res(N);
 
 	// computation
 #pragma omp parallel for num_threads(nthreads)
@@ -424,13 +425,13 @@ doubles cpppar_xbeta(doubles_matrix X, doubles beta, int nthreads){
 
 
 [[cpp11::register]]
-doubles_matrix cpppar_matprod(doubles_matrix x, doubles_matrix y, int nthreads){
+doubles_matrix<> cpppar_matprod(doubles_matrix<> x, doubles_matrix<> y, int nthreads){
 	// => simply x %*% y
 
 	int N = x.nrow();
 	int K = x.ncol();
 
-	doubles_matrix xy(N, K);
+	writable::doubles_matrix<> xy(N, K);
 
 	// computing xy
 #pragma omp parallel for num_threads(nthreads)
@@ -486,7 +487,7 @@ list cpppar_which_na_inf_vec(SEXP x, int nthreads){
 
 
     // object to return: is_na_inf
-    LogicalVector is_na_inf(anyNAInf ? nobs : 1);
+    writable::logicals is_na_inf(anyNAInf ? nobs : 1);
 
     if(anyNAInf){
         // again: no need to care about race conditions
@@ -503,18 +504,16 @@ list cpppar_which_na_inf_vec(SEXP x, int nthreads){
         }
     }
 
-    // Return
-    list res;
-    res["any_na"] = any_na;
-    res["any_inf"] = any_inf;
-    res["any_na_inf"] = any_na || any_inf;
-    res["is_na_inf"] = is_na_inf;
-
-    return res;
+    return writable::list({
+        "any_na"_nm = any_na,
+        "any_inf"_nm = any_inf,
+        "any_na_inf"_nm = any_na || any_inf,
+        "is_na_inf"_nm = is_na_inf
+    });
 }
 
 [[cpp11::register]]
-list cpppar_which_na_inf_mat(doubles_matrix mat, int nthreads){
+list cpppar_which_na_inf_mat(doubles_matrix<> mat, int nthreads){
     // almost identical to cpppar_which_na_inf_vec but for R matrices. Changes:
     // - main argument becomes doubles_matrix
     // - k-for loop within the i-for loop
@@ -555,7 +554,7 @@ list cpppar_which_na_inf_mat(doubles_matrix mat, int nthreads){
     }
 
     // object to return: is_na_inf
-    LogicalVector is_na_inf(anyNAInf ? nobs : 1);
+    writable::logicals is_na_inf(anyNAInf ? nobs : 1);
 
     if(anyNAInf){
         #pragma omp parallel for num_threads(nthreads)
@@ -576,14 +575,12 @@ list cpppar_which_na_inf_mat(doubles_matrix mat, int nthreads){
         }
     }
 
-    // Return
-    list res;
-    res["any_na"] = any_na;
-    res["any_inf"] = any_inf;
-    res["any_na_inf"] = any_na || any_inf;
-    res["is_na_inf"] = is_na_inf;
-
-    return res;
+    return writable::list({
+        "any_na"_nm = any_na,
+        "any_inf"_nm = any_inf,
+        "any_na_inf"_nm = any_na || any_inf,
+        "is_na_inf"_nm = is_na_inf
+    });
 }
 
 [[cpp11::register]]
@@ -634,7 +631,7 @@ list cpppar_which_na_inf_df(SEXP df, int nthreads){
     }
 
     // object to return: is_na_inf
-    LogicalVector is_na_inf(anyNAInf ? nobs : 1);
+    writable::logicals is_na_inf(anyNAInf ? nobs : 1);
 
     if(anyNAInf){
         #pragma omp parallel for num_threads(nthreads)
@@ -655,31 +652,29 @@ list cpppar_which_na_inf_df(SEXP df, int nthreads){
         }
     }
 
-    // Return
-    list res;
-    res["any_na"] = any_na;
-    res["any_inf"] = any_inf;
-    res["any_na_inf"] = any_na || any_inf;
-    res["is_na_inf"] = is_na_inf;
-
-    return res;
+    return writable::list({
+        "any_na"_nm = any_na,
+        "any_inf"_nm = any_inf,
+        "any_na_inf"_nm = any_na || any_inf,
+        "is_na_inf"_nm = is_na_inf
+    });
 }
 
 
 
 [[cpp11::register]]
-list cpppar_cond_means(doubles_matrix mat_vars, integers treat, int nthreads = 1){
+list cpppar_cond_means(doubles_matrix<> mat_vars, integers treat, int nthreads = 1){
     // conditional means: function did_means
 
     int N = mat_vars.nrow();
     int K = mat_vars.ncol();
 
     // objects to return:
-    integers na_vect(K);
-    doubles_matrix mean_mat(K, 2);
-    doubles_matrix sd_mat(K, 2);
-    integers_matrix n_mat(K, 2);
-    integers n_01(2);
+    writable::integers na_vect(K);
+    writable::doubles_matrix<> mean_mat(K, 2);
+    writable::doubles_matrix<> sd_mat(K, 2);
+    writable::integers_matrix<> n_mat(K, 2);
+    writable::integers n_01(2);
 
 
     // computation
@@ -734,24 +729,23 @@ list cpppar_cond_means(doubles_matrix mat_vars, integers treat, int nthreads = 1
         }
     }
 
-    list res;
-    res["means"] = mean_mat;
-    res["sd"] = sd_mat;
-    res["n"] = n_mat;
-    res["n_01"] = n_01;
-    res["na"] = na_vect;
-
-    return res;
+    return writable::list({
+        "means"_nm = mean_mat,
+        "sd"_nm = sd_mat,
+        "n"_nm = n_mat,
+        "n_01"_nm = n_01,
+        "na"_nm = na_vect
+    });
 }
 
 [[cpp11::register]]
-integers cpppar_check_only_0(doubles_matrix x_mat, int nthreads){
+integers cpppar_check_only_0(doubles_matrix<> x_mat, int nthreads){
     // returns a 0/1 vectors => 1 means only 0
 
     int n = x_mat.nrow();
     int K = x_mat.ncol();
 
-    integers res(K);
+    writable::integers res(K);
 
     #pragma omp parallel for num_threads(nthreads)
     for(int k=0 ; k<K ; ++k){
