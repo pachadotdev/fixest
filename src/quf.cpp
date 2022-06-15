@@ -48,6 +48,7 @@
 
 #include <cpp11.hpp>
 #include <vector>
+#include <numeric>
 
 using namespace cpp11;
 using std::vector;
@@ -453,11 +454,10 @@ list cpp_quf_gnl(SEXP x){
 
     UNPROTECT(1);
 
-    list res;
-    res["x_uf"] = r_x_uf;
-    res["x_unik"] = x_unik;
-
-    return res;
+    return writable::list({
+        "x_uf"_nm = r_x_uf,
+        "x_unik"_nm = x_unik
+    });
 }
 
 
@@ -612,7 +612,7 @@ void quf_table_sum_single(void *px_in, std::string &x_type, int n, int q, int *x
         quf_refactor(px_in_int, x_size, obs2keep, n, x_quf, x_unik, x_table);
 
         if(obs2keep[0] != 0){
-            n = obs2keep.length();
+            n = obs2keep.size();
         }
         // Rcout << "new n = " << n << "\n";
         // return;
@@ -868,7 +868,7 @@ list cpppar_quf_table_sum(SEXP x, SEXP y, bool do_sum_y, bool rm_0, bool rm_1,
     int n = Rf_length(xq);
 
     vector<bool> check_pblm(Q, true);
-    if(only_slope.length() == Q){
+    if(only_slope.size() == Q){
         for(int q=0 ; q<Q ; ++q){
             // we check for pblm only if NOT only slope
             check_pblm[q] = only_slope[q] == false;
@@ -893,11 +893,11 @@ list cpppar_quf_table_sum(SEXP x, SEXP y, bool do_sum_y, bool rm_0, bool rm_1,
     vector<int> x_sizes_fake(Q, 0);
     int *px_sizes = do_refactor ? INTEGER(r_x_sizes) : x_sizes_fake.data();
 
-    int n_keep = obs2keep.length();
+    int n_keep = obs2keep.size();
     bool identical_x = do_refactor && obs2keep[0] == 0;
 
     // the vectors of qufed
-    list res_x_quf_all(Q);
+    writable::list res_x_quf_all(Q);
     vector<int*> p_x_quf_all(Q);
     for(int q=0 ; q<Q ; ++q){
         if(identical_x){
@@ -1067,7 +1067,7 @@ list cpppar_quf_table_sum(SEXP x, SEXP y, bool do_sum_y, bool rm_0, bool rm_1,
         int n_removed = std::accumulate(obs_removed.begin(), obs_removed.end(), 0);
         int n_new = n - n_removed;
 
-        list res_x_new_quf_all(Q);
+        writable::list res_x_new_quf_all(Q);
         vector<int*> p_x_new_quf_all(Q);
         for(int q=0 ; q<Q ; ++q){
             res_x_new_quf_all[q] = PROTECT(Rf_allocVector(INTSXP, n_new));
@@ -1100,23 +1100,24 @@ list cpppar_quf_table_sum(SEXP x, SEXP y, bool do_sum_y, bool rm_0, bool rm_1,
 
     // The object to be returned
 
-    list res;
+    writable::list res;
 
     // x: UF (the largest object => no copy)
-    res["quf"] = res_x_quf_all;
+    res.push_back({"quf"_nm = res_x_quf_all});
 
     // x: Unik
-    list res_tmp(Q);
+    writable::list res_tmp(Q);
     for(int q=0 ; q<Q ; ++q){
         res_tmp[q] = x_unik_all[q];
+        res_tmp.push_back(x_unik_all[q]);
     }
-    res["items"] = clone(res_tmp);
+    res.push_back({"items"_nm = res_tmp});
 
     // table
     for(int q=0 ; q<Q ; ++q){
         res_tmp[q] = x_table_all[q];
     }
-    res["table"] = clone(res_tmp);
+    res.push_back({"table"_nm = res_tmp});
 
     // sum y
     for(int q=0 ; q<Q ; ++q){
@@ -1126,7 +1127,7 @@ list cpppar_quf_table_sum(SEXP x, SEXP y, bool do_sum_y, bool rm_0, bool rm_1,
             res_tmp[q] = 0;
         }
     }
-    res["sum_y"] = clone(res_tmp);
+    res.push_back({"sum_y"_nm = res_tmp});
 
     //
     // IF PROBLEM ONLY
