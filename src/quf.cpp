@@ -1107,27 +1107,19 @@ list cpppar_quf_table_sum(SEXP x, SEXP y, bool do_sum_y, bool rm_0, bool rm_1,
 
     // x: Unik
     writable::list res_tmp(Q);
-    for(int q=0 ; q<Q ; ++q){
-        res_tmp[q] = x_unik_all[q];
-        res_tmp.push_back(x_unik_all[q]);
-    }
-    res.push_back({"items"_nm = res_tmp});
+    res.push_back({"items"_nm = x_unik_all});
 
     // table
-    for(int q=0 ; q<Q ; ++q){
-        res_tmp[q] = x_table_all[q];
-    }
-    res.push_back({"table"_nm = res_tmp});
+    res.push_back({"table"_nm = x_table_all});
 
     // sum y
-    for(int q=0 ; q<Q ; ++q){
-        if(do_sum_y){
-            res_tmp[q] = sum_y_all[q];
-        } else {
-            res_tmp[q] = 0;
+    writable::doubles copy_sum_y_all = sum_y_all;
+    if(!do_sum_y){
+        for(int q=0 ; q<Q ; ++q){
+            copy_sum_y_all[q] = 0.0;
         }
     }
-    res.push_back({"sum_y"_nm = res_tmp});
+    res.push_back({"sum_y"_nm = copy_sum_y_all});
 
     //
     // IF PROBLEM ONLY
@@ -1135,13 +1127,10 @@ list cpppar_quf_table_sum(SEXP x, SEXP y, bool do_sum_y, bool rm_0, bool rm_1,
 
     if(is_pblm){
         // The removed observations
-        res["obs_removed"] = obs_removed;
+        res.push_back({ "obs_removed"_nm = obs_removed });
 
         // The removed clusters
-        for(int q=0 ; q<Q ; ++q){
-            res_tmp[q] = x_removed_all[q];
-        }
-        res["fe_removed"] = clone(res_tmp);
+        res.push_back({ "fe_removed"_nm = copy_sum_y_all });
 
     }
 
