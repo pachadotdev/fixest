@@ -719,7 +719,7 @@ doubles_matrix<> cpp_factor_matrix(integers fact, logicals is_na_all, integers w
     }
 
     // TODO: dimnames
-    res.attr("dimnames") = list(NULL, col_names);
+    // res.attr("dimnames") = list(NULL, col_names);
 
     return res;
 }
