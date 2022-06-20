@@ -454,7 +454,7 @@ list cpp_quf_gnl(SEXP x){
 
     UNPROTECT(1);
 
-    return writable::list({
+    return list({
         "x_uf"_nm = r_x_uf,
         "x_unik"_nm = x_unik
     });
