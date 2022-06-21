@@ -2,6 +2,7 @@
 #include <string>
 #include <cstring>
 #include <vector>
+#include <cpp11/strings.hpp>
 
 using namespace cpp11;
 
@@ -59,7 +60,7 @@ strings cpp_colon_to_star(SEXP Rstr){
 
   int n = LENGTH(Rstr);
 
-  strings res(n);
+  writable::strings res(n);
   for(int i = 0; i < n; ++i){
     const char *str = CHAR(STRING_ELT(Rstr, i));
     res[i] = colon_to_star_single(str);
