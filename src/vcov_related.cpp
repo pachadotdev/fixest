@@ -38,7 +38,7 @@ doubles_matrix<> cpp_newey_west(doubles_matrix<> S, doubles w, int nthreads){
         }
     }
 
-    doubles_matrix<> meat(K, K);
+    writable::doubles_matrix<> meat(K, K);
 
     if(par_on_col){
 
@@ -46,7 +46,7 @@ doubles_matrix<> cpp_newey_west(doubles_matrix<> S, doubles w, int nthreads){
 
         for(int l=0 ; l<L ; ++l){
 
-#pragma omp parallel for num_threads(nthreads) schedule(static, 1)
+        #pragma omp parallel for num_threads(nthreads) schedule(static, 1)
             for(int index=0 ; index<K_sq ; ++index){
                 int k1 = all_k1[index];
                 int k2 = all_k2[index];
@@ -101,7 +101,7 @@ doubles_matrix<> cpp_newey_west(doubles_matrix<> S, doubles w, int nthreads){
             // Adding all the matrices
             for(int l=L_start ; l<L_end ; ++l){
                 double * mat_prod = p_mat_prods[l - L_start];
-#pragma omp parallel for num_threads(nthreads)
+                #pragma omp parallel for num_threads(nthreads)
                 for(int k1=0 ; k1<K ; ++k1){
                     for(int k2=0 ; k2<K ; ++k2){
                         meat(k1, k2) += w[l] * mat_prod[k1 + k2*K];
@@ -121,8 +121,8 @@ doubles_matrix<> cpp_newey_west(doubles_matrix<> S, doubles w, int nthreads){
 
     // Finishing
     // we add the transpose
-    doubles_matrix<> res = clone(meat);
-#pragma omp parallel for num_threads(nthreads)
+    writable::doubles_matrix<> res = clone(meat);
+    #pragma omp parallel for num_threads(nthreads)
     for(int k1=0 ; k1<K ; ++k1){
         for(int k2=0 ; k2<K ; ++k2){
             res(k1, k2) += meat(k2, k1);
@@ -150,10 +150,10 @@ doubles_matrix<> cpp_newey_west_panel(doubles_matrix<> S, doubles w, integers un
     if(w[L - 1] == 0) L -= 1;
     if(L > T - 1) L = T - 1;
 
-    doubles_matrix<> meat(K, K);
+    writable::doubles_matrix<> meat(K, K);
 
     // utilities
-    doubles time_table(T);
+    writable::doubles time_table(T);
     for(int i=0 ; i<N ; ++i){
         ++time_table[time[i] - 1];
     }
@@ -207,7 +207,7 @@ doubles_matrix<> cpp_newey_west_panel(doubles_matrix<> S, doubles w, integers un
     }
 
     // l == 0 => easy
-#pragma omp parallel for num_threads(nthreads)
+    #pragma omp parallel for num_threads(nthreads)
     for(int index=0 ; index<K_sq ; ++index){
         int k1 = all_k1[index];
         int k2 = all_k2[index];
@@ -236,7 +236,7 @@ doubles_matrix<> cpp_newey_west_panel(doubles_matrix<> S, doubles w, integers un
                 nmax += time_table[t];
             }
 
-#pragma omp parallel for num_threads(nthreads)
+        #pragma omp parallel for num_threads(nthreads)
             for(int index=0 ; index<K_sq ; ++index){
                 int k1 = all_k1[index];
                 int k2 = all_k2[index];
@@ -257,7 +257,7 @@ doubles_matrix<> cpp_newey_west_panel(doubles_matrix<> S, doubles w, integers un
         // the rest
         for(int l=1 ; l<L ; ++l){
 
-#pragma omp parallel for num_threads(nthreads) schedule(static, 1)
+        #pragma omp parallel for num_threads(nthreads) schedule(static, 1)
             for(int index=0 ; index<K_sq ; ++index){
                 int k1 = all_k1[index];
                 int k2 = all_k2[index];
@@ -297,8 +297,8 @@ doubles_matrix<> cpp_newey_west_panel(doubles_matrix<> S, doubles w, integers un
 
     // Finishing
     // we add the transpose
-    doubles_matrix<> res = clone(meat);
-#pragma omp parallel for num_threads(nthreads)
+    writable::doubles_matrix<> res = clone(meat);
+    #pragma omp parallel for num_threads(nthreads)
     for(int k1=0 ; k1<K ; ++k1){
         for(int k2=0 ; k2<K ; ++k2){
             res(k1, k2) += meat(k2, k1);
@@ -306,7 +306,6 @@ doubles_matrix<> cpp_newey_west_panel(doubles_matrix<> S, doubles w, integers un
     }
 
     return res;
-
 }
 
 
