@@ -564,7 +564,7 @@ doubles_matrix<> cpp_vcov_conley(doubles_matrix<> S, doubles lon_rad, doubles la
     mat_row_scheme scores(S);
 
     // utilities
-    doubles cos_lat(N);
+    writable::doubles cos_lat(N);
     for(int i=0 ; i<N ; ++i){
         cos_lat[i] = cos(lat_rad[i]);
     }
@@ -644,7 +644,7 @@ doubles_matrix<> cpp_vcov_conley(doubles_matrix<> S, doubles lon_rad, doubles la
 
     // Rcout << "total done: " << ++n_done << "\n";
 
-    doubles_matrix<> res(K, K);
+    writable::doubles_matrix<> res(K, K);
 
     for(int i=0 ; i<N ; ++i){
         for(int k1=0 ; k1<K ; ++k1){
