@@ -42,7 +42,7 @@ doubles_matrix<> cpp_newey_west(doubles_matrix<> S, doubles w, int nthreads){
 
     if(par_on_col){
 
-        doubles_matrix<> mat_prod(K, K);
+        writable::doubles_matrix<> mat_prod(K, K);
 
         for(int l=0 ; l<L ; ++l){
 
@@ -66,7 +66,7 @@ doubles_matrix<> cpp_newey_west(doubles_matrix<> S, doubles w, int nthreads){
 
         // we avoid race conditions that way
 
-        // I still don't know how to conveniently do the same with Rcpp::doubles_matrix...
+        // TODO: do the same with cpp11::doubles_matrix
         int K_sq = K * K;
         std::vector<double> mat_all_stacked(K_sq * step_size);
         std::vector<double*> p_mat_prods(step_size);
@@ -78,8 +78,7 @@ doubles_matrix<> cpp_newey_west(doubles_matrix<> S, doubles w, int nthreads){
         int L_start = 0;
         int L_end = step_size;
         for(int s=0 ; s<n_steps ; ++s){
-
-#pragma omp parallel for num_threads(nthreads)
+        #pragma omp parallel for num_threads(nthreads)
             for(int l=L_start ; l<L_end ; ++l){
 
                 // pointer matrix (not a copy)
@@ -96,7 +95,6 @@ doubles_matrix<> cpp_newey_west(doubles_matrix<> S, doubles w, int nthreads){
                     }
                 }
             }
-
 
             // Adding all the matrices
             for(int l=L_start ; l<L_end ; ++l){
@@ -115,8 +113,6 @@ doubles_matrix<> cpp_newey_west(doubles_matrix<> S, doubles w, int nthreads){
             if(L_end > L) L_end = L;
 
         }
-
-
     }
 
     // Finishing
@@ -326,13 +322,13 @@ doubles_matrix<> cpp_driscoll_kraay(doubles_matrix<> S, doubles w,
     if(w[L - 1] == 0) L -= 1;
     if(L > T - 1) L = T - 1;
 
-    doubles_matrix<> meat(K, K);
+    writable::doubles_matrix<> meat(K, K);
 
     // Scores
-    doubles_matrix<> time_scores(T, K);
+    writable::doubles_matrix<> time_scores(T, K);
 
     // we sum the scores by period
-#pragma omp parallel for num_threads(nthreads)
+    #pragma omp parallel for num_threads(nthreads)
     for(int k=0 ; k<K ; ++k){
         for(int i=0 ; i<N ; ++i){
             time_scores(time[i] - 1, k) += S(i, k);
@@ -350,7 +346,7 @@ doubles_matrix<> cpp_driscoll_kraay(doubles_matrix<> S, doubles w,
 
     for(int l=0 ; l<L ; ++l){
         // X_t' %*% X_t+l
-#pragma omp parallel for num_threads(nthreads) schedule(static, 1)
+        #pragma omp parallel for num_threads(nthreads) schedule(static, 1)
         for(int index=0 ; index<K_sq ; ++index){
             int k1 = all_k1[index];
             int k2 = all_k2[index];
@@ -370,8 +366,8 @@ doubles_matrix<> cpp_driscoll_kraay(doubles_matrix<> S, doubles w,
 
     // Finishing
     // we add the transpose
-    doubles_matrix<> res = clone(meat);
-#pragma omp parallel for num_threads(nthreads)
+    writable::doubles_matrix<> res = clone(meat);
+    #pragma omp parallel for num_threads(nthreads)
     for(int k1=0 ; k1<K ; ++k1){
         for(int k2=0 ; k2<K ; ++k2){
             res(k1, k2) += meat(k2, k1);
@@ -379,7 +375,6 @@ doubles_matrix<> cpp_driscoll_kraay(doubles_matrix<> S, doubles w,
     }
 
     return res;
-
 }
 
 
@@ -435,7 +430,7 @@ public:
 
 };
 
-mat_row_scheme::mat_row_scheme(Rcpp::doubles_matrix<> &x){
+mat_row_scheme::mat_row_scheme(doubles_matrix<> &x){
 
     this->N = x.nrow();
     this->K = x.ncol();
