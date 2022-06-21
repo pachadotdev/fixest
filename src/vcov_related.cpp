@@ -12,7 +12,7 @@
 using namespace cpp11;
 
 [[cpp11::register]]
-doubles_matrix cpp_newey_west(doubles_matrix S, doubles w, int nthreads){
+doubles_matrix<> cpp_newey_west(doubles_matrix<> S, doubles w, int nthreads){
     // Basic NeweyWest for time series
     // note that the data MUST be sorted by period beforehand
     // S: scores
@@ -38,11 +38,11 @@ doubles_matrix cpp_newey_west(doubles_matrix S, doubles w, int nthreads){
         }
     }
 
-    doubles_matrix meat(K, K);
+    doubles_matrix<> meat(K, K);
 
     if(par_on_col){
 
-        doubles_matrix mat_prod(K, K);
+        doubles_matrix<> mat_prod(K, K);
 
         for(int l=0 ; l<L ; ++l){
 
@@ -121,7 +121,7 @@ doubles_matrix cpp_newey_west(doubles_matrix S, doubles w, int nthreads){
 
     // Finishing
     // we add the transpose
-    doubles_matrix res = clone(meat);
+    doubles_matrix<> res = clone(meat);
 #pragma omp parallel for num_threads(nthreads)
     for(int k1=0 ; k1<K ; ++k1){
         for(int k2=0 ; k2<K ; ++k2){
@@ -133,7 +133,7 @@ doubles_matrix cpp_newey_west(doubles_matrix S, doubles w, int nthreads){
 }
 
 [[cpp11::register]]
-doubles_matrix cpp_newey_west_panel(doubles_matrix S, doubles w, integers unit,
+doubles_matrix<> cpp_newey_west_panel(doubles_matrix<> S, doubles w, integers unit,
                                         int G, integers time, int T, int nthreads){
     // Newey West,  but for panels
     // S: scores
@@ -150,7 +150,7 @@ doubles_matrix cpp_newey_west_panel(doubles_matrix S, doubles w, integers unit,
     if(w[L - 1] == 0) L -= 1;
     if(L > T - 1) L = T - 1;
 
-    doubles_matrix meat(K, K);
+    doubles_matrix<> meat(K, K);
 
     // utilities
     doubles time_table(T);
@@ -297,7 +297,7 @@ doubles_matrix cpp_newey_west_panel(doubles_matrix S, doubles w, integers unit,
 
     // Finishing
     // we add the transpose
-    doubles_matrix res = clone(meat);
+    doubles_matrix<> res = clone(meat);
 #pragma omp parallel for num_threads(nthreads)
     for(int k1=0 ; k1<K ; ++k1){
         for(int k2=0 ; k2<K ; ++k2){
@@ -311,7 +311,7 @@ doubles_matrix cpp_newey_west_panel(doubles_matrix S, doubles w, integers unit,
 
 
 [[cpp11::register]]
-doubles_matrix cpp_driscoll_kraay(doubles_matrix S, doubles w,
+doubles_matrix<> cpp_driscoll_kraay(doubles_matrix<> S, doubles w,
                                       integers time, int T, int nthreads){
     // Driscoll and Kraay
     // S: scores
@@ -327,10 +327,10 @@ doubles_matrix cpp_driscoll_kraay(doubles_matrix S, doubles w,
     if(w[L - 1] == 0) L -= 1;
     if(L > T - 1) L = T - 1;
 
-    doubles_matrix meat(K, K);
+    doubles_matrix<> meat(K, K);
 
     // Scores
-    doubles_matrix time_scores(T, K);
+    doubles_matrix<> time_scores(T, K);
 
     // we sum the scores by period
 #pragma omp parallel for num_threads(nthreads)
@@ -371,7 +371,7 @@ doubles_matrix cpp_driscoll_kraay(doubles_matrix S, doubles w,
 
     // Finishing
     // we add the transpose
-    doubles_matrix res = clone(meat);
+    doubles_matrix<> res = clone(meat);
 #pragma omp parallel for num_threads(nthreads)
     for(int k1=0 ; k1<K ; ++k1){
         for(int k2=0 ; k2<K ; ++k2){
@@ -436,7 +436,7 @@ public:
 
 };
 
-mat_row_scheme::mat_row_scheme(Rcpp::doubles_matrix &x){
+mat_row_scheme::mat_row_scheme(Rcpp::doubles_matrix<> &x){
 
     this->N = x.nrow();
     this->K = x.ncol();
@@ -516,7 +516,7 @@ inline double fabs_lat(double x, double y){
 
 
 [[cpp11::register]]
-doubles_matrix cpp_vcov_conley(doubles_matrix S, doubles lon_rad, doubles lat_rad,
+doubles_matrix<> cpp_vcov_conley(doubles_matrix<> S, doubles lon_rad, doubles lat_rad,
                                    const int distance, const double cutoff, int nthreads){
     // S: scores
     // lon_rad/lat_rad: longitude/latitude
@@ -644,7 +644,7 @@ doubles_matrix cpp_vcov_conley(doubles_matrix S, doubles lon_rad, doubles lat_ra
 
     // Rcout << "total done: " << ++n_done << "\n";
 
-    doubles_matrix res(K, K);
+    doubles_matrix<> res(K, K);
 
     for(int i=0 ; i<N ; ++i){
         for(int k1=0 ; k1<K ; ++k1){
