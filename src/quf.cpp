@@ -1100,17 +1100,19 @@ list cpppar_quf_table_sum(SEXP x, SEXP y, bool do_sum_y, bool rm_0, bool rm_1,
 
     // The object to be returned
 
+    // TODO: commented push backs
+
     writable::list res;
 
     // x: UF (the largest object => no copy)
-    res.push_back({"quf"_nm = res_x_quf_all});
+    // res.push_back({"quf"_nm = res_x_quf_all});
 
     // x: Unik
-    writable::list res_tmp(Q);
-    res.push_back({"items"_nm = x_unik_all});
+    // writable::list res_tmp(Q);
+    // res.push_back({"items"_nm = x_unik_all});
 
     // table
-    res.push_back({"table"_nm = x_table_all});
+    // res.push_back({"table"_nm = x_table_all});
 
     // sum y
     writable::doubles copy_sum_y_all = sum_y_all;
@@ -1121,6 +1123,8 @@ list cpppar_quf_table_sum(SEXP x, SEXP y, bool do_sum_y, bool rm_0, bool rm_1,
     }
     res.push_back({"sum_y"_nm = copy_sum_y_all});
 
+    // end TODO
+    
     //
     // IF PROBLEM ONLY
     //

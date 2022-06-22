@@ -15,3 +15,5 @@
 ^_AUTO_BENCHMARK$
 ^CONTRIBUTORS\.md$
 ^.vscode
+^dev$
+^vscode-install.r$
