@@ -6,7 +6,8 @@
 
 using namespace cpp11;
 
-std::string colon_to_star_single(const char * str){
+std::string colon_to_star_single(const char *str)
+{
   // we change a:b into a*b
   // we don't touch what's in paren: I(a:b) stays I(a:b)
 
@@ -20,25 +21,40 @@ std::string colon_to_star_single(const char * str){
   bool in_quote = false;
   char quote = '"';
   int n_paren = 0;
-  while(i < n){
+  while (i < n)
+  {
 
-    if(in_quote){
-      if(str[i] == quote){
+    if (in_quote)
+    {
+      if (str[i] == quote)
+      {
         in_quote = false;
       }
-    } else if(str[i] == '"' || str[i] == '\''){
+    }
+    else if (str[i] == '"' || str[i] == '\'')
+    {
       in_quote = true;
       quote = str[i];
-    } else if(n_paren > 0){
-      if(str[i] == '('){
+    }
+    else if (n_paren > 0)
+    {
+      if (str[i] == '(')
+      {
         ++n_paren;
-      } else if(str[i] == ')'){
+      }
+      else if (str[i] == ')')
+      {
         --n_paren;
       }
-    } else if(str[i] == '('){
-        ++n_paren;
-    } else if(str[i] == ':'){
-      if(i + 1 < n && str[i + 1] != ':' && i - 1 >= 0 && str[i - 1] != ':'){
+    }
+    else if (str[i] == '(')
+    {
+      ++n_paren;
+    }
+    else if (str[i] == ':')
+    {
+      if (i + 1 < n && str[i + 1] != ':' && i - 1 >= 0 && str[i - 1] != ':')
+      {
         // OK
         res += '*';
         ++i;
@@ -46,7 +62,8 @@ std::string colon_to_star_single(const char * str){
       }
     }
 
-    if(i == n) stop("Error in the index.");
+    if (i == n)
+      stop("Error in the index.");
 
     res += str[i++];
   }
@@ -54,14 +71,14 @@ std::string colon_to_star_single(const char * str){
   return res;
 }
 
-
-[[cpp11::register]]
-strings cpp_colon_to_star(SEXP Rstr){
+[[cpp11::register]] strings cpp_colon_to_star(SEXP Rstr)
+{
 
   int n = LENGTH(Rstr);
 
   writable::strings res(n);
-  for(int i = 0; i < n; ++i){
+  for (int i = 0; i < n; ++i)
+  {
     const char *str = CHAR(STRING_ELT(Rstr, i));
     res[i] = colon_to_star_single(str);
   }
