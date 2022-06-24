@@ -2,22 +2,7 @@
 // Maintenant la convergence des derivees
 //
 
-#include <cpp11.hpp>
-#include <cpp11/doubles.hpp>
-#include <vector>
-#include <cmath>
-
-#ifdef _OPENMP
-#include <omp.h>
-#else
-#define omp_get_thread_num() 0
-#endif
-
 #include "00_convergence.h"
-
-using namespace cpp11;
-using std::vector;
-using std::fabs;
 
 [[cpp11::register]] list cpp_derivconv_seq_gnl(int iterMax, double diffMax, int n_vars, SEXP nb_cluster_all, SEXP ll_d2,
 											   SEXP jacob_vector, SEXP deriv_init_vector, SEXP dum_vector)

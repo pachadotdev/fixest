@@ -1,19 +1,4 @@
-#include <cpp11.hpp>
-#include <cpp11/doubles.hpp>
-#include <vector>
-#include <cmath>
-
-#ifdef _OPENMP
-#include <omp.h>
-#else
-#define omp_get_thread_num() 0
-#endif
-
 #include "00_convergence.h"
-
-using namespace cpp11;
-using std::vector;
-using std::fabs;
 
 [[cpp11::register]] list cpp_conv_acc_gnl(int family, int iterMax, double diffMax, double diffMax_NR, double theta, SEXP nb_cluster_all,
 										  SEXP lhs, SEXP mu_init, SEXP dum_vector, SEXP tableCluster_vector,
