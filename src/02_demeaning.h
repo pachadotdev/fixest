@@ -53,9 +53,7 @@ nb_coef: refers to the fixed-effects coefficients. Coef and id are identical in 
 vs: means varying slopes
  */
 
-//
-// Next version => clean c++ code, use only sMat, create file with common functions
-//
+// TODO: Next version => clean c++ code, use only sMat
 
 #pragma once
 
