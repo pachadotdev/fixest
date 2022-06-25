@@ -1,12 +1,12 @@
 #include "04_linear_model.h"
 
-std::vector<int> set_parallel_scheme(int N, int nthreads)
+vector<int> set_parallel_scheme(int N, int nthreads)
 {
     // => this concerns only the parallel application on a 1-Dimensional matrix
     // takes in the nber of observations of the vector and the nber of threads
     // gives back a vector of the length the nber of threads + 1 giving the start/stop of each threads
 
-    std::vector<int> res(nthreads + 1, 0);
+    vector<int> res(nthreads + 1, 0);
     double N_rest = N;
 
     for (int i = 0; i < nthreads; ++i)
@@ -60,7 +60,7 @@ bool sparse_check(const doubles_matrix<> &X)
     return false;
 }
 
-void set_sparse(std::vector<int> &n_j, std::vector<int> &start_j, std::vector<int> &all_i, std::vector<double> &x, const doubles_matrix<> &X, const doubles &w)
+void set_sparse(vector<int> &n_j, vector<int> &start_j, vector<int> &all_i, vector<double> &x, const doubles_matrix<> &X, const doubles &w)
 {
 
     int N = X.nrow();
