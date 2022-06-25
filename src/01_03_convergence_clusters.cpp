@@ -1,4 +1,4 @@
-#include "00_convergence.h"
+#include "01_convergence.h"
 
 void computeClusterCoef_single(int family, int n_obs, int nb_cluster, double theta, double diffMax_NR,
 							   double *cluster_coef, double *mu,

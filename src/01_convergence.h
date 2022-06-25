@@ -1,41 +1,43 @@
-/***************************************************************************
- * _________________                                                       *
- * || Convergence ||                                                       *
- * -----------------                                                       *
- *                                                                         *
- * Author: Laurent R. Berge                                                *
- *                                                                         *
- * Compute the optimal set of cluster coefficients based on Berge (2018),  *
- * in a ML framework.                                                      *
- *                                                                         *
- * The code concerns both the cluster coefficients (i.e. fixed-effects)    *
- * and the coefficients of the derivatives of the cluster coefficients.    *
- *                                                                         *
- * 2-FEs trick:                                                            *
- * For both the Poisson and the Gaussian methods I use a trick to hasten   *
- * computation. Instead of looping on the number of observations, the      *
- * loop is on the number of unique cases. For balanced panels, this is     *
- * not useful, but for strongly unbalanced panels, this makes a big        *
- * difference.                                                             *
- *                                                                         *
- * Logit/Negbin:                                                           *
- * To obtain the cluster coefficients for these two likelihoods, I use     *
- * a Newton-Raphson + dichotomy algorithm. This ensures convergence        *
- * even when the NR algo would go astray (which may be the case in some    *
- * situations).                                                            *
- *                                                                         *
- * Drawback:                                                               *
- * The big drawback of the ML methods is that, as opposed to GLM methods,  *
- * parallel computing cannot be leveraged.                                 *
- *                                                                         *
- **************************************************************************/
+/*
+  ___   ___   _ __  __   __  ___  _ __   __ _   ___  _ __    ___   ___ 
+ / __| / _ \ | '_ \ \ \ / / / _ \| '__| / _` | / _ \| '_ \  / __| / _ \  
+| (__ | (_) || | | | \ V / |  __/| |   | (_| ||  __/| | | || (__ |  __/ 
+ \___| \___/ |_| |_|  \_/   \___||_|    \__, | \___||_| |_| \___| \___|
+                                         __/ |                         
+                                        |___/
+
+Original Author: Laurent R. Berge
+Refactored by Mauricio "Pacha" Vargas Sepulveda starting in Jun 2022
+
+Compute the optimal set of cluster coefficients based on Berge (2018)
+in a ML framework.
+
+The code concerns both the cluster coefficients (i.e. fixed-effects)
+and the coefficients of the derivatives of the cluster coefficients.
+
+2-FEs trick:
+For both the Poisson and the Gaussian methods I use a trick to hasten
+computation. Instead of looping on the number of observations, the
+loop is on the number of unique cases. For balanced panels, this is
+not useful, but for strongly unbalanced panels, this makes a big
+difference.
+
+Logit/Negbin:
+To obtain the cluster coefficients for these two likelihoods, I use
+a Newton-Raphson + dichotomy algorithm. This ensures convergence
+even when the NR algo would go astray (which may be the case in some
+situations).
+
+Drawback:
+The big drawback of the ML methods is that, as opposed to GLM methods,
+parallel computing cannot be leveraged.
+*/
 
 #pragma once
 
 #include <cpp11.hpp>
 #include <cpp11/doubles.hpp>
 #include <vector>
-#include <cmath>
 
 #ifdef _OPENMP
 #include <omp.h>
@@ -47,7 +49,7 @@ using namespace cpp11;
 using std::vector;
 using std::fabs;
 
-// HELPERS
+// COMMON FUNS
 
 bool continue_criterion(double a, double b, double diffMax);
 
