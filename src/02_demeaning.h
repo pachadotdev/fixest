@@ -35,18 +35,6 @@ parallel setup. It costs a bit, but it's clearly worth it.
 */
 
 /* 
-CHANGELOG
-
-12/09/2020: the vector of fixed-effects id becomes a list, the same that is returned in R (it avoids a deep copy).
-So I had to change the R-style indexes into C-style indexes by substratcting 1.
-
-October 2020:
-Complete rewriting of the function. Now there is a class, FEClass, that takes care of computing the FE related stuff.
-I included the handling of varying slopes with closed-form.
-=> this leads to much clearer code.
-*/
-
-/* 
 CONVENTIONS
 
 Suffixes

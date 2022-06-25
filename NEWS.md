@@ -1,3 +1,24 @@
+# fixest2 2022.05.25
+
+This is the first version of the fork with a changelog (this file).
+
+The changes in this version consisted in a refactoring of all the original cpp 
+files from fixest 0.10.5 into smaller files (i.e. the +3,000 lines in 
+convergence.cpp were reorganized into smaller files according to the kind 
+of computation for each function, such as if these return numerical 
+derivatives, the number of clusters, etc.)
+
+Until this point, I found the following in the cpp files not documented below.
+
+## Demeaning
+
+12/09/2020: the vector of fixed-effects id becomes a list, the same that is returned in R (it avoids a deep copy).
+So I had to change the R-style indexes into C-style indexes by substratcting 1.
+
+October 2020:
+Complete rewriting of the function. Now there is a class, FEClass, that takes care of computing the FE related stuff.
+I included the handling of varying slopes with closed-form.
+=> this leads to much clearer code.
 
 # fixest 0.10.4
 

@@ -1,20 +1,33 @@
 Package: fixest
 Type: Package
 Title: Fast Fixed-Effects Estimations
-Version: 0.11.0
-Authors@R:
-    c(person(given = "Laurent",
-             family = "Berge",
-             role = c("aut", "cre"),
-             email = "laurent.berge@u-bordeaux.fr"),
-      person(given = "Sebastian",
-             family = "Krantz",
-             role = "ctb"),
-      person(given = "Grant",
-             family = "McDermott",
-             role = "ctb",
-             email = "grantmcd@uoregon.edu",
-             comment = c(ORCID = "0000-0001-7883-8573")))
+Version: 2022.05.25
+Authors@R: c(
+    person(given = "Laurent",
+        family = "Berge",
+        role = c("aut", "cre"),
+        email = "laurent.berge@u-bordeaux.fr"),
+    person(given = "Sebastian",
+        family = "Krantz",
+        role = "ctb"),
+    person(given = "Grant",
+        family = "McDermott",
+        role = "ctb",
+        email = "grantmcd@uoregon.edu",
+        comment = c(ORCID = "0000-0001-7883-8573")),
+    person(given = "Agustin",
+        family = "Covarrubias",
+        role = "ctb",
+        email = "gh@agucova.dev"),
+    person(given = "Hernan",
+        family = "Robledo",
+        role = "ctb",
+        email = "harobledo@uc.cl"),
+    person(given = "Mauricio",
+        family = "Vargas",
+        role = "ctb",
+        email = "mavargas11@uc.cl",
+        c(ORCID = "0000-0003-1017-7574")))
 Imports: stats, graphics, grDevices, tools, utils, methods, numDeriv, nlme, sandwich, dreamerr(>= 1.2.3)
 Suggests: knitr, rmarkdown, data.table, plm, MASS, pander, ggplot2, lfe, tinytex, pdftools
 LinkingTo: cpp11
