@@ -50,7 +50,7 @@ inline bool is_separator(const char *str, int i)
 }
 
 void extract_quote(const char *str, int &i, int n,
-                   std::string &operator_tmp)
+                   string &operator_tmp)
 {
 
     char quote = str[i++];
@@ -69,14 +69,14 @@ void extract_quote(const char *str, int &i, int n,
 }
 
 void extract_operator(const char *str, int &i, int n,
-                      std::vector<std::string> &operator_vec,
+                      vector<string> &operator_vec,
                       bool &is_eval, bool no_whitespace = false)
 {
     // modifies the operator and gives the updated i
     // the i should start where to evaluate post separator (if present)
 
     // we first get the operator, if there is an operator
-    std::string operator_tmp = "";
+    string operator_tmp = "";
 
     int i_start = i;
     bool any_operator = true;
@@ -246,7 +246,7 @@ void extract_operator(const char *str, int &i, int n,
 
         if (!any_operator)
         {
-            std::vector<std::string> empty_vec;
+            vector<string> empty_vec;
             operator_vec = empty_vec;
             i = i_start;
         }
@@ -263,8 +263,8 @@ void extract_operator(const char *str, int &i, int n,
     // DSB open flag
     int n_open = 0;
 
-    std::string string_value = "";
-    std::string dsb_value = "";
+    string string_value = "";
+    string dsb_value = "";
 
     int n = strlen(str);
 
@@ -295,7 +295,7 @@ void extract_operator(const char *str, int &i, int n,
         {
 
             writable::list dsb_element;
-            std::vector<std::string> operator_vec;
+            vector<string> operator_vec;
 
             // modifies i and operator_vec "in place"
             bool is_eval = true;
@@ -376,7 +376,7 @@ void extract_operator(const char *str, int &i, int n,
     int n = strlen(str);
 
     writable::list dsb_element;
-    std::vector<std::string> operator_vec;
+    vector<string> operator_vec;
 
     // is eval is not used here but is required in extract_operator
     bool is_eval = false;
@@ -388,7 +388,7 @@ void extract_operator(const char *str, int &i, int n,
     dsb_element.push_back({"operator_vec"_nm = operator_vec});
 
     // init
-    std::string dsb_value = "";
+    string dsb_value = "";
 
     // Remember that the full string is verbatim
     for (; i < n; ++i)
@@ -420,9 +420,9 @@ inline bool is_if_separator(const char *str, int i, int n, bool semicolon = fals
     int n = strlen(str);
 
     writable::list if_elements;
-    std::vector<std::string> operator_vec;
-    std::vector<std::string> empty_vec;
-    std::string operator_tmp = "";
+    vector<string> operator_vec;
+    vector<string> empty_vec;
+    string operator_tmp = "";
 
     // the code is close to extract_operator, but not identical....
     // it's a bit code duplication and I really don't like that
@@ -536,7 +536,7 @@ inline bool is_if_separator(const char *str, int i, int n, bool semicolon = fals
         return res;
     }
 
-    std::string tmp = "";
+    string tmp = "";
     int id_current = id[0];
 
     for (int i = 0; i < n_x; ++i)

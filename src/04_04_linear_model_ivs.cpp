@@ -110,10 +110,10 @@
     // SPARSE case
     //
 
-    std::vector<int> n_j(K2 + !isX, 0);
-    std::vector<int> start_j(K2 + !isX + 1, 0);
-    std::vector<int> all_i;
-    std::vector<double> x;
+    vector<int> n_j(K2 + !isX, 0);
+    vector<int> start_j(K2 + !isX + 1, 0);
+    vector<int> all_i;
+    vector<double> x;
 
     set_sparse(n_j, start_j, all_i, x, X, w);
 
@@ -230,10 +230,10 @@
     }
     else
     {
-        std::vector<int> n_j(K2 + !isX, 0);
-        std::vector<int> start_j(K2 + !isX + 1, 0);
-        std::vector<int> all_i;
-        std::vector<double> x;
+        vector<int> n_j(K2 + !isX, 0);
+        vector<int> start_j(K2 + !isX + 1, 0);
+        vector<int> all_i;
+        vector<double> x;
 
         set_sparse(n_j, start_j, all_i, x, X, w);
 
@@ -251,7 +251,7 @@
     int K = Rf_length(resid_1st);
 
     writable::doubles iv_resid(resid_2nd);
-    std::vector<int> bounds = set_parallel_scheme(N, nthreads);
+    vector<int> bounds = set_parallel_scheme(N, nthreads);
 
     if (K == 1)
     {
@@ -269,7 +269,7 @@
     else
     {
 
-        std::vector<double *> p_p_r(K);
+        vector<double *> p_p_r(K);
         for (int k = 0; k < K; ++k)
         {
             p_p_r[k] = REAL(VECTOR_ELT(resid_1st, k));

@@ -27,6 +27,7 @@ Refactored by Mauricio "Pacha" Vargas Sepulveda starting in Jun 2022
 
 using namespace cpp11;
 using std::vector;
+using std::string;
 using std::strlen;
 
 inline bool is_dsb_open(const char *str, int i, int n);

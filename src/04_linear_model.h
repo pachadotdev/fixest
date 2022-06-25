@@ -32,7 +32,7 @@ but they have the merit of doing exacly what I want.
 using namespace cpp11;
 using std::vector;
 
-std::vector<int> set_parallel_scheme(int N, int nthreads);
+vector<int> set_parallel_scheme(int N, int nthreads);
 
 bool sparse_check(const doubles_matrix<> &X);
 
