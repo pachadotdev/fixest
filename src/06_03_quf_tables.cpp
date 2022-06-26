@@ -1,6 +1,6 @@
 #include "06_quf.h"
 
-void quf_table_sum_single(void *px_in, std::string &x_type, int n, int q, int *x_quf,
+void quf_table_sum_single(void *px_in, string &x_type, int n, int q, int *x_quf,
                           vector<double> &x_unik, vector<int> &x_table, double *py,
                           vector<double> &sum_y, bool do_sum_y, bool rm_0, bool rm_1,
                           bool rm_single, vector<int> &any_pblm, vector<bool> &id_pblm,
@@ -51,7 +51,7 @@ void quf_table_sum_single(void *px_in, std::string &x_type, int n, int q, int *x
     // return;
 
     sum_y.resize(compute_sum_y > 0 ? D : 1);
-    std::fill(sum_y.begin(), sum_y.end(), 0);
+    fill(sum_y.begin(), sum_y.end(), 0);
 
     // Rcout << "size sum_y = " << sum_y.size() << "\n";
 
@@ -90,7 +90,7 @@ void quf_table_sum_single(void *px_in, std::string &x_type, int n, int q, int *x
         if (any_pblm[q])
         {
             id_pblm.resize(D);
-            std::fill(id_pblm.begin(), id_pblm.end(), false);
+            fill(id_pblm.begin(), id_pblm.end(), false);
 
             for (int d = d_end; d < D; ++d)
             {
@@ -101,7 +101,7 @@ void quf_table_sum_single(void *px_in, std::string &x_type, int n, int q, int *x
                 }
             }
 
-            // int sum_problems = std::accumulate(id_pblm.begin(), id_pblm.end(), 0);
+            // int sum_problems = accumulate(id_pblm.begin(), id_pblm.end(), 0);
             // Rcout << ", sum_problems = " << sum_problems;
         }
     }
@@ -196,7 +196,7 @@ void quf_table_sum_single(void *px_in, std::string &x_type, int n, int q, int *x
     // For strings => we convert into numeric without parallel (sigh)
 
     vector<void *> px_all(Q);
-    vector<std::string> x_type_all(Q);
+    vector<string> x_type_all(Q);
     // vector to store modified strings
     vector<vector<unsigned long long>> x_ull_all(Q);
 
@@ -220,12 +220,12 @@ void quf_table_sum_single(void *px_in, std::string &x_type, int n, int q, int *x
             // We make the conversion to unsigned long long
             x_type_all[q] = "string";
 
-            std::uintptr_t xi_uintptr;
+            uintptr_t xi_uintptr;
 
             for (int i = 0; i < n; ++i)
             {
                 const char *pxi = CHAR(STRING_ELT(xq, i));
-                xi_uintptr = reinterpret_cast<std::uintptr_t>(pxi);
+                xi_uintptr = reinterpret_cast<uintptr_t>(pxi);
 
                 x_ull_all[q].push_back(static_cast<unsigned long long>(xi_uintptr));
 
@@ -283,12 +283,12 @@ void quf_table_sum_single(void *px_in, std::string &x_type, int n, int q, int *x
         // - if not parallel, we fill the bool vector directly
         //
 
-        int n_problems = std::accumulate(any_pblm.begin(), any_pblm.end(), 0);
+        int n_problems = accumulate(any_pblm.begin(), any_pblm.end(), 0);
         bool is_parallel = n_problems > 1 && nthreads > 1;
 
         // creating the obs2remove vector
         obs_removed.resize(n);
-        std::fill(obs_removed.begin(), obs_removed.end(), false);
+        fill(obs_removed.begin(), obs_removed.end(), false);
 
         if (is_parallel)
         {
@@ -357,7 +357,7 @@ void quf_table_sum_single(void *px_in, std::string &x_type, int n, int q, int *x
         // I create the addition new_quf and new_unik because we need the
         // them old items for the construction of the new.
 
-        int n_removed = std::accumulate(obs_removed.begin(), obs_removed.end(), 0);
+        int n_removed = accumulate(obs_removed.begin(), obs_removed.end(), 0);
         int n_new = n - n_removed;
 
         writable::list res_x_new_quf_all(Q);

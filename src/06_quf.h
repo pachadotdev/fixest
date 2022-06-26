@@ -57,6 +57,7 @@ vector ranging from 1 to the number of unique values (i.e:
 #include <cpp11.hpp>
 #include <cpp11/doubles.hpp>
 #include <vector>
+#include <numeric>
 
 #include <stdint.h>
 
@@ -68,5 +69,18 @@ vector ranging from 1 to the number of unique values (i.e:
 
 using namespace cpp11;
 using std::vector;
+using std::string;
+using std::uintptr_t;
+using std::fill;
+using std::accumulate;
 
 void quf_refactor(int *px_in, int x_size, integers &obs2keep, int n, int *x_uf, vector<double> &x_unik, vector<int> &x_table);
+
+void quf_single(void *px_in, string &x_type, int n, int *x_uf, vector<double> &x_unik);
+
+void quf_refactor_table_sum_single(int n, int *quf_old, int *quf_new, vector<bool> &obs_removed,
+                                   vector<double> &x_unik, vector<double> &x_unik_new, vector<double> &x_removed,
+                                   vector<int> &x_table, double *py, vector<double> &sum_y, bool do_sum_y,
+                                   bool rm_1, bool rm_single, vector<bool> &id_pblm, bool check_pblm,
+                                   bool *pstop_now, int n_FE);
+                                   

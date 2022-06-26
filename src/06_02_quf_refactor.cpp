@@ -33,7 +33,7 @@ void quf_refactor(int *px_in, int x_size, integers &obs2keep, int n, int *x_uf, 
     {
         // We just create the table and the unique
         x_table.resize(x_size);
-        std::fill(x_table.begin(), x_table.end(), 0);
+        fill(x_table.begin(), x_table.end(), 0);
 
         for (int i = 0; i < n; ++i)
         {
@@ -91,12 +91,12 @@ void quf_refactor_table_sum_single(int n, int *quf_old, int *quf_new, vector<boo
         // We also check that some observations are still left!
 
         // we recompute the table and sum_y
-        std::fill(x_table.begin(), x_table.end(), 0);
-        // std::fill(sum_y.begin(), sum_y.end(), 0);
+        fill(x_table.begin(), x_table.end(), 0);
+        // fill(sum_y.begin(), sum_y.end(), 0);
 
         if (do_sum_y)
         {
-            std::fill(sum_y.begin(), sum_y.end(), 0);
+            fill(sum_y.begin(), sum_y.end(), 0);
         }
 
         int id = 0;
@@ -131,7 +131,7 @@ void quf_refactor_table_sum_single(int n, int *quf_old, int *quf_new, vector<boo
             }
         }
 
-        int sum_problems = std::accumulate(id_pblm_check.begin(), id_pblm_check.end(), 0);
+        int sum_problems = accumulate(id_pblm_check.begin(), id_pblm_check.end(), 0);
         // Rcout << "sum_problems = " << sum_problems << "\n";
         *pstop_now = sum_problems == D;
     }
@@ -163,7 +163,7 @@ void quf_refactor_table_sum_single(int n, int *quf_old, int *quf_new, vector<boo
             // if no problem then the elements of quf_new are the same as in quf_old
 
             id_new.resize(D);
-            std::fill(id_new.begin(), id_new.end(), 0);
+            fill(id_new.begin(), id_new.end(), 0);
 
             for (int d = 0; d < D; ++d)
             {
@@ -187,11 +187,11 @@ void quf_refactor_table_sum_single(int n, int *quf_old, int *quf_new, vector<boo
         // Rcout << "id_pblm size: " << id_pblm.size() << "\n";
 
         x_table.resize(D_new);
-        std::fill(x_table.begin(), x_table.end(), 0);
+        fill(x_table.begin(), x_table.end(), 0);
         if (do_sum_y)
         {
             sum_y.resize(D_new);
-            std::fill(sum_y.begin(), sum_y.end(), 0);
+            fill(sum_y.begin(), sum_y.end(), 0);
         }
 
         int id;

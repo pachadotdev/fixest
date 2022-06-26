@@ -358,12 +358,12 @@ void quf_int(int n, int *x_uf, void *px, vector<double> &x_unik, int x_min, int 
     {
 
         IS_STR = true;
-        std::uintptr_t xi_uintptr;
+        uintptr_t xi_uintptr;
 
         for (int i = 0; i < n; ++i)
         {
             const char *pxi = CHAR(STRING_ELT(x, i));
-            xi_uintptr = reinterpret_cast<std::uintptr_t>(pxi);
+            xi_uintptr = reinterpret_cast<uintptr_t>(pxi);
 
             x_ull.push_back(static_cast<unsigned long long>(xi_uintptr));
 
@@ -466,7 +466,7 @@ void quf_int(int n, int *x_uf, void *px, vector<double> &x_unik, int x_min, int 
                  "x_unik"_nm = x_unik});
 }
 
-void quf_single(void *px_in, std::string &x_type, int n, int *x_uf, vector<double> &x_unik)
+void quf_single(void *px_in, string &x_type, int n, int *x_uf, vector<double> &x_unik)
 {
 
     // preparation for strings
