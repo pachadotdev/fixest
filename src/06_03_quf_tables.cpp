@@ -109,333 +109,333 @@ void quf_table_sum_single(void *px_in, string &x_type, int n, int q, int *x_quf,
     // Rcout << "\n";
 }
 
-[[cpp11::register]] list cpppar_quf_table_sum(SEXP x, SEXP y, bool do_sum_y, bool rm_0, bool rm_1,
-                                              bool rm_single, integers only_slope, int nthreads,
-                                              bool do_refactor, SEXP r_x_sizes, integers obs2keep)
-{
+// [[cpp11::register]] list cpppar_quf_table_sum(SEXP x, SEXP y, bool do_sum_y, bool rm_0, bool rm_1,
+//                                               bool rm_single, integers only_slope, int nthreads,
+//                                               bool do_refactor, SEXP r_x_sizes, integers obs2keep)
+// {
 
-    // x: List of vectors of IDs (type int/num or char only)
-    // y: dependent variable
-    // rm_0: remove FEs where dep var is only 0
-    // rm_1: remove FEs where dep var is only 0 or 1
-    // rm_single: remove FEs with only one observation
-    // do_sum_y: should we compute the sum_y?
+//     // x: List of vectors of IDs (type int/num or char only)
+//     // y: dependent variable
+//     // rm_0: remove FEs where dep var is only 0
+//     // rm_1: remove FEs where dep var is only 0 or 1
+//     // rm_single: remove FEs with only one observation
+//     // do_sum_y: should we compute the sum_y?
 
-    // When the data is refactored (ie x is a fixef_id_list, each element ranging from 1 to n_items):
-    // - do_refactor
-    // - r_x_sizes => a vector of length Q, the number of items for each FE
-    // - obs2keep => vector of observations to keep. The neutral is 0.
+//     // When the data is refactored (ie x is a fixef_id_list, each element ranging from 1 to n_items):
+//     // - do_refactor
+//     // - r_x_sizes => a vector of length Q, the number of items for each FE
+//     // - obs2keep => vector of observations to keep. The neutral is 0.
 
-    int Q = Rf_length(x);
-    SEXP xq = VECTOR_ELT(x, 0);
-    int n = Rf_length(xq);
+//     int Q = Rf_length(x);
+//     SEXP xq = VECTOR_ELT(x, 0);
+//     int n = Rf_length(xq);
 
-    vector<bool> check_pblm(Q, true);
-    if (only_slope.size() == Q)
-    {
-        for (int q = 0; q < Q; ++q)
-        {
-            // we check for pblm only if NOT only slope
-            check_pblm[q] = only_slope[q] == false;
-        }
-    }
+//     vector<bool> check_pblm(Q, true);
+//     if (only_slope.size() == Q)
+//     {
+//         for (int q = 0; q < Q; ++q)
+//         {
+//             // we check for pblm only if NOT only slope
+//             check_pblm[q] = only_slope[q] == false;
+//         }
+//     }
 
-    // Rcout << "Q = " << Q << "\n";
+//     // Rcout << "Q = " << Q << "\n";
 
-    double *py = nullptr;
-    if (TYPEOF(y) == REALSXP)
-    {
-        py = REAL(y);
-    }
-    else
-    {
-        // => there will be no use of y, so nullptr is OK
-        // but I must ensure that beforehand: do_sum_y = rm_0 = rm_1 = false
-        if (do_sum_y || rm_0)
-        {
-            stop("y should not be a list when its values are assessed.");
-        }
-    }
+//     double *py = nullptr;
+//     if (TYPEOF(y) == REALSXP)
+//     {
+//         py = REAL(y);
+//     }
+//     else
+//     {
+//         // => there will be no use of y, so nullptr is OK
+//         // but I must ensure that beforehand: do_sum_y = rm_0 = rm_1 = false
+//         if (do_sum_y || rm_0)
+//         {
+//             stop("y should not be a list when its values are assessed.");
+//         }
+//     }
 
-    // I create a fake vector to avoid conditional calls later on
-    vector<int> x_sizes_fake(Q, 0);
-    int *px_sizes = do_refactor ? INTEGER(r_x_sizes) : x_sizes_fake.data();
+//     // I create a fake vector to avoid conditional calls later on
+//     vector<int> x_sizes_fake(Q, 0);
+//     int *px_sizes = do_refactor ? INTEGER(r_x_sizes) : x_sizes_fake.data();
 
-    int n_keep = obs2keep.size();
-    bool identical_x = do_refactor && obs2keep[0] == 0;
+//     int n_keep = obs2keep.size();
+//     bool identical_x = do_refactor && obs2keep[0] == 0;
 
-    // the vectors of qufed
-    writable::list res_x_quf_all(Q);
-    vector<int *> p_x_quf_all(Q);
-    for (int q = 0; q < Q; ++q)
-    {
-        if (identical_x)
-        {
-            SEXP x_val = VECTOR_ELT(x, q);
-            res_x_quf_all[q] = x_val;
-            p_x_quf_all[q] = INTEGER(x_val);
-        }
-        else
-        {
-            res_x_quf_all[q] = PROTECT(Rf_allocVector(INTSXP, do_refactor ? n_keep : n));
-            p_x_quf_all[q] = INTEGER(res_x_quf_all[q]);
-        }
-    }
+//     // the vectors of qufed
+//     writable::list res_x_quf_all(Q);
+//     vector<int *> p_x_quf_all(Q);
+//     for (int q = 0; q < Q; ++q)
+//     {
+//         if (identical_x)
+//         {
+//             SEXP x_val = VECTOR_ELT(x, q);
+//             res_x_quf_all[q] = x_val;
+//             p_x_quf_all[q] = INTEGER(x_val);
+//         }
+//         else
+//         {
+//             res_x_quf_all[q] = PROTECT(Rf_allocVector(INTSXP, do_refactor ? n_keep : n));
+//             p_x_quf_all[q] = INTEGER(res_x_quf_all[q]);
+//         }
+//     }
 
-    vector<vector<int>> x_table_all(Q);
-    vector<vector<double>> x_unik_all(Q);
-    vector<int> any_pblm(Q, 0);
-    vector<vector<bool>> id_pblm_all(Q);
-    // The following may not be needed:
-    vector<vector<double>> sum_y_all(Q);
-    vector<bool> obs_removed;
-    vector<vector<double>> x_removed_all(Q);
+//     vector<vector<int>> x_table_all(Q);
+//     vector<vector<double>> x_unik_all(Q);
+//     vector<int> any_pblm(Q, 0);
+//     vector<vector<bool>> id_pblm_all(Q);
+//     // The following may not be needed:
+//     vector<vector<double>> sum_y_all(Q);
+//     vector<bool> obs_removed;
+//     vector<vector<double>> x_removed_all(Q);
 
-    // New code => we avoid passing SEXP within the parallel loop
-    // We get the types of the R vectors
-    // For strings => we convert into numeric without parallel (sigh)
+//     // New code => we avoid passing SEXP within the parallel loop
+//     // We get the types of the R vectors
+//     // For strings => we convert into numeric without parallel (sigh)
 
-    vector<void *> px_all(Q);
-    vector<string> x_type_all(Q);
-    // vector to store modified strings
-    vector<vector<unsigned long long>> x_ull_all(Q);
+//     vector<void *> px_all(Q);
+//     vector<string> x_type_all(Q);
+//     // vector to store modified strings
+//     vector<vector<unsigned long long>> x_ull_all(Q);
 
-    for (int q = 0; q < Q; ++q)
-    {
+//     for (int q = 0; q < Q; ++q)
+//     {
 
-        xq = VECTOR_ELT(x, q);
+//         xq = VECTOR_ELT(x, q);
 
-        if (TYPEOF(xq) == INTSXP)
-        {
-            x_type_all[q] = "int";
-            px_all[q] = INTEGER(xq);
-        }
-        else if (TYPEOF(xq) == REALSXP)
-        {
-            x_type_all[q] = "double";
-            px_all[q] = REAL(xq);
-        }
-        else if (TYPEOF(xq) == STRSXP)
-        {
-            // We make the conversion to unsigned long long
-            x_type_all[q] = "string";
+//         if (TYPEOF(xq) == INTSXP)
+//         {
+//             x_type_all[q] = "int";
+//             px_all[q] = INTEGER(xq);
+//         }
+//         else if (TYPEOF(xq) == REALSXP)
+//         {
+//             x_type_all[q] = "double";
+//             px_all[q] = REAL(xq);
+//         }
+//         else if (TYPEOF(xq) == STRSXP)
+//         {
+//             // We make the conversion to unsigned long long
+//             x_type_all[q] = "string";
 
-            uintptr_t xi_uintptr;
+//             uintptr_t xi_uintptr;
 
-            for (int i = 0; i < n; ++i)
-            {
-                const char *pxi = CHAR(STRING_ELT(xq, i));
-                xi_uintptr = reinterpret_cast<uintptr_t>(pxi);
+//             for (int i = 0; i < n; ++i)
+//             {
+//                 const char *pxi = CHAR(STRING_ELT(xq, i));
+//                 xi_uintptr = reinterpret_cast<uintptr_t>(pxi);
 
-                x_ull_all[q].push_back(static_cast<unsigned long long>(xi_uintptr));
+//                 x_ull_all[q].push_back(static_cast<unsigned long long>(xi_uintptr));
 
-                // Rcout << xi_uintptr << "  ----  " << xi_ull << "\n";
-            }
+//                 // Rcout << xi_uintptr << "  ----  " << xi_ull << "\n";
+//             }
 
-            px_all[q] = x_ull_all[q].data();
-        }
-        else
-        {
-            // We NEVER end here
-            stop("Error: wrong type.");
-        }
-    }
+//             px_all[q] = x_ull_all[q].data();
+//         }
+//         else
+//         {
+//             // We NEVER end here
+//             stop("Error: wrong type.");
+//         }
+//     }
 
-#pragma omp parallel for num_threads(nthreads)
-    for (int q = 0; q < Q; ++q)
-    {
-        quf_table_sum_single(px_all[q], x_type_all[q], n, q, p_x_quf_all[q],
-                             x_unik_all[q], x_table_all[q],
-                             py, sum_y_all[q], do_sum_y, rm_0, rm_1,
-                             rm_single, any_pblm, id_pblm_all[q], check_pblm[q],
-                             do_refactor, px_sizes[q], obs2keep);
-    }
+// #pragma omp parallel for num_threads(nthreads)
+//     for (int q = 0; q < Q; ++q)
+//     {
+//         quf_table_sum_single(px_all[q], x_type_all[q], n, q, p_x_quf_all[q],
+//                              x_unik_all[q], x_table_all[q],
+//                              py, sum_y_all[q], do_sum_y, rm_0, rm_1,
+//                              rm_single, any_pblm, id_pblm_all[q], check_pblm[q],
+//                              do_refactor, px_sizes[q], obs2keep);
+//     }
 
-    bool is_pblm = false;
-    for (int q = 0; q < Q; ++q)
-    {
-        if (any_pblm[q])
-        {
-            is_pblm = true;
-            break;
-        }
-    }
+//     bool is_pblm = false;
+//     for (int q = 0; q < Q; ++q)
+//     {
+//         if (any_pblm[q])
+//         {
+//             is_pblm = true;
+//             break;
+//         }
+//     }
 
-    // Rcout << "Any problem: " << is_pblm << "\n";
+//     // Rcout << "Any problem: " << is_pblm << "\n";
 
-    if (obs2keep[0] != 0)
-    {
-        n = n_keep;
-    }
+//     if (obs2keep[0] != 0)
+//     {
+//         n = n_keep;
+//     }
 
-    if (is_pblm)
-    {
+//     if (is_pblm)
+//     {
 
-        //
-        // finding which observation to remove based on the removed fixed-effects
-        //
+//         //
+//         // finding which observation to remove based on the removed fixed-effects
+//         //
 
-        // New scheme:
-        // - if parallel, we create an int vector gathering the obs removed
-        //   => this will allows to avoid a critical section which makes the
-        //      parallel useless
-        //   we then copy the values into the bool vector
-        // - if not parallel, we fill the bool vector directly
-        //
+//         // New scheme:
+//         // - if parallel, we create an int vector gathering the obs removed
+//         //   => this will allows to avoid a critical section which makes the
+//         //      parallel useless
+//         //   we then copy the values into the bool vector
+//         // - if not parallel, we fill the bool vector directly
+//         //
 
-        int n_problems = accumulate(any_pblm.begin(), any_pblm.end(), 0);
-        bool is_parallel = n_problems > 1 && nthreads > 1;
+//         int n_problems = accumulate(any_pblm.begin(), any_pblm.end(), 0);
+//         bool is_parallel = n_problems > 1 && nthreads > 1;
 
-        // creating the obs2remove vector
-        obs_removed.resize(n);
-        fill(obs_removed.begin(), obs_removed.end(), false);
+//         // creating the obs2remove vector
+//         obs_removed.resize(n);
+//         fill(obs_removed.begin(), obs_removed.end(), false);
 
-        if (is_parallel)
-        {
+//         if (is_parallel)
+//         {
 
-            // using an int vector removes the race condition issue
-            // => we can't use a boolean vector directly bc of the way
-            // boolean vectors are stored (allocation of new values depends
-            // on the position of the existing values => creating a race condition
-            // problem)
-            //
-            // using a omp critical section is a no go, renders parallel useless
-            vector<int> obs_removed_int(n, 0);
+//             // using an int vector removes the race condition issue
+//             // => we can't use a boolean vector directly bc of the way
+//             // boolean vectors are stored (allocation of new values depends
+//             // on the position of the existing values => creating a race condition
+//             // problem)
+//             //
+//             // using a omp critical section is a no go, renders parallel useless
+//             vector<int> obs_removed_int(n, 0);
 
-#pragma omp parallel for num_threads(nthreads)
-            for (int q = 0; q < Q; ++q)
-            {
-                if (any_pblm[q])
-                {
-                    vector<bool> &id_pblm = id_pblm_all[q];
-                    int *pquf = p_x_quf_all[q];
-                    for (int i = 0; i < n; ++i)
-                    {
-                        if (id_pblm[pquf[i] - 1])
-                        {
-                            obs_removed_int[i] = 1;
-                        }
-                    }
-                }
-            }
+// #pragma omp parallel for num_threads(nthreads)
+//             for (int q = 0; q < Q; ++q)
+//             {
+//                 if (any_pblm[q])
+//                 {
+//                     vector<bool> &id_pblm = id_pblm_all[q];
+//                     int *pquf = p_x_quf_all[q];
+//                     for (int i = 0; i < n; ++i)
+//                     {
+//                         if (id_pblm[pquf[i] - 1])
+//                         {
+//                             obs_removed_int[i] = 1;
+//                         }
+//                     }
+//                 }
+//             }
 
-            // we copy the values into the boolean vector
-            for (int i = 0; i < n; ++i)
-            {
-                if (obs_removed_int[i])
-                {
-                    obs_removed[i] = true;
-                }
-            }
-        }
-        else
-        {
+//             // we copy the values into the boolean vector
+//             for (int i = 0; i < n; ++i)
+//             {
+//                 if (obs_removed_int[i])
+//                 {
+//                     obs_removed[i] = true;
+//                 }
+//             }
+//         }
+//         else
+//         {
 
-            // we fill the boolean vector directly
-            for (int q = 0; q < Q; ++q)
-            {
-                if (any_pblm[q])
-                {
-                    vector<bool> &id_pblm = id_pblm_all[q];
-                    int *pquf = p_x_quf_all[q];
-                    for (int i = 0; i < n; ++i)
-                    {
-                        if (id_pblm[pquf[i] - 1])
-                        {
-                            obs_removed[i] = true;
-                        }
-                    }
-                }
-            }
-        }
+//             // we fill the boolean vector directly
+//             for (int q = 0; q < Q; ++q)
+//             {
+//                 if (any_pblm[q])
+//                 {
+//                     vector<bool> &id_pblm = id_pblm_all[q];
+//                     int *pquf = p_x_quf_all[q];
+//                     for (int i = 0; i < n; ++i)
+//                     {
+//                         if (id_pblm[pquf[i] - 1])
+//                         {
+//                             obs_removed[i] = true;
+//                         }
+//                     }
+//                 }
+//             }
+//         }
 
-        // refactoring, recomputing all the stuff
-        // ie x_quf, x_unik, x_table, sum_y (if needed)
-        // but also: x_removed
+//         // refactoring, recomputing all the stuff
+//         // ie x_quf, x_unik, x_table, sum_y (if needed)
+//         // but also: x_removed
 
-        // The values of x_table and sum_y are changed in place
-        // I create the addition new_quf and new_unik because we need the
-        // them old items for the construction of the new.
+//         // The values of x_table and sum_y are changed in place
+//         // I create the addition new_quf and new_unik because we need the
+//         // them old items for the construction of the new.
 
-        int n_removed = accumulate(obs_removed.begin(), obs_removed.end(), 0);
-        int n_new = n - n_removed;
+//         int n_removed = accumulate(obs_removed.begin(), obs_removed.end(), 0);
+//         int n_new = n - n_removed;
 
-        writable::list res_x_new_quf_all(Q);
-        vector<int *> p_x_new_quf_all(Q);
-        for (int q = 0; q < Q; ++q)
-        {
-            res_x_new_quf_all[q] = PROTECT(Rf_allocVector(INTSXP, n_new));
-            p_x_new_quf_all[q] = INTEGER(res_x_new_quf_all[q]);
-        }
+//         writable::list res_x_new_quf_all(Q);
+//         vector<int *> p_x_new_quf_all(Q);
+//         for (int q = 0; q < Q; ++q)
+//         {
+//             res_x_new_quf_all[q] = PROTECT(Rf_allocVector(INTSXP, n_new));
+//             p_x_new_quf_all[q] = INTEGER(res_x_new_quf_all[q]);
+//         }
 
-        vector<vector<double>> x_new_unik_all(Q);
-        bool stop_now = false;
-        bool *pstop_now = &stop_now;
+//         vector<vector<double>> x_new_unik_all(Q);
+//         bool stop_now = false;
+//         bool *pstop_now = &stop_now;
 
-#pragma omp parallel for num_threads(nthreads)
-        for (int q = 0; q < Q; ++q)
-        {
-            quf_refactor_table_sum_single(n, p_x_quf_all[q], p_x_new_quf_all[q], obs_removed,
-                                          x_unik_all[q], x_new_unik_all[q], x_removed_all[q],
-                                          x_table_all[q], py, sum_y_all[q], do_sum_y,
-                                          rm_1, rm_single, id_pblm_all[q], check_pblm[q],
-                                          pstop_now, Q);
-        }
+// #pragma omp parallel for num_threads(nthreads)
+//         for (int q = 0; q < Q; ++q)
+//         {
+//             quf_refactor_table_sum_single(n, p_x_quf_all[q], p_x_new_quf_all[q], obs_removed,
+//                                           x_unik_all[q], x_new_unik_all[q], x_removed_all[q],
+//                                           x_table_all[q], py, sum_y_all[q], do_sum_y,
+//                                           rm_1, rm_single, id_pblm_all[q], check_pblm[q],
+//                                           pstop_now, Q);
+//         }
 
-        if (*pstop_now)
-        {
-            UNPROTECT((Q * (!identical_x)) + Q);
-            stop("The dependent variable is fully explained by the fixed-effects.");
-        }
+//         if (*pstop_now)
+//         {
+//             UNPROTECT((Q * (!identical_x)) + Q);
+//             stop("The dependent variable is fully explained by the fixed-effects.");
+//         }
 
-        // Saving the values in the appropriate locations
-        res_x_quf_all = res_x_new_quf_all;
-        x_unik_all = x_new_unik_all;
-    }
+//         // Saving the values in the appropriate locations
+//         res_x_quf_all = res_x_new_quf_all;
+//         x_unik_all = x_new_unik_all;
+//     }
 
-    // The object to be returned
+//     // The object to be returned
 
-    // TODO: commented push backs
+//     // TODO: commented push backs
 
-    writable::list res;
+//     writable::list res;
 
-    // x: UF (the largest object => no copy)
-    // res.push_back({"quf"_nm = res_x_quf_all});
+//     // x: UF (the largest object => no copy)
+//     // res.push_back({"quf"_nm = res_x_quf_all});
 
-    // x: Unik
-    // writable::list res_tmp(Q);
-    // res.push_back({"items"_nm = x_unik_all});
+//     // x: Unik
+//     // writable::list res_tmp(Q);
+//     // res.push_back({"items"_nm = x_unik_all});
 
-    // table
-    // res.push_back({"table"_nm = x_table_all});
+//     // table
+//     // res.push_back({"table"_nm = x_table_all});
 
-    // sum y
-    writable::doubles copy_sum_y_all = sum_y_all;
-    if (!do_sum_y)
-    {
-        for (int q = 0; q < Q; ++q)
-        {
-            copy_sum_y_all[q] = 0.0;
-        }
-    }
-    res.push_back({"sum_y"_nm = copy_sum_y_all});
+//     // sum y
+//     writable::doubles copy_sum_y_all = sum_y_all;
+//     if (!do_sum_y)
+//     {
+//         for (int q = 0; q < Q; ++q)
+//         {
+//             copy_sum_y_all[q] = 0.0;
+//         }
+//     }
+//     res.push_back({"sum_y"_nm = copy_sum_y_all});
 
-    // end TODO
+//     // end TODO
 
-    //
-    // IF PROBLEM ONLY
-    //
+//     //
+//     // IF PROBLEM ONLY
+//     //
 
-    if (is_pblm)
-    {
-        // The removed observations
-        res.push_back({"obs_removed"_nm = obs_removed});
+//     if (is_pblm)
+//     {
+//         // The removed observations
+//         res.push_back({"obs_removed"_nm = obs_removed});
 
-        // The removed clusters
-        res.push_back({"fe_removed"_nm = copy_sum_y_all});
-    }
+//         // The removed clusters
+//         res.push_back({"fe_removed"_nm = copy_sum_y_all});
+//     }
 
-    UNPROTECT((Q * (!identical_x)) + (Q * is_pblm));
+//     UNPROTECT((Q * (!identical_x)) + (Q * is_pblm));
 
-    return res;
-}
+//     return res;
+// }
