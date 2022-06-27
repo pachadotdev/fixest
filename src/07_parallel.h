@@ -38,6 +38,7 @@ Safer not to include it for now.
 #include <numeric>
 
 #include <stdint.h>
+#include <float.h>
 #include <Rmath.h>
 
 #ifdef _OPENMP
