@@ -79,7 +79,7 @@ inline double poisson_linkinv(double x)
     for (int i = 0; i < n; ++i)
     {
         double x_tmp = px[i];
-        if (std::isinf(x_tmp) || x_tmp <= 0)
+        if (isinf(x_tmp) || x_tmp <= 0)
         {
             res = false;
         }

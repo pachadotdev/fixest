@@ -85,7 +85,7 @@
 
             x_tmp = mat_vars(i, k);
 
-            if (std::isnan(x_tmp) || std::isinf(x_tmp))
+            if (isnan(x_tmp) || isinf(x_tmp))
             {
                 ++n_na;
             }

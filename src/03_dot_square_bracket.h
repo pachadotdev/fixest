@@ -30,4 +30,6 @@ using std::vector;
 using std::string;
 using std::strlen;
 
+vector<int> set_parallel_scheme(int N, int nthreads);
+
 inline bool is_dsb_open(const char *str, int i, int n);

@@ -1,5 +1,8 @@
 #include "01_convergence.h"
 #include "02_demeaning.h"
+#include "03_dot_square_bracket.h"
+#include "04_linear_model.h"
+#include "07_parallel.h"
 
 inline bool continue_criterion(double a, double b, double diffMax)
 {
@@ -70,4 +73,22 @@ bool update_X_IronsTuck(int nb_coef_no_KQ, vector<double> &X,
 	}
 
 	return (res);
+}
+
+// => this concerns only the parallel application on a 1-Dimensional matrix
+// takes in the nber of observations of the vector and the nber of threads
+// gives back a vector of the length the nber of threads + 1 giving the start/stop of each threads
+vector<int> set_parallel_scheme(int N, int nthreads)
+{
+    vector<int> res(nthreads + 1, 0);
+    double N_rest = N;
+
+    for (int i = 0; i < nthreads; ++i)
+    {
+        res[i + 1] = ceil(N_rest / (nthreads - i));
+        N_rest -= res[i + 1];
+        res[i + 1] += res[i];
+    }
+
+    return res;
 }

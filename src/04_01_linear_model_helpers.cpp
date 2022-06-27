@@ -1,24 +1,5 @@
 #include "04_linear_model.h"
 
-vector<int> set_parallel_scheme(int N, int nthreads)
-{
-    // => this concerns only the parallel application on a 1-Dimensional matrix
-    // takes in the nber of observations of the vector and the nber of threads
-    // gives back a vector of the length the nber of threads + 1 giving the start/stop of each threads
-
-    vector<int> res(nthreads + 1, 0);
-    double N_rest = N;
-
-    for (int i = 0; i < nthreads; ++i)
-    {
-        res[i + 1] = ceil(N_rest / (nthreads - i));
-        N_rest -= res[i + 1];
-        res[i + 1] += res[i];
-    }
-
-    return res;
-}
-
 bool sparse_check(const doubles_matrix<> &X)
 {
     // Super cheap sparsity test

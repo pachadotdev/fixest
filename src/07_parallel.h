@@ -47,3 +47,8 @@ Safer not to include it for now.
 #endif
 
 using namespace cpp11;
+using std::vector;
+using std::isnan;
+using std::isinf;
+
+vector<int> set_parallel_scheme(int N, int nthreads);

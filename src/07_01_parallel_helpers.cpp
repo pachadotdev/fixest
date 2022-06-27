@@ -5,27 +5,6 @@
     return omp_get_max_threads();
 }
 
-// The following function is already defined in lm_related (I know...)
-std::vector<int> set_parallel_scheme_bis(int N, int nthreads)
-{
-    // => this concerns only the parallel application on a 1-Dimensional matrix
-    // takes in the nber of observations of the vector and the nber of threads
-    // gives back a vector of the length the nber of threads + 1 giving the start/stop of each threads
-
-    std::vector<int> res(nthreads + 1, 0);
-    double N_rest = N;
-
-    for (int i = 0; i < nthreads; ++i)
-    {
-        res[i + 1] = ceil(N_rest / (nthreads - i));
-        N_rest -= res[i + 1];
-        res[i + 1] += res[i];
-    }
-
-    return res;
-}
-
-
 [[cpp11::register]] list cpppar_which_na_inf_vec(SEXP x, int nthreads)
 {
     /*
@@ -52,13 +31,13 @@ std::vector<int> set_parallel_scheme_bis(int N, int nthreads)
     // no need to care about the race condition
     // "trick" to make a break in a multi-threaded section
 
-    std::vector<int> bounds = set_parallel_scheme_bis(nobs, nthreads);
+    vector<int> bounds = set_parallel_scheme(nobs, nthreads);
 #pragma omp parallel for num_threads(nthreads)
     for (int t = 0; t < nthreads; ++t)
     {
         for (int i = bounds[t]; i < bounds[t + 1] && !anyNAInf; ++i)
         {
-            if (std::isnan(px[i]) || std::isinf(px[i]))
+            if (isnan(px[i]) || isinf(px[i]))
             {
                 anyNAInf = true;
             }
@@ -75,12 +54,12 @@ std::vector<int> set_parallel_scheme_bis(int N, int nthreads)
         for (int i = 0; i < nobs; ++i)
         {
             double x_tmp = px[i];
-            if (std::isnan(x_tmp))
+            if (isnan(x_tmp))
             {
                 is_na_inf[i] = true;
                 any_na = true;
             }
-            else if (std::isinf(x_tmp))
+            else if (isinf(x_tmp))
             {
                 is_na_inf[i] = true;
                 any_inf = true;
@@ -122,7 +101,7 @@ std::vector<int> set_parallel_scheme_bis(int N, int nthreads)
     // no need to care about the race condition
     // "trick" to make a break in a multi-threaded section
 
-    std::vector<int> bounds = set_parallel_scheme_bis(nobs, nthreads);
+    vector<int> bounds = set_parallel_scheme(nobs, nthreads);
 
 #pragma omp parallel for num_threads(nthreads)
     for (int t = 0; t < nthreads; ++t)
@@ -131,7 +110,7 @@ std::vector<int> set_parallel_scheme_bis(int N, int nthreads)
         {
             for (int i = bounds[t]; i < bounds[t + 1] && !anyNAInf; ++i)
             {
-                if (std::isnan(mat(i, k)) || std::isinf(mat(i, k)))
+                if (isnan(mat(i, k)) || isinf(mat(i, k)))
                 {
                     anyNAInf = true;
                 }
@@ -151,13 +130,13 @@ std::vector<int> set_parallel_scheme_bis(int N, int nthreads)
             for (int k = 0; k < K; ++k)
             {
                 x_tmp = mat(i, k);
-                if (std::isnan(x_tmp))
+                if (isnan(x_tmp))
                 {
                     is_na_inf[i] = true;
                     any_na = true;
                     break;
                 }
-                else if (std::isinf(x_tmp))
+                else if (isinf(x_tmp))
                 {
                     is_na_inf[i] = true;
                     any_inf = true;
@@ -192,7 +171,7 @@ std::vector<int> set_parallel_scheme_bis(int N, int nthreads)
     bool any_inf = false; // return value
 
     // The Mapping of the data
-    std::vector<double *> df_data(K);
+    vector<double *> df_data(K);
     for (int k = 0; k < K; ++k)
     {
         df_data[k] = REAL(VECTOR_ELT(df, k));
@@ -207,7 +186,7 @@ std::vector<int> set_parallel_scheme_bis(int N, int nthreads)
     // no need to care about the race condition
     // "trick" to make a break in a multi-threaded section
 
-    std::vector<int> bounds = set_parallel_scheme_bis(nobs, nthreads);
+    vector<int> bounds = set_parallel_scheme(nobs, nthreads);
 
 #pragma omp parallel for num_threads(nthreads)
     for (int t = 0; t < nthreads; ++t)
@@ -216,7 +195,7 @@ std::vector<int> set_parallel_scheme_bis(int N, int nthreads)
         {
             for (int i = bounds[t]; i < bounds[t + 1] && !anyNAInf; ++i)
             {
-                if (std::isnan(df_data[k][i]) || std::isinf(df_data[k][i]))
+                if (isnan(df_data[k][i]) || isinf(df_data[k][i]))
                 {
                     anyNAInf = true;
                 }
@@ -236,13 +215,13 @@ std::vector<int> set_parallel_scheme_bis(int N, int nthreads)
             for (int k = 0; k < K; ++k)
             {
                 x_tmp = df_data[k][i];
-                if (std::isnan(x_tmp))
+                if (isnan(x_tmp))
                 {
                     is_na_inf[i] = true;
                     any_na = true;
                     break;
                 }
-                else if (std::isinf(x_tmp))
+                else if (isinf(x_tmp))
                 {
                     is_na_inf[i] = true;
                     any_inf = true;
