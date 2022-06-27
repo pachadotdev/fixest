@@ -25,6 +25,7 @@ std::vector<int> set_parallel_scheme_bis(int N, int nthreads)
     return res;
 }
 
+
 [[cpp11::register]] list cpppar_which_na_inf_vec(SEXP x, int nthreads)
 {
     /*

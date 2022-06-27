@@ -38,9 +38,12 @@ Safer not to include it for now.
 #include <numeric>
 
 #include <stdint.h>
+#include <Rmath.h>
 
 #ifdef _OPENMP
 #include <omp.h>
 #else
 #define omp_get_thread_num() 0
 #endif
+
+using namespace cpp11;
