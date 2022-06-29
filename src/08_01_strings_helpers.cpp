@@ -1,18 +1,10 @@
-#include <cpp11.hpp>
-#include <string>
-#include <cstring>
-#include <vector>
-#include <cpp11/strings.hpp>
+#include "08_strings.h"
 
-using namespace cpp11;
-
+// we change a:b into a*b
+// we don't touch what's in paren: I(a:b) stays I(a:b)
+ // x = c("x1:x2:a(6:7)", "x5", "i(aa, 5:6):jjl", "base::poly(x, 5)")
 std::string colon_to_star_single(const char *str)
 {
-  // we change a:b into a*b
-  // we don't touch what's in paren: I(a:b) stays I(a:b)
-
-  // x = c("x1:x2:a(6:7)", "x5", "i(aa, 5:6):jjl", "base::poly(x, 5)")
-
   std::string res = "";
 
   int n = std::strlen(str);

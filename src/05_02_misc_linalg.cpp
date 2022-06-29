@@ -116,9 +116,10 @@ double simple_vec_double::operator[](int i)
         }
     }
 
-    // TODO: dimnames
-    // res.attr("dimnames") = list(NULL, col_names);
-
+    
+    // create a list where the first element is NULL and the second is the variable col_names
+    res.attr("dimnames") = list(NULL, col_names);
+    
     return res;
 }
 
