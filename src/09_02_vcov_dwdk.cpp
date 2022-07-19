@@ -124,17 +124,16 @@
 
     // Finishing
     // we add the transpose
-    writable::doubles_matrix<> res = clone(meat);
 #pragma omp parallel for num_threads(nthreads)
     for (int k1 = 0; k1 < K; ++k1)
     {
         for (int k2 = 0; k2 < K; ++k2)
         {
-            res(k1, k2) += meat(k2, k1);
+            meat(k1, k2) += meat(k2, k1);
         }
     }
 
-    return res;
+    return meat;
 }
 
 // Newey West, but for panels
@@ -165,13 +164,13 @@
         ++time_table[time[i] - 1];
     }
 
-    doubles time_start(T);
-    doubles time_end(T);
-    time_end[0] = time_table[0];
+    writable::doubles time_start(T);
+    writable::doubles time_end(T);
+    time_end[0] += time_table[0];
     for (int t = 1; t < T; ++t)
     {
-        time_start[t] = time_start[t - 1] + time_table[t - 1];
-        time_end[t] = time_end[t - 1] + time_table[t];
+        time_start[t] += time_start[t - 1] + time_table[t - 1];
+        time_end[t] += time_end[t - 1] + time_table[t];
     }
 
     // checking the balance
@@ -333,17 +332,16 @@
 
     // Finishing
     // we add the transpose
-    writable::doubles_matrix<> res = clone(meat);
 #pragma omp parallel for num_threads(nthreads)
     for (int k1 = 0; k1 < K; ++k1)
     {
         for (int k2 = 0; k2 < K; ++k2)
         {
-            res(k1, k2) += meat(k2, k1);
+            meat(k1, k2) += meat(k2, k1);
         }
     }
 
-    return res;
+    return meat;
 }
 
 // Driscoll and Kraay
@@ -416,15 +414,14 @@
 
     // Finishing
     // we add the transpose
-    writable::doubles_matrix<> res = clone(meat);
 #pragma omp parallel for num_threads(nthreads)
     for (int k1 = 0; k1 < K; ++k1)
     {
         for (int k2 = 0; k2 < K; ++k2)
         {
-            res(k1, k2) += meat(k2, k1);
+            meat(k1, k2) += meat(k2, k1);
         }
     }
 
-    return res;
+    return meat;
 }
