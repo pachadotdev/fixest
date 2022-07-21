@@ -3,6 +3,8 @@
 #include "03_dot_square_bracket.h"
 #include "04_linear_model.h"
 #include "07_parallel.h"
+#include "08_strings.h"
+#include "09_vcov.h"
 
 inline bool continue_criterion(double a, double b, double diffMax)
 {
