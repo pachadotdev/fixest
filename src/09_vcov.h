@@ -75,3 +75,10 @@ public:
     int nrow() { return N; }
     int ncol() { return K; }
 };
+
+double to_sq(double x);
+double dist_km(double lon_1, double lat_1, double cos_lat_1,
+               double lon_2, double lat_2, double cos_lat_2);
+double degree_to_radian(double x);
+double fabs_lon(double x, double y);
+double fabs_lat(double x, double y);
