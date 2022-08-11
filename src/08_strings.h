@@ -9,7 +9,8 @@
                            |___/
 */
 
-#pragma once
+// TODO: OMP functions
+// #pragma once
 
 #include <cpp11.hpp>
 #include <cpp11/strings.hpp>

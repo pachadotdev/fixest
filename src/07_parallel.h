@@ -30,7 +30,8 @@ Safer not to include it for now.
 // }
 */
 
-#pragma once
+// TODO: OMP functions
+// #pragma once
 
 #include <cpp11.hpp>
 #include <cpp11/doubles.hpp>

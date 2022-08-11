@@ -8,7 +8,8 @@ Original Author: Laurent R. Berge
 Refactored by Mauricio "Pacha" Vargas Sepulveda starting in Jun 2022
 */
 
-#pragma once
+// TODO: OMP functions
+// #pragma once
 
 #include <cpp11.hpp>
 #include <cpp11/doubles.hpp>

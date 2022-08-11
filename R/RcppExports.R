@@ -213,9 +213,10 @@ cpp_hash_string <- function(x) {
     .Call(`_fixest_cpp_hash_string`, x)
 }
 
-cpp_get_nb_threads <- function() {
-    .Call(`_fixest_cpp_get_nb_threads`)
-}
+# TODO: OMP functions
+# cpp_get_nb_threads <- function() {
+#     .Call(`_fixest_cpp_get_nb_threads`)
+# }
 
 cpppar_exp <- function(x, nthreads) {
     .Call(`_fixest_cpppar_exp`, x, nthreads)

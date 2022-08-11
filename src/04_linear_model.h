@@ -15,7 +15,8 @@ In general, the functions are slower than BLAS ones
 but they have the merit of doing exacly what I want.
 */
 
-#pragma once
+// TODO: OMP functions
+// #pragma once
 
 #include <cpp11.hpp>
 #include <cpp11/doubles.hpp>

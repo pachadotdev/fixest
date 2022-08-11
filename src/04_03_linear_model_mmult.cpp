@@ -5,7 +5,8 @@ void mp_sparse_XtX(writable::doubles_matrix<> &XtX, const vector<int> &n_j, cons
 
     int K = X.ncol();
 
-#pragma omp parallel for num_threads(nthreads) schedule(static, 1)
+    // TODO: OMP functions
+    // #pragma omp parallel for num_threads(nthreads) schedule(static, 1)
     for (int j1 = 0; j1 < K; ++j1)
     {
 
@@ -48,7 +49,7 @@ void mp_sparse_Xty(writable::doubles &Xty, const vector<int> &start_j, const vec
 
     int K = Xty.size();
 
-#pragma omp parallel for num_threads(nthreads)
+// TODO: OMP functions #pragma omp parallel for num_threads(nthreads)
     for (int j = 0; j < K; ++j)
     {
 
@@ -81,7 +82,7 @@ void mp_XtX(writable::doubles_matrix<> &XtX, const doubles_matrix<> &X, const do
         vector<double> all_values(nthreads, 0);
         vector<int> bounds = set_parallel_scheme(N, nthreads);
 
-#pragma omp parallel for num_threads(nthreads)
+// TODO: OMP functions #pragma omp parallel for num_threads(nthreads)
         for (int t = 0; t < nthreads; ++t)
         {
             double val = 0;
@@ -114,7 +115,7 @@ void mp_XtX(writable::doubles_matrix<> &XtX, const doubles_matrix<> &X, const do
             }
         }
 
-#pragma omp parallel for num_threads(nthreads) schedule(static, 1)
+// TODO: OMP functions #pragma omp parallel for num_threads(nthreads) schedule(static, 1)
         for (int index = 0; index < nValues; ++index)
         {
             int k_row = all_i[index];
@@ -165,7 +166,7 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y, 
     }
     else
     {
-#pragma omp parallel for num_threads(nthreads)
+// TODO: OMP functions #pragma omp parallel for num_threads(nthreads)
         for (int j = 0; j < K; ++j)
         {
             double val = 0;
@@ -405,7 +406,7 @@ void mp_ZXtZX(writable::doubles_matrix<> &ZXtZX, const doubles_matrix<> &XtX, co
         }
     }
 
-#pragma omp parallel for num_threads(nthreads)
+// TODO: OMP functions #pragma omp parallel for num_threads(nthreads)
     for (int index = 0; index < nValues; ++index)
     {
         int l = all_l[index];
@@ -438,7 +439,7 @@ void mp_ZXtZX(writable::doubles_matrix<> &ZXtZX, const doubles_matrix<> &XtX, co
         }
     }
 
-#pragma omp parallel for num_threads(nthreads)
+// TODO: OMP functions #pragma omp parallel for num_threads(nthreads)
     for (int index = 0; index < nValues; ++index)
     {
         int l = all_l[index];
@@ -464,7 +465,7 @@ void mp_ZXtu(writable::doubles &ZXtu, const doubles_matrix<> &X, const doubles_m
     bool isX = X.nrow() > 1;
     int K2 = isX ? X.ncol() : 0;
 
-#pragma omp parallel for num_threads(nthreads)
+// TODO: OMP functions #pragma omp parallel for num_threads(nthreads)
     for (int k = 0; k < (K2 + K1); ++k)
     {
         double val = 0;
@@ -505,7 +506,7 @@ void mp_sparse_ZXtZX(writable::doubles_matrix<> &ZXtZX, const doubles_matrix<> &
     // the K2 x K1 band
     for (int l = 0; l < K1; ++l)
     {
-#pragma omp parallel for num_threads(nthreads) schedule(static, 1)
+// TODO: OMP functions #pragma omp parallel for num_threads(nthreads) schedule(static, 1)
         for (int j = 0; j < K2; ++j)
         {
 
@@ -539,7 +540,7 @@ void mp_sparse_ZXtZX(writable::doubles_matrix<> &ZXtZX, const doubles_matrix<> &
         }
     }
 
-#pragma omp parallel for num_threads(nthreads)
+// TODO: OMP functions #pragma omp parallel for num_threads(nthreads)
     for (int index = 0; index < nValues; ++index)
     {
         int l = all_l[index];
@@ -565,7 +566,7 @@ void mp_sparse_ZXtu(writable::doubles &ZXtu, const vector<int> &start_j, const v
     bool isX = X.nrow() > 1;
     int K2 = isX ? X.ncol() : 0;
 
-#pragma omp parallel for num_threads(nthreads)
+// TODO: OMP functions #pragma omp parallel for num_threads(nthreads)
     for (int k = 0; k < (K2 + K1); ++k)
     {
 

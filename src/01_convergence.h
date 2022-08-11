@@ -33,7 +33,7 @@ The big drawback of the ML methods is that, as opposed to GLM methods,
 parallel computing cannot be leveraged.
 */
 
-#pragma once
+// TODO: OMP functions #pragma once
 
 #include <cpp11.hpp>
 #include <cpp11/doubles.hpp>

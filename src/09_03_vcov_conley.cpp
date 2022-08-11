@@ -112,7 +112,8 @@ mat_row_scheme::mat_row_scheme(int N_in, int K_in)
     // cutoff_rad_sq used when distance == 2
     const double cutoff_rad_sq = to_sq(degree_to_radian(cutoff) / 111);
 
-#pragma omp parallel for num_threads(nthreads)
+    // TODO: OMP functions
+    // #pragma omp parallel for num_threads(nthreads)
     for (int i = 0; i < N; ++i)
     {
 

@@ -40,7 +40,8 @@
         for (int l = 0; l < L; ++l)
         {
 
-#pragma omp parallel for num_threads(nthreads) schedule(static, 1)
+            // TODO: OMP functions
+            // #pragma omp parallel for num_threads(nthreads) schedule(static, 1)
             for (int index = 0; index < K_sq; ++index)
             {
                 int k1 = all_k1[index];
@@ -78,7 +79,8 @@
         int L_end = step_size;
         for (int s = 0; s < n_steps; ++s)
         {
-#pragma omp parallel for num_threads(nthreads)
+            // TODO: OMP functions
+            // #pragma omp parallel for num_threads(nthreads)
             for (int l = L_start; l < L_end; ++l)
             {
 
@@ -104,7 +106,8 @@
             for (int l = L_start; l < L_end; ++l)
             {
                 double *mat_prod = p_mat_prods[l - L_start];
-#pragma omp parallel for num_threads(nthreads)
+                // TODO: OMP functions
+                // #pragma omp parallel for num_threads(nthreads)
                 for (int k1 = 0; k1 < K; ++k1)
                 {
                     for (int k2 = 0; k2 < K; ++k2)
@@ -124,7 +127,8 @@
 
     // Finishing
     // we add the transpose
-#pragma omp parallel for num_threads(nthreads)
+    // TODO: OMP functions
+    // #pragma omp parallel for num_threads(nthreads)
     for (int k1 = 0; k1 < K; ++k1)
     {
         for (int k2 = 0; k2 < K; ++k2)
@@ -224,7 +228,8 @@
     }
 
 // l == 0 => easy
-#pragma omp parallel for num_threads(nthreads)
+    // TODO: OMP functions
+    // #pragma omp parallel for num_threads(nthreads)
     for (int index = 0; index < K_sq; ++index)
     {
         int k1 = all_k1[index];
@@ -260,7 +265,8 @@
                 nmax += time_table[t];
             }
 
-#pragma omp parallel for num_threads(nthreads)
+            // TODO: OMP functions
+            // #pragma omp parallel for num_threads(nthreads)
             for (int index = 0; index < K_sq; ++index)
             {
                 int k1 = all_k1[index];
@@ -285,7 +291,8 @@
         for (int l = 1; l < L; ++l)
         {
 
-#pragma omp parallel for num_threads(nthreads) schedule(static, 1)
+            // TODO: OMP functions
+            // #pragma omp parallel for num_threads(nthreads) schedule(static, 1)
             for (int index = 0; index < K_sq; ++index)
             {
                 int k1 = all_k1[index];
@@ -332,7 +339,8 @@
 
     // Finishing
     // we add the transpose
-#pragma omp parallel for num_threads(nthreads)
+    // TODO: OMP functions
+    // #pragma omp parallel for num_threads(nthreads)
     for (int k1 = 0; k1 < K; ++k1)
     {
         for (int k2 = 0; k2 < K; ++k2)
@@ -368,7 +376,8 @@
     writable::doubles_matrix<> time_scores(T, K);
 
 // we sum the scores by period
-#pragma omp parallel for num_threads(nthreads)
+    // TODO: OMP functions
+    // #pragma omp parallel for num_threads(nthreads)
     for (int k = 0; k < K; ++k)
     {
         for (int i = 0; i < N; ++i)
@@ -391,7 +400,8 @@
     for (int l = 0; l < L; ++l)
     {
 // X_t' %*% X_t+l
-#pragma omp parallel for num_threads(nthreads) schedule(static, 1)
+        // TODO: OMP functions
+        // #pragma omp parallel for num_threads(nthreads) schedule(static, 1)
         for (int index = 0; index < K_sq; ++index)
         {
             int k1 = all_k1[index];
@@ -414,7 +424,8 @@
 
     // Finishing
     // we add the transpose
-#pragma omp parallel for num_threads(nthreads)
+    // TODO: OMP functions
+    // #pragma omp parallel for num_threads(nthreads)
     for (int k1 = 0; k1 < K; ++k1)
     {
         for (int k2 = 0; k2 < K; ++k2)

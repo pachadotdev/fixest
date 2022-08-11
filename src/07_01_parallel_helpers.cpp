@@ -1,9 +1,10 @@
 #include "07_parallel.h"
 
-[[cpp11::register]] int cpp_get_nb_threads()
-{
-    return omp_get_max_threads();
-}
+// TODO: OMP functions
+// [[cpp11::register]] int cpp_get_nb_threads()
+// {
+//    return omp_get_max_threads();
+// }
 
 [[cpp11::register]] list cpppar_which_na_inf_vec(SEXP x, int nthreads)
 {
@@ -32,7 +33,8 @@
     // "trick" to make a break in a multi-threaded section
 
     vector<int> bounds = set_parallel_scheme(nobs, nthreads);
-#pragma omp parallel for num_threads(nthreads)
+    // TODO: OMP functions
+    // #pragma omp parallel for num_threads(nthreads)
     for (int t = 0; t < nthreads; ++t)
     {
         for (int i = bounds[t]; i < bounds[t + 1] && !anyNAInf; ++i)
@@ -49,8 +51,9 @@
 
     if (anyNAInf)
     {
-// again: no need to care about race conditions
-#pragma omp parallel for num_threads(nthreads)
+    // again: no need to care about race conditions
+    // TODO: OMP functions
+    // #pragma omp parallel for num_threads(nthreads)
         for (int i = 0; i < nobs; ++i)
         {
             double x_tmp = px[i];
@@ -103,7 +106,8 @@
 
     vector<int> bounds = set_parallel_scheme(nobs, nthreads);
 
-#pragma omp parallel for num_threads(nthreads)
+    // TODO: OMP functions
+    // #pragma omp parallel for num_threads(nthreads)
     for (int t = 0; t < nthreads; ++t)
     {
         for (int k = 0; k < K; ++k)
@@ -123,7 +127,8 @@
 
     if (anyNAInf)
     {
-#pragma omp parallel for num_threads(nthreads)
+    // TODO: OMP functions
+    // #pragma omp parallel for num_threads(nthreads)
         for (int i = 0; i < nobs; ++i)
         {
             double x_tmp = 0;
@@ -188,7 +193,8 @@
 
     vector<int> bounds = set_parallel_scheme(nobs, nthreads);
 
-#pragma omp parallel for num_threads(nthreads)
+    // TODO: OMP functions
+    // #pragma omp parallel for num_threads(nthreads)
     for (int t = 0; t < nthreads; ++t)
     {
         for (int k = 0; k < K; ++k)
@@ -208,7 +214,8 @@
 
     if (anyNAInf)
     {
-#pragma omp parallel for num_threads(nthreads)
+    // TODO: OMP functions
+    // #pragma omp parallel for num_threads(nthreads)
         for (int i = 0; i < nobs; ++i)
         {
             double x_tmp = 0;
@@ -246,7 +253,8 @@
 
     writable::integers res(K);
 
-#pragma omp parallel for num_threads(nthreads)
+    // TODO: OMP functions
+    // #pragma omp parallel for num_threads(nthreads)
     for (int k = 0; k < K; ++k)
     {
 

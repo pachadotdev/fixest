@@ -55,7 +55,7 @@ vs: means varying slopes
 
 // TODO: Next version => clean c++ code, use only sMat
 
-#pragma once
+// TODO: OMP functions #pragma once
 
 #include <cpp11.hpp>
 #include <cpp11/doubles.hpp>

@@ -34,7 +34,7 @@ void invert_tri(writable::doubles_matrix<> &R, int K, int nthreads = 1)
             R_CheckUserInterrupt();
         }
 
-#pragma omp parallel for num_threads(nthreads) schedule(static, 1)
+// TODO: OMP functions #pragma omp parallel for num_threads(nthreads) schedule(static, 1)
         for (int i = 0; i < K - b; ++i)
         {
             double numerator = 0;
@@ -68,7 +68,7 @@ void tproduct_tri(writable::doubles_matrix<> &RRt, writable::doubles_matrix<> &R
     int iterSecond = ceil(2000000000 / flop / 5); // nber iter per 1/5 second
     int n_iter_main = 0;
 
-#pragma omp parallel for num_threads(nthreads) schedule(static, 1)
+// TODO: OMP functions #pragma omp parallel for num_threads(nthreads) schedule(static, 1)
     for (int i = 0; i < K; ++i)
     {
 
@@ -160,7 +160,7 @@ void tproduct_tri(writable::doubles_matrix<> &RRt, writable::doubles_matrix<> &R
 
         R(j, j) = R_jj;
 
-#pragma omp parallel for num_threads(nthreads) schedule(static, 1)
+// TODO: OMP functions #pragma omp parallel for num_threads(nthreads) schedule(static, 1)
         for (int i = j + 1; i < K; ++i)
         {
 
