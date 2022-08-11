@@ -153,7 +153,7 @@ double sMat::operator()(int i, int k)
     return p_sVec[k][i];
 }
 
-inline double &simple_mat_with_id::operator()(int id, int i, int j)
+double &simple_mat_with_id::operator()(int id, int i, int j)
 {
     if (id != id_current)
     {
@@ -164,7 +164,7 @@ inline double &simple_mat_with_id::operator()(int id, int i, int j)
     return px_current[i + nrow * j];
 }
 
-inline double &simple_mat_with_id::operator()(int id, int i)
+double &simple_mat_with_id::operator()(int id, int i)
 {
     if (id != id_current)
     {

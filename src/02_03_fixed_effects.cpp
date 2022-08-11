@@ -800,7 +800,7 @@ FEClass::simple_mat_of_vs_vars::simple_mat_of_vs_vars(const FEClass *FE_info, in
     }
 }
 
-inline double FEClass::simple_mat_of_vs_vars::operator()(int i, int k)
+double FEClass::simple_mat_of_vs_vars::operator()(int i, int k)
 {
     if (k == K_fe)
     {

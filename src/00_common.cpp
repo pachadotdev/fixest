@@ -6,14 +6,14 @@
 #include "08_strings.h"
 #include "09_vcov.h"
 
-inline bool continue_criterion(double a, double b, double diffMax)
+bool continue_criterion(double a, double b, double diffMax)
 {
 	// continuing criterion of the algorithm
 	double diff = fabs(a - b);
 	return ((diff > diffMax) && (diff / (0.1 + fabs(a)) > diffMax));
 }
 
-inline bool stopping_criterion(double a, double b, double diffMax)
+bool stopping_criterion(double a, double b, double diffMax)
 {
 	// stopping criterion of the algorithm
 	double diff = fabs(a - b);

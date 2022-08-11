@@ -169,7 +169,7 @@ class FEClass
     void compute_fe_coef_2_internal(double *, double *, double *, bool);
     void add_wfe_coef_to_mu_internal(int, double *, double *, bool);
 
-public:
+    public:
     // Utility class: Facilitates the access to the VS variables
     class simple_mat_of_vs_vars
     {
@@ -250,51 +250,6 @@ struct PARAM_DEMEAN
     bool *stopnow;
     int *jobdone;
 };
-
-void FEClass::add_2_fe_coef_to_mu(double *fe_coef_a, double *fe_coef_b, double *in_out_C, double *out_N, bool update_beta = true)
-{
-    // We add the value of the FE coefficients to each observation
-
-    //
-    // Step 1: we update the coefficients of b
-    //
-
-    if (update_beta)
-    {
-        compute_fe_coef_2_internal(fe_coef_a, fe_coef_b, in_out_C, out_N);
-    }
-
-    //
-    // Step 2: we add the value of each coef
-    //
-
-    for (int q = 0; q < 2; ++q)
-    {
-
-        double *my_fe_coef = q == 0 ? fe_coef_a : fe_coef_b;
-        int *my_fe = p_fe_id[q];
-        bool is_slope = is_slope_Q[q];
-        int V = nb_vs_Q[q];
-
-        simple_mat_of_vs_vars VS_mat(this, q);
-        simple_mat_with_id my_vs_coef(my_fe_coef, nb_vs_Q[q], 1);
-
-        for (int i = 0; i < n_obs; ++i)
-        {
-            if (is_slope)
-            {
-                for (int v = 0; v < V; ++v)
-                {
-                    out_N[i] += my_vs_coef(my_fe[i] - 1, v) * VS_mat(i, v);
-                }
-            }
-            else
-            {
-                out_N[i] += my_fe_coef[my_fe[i] - 1];
-            }
-        }
-    }
-}
 
 void compute_fe_gnl(double *p_fe_coef_origin, double *p_fe_coef_destination,
                     double *p_sum_other_means, double *p_sum_in_out, PARAM_DEMEAN *args);
