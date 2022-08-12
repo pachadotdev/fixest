@@ -376,6 +376,13 @@ extern "C" SEXP _fixest_cpp_quf_gnl(SEXP x) {
     return cpp11::as_sexp(cpp_quf_gnl(cpp11::as_cpp<cpp11::decay_t<SEXP>>(x)));
   END_CPP11
 }
+// 06_03_quf_tables.cpp
+writable::list cpppar_quf_table_sum(SEXP x, SEXP y, bool do_sum_y, bool rm_0, bool rm_1, bool rm_single, writable::integer only_slope, int nthreads, bool do_refactor, SEXP r_x_sizes, writable::integer obs2keep);
+extern "C" SEXP _fixest_cpppar_quf_table_sum(SEXP x, SEXP y, SEXP do_sum_y, SEXP rm_0, SEXP rm_1, SEXP rm_single, SEXP only_slope, SEXP nthreads, SEXP do_refactor, SEXP r_x_sizes, SEXP obs2keep) {
+  BEGIN_CPP11
+    return cpp11::as_sexp(cpppar_quf_table_sum(cpp11::as_cpp<cpp11::decay_t<SEXP>>(x), cpp11::as_cpp<cpp11::decay_t<SEXP>>(y), cpp11::as_cpp<cpp11::decay_t<bool>>(do_sum_y), cpp11::as_cpp<cpp11::decay_t<bool>>(rm_0), cpp11::as_cpp<cpp11::decay_t<bool>>(rm_1), cpp11::as_cpp<cpp11::decay_t<bool>>(rm_single), cpp11::as_cpp<cpp11::decay_t<writable::integer>>(only_slope), cpp11::as_cpp<cpp11::decay_t<int>>(nthreads), cpp11::as_cpp<cpp11::decay_t<bool>>(do_refactor), cpp11::as_cpp<cpp11::decay_t<SEXP>>(r_x_sizes), cpp11::as_cpp<cpp11::decay_t<writable::integer>>(obs2keep)));
+  END_CPP11
+}
 // 07_01_parallel_helpers.cpp
 list cpppar_which_na_inf_vec(SEXP x, int nthreads);
 extern "C" SEXP _fixest_cpppar_which_na_inf_vec(SEXP x, SEXP nthreads) {
@@ -623,6 +630,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_fixest_cpppar_matprod",                (DL_FUNC) &_fixest_cpppar_matprod,                 3},
     {"_fixest_cpppar_poisson_linkinv",        (DL_FUNC) &_fixest_cpppar_poisson_linkinv,         2},
     {"_fixest_cpppar_poisson_validmu",        (DL_FUNC) &_fixest_cpppar_poisson_validmu,         2},
+    {"_fixest_cpppar_quf_table_sum",          (DL_FUNC) &_fixest_cpppar_quf_table_sum,          11},
     {"_fixest_cpppar_trigamma",               (DL_FUNC) &_fixest_cpppar_trigamma,                2},
     {"_fixest_cpppar_which_na_inf_df",        (DL_FUNC) &_fixest_cpppar_which_na_inf_df,         2},
     {"_fixest_cpppar_which_na_inf_mat",       (DL_FUNC) &_fixest_cpppar_which_na_inf_mat,        2},
