@@ -130,7 +130,7 @@ void quf_table_sum_single(void *px_in, string &x_type, int n, int q, int *x_quf,
     int n = Rf_length(xq);
 
     vector<bool> check_pblm(Q, true);
-    if(only_slope.length() == Q){
+    if(only_slope.size() == Q){
         for(int q=0 ; q<Q ; ++q){
             // we check for pblm only if NOT only slope
             check_pblm[q] = only_slope[q] == false;
@@ -155,7 +155,7 @@ void quf_table_sum_single(void *px_in, string &x_type, int n, int q, int *x_quf,
     vector<int> x_sizes_fake(Q, 0);
     int *px_sizes = do_refactor ? INTEGER(r_x_sizes) : x_sizes_fake.data();
 
-    int n_keep = obs2keep.length();
+    int n_keep = obs2keep.size();
     bool identical_x = do_refactor && obs2keep[0] == 0;
 
     // the vectors of qufed
