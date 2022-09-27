@@ -1,7 +1,7 @@
 test_that("auto-generated test #11", {
   do_refactor <- FALSE
   do_sum_y <- FALSE
-  nthreads <- 4
+  nthreads <- 4L
   obs2keep <- 0L
   only_slope <- c(TRUE, FALSE)
   r_x_sizes <- 0L
