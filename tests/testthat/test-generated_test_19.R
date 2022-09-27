@@ -4,7 +4,7 @@ test_that("auto-generated test #19", {
   nthreads <- 4
   obs2keep <- 0
   only_slope <- c(TRUE, TRUE)
-  r_x_sizes <- 0
+  r_x_sizes <- 0L
   rm_0 <- TRUE
   rm_1 <- TRUE
   rm_single <- FALSE
