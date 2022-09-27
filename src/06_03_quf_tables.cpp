@@ -1,4 +1,4 @@
-#include "06_quf.h"
+#include "06_0_quf.h"
 
 void quf_table_sum_single(void *px_in, string &x_type, int n, int q, int *x_quf,
                           vector<double> &x_unik, vector<int> &x_table, double *py,
@@ -110,8 +110,8 @@ void quf_table_sum_single(void *px_in, string &x_type, int n, int q, int *x_quf,
 }
 
 [[cpp11::register]] writable::list cpppar_quf_table_sum(SEXP x, SEXP y, bool do_sum_y, bool rm_0, bool rm_1,
-                          bool rm_single, writable::integer only_slope, int nthreads,
-                          bool do_refactor, SEXP r_x_sizes, writable::integer obs2keep){
+                          bool rm_single, writable::integers only_slope, int nthreads,
+                          bool do_refactor, SEXP r_x_sizes, writable::integers obs2keep){
 
     // x: List of vectors of IDs (type int/num or char only)
     // y: dependent variable
