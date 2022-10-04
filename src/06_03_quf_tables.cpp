@@ -389,9 +389,9 @@ void quf_table_sum_single(void *px_in, string &x_type, int n, int q, int *x_quf,
     writable::list copy_sum_y_all;
     for(int i = 0; i < Q; i++){
         if(do_sum_y){
-            copy_sum_y_all.push_back(writable::integers(sum_y_all[i]));
+            copy_sum_y_all.push_back(writable::doubles(sum_y_all[i]));
         } else {
-            copy_sum_y_all.push_back(writable::integers({0}));
+            copy_sum_y_all.push_back(writable::doubles({0}));
         }
 
     }
@@ -408,7 +408,11 @@ void quf_table_sum_single(void *px_in, string &x_type, int n, int q, int *x_quf,
         res.push_back({"obs_removed"_nm = writable::logicals(obs_removed)});
 
         // The removed clusters
-        res.push_back({"fe_removed"_nm = copy_sum_y_all});
+        writable::list res_tmp4;
+        for(int i = 0; i < Q; i++){
+            res_tmp4.push_back(writable::doubles(x_removed_all[i]));
+        }
+        res.push_back({"fe_removed"_nm = res_tmp4});
     }
 
     UNPROTECT((Q * (!identical_x)) + (Q * is_pblm));
