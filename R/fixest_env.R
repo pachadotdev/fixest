@@ -3023,7 +3023,7 @@ setup_fixef = function(fixef_df, lhs, fixef_vars, fixef.rm, family, isSplit, spl
     }
 
     if(is.null(obs2keep)){
-        obs2keep = 0
+        obs2keep = 0L
     }
 
     if(is.null(fixef_sizes)){
