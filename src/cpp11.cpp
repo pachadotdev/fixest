@@ -377,10 +377,10 @@ extern "C" SEXP _fixest_cpp_quf_gnl(SEXP x) {
   END_CPP11
 }
 // 06_03_quf_tables.cpp
-writable::list cpppar_quf_table_sum(SEXP x, SEXP y, bool do_sum_y, bool rm_0, bool rm_1, bool rm_single, writable::integer only_slope, int nthreads, bool do_refactor, SEXP r_x_sizes, writable::integer obs2keep);
+writable::list cpppar_quf_table_sum(SEXP x, SEXP y, bool do_sum_y, bool rm_0, bool rm_1, bool rm_single, writable::logicals only_slope, int nthreads, bool do_refactor, SEXP r_x_sizes, writable::integers obs2keep);
 extern "C" SEXP _fixest_cpppar_quf_table_sum(SEXP x, SEXP y, SEXP do_sum_y, SEXP rm_0, SEXP rm_1, SEXP rm_single, SEXP only_slope, SEXP nthreads, SEXP do_refactor, SEXP r_x_sizes, SEXP obs2keep) {
   BEGIN_CPP11
-    return cpp11::as_sexp(cpppar_quf_table_sum(cpp11::as_cpp<cpp11::decay_t<SEXP>>(x), cpp11::as_cpp<cpp11::decay_t<SEXP>>(y), cpp11::as_cpp<cpp11::decay_t<bool>>(do_sum_y), cpp11::as_cpp<cpp11::decay_t<bool>>(rm_0), cpp11::as_cpp<cpp11::decay_t<bool>>(rm_1), cpp11::as_cpp<cpp11::decay_t<bool>>(rm_single), cpp11::as_cpp<cpp11::decay_t<writable::integer>>(only_slope), cpp11::as_cpp<cpp11::decay_t<int>>(nthreads), cpp11::as_cpp<cpp11::decay_t<bool>>(do_refactor), cpp11::as_cpp<cpp11::decay_t<SEXP>>(r_x_sizes), cpp11::as_cpp<cpp11::decay_t<writable::integer>>(obs2keep)));
+    return cpp11::as_sexp(cpppar_quf_table_sum(cpp11::as_cpp<cpp11::decay_t<SEXP>>(x), cpp11::as_cpp<cpp11::decay_t<SEXP>>(y), cpp11::as_cpp<cpp11::decay_t<bool>>(do_sum_y), cpp11::as_cpp<cpp11::decay_t<bool>>(rm_0), cpp11::as_cpp<cpp11::decay_t<bool>>(rm_1), cpp11::as_cpp<cpp11::decay_t<bool>>(rm_single), cpp11::as_cpp<cpp11::decay_t<writable::logicals>>(only_slope), cpp11::as_cpp<cpp11::decay_t<int>>(nthreads), cpp11::as_cpp<cpp11::decay_t<bool>>(do_refactor), cpp11::as_cpp<cpp11::decay_t<SEXP>>(r_x_sizes), cpp11::as_cpp<cpp11::decay_t<writable::integers>>(obs2keep)));
   END_CPP11
 }
 // 07_01_parallel_helpers.cpp
