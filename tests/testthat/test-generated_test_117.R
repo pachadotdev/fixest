@@ -13,5 +13,5 @@ test_that("auto-generated test #117", {
   result <- cpppar_quf_table_sum(x, y, do_sum_y, rm_0, rm_1, rm_single, only_slope, nthreads, do_refactor, r_x_sizes, obs2keep)
   expected_result <- list(quf = list(c(1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L, 1L), c(10L, 14L, 6L, 2L, 8L, 12L, 3L, 9L, 1L, 5L, 13L, 7L, 4L, 11L, 10L, 14L, 6L, 2L, 8L, 12L, 3L, 9L, 1L, 5L, 13L, 7L, 4L, 11L, 10L, 14L, 6L, 2L, 8L, 12L, 3L, 9L, 1L, 5L, 13L, 7L, 4L, 11L, 10L, 14L, 6L, 2L, 8L)), items = list(1, c(1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15)), table = list(47L, c(3L, 4L, 3L, 3L, 3L, 4L, 3L, 4L, 3L, 4L, 3L, 3L, 3L, 4L)), sum_y = list(0L, 0L), obs_removed = c(FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE), fe_removed = list(numeric(0), 9))
 
-  expect_identical(result, expected_result)
+  expect_identical_unordered(result, expected_result)
 })

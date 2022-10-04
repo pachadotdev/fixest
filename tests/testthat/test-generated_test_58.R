@@ -13,5 +13,5 @@ test_that("auto-generated test #58", {
   result <- cpppar_quf_table_sum(x, y, do_sum_y, rm_0, rm_1, rm_single, only_slope, nthreads, do_refactor, r_x_sizes, obs2keep)
   expected_result <- list(quf = list(c(22L, 19L, 11L, 18L, 19L, 11L, 9L, 20L, 23L, 7L, 17L, 4L, 12L, 10L, 18L, 24L, 8L, 10L, 1L, 9L, 16L, 21L, 20L, 10L, 10L, 17L, 6L, 10L, 16L, 3L, 13L, 18L, 7L, 19L, 16L, 2L, 14L, 8L, 11L, 21L, 21L, 5L, 3L, 15L, 5L, 5L, 13L, 19L, 15L)), items = list(c(19, 36, 30, 12, 42, 27, 10, 17, 7, 14, 3, 13, 31, 37, 44, 21, 11, 4, 2, 8, 22, 1, 9, 16)), table = list(c(1L, 1L, 2L, 1L, 3L, 1L, 2L, 2L, 2L, 5L, 3L, 1L, 2L, 1L, 2L, 3L, 2L, 3L, 4L, 2L, 3L, 1L, 1L, 1L)), sum_y = list(c(5.1, 5.5, 9.8, 4.8, 14.3, 5.2, 10.4, 9.5, 10, 25, 15.2, 4.8, 10, 4.9, 10.1, 14.8, 10.4, 15.6, 20.1, 10.1, 14.1, 5.1, 4.4, 5.4)))
 
-  expect_identical(result, expected_result)
+  expect_identical_unordered(result, expected_result)
 })

@@ -2,7 +2,7 @@ test_that("auto-generated test #177", {
 do_refactor = FALSE
 do_sum_y = FALSE
 nthreads = 4
-obs2keep = 0
+obs2keep = 0L
 only_slope = FALSE
 r_x_sizes = 0
 rm_0 = FALSE
@@ -13,6 +13,6 @@ y = c(5.1, 4.9, 4.7, 4.6, 5, 5.4, 4.6, 5, 4.4, 4.9, 5.4, 4.8, 4.8, 4.3, 5.8, 5.7
 result <- cpppar_quf_table_sum(x, y, do_sum_y, rm_0, rm_1, rm_single, only_slope, nthreads, do_refactor, r_x_sizes, obs2keep)
 expected_result <- list(quf = list(c(18L, 19L, 20L, 21L, 22L, 22L, 23L, 24L, 25L, 26L, 27L, 23L, 28L, 24L, 29L, 30L, 30L, 31L, 29L, 30L, 28L, 32L, 33L, 25L, 34L, 28L, 31L, 20L, 35L, 24L, 22L, 35L, 35L, 25L, 24L, 36L, 24L, 31L, 29L, 29L, 35L, 22L, 36L, 37L, 36L, 23L, 38L, 27L, 36L, 39L, 40L, 41L, 42L, 43L, 43L, 44L, 42L, 45L, 46L, 47L, 44L, 48L, 49L, 50L, 51L, 52L, 46L, 50L, 41L, 49L, 53L, 54L, 54L, 52L, 52L, 54L, 55L, 47L, 48L, 56L, 57L, 41L, 55L, 41L, 47L, 42L, 58L, 44L, 41L, 57L, 59L, 60L, 45L, 40L, 52L, 54L, 53L, 60L, 61L, 60L, 62L, 63L, 64L, 65L, 66L, 67L, 1L, 2L, 3L, 65L, 66L, 4L, 5L, 6L, 4L, 7L, 8L, 7L, 3L, 9L, 10L, 11L, 65L, 12L, 12L, 62L, 9L, 13L, 11L, 66L, 65L, 14L, 15L, 14L, 8L, 6L, 6L, 64L, 14L, 16L, 17L, 6L, 3L, 66L, 62L, 3L, 16L, 14L, 4L, 4L)), items = list(c(107, 108, 109, 112, 113, 114, 116, 117, 120, 121, 122, 124, 128, 132, 133, 140, 141, 1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 13, 15, 16, 18, 22, 23, 25, 29, 36, 44, 47, 50, 51, 52, 53, 54, 56, 58, 59, 60, 62, 63, 64, 65, 66, 71, 72, 77, 80, 81, 87, 91, 92, 99, 101, 102, 103, 104, 105, 106)), table = list(c(1L, 1L, 4L, 4L, 1L, 4L, 2L, 2L, 2L, 1L, 2L, 2L, 1L, 4L, 1L, 2L, 1L, 1L, 1L, 2L, 1L, 4L, 3L, 5L, 3L, 1L, 2L, 3L, 4L, 3L, 3L, 1L, 1L, 1L, 4L, 4L, 1L, 1L, 1L, 2L, 5L, 3L, 2L, 3L, 2L, 2L, 3L, 2L, 2L, 2L, 1L, 4L, 2L, 4L, 2L, 1L, 2L, 1L, 1L, 3L, 1L, 3L, 1L, 2L, 4L, 4L, 1L)), sum_y = list(    0L))
 
-expect_identical(result, expected_result)
+expect_identical_unordered(result, expected_result)
 })
 
