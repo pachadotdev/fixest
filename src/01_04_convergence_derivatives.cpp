@@ -2,7 +2,7 @@
 // Maintenant la convergence des derivees
 //
 
-#include "01_convergence.h"
+#include "01_0_convergence.h"
 
 [[cpp11::register]] list cpp_derivconv_seq_gnl(int iterMax, double diffMax, int n_vars, SEXP nb_cluster_all, SEXP ll_d2,
 											   SEXP jacob_vector, SEXP deriv_init_vector, SEXP dum_vector)

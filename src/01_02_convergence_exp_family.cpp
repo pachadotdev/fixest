@@ -2,7 +2,7 @@
 // lighten the writting of the functions
 // Contains only parameters that are fixed throguhout ALL the process
 
-#include "01_convergence.h"
+#include "01_0_convergence.h"
 
 void CCC_poisson(int n_obs, int nb_cluster,
 				 double *cluster_coef, double *exp_mu,

@@ -4276,8 +4276,8 @@ demean = function(X, f, slope.vars, slope.flag, data, weights,
 
     quf_info_all = cpppar_quf_table_sum(x = f, y = 0, do_sum_y = FALSE, rm_0 = FALSE,
                                         rm_1 = FALSE, rm_single = FALSE, do_refactor = FALSE,
-                                        r_x_sizes = 0, obs2keep = 0, only_slope = slope.flag < 0L,
-                                        nthreads = nthreads)
+                                        r_x_sizes = 0L, obs2keep = 0L, only_slope = slope.flag < 0L,
+                                        nthreads = as.integer(nthreads))
 
     # table/sum_y/sizes
     fixef_table = quf_info_all$table
@@ -7027,7 +7027,7 @@ check_set_nthreads <- function(nthreads) {
 
     check_value(nthreads, "integer scalar GE{0}",
      .message = "The argument 'nthreads' must be an integer lower or equal to the number of threads available on the system.")
- 
+
     if(nthreads <= 0){
         nthreads = 1
     }
@@ -7038,20 +7038,20 @@ check_set_nthreads <- function(nthreads) {
 # check_set_nthreads = function(nthreads){
 #     # Simple function that checks that the nber of threads is valid
 #     set_up(1)
-# 
+#
 #     check_value(nthreads, "integer scalar GE{0} | numeric scalar GT{0} LT{1}", .message = paste0("The argument 'nthreads' must be an integer lower or equal to the number of threads available (", max(cpp_get_nb_threads(), 1), "). It can be equal to 0 which means all threads. Alternatively, if equal to a number strictly between 0 and 1, it represents the fraction of all threads to be used."))
-# 
+#
 #     max_threads = cpp_get_nb_threads()
-# 
+#
 #     # # To add later
 #     # if(cpp_is_in_fork()) return(1)
-# 
+#
 #     if(nthreads == 0){
 #         nthreads = max(max_threads, 1)
-# 
+#
 #     } else if(nthreads < 1){
 #         nthreads = max(ceiling(max_threads * nthreads), 1)
-# 
+#
 #     } else if(nthreads > 1){
 #         if(max_threads == 0){
 #             warn_up("OpenMP not detected: cannot use ", nthreads, " threads, single-threaded mode instead.")
@@ -7060,9 +7060,9 @@ check_set_nthreads <- function(nthreads) {
 #             warn_up("Asked for ", nthreads, " threads while the maximum is ", max_threads, ". Set to ", max_threads, " threads instead.")
 #             nthreads = max_threads
 #         }
-# 
+#
 #     }
-# 
+#
 #     nthreads
 # }
 
@@ -11388,28 +11388,28 @@ setFixest_nthreads = function(nthreads = 1, save = FALSE){
 	# if(missing(nthreads) || is.null(nthreads)){
 	#     # We first get the default from the environment variable
 	#     # If it is missing => 50% of all threads
-    # 
+    #
 	#     # 0.5 => 50% of all available threads (usually equiv to the nber of procs)
-    # 
+    #
 	#     nthreads_default = renvir_get("fixest_nthreads")
-    # 
+    #
 	#     if(!do_reset && !is.null(nthreads_default)){
 	#         if(!isScalar(nthreads_default) || nthreads_default < 0){
 	#             warning("The variable setting the number of threads in the .Renviron file is corrupted. It's value has been reset.")
 	#             renvir_update("fixest_nthreads", NULL)
 	#             nthreads_default = 0.5
 	#         }
-    # 
+    #
 	#     } else {
 	#         nthreads_default = 0.5
 	#     }
-    # 
+    #
 	#     nthreads = check_set_nthreads(nthreads_default)
-    # 
+    #
 	# }
-    # 
+    #
 	# nthreads = check_set_nthreads(nthreads)
-    # 
+    #
 	# if(do_reset){
 	#     renvir_update("fixest_nthreads", NULL)
 	# } else if(save){

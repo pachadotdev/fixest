@@ -1,4 +1,5 @@
-#include "06_quf.h"
+#include "06_0_quf.h"
+using namespace cpp11::literals;
 
 void quf_table_sum_single(void *px_in, string &x_type, int n, int q, int *x_quf,
                           vector<double> &x_unik, vector<int> &x_table, double *py,
@@ -110,8 +111,8 @@ void quf_table_sum_single(void *px_in, string &x_type, int n, int q, int *x_quf,
 }
 
 [[cpp11::register]] writable::list cpppar_quf_table_sum(SEXP x, SEXP y, bool do_sum_y, bool rm_0, bool rm_1,
-                          bool rm_single, writable::integer only_slope, int nthreads,
-                          bool do_refactor, SEXP r_x_sizes, writable::integer obs2keep){
+                          bool rm_single, writable::logicals only_slope, int nthreads,
+                          bool do_refactor, SEXP r_x_sizes, writable::integers obs2keep){
 
     // x: List of vectors of IDs (type int/num or char only)
     // y: dependent variable
@@ -368,33 +369,33 @@ void quf_table_sum_single(void *px_in, string &x_type, int n, int q, int *x_quf,
     res.push_back({"quf"_nm = res_x_quf_all});
 
     // x: Unik
-    writable::list res_tmp(Q);
-    res.push_back({"items"_nm = x_unik_all});
+    // items
+    writable::list res_tmp;
+    for(int i = 0; i < Q; i++){
+        res_tmp.push_back(writable::doubles(x_unik_all[i]));
+    }
+
+    res.push_back({"items"_nm = res_tmp});
 
     // table
-    res.push_back({"table"_nm = x_table_all});
-
-    // sum y
-
-    // Rcpp
-    // for(int q=0 ; q<Q ; ++q){
-    //     if(do_sum_y){
-    //         res_tmp[q] = sum_y_all[q];
-    //     } else {
-    //         res_tmp[q] = 0;
-    //     }
-    // }
-    // res["sum_y"] = clone(res_tmp);
-
-    // cpp11
-    writable::doubles copy_sum_y_all = sum_y_all;
-    for (int q = 0; q < Q; ++q){
-        if (do_sum_y) {
-            copy_sum_y_all[q] = sum_y_all[q];
-        } else {
-            copy_sum_y_all[q] = 0.0;
-        }
+    writable::list res_tmp2;
+    for(int i = 0; i < Q; i++){
+        res_tmp2.push_back(writable::integers(x_table_all[i]));
     }
+
+    res.push_back({"table"_nm = res_tmp2});
+
+    // sum_y
+    writable::list copy_sum_y_all;
+    for(int i = 0; i < Q; i++){
+        if(do_sum_y){
+            copy_sum_y_all.push_back(writable::doubles(sum_y_all[i]));
+        } else {
+            copy_sum_y_all.push_back(writable::doubles({0}));
+        }
+
+    }
+
     res.push_back({"sum_y"_nm = copy_sum_y_all});
 
     //
@@ -404,10 +405,14 @@ void quf_table_sum_single(void *px_in, string &x_type, int n, int q, int *x_quf,
     if (is_pblm)
     {
         // The removed observations
-        res.push_back({"obs_removed"_nm = obs_removed});
+        res.push_back({"obs_removed"_nm = writable::logicals(obs_removed)});
 
         // The removed clusters
-        res.push_back({"fe_removed"_nm = copy_sum_y_all});
+        writable::list res_tmp4;
+        for(int i = 0; i < Q; i++){
+            res_tmp4.push_back(writable::doubles(x_removed_all[i]));
+        }
+        res.push_back({"fe_removed"_nm = res_tmp4});
     }
 
     UNPROTECT((Q * (!identical_x)) + (Q * is_pblm));

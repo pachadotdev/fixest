@@ -1,4 +1,4 @@
-#include "04_linear_model.h"
+#include "04_0_linear_model.h"
 
 void invert_tri(writable::doubles_matrix<> &R, int K, int nthreads = 1)
 {

@@ -1,4 +1,4 @@
-#include "04_linear_model.h"
+#include "04_0_linear_model.h"
 
 void mp_sparse_XtX(writable::doubles_matrix<> &XtX, const vector<int> &n_j, const vector<int> &start_j, const vector<int> &all_i, const vector<double> &x, const doubles_matrix<> &X, int nthreads)
 {

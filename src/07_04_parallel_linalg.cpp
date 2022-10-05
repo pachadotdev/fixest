@@ -1,4 +1,4 @@
-#include "07_parallel.h"
+#include "07_0_parallel.h"
 
 [[cpp11::register]] doubles cpppar_xwy(doubles_matrix<> X, doubles y, doubles w, int nthreads)
 {

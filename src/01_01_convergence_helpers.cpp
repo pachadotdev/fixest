@@ -1,4 +1,4 @@
-#include "01_convergence.h"
+#include "01_0_convergence.h"
 
 [[cpp11::register]] list cpp_fixed_cost_gaussian(int n_i, int n_cells, SEXP index_i, SEXP index_j, SEXP order,
 												 SEXP invTableCluster_vector, SEXP dum_vector)
