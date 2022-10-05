@@ -29,7 +29,19 @@ Authors@R: c(
         email = "mavargas11@uc.cl",
         c(ORCID = "0000-0003-1017-7574")))
 Imports: stats, graphics, grDevices, tools, utils, methods, numDeriv, nlme, sandwich, dreamerr(>= 1.2.3)
-Suggests: knitr, rmarkdown, data.table, plm, MASS, pander, ggplot2, lfe, tinytex, pdftools
+Suggests: 
+    knitr,
+    rmarkdown,
+    data.table,
+    plm,
+    MASS,
+    pander,
+    ggplot2,
+    lfe,
+    tinytex,
+    pdftools,
+    testthat (>= 3.0.0),
+    patrick
 LinkingTo: cpp11
 SystemRequirements: C++11
 Depends: R(>= 3.5.0)
@@ -43,3 +55,4 @@ VignetteBuilder: knitr
 LazyData: true
 RoxygenNote: 7.1.2
 Encoding: UTF-8
+Config/testthat/edition: 3
