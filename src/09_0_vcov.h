@@ -1,15 +1,15 @@
 /*
 __   __  ___   ___  __   __
 \ \ / / / __| / _ \ \ \ / /
- \ V / | (__ | (_) | \ V / 
-  \_/   \___| \___/   \_/  
+ \ V / | (__ | (_) | \ V /
+  \_/   \___| \___/   \_/
 
 Original Author: Laurent R. Berge
 Refactored by Mauricio "Pacha" Vargas Sepulveda starting in Jun 2022
 */
 
 // TODO: OMP functions
-// #pragma once
+#pragma once
 
 #include <cpp11.hpp>
 #include <cpp11/doubles.hpp>

@@ -216,6 +216,10 @@ cpppar_quf_table_sum <- function(x, y, do_sum_y, rm_0, rm_1, rm_single, only_slo
   .Call(`_fixest_cpppar_quf_table_sum`, x, y, do_sum_y, rm_0, rm_1, rm_single, only_slope, nthreads, do_refactor, r_x_sizes, obs2keep)
 }
 
+cpp_get_nb_threads <- function() {
+  .Call(`_fixest_cpp_get_nb_threads`)
+}
+
 cpppar_which_na_inf_vec <- function(x, nthreads) {
   .Call(`_fixest_cpppar_which_na_inf_vec`, x, nthreads)
 }

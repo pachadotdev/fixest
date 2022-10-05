@@ -225,6 +225,7 @@ void quf_table_sum_single(void *px_in, string &x_type, int n, int q, int *x_quf,
         }
     }
 
+    // TODO: OMP functions
     #pragma omp parallel for num_threads(nthreads)
     for(int q=0 ; q<Q ; ++q){
         quf_table_sum_single(px_all[q], x_type_all[q], n, q, p_x_quf_all[q],
@@ -282,7 +283,8 @@ void quf_table_sum_single(void *px_in, string &x_type, int n, int q, int *x_quf,
             // using a omp critical section is a no go, renders parallel useless
             vector<int> obs_removed_int(n, 0);
 
-            // TODO: OMP functions #pragma omp parallel for num_threads(nthreads)
+            // TODO: OMP functions
+            #pragma omp parallel for num_threads(nthreads)
             for(int q=0 ; q<Q ; ++q){
                 if(any_pblm[q]){
                     vector<bool> &id_pblm = id_pblm_all[q];
@@ -341,7 +343,8 @@ void quf_table_sum_single(void *px_in, string &x_type, int n, int q, int *x_quf,
         bool stop_now = false;
         bool *pstop_now = &stop_now;
 
-        // TODO: OMP functions #pragma omp parallel for num_threads(nthreads)
+        // TODO: OMP functions
+        #pragma omp parallel for num_threads(nthreads)
         for(int q=0 ; q<Q ; ++q){
             quf_refactor_table_sum_single(n, p_x_quf_all[q], p_x_new_quf_all[q], obs_removed,
                                           x_unik_all[q], x_new_unik_all[q], x_removed_all[q],

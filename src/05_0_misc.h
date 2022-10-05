@@ -1,7 +1,7 @@
 /*
- _ __ ___   _  ___   ___ 
+ _ __ ___   _  ___   ___
 | '_ ` _ \ | |/ __| / __|
-| | | | | || |\__ \| (__ 
+| | | | | || |\__ \| (__
 |_| |_| |_||_||___/ \___|
 
 Original Author: Laurent R. Berge
@@ -10,11 +10,11 @@ Refactored by Mauricio "Pacha" Vargas Sepulveda starting in Jun 2022
 Three groups of non-parallel functions:
 1) simple functions that are faster than base R (because more specific)
 2) function to obtain the FE coefficients after the estimation is done
-3) functions to lag variables 
+3) functions to lag variables
 */
 
 // TODO: OMP functions
-// #pragma once
+#pragma once
 
 #include <cpp11.hpp>
 #include <cpp11/doubles.hpp>

@@ -8,7 +8,7 @@
     writable::doubles res(n);
 
     // TODO: OMP functions
-    // #pragma omp parallel for num_threads(nthreads)
+    #pragma omp parallel for num_threads(nthreads)
     for (int i = 0; i < n; ++i)
     {
         res[i] = lgamma(x[i]);
@@ -25,7 +25,7 @@
     writable::doubles res(n);
 
     // TODO: OMP functions
-    // #pragma omp parallel for num_threads(nthreads)
+    #pragma omp parallel for num_threads(nthreads)
     for (int i = 0; i < n; ++i)
     {
         res[i] = Rf_digamma(x[i]);
@@ -42,7 +42,7 @@
     writable::doubles res(n);
 
     // TODO: OMP functions
-    // #pragma omp parallel for num_threads(nthreads)
+    #pragma omp parallel for num_threads(nthreads)
     for (int i = 0; i < n; ++i)
     {
         res[i] = Rf_trigamma(x[i]);
@@ -63,7 +63,7 @@ inline double poisson_linkinv(double x)
     writable::doubles res(n);
 
     // TODO: OMP functions
-    // #pragma omp parallel for num_threads(nthreads)
+    #pragma omp parallel for num_threads(nthreads)
     for (int i = 0; i < n; ++i)
     {
         res[i] = poisson_linkinv(x[i]);
@@ -80,7 +80,7 @@ inline double poisson_linkinv(double x)
     bool res = true;
 
     // TODO: OMP functions
-    // #pragma omp parallel for num_threads(nthreads)
+    #pragma omp parallel for num_threads(nthreads)
     for (int i = 0; i < n; ++i)
     {
         double x_tmp = px[i];
@@ -101,7 +101,7 @@ inline double poisson_linkinv(double x)
     writable::doubles res(n);
 
     // TODO: OMP functions
-    // #pragma omp parallel for num_threads(nthreads)
+    #pragma omp parallel for num_threads(nthreads)
     for (int i = 0; i < n; ++i)
     {
         double x_tmp = x[i];
@@ -125,7 +125,7 @@ inline double logit_linkinv(double x)
     writable::doubles res(n);
 
     // TODO: OMP functions
-    // #pragma omp parallel for num_threads(nthreads)
+    #pragma omp parallel for num_threads(nthreads)
     for (int i = 0; i < n; ++i)
     {
         // res[i] = 1 / (1 + 1 / exp(x[i]));
@@ -156,7 +156,7 @@ inline double logit_mueta(double x)
     writable::doubles res(n);
 
     // TODO: OMP functions
-    // #pragma omp parallel for num_threads(nthreads)
+    #pragma omp parallel for num_threads(nthreads)
     for (int i = 0; i < n; ++i)
     {
         // double exp_x = exp(x[i]);
@@ -175,7 +175,7 @@ inline double logit_mueta(double x)
     bool isWeight = wt.size() != 1;
 
     // TODO: OMP functions
-    // #pragma omp parallel for num_threads(nthreads)
+    #pragma omp parallel for num_threads(nthreads)
     for (int i = 0; i < n; ++i)
     {
         if (y[i] == 1)

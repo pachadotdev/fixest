@@ -1,11 +1,11 @@
 /*
-                __ 
+                __
                / _|
-  __ _  _   _ | |_ 
+  __ _  _   _ | |_
  / _` || | | ||  _|
-| (_| || |_| || |  
- \__, | \__,_||_|  
-    | |            
+| (_| || |_| || |
+ \__, | \__,_||_|
+    | |
     |_|
 
 Original Author: Laurent R. Berge
@@ -16,7 +16,7 @@ in transforming a vector of arbitrary values into an integer
 vector ranging from 1 to the number of unique values (i.e:
   a)  (50, 55, 32, 12, 12) => (3, 4, 2, 1, 1)
   b)  ("a", "d", "a", "b") => (1, 3, 1, 2)
- 
+
  The code here is used to quf vectors of integers, floats
  or strings. I convert any other type of identifier to
  character if they're not numeric before getting into this
@@ -53,7 +53,7 @@ vector ranging from 1 to the number of unique values (i.e:
 */
 
 // TODO: OMP functions
-// #pragma once
+#pragma once
 
 #include <cpp11.hpp>
 #include <cpp11/doubles.hpp>
@@ -84,4 +84,3 @@ void quf_refactor_table_sum_single(int n, int *quf_old, int *quf_new, vector<boo
                                    vector<int> &x_table, double *py, vector<double> &sum_y, bool do_sum_y,
                                    bool rm_1, bool rm_single, vector<bool> &id_pblm, bool check_pblm,
                                    bool *pstop_now, int n_FE);
-                                   

@@ -384,6 +384,13 @@ extern "C" SEXP _fixest_cpppar_quf_table_sum(SEXP x, SEXP y, SEXP do_sum_y, SEXP
   END_CPP11
 }
 // 07_01_parallel_helpers.cpp
+int cpp_get_nb_threads();
+extern "C" SEXP _fixest_cpp_get_nb_threads() {
+  BEGIN_CPP11
+    return cpp11::as_sexp(cpp_get_nb_threads());
+  END_CPP11
+}
+// 07_01_parallel_helpers.cpp
 list cpppar_which_na_inf_vec(SEXP x, int nthreads);
 extern "C" SEXP _fixest_cpppar_which_na_inf_vec(SEXP x, SEXP nthreads) {
   BEGIN_CPP11
@@ -591,6 +598,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_fixest_cpp_find_never_always_treated", (DL_FUNC) &_fixest_cpp_find_never_always_treated,  2},
     {"_fixest_cpp_fixed_cost_gaussian",       (DL_FUNC) &_fixest_cpp_fixed_cost_gaussian,        7},
     {"_fixest_cpp_get_first_item",            (DL_FUNC) &_fixest_cpp_get_first_item,             2},
+    {"_fixest_cpp_get_nb_threads",            (DL_FUNC) &_fixest_cpp_get_nb_threads,             0},
     {"_fixest_cpp_hash_string",               (DL_FUNC) &_fixest_cpp_hash_string,                1},
     {"_fixest_cpp_isConstant",                (DL_FUNC) &_fixest_cpp_isConstant,                 1},
     {"_fixest_cpp_is_int",                    (DL_FUNC) &_fixest_cpp_is_int,                     1},

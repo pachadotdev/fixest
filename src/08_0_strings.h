@@ -10,7 +10,7 @@
 */
 
 // TODO: OMP functions
-// #pragma once
+#pragma once
 
 #include <cpp11.hpp>
 #include <cpp11/strings.hpp>

@@ -16,7 +16,7 @@
 
     // computation
     // TODO: OMP functions
-    // #pragma omp parallel for num_threads(nthreads)
+    #pragma omp parallel for num_threads(nthreads)
     for (int k = 0; k < K; ++k)
     {
 
@@ -51,7 +51,7 @@
 
     // computation
     // TODO: OMP functions
-    // #pragma omp parallel for num_threads(nthreads)
+    #pragma omp parallel for num_threads(nthreads)
     for (int i = 0; i < N; ++i)
     {
 
@@ -77,7 +77,7 @@
 
     // computing xy
     // TODO: OMP functions
-    // #pragma omp parallel for num_threads(nthreads)
+    #pragma omp parallel for num_threads(nthreads)
     for (int i = 0; i < N; ++i)
     {
         for (int k = 0; k < K; ++k)

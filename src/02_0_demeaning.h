@@ -1,12 +1,12 @@
 /*
-     _                                       _               
-    | |                                     (_)              
-  __| |  ___  _ __ ___    ___   __ _  _ __   _  _ __    __ _ 
+     _                                       _
+    | |                                     (_)
+  __| |  ___  _ __ ___    ___   __ _  _ __   _  _ __    __ _
  / _` | / _ \| '_ ` _ \  / _ \ / _` || '_ \ | || '_ \  / _` |
 | (_| ||  __/| | | | | ||  __/| (_| || | | || || | | || (_| |
  \__,_| \___||_| |_| |_| \___| \__,_||_| |_||_||_| |_| \__, |
                                                         __/ |
-                                                       |___/ 
+                                                       |___/
 
 Original Author: Laurent R. Berge
 Refactored by Mauricio "Pacha" Vargas Sepulveda starting in Jun 2022
@@ -34,7 +34,7 @@ I had to apply a trick to accommodate user interrupt in a
 parallel setup. It costs a bit, but it's clearly worth it.
 */
 
-/* 
+/*
 CONVENTIONS
 
 Suffixes
@@ -55,7 +55,8 @@ vs: means varying slopes
 
 // TODO: Next version => clean c++ code, use only sMat
 
-// TODO: OMP functions #pragma once
+// TODO: OMP functions
+#pragma once
 
 #include <cpp11.hpp>
 #include <cpp11/doubles.hpp>

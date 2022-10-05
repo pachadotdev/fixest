@@ -1,12 +1,12 @@
 /*
-                            _  _        _ 
+                            _  _        _
                            | || |      | |
  _ __    __ _  _ __   __ _ | || |  ___ | |
 | '_ \  / _` || '__| / _` || || | / _ \| |
 | |_) || (_| || |   | (_| || || ||  __/| |
 | .__/  \__,_||_|    \__,_||_||_| \___||_|
-| |                                       
-|_| 
+| |
+|_|
 
 Original Author: Laurent R. Berge
 Refactored by Mauricio "Pacha" Vargas Sepulveda starting in Jun 2022
@@ -31,7 +31,7 @@ Safer not to include it for now.
 */
 
 // TODO: OMP functions
-// #pragma once
+#pragma once
 
 #include <cpp11.hpp>
 #include <cpp11/doubles.hpp>

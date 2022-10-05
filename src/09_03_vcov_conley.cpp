@@ -113,7 +113,7 @@ mat_row_scheme::mat_row_scheme(int N_in, int K_in)
     const double cutoff_rad_sq = to_sq(degree_to_radian(cutoff) / 111);
 
     // TODO: OMP functions
-    // #pragma omp parallel for num_threads(nthreads)
+    #pragma omp parallel for num_threads(nthreads)
     for (int i = 0; i < N; ++i)
     {
 

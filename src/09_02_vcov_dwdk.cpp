@@ -41,7 +41,7 @@
         {
 
             // TODO: OMP functions
-            // #pragma omp parallel for num_threads(nthreads) schedule(static, 1)
+            #pragma omp parallel for num_threads(nthreads) schedule(static, 1)
             for (int index = 0; index < K_sq; ++index)
             {
                 int k1 = all_k1[index];
@@ -80,7 +80,7 @@
         for (int s = 0; s < n_steps; ++s)
         {
             // TODO: OMP functions
-            // #pragma omp parallel for num_threads(nthreads)
+            #pragma omp parallel for num_threads(nthreads)
             for (int l = L_start; l < L_end; ++l)
             {
 
@@ -107,7 +107,7 @@
             {
                 double *mat_prod = p_mat_prods[l - L_start];
                 // TODO: OMP functions
-                // #pragma omp parallel for num_threads(nthreads)
+                #pragma omp parallel for num_threads(nthreads)
                 for (int k1 = 0; k1 < K; ++k1)
                 {
                     for (int k2 = 0; k2 < K; ++k2)
@@ -128,7 +128,7 @@
     // Finishing
     // we add the transpose
     // TODO: OMP functions
-    // #pragma omp parallel for num_threads(nthreads)
+    #pragma omp parallel for num_threads(nthreads)
     for (int k1 = 0; k1 < K; ++k1)
     {
         for (int k2 = 0; k2 < K; ++k2)
@@ -229,7 +229,7 @@
 
 // l == 0 => easy
     // TODO: OMP functions
-    // #pragma omp parallel for num_threads(nthreads)
+    #pragma omp parallel for num_threads(nthreads)
     for (int index = 0; index < K_sq; ++index)
     {
         int k1 = all_k1[index];
@@ -266,7 +266,7 @@
             }
 
             // TODO: OMP functions
-            // #pragma omp parallel for num_threads(nthreads)
+            #pragma omp parallel for num_threads(nthreads)
             for (int index = 0; index < K_sq; ++index)
             {
                 int k1 = all_k1[index];
@@ -292,7 +292,7 @@
         {
 
             // TODO: OMP functions
-            // #pragma omp parallel for num_threads(nthreads) schedule(static, 1)
+            #pragma omp parallel for num_threads(nthreads) schedule(static, 1)
             for (int index = 0; index < K_sq; ++index)
             {
                 int k1 = all_k1[index];
@@ -340,7 +340,7 @@
     // Finishing
     // we add the transpose
     // TODO: OMP functions
-    // #pragma omp parallel for num_threads(nthreads)
+    #pragma omp parallel for num_threads(nthreads)
     for (int k1 = 0; k1 < K; ++k1)
     {
         for (int k2 = 0; k2 < K; ++k2)
@@ -377,7 +377,7 @@
 
 // we sum the scores by period
     // TODO: OMP functions
-    // #pragma omp parallel for num_threads(nthreads)
+    #pragma omp parallel for num_threads(nthreads)
     for (int k = 0; k < K; ++k)
     {
         for (int i = 0; i < N; ++i)
@@ -401,7 +401,7 @@
     {
 // X_t' %*% X_t+l
         // TODO: OMP functions
-        // #pragma omp parallel for num_threads(nthreads) schedule(static, 1)
+        #pragma omp parallel for num_threads(nthreads) schedule(static, 1)
         for (int index = 0; index < K_sq; ++index)
         {
             int k1 = all_k1[index];
@@ -425,7 +425,7 @@
     // Finishing
     // we add the transpose
     // TODO: OMP functions
-    // #pragma omp parallel for num_threads(nthreads)
+    #pragma omp parallel for num_threads(nthreads)
     for (int k1 = 0; k1 < K; ++k1)
     {
         for (int k2 = 0; k2 < K; ++k2)

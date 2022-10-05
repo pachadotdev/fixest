@@ -1,8 +1,8 @@
 /*
- _            
-| |           
-| | _ __ ___  
-| || '_ ` _ \ 
+ _
+| |
+| | _ __ ___
+| || '_ ` _ \
 | || | | | | |
 |_||_| |_| |_|
 
@@ -16,7 +16,7 @@ but they have the merit of doing exacly what I want.
 */
 
 // TODO: OMP functions
-// #pragma once
+#pragma once
 
 #include <cpp11.hpp>
 #include <cpp11/doubles.hpp>

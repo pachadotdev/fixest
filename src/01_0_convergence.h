@@ -1,9 +1,9 @@
 /*
-  ___   ___   _ __  __   __  ___  _ __   __ _   ___  _ __    ___   ___ 
- / __| / _ \ | '_ \ \ \ / / / _ \| '__| / _` | / _ \| '_ \  / __| / _ \  
-| (__ | (_) || | | | \ V / |  __/| |   | (_| ||  __/| | | || (__ |  __/ 
+  ___   ___   _ __  __   __  ___  _ __   __ _   ___  _ __    ___   ___
+ / __| / _ \ | '_ \ \ \ / / / _ \| '__| / _` | / _ \| '_ \  / __| / _ \
+| (__ | (_) || | | | \ V / |  __/| |   | (_| ||  __/| | | || (__ |  __/
  \___| \___/ |_| |_|  \_/   \___||_|    \__, | \___||_| |_| \___| \___|
-                                         __/ |                         
+                                         __/ |
                                         |___/
 
 Original Author: Laurent R. Berge
@@ -33,7 +33,8 @@ The big drawback of the ML methods is that, as opposed to GLM methods,
 parallel computing cannot be leveraged.
 */
 
-// TODO: OMP functions #pragma once
+// TODO: OMP functions
+#pragma once
 
 #include <cpp11.hpp>
 #include <cpp11/doubles.hpp>
@@ -127,4 +128,3 @@ void computeClusterCoef_single(int family, int n_obs, int nb_cluster, double the
 
 void computeClusterCoef(vector<double *> &pcluster_origin, vector<double *> &pcluster_destination,
 						PARAM_CCC *args);
-                        
