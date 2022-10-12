@@ -3034,10 +3034,10 @@ setup_fixef = function(fixef_df, lhs, fixef_vars, fixef.rm, family, isSplit, spl
     # save(quoi, file = "../_PROBLEM/fepois crashes/problem_quf.Rdata")
     # stop()
 
-    quf_info_all = cpppar_quf_table_sum(x = fixef_df, y = lhs, do_sum_y = do_sum_y,
-                                        rm_0 = rm_0, rm_1 = rm_1, rm_single = rm_single,
-                                        only_slope = only_slope, nthreads = as.integer(nthreads),
-                                        do_refactor = isRefactor, r_x_sizes = as.integer(fixef_sizes), obs2keep = as.integer(obs2keep))
+    quf_info_all = quf_table_sum(x = fixef_df, y = lhs, do_sum_y = do_sum_y,
+                                 rm_0 = rm_0, rm_1 = rm_1, rm_single = rm_single,
+                                 only_slope = only_slope, nthreads = as.integer(nthreads),
+                                 do_refactor = isRefactor, r_x_sizes = as.integer(fixef_sizes), obs2keep = as.integer(obs2keep))
 
     fixef_id = quf_info_all$quf
     # names
