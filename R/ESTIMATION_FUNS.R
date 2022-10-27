@@ -4286,24 +4286,3 @@ multi_fixef = function(env, estfun){
     return(res_multi)
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

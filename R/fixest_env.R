@@ -4093,5 +4093,3 @@ fixest_NA_results = function(env){
 
     res
 }
-
-
