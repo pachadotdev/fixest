@@ -1,5 +1,5 @@
 
-# fixest: Fast and user-friendly fixed-effects estimation
+# Fixest2: Efficient Fixed-Effects Estimation in R With C++ 11 Backend
 
 <a href="https://cran.r-project.org/web/checks/check_results_fixest.html"><img src="https://cranchecks.info/badges/worst/fixest" alt="CRAN status"></a>
 <a href="https://CRAN.R-project.org/package=fixest"><img src="http://www.r-pkg.org/badges/version/fixest" alt="Version"> </a>
