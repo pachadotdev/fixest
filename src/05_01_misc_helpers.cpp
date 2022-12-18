@@ -135,7 +135,7 @@
     }
 
     writable::list res;
-    res["always_treated"] = always_treated;
+    res.push_back({"always_treated"_nm = always_treated});
     res.push_back({"ref"_nm = cohort_ref});
 
     return res;
@@ -314,7 +314,7 @@
     }
 
     writable::list res;
-    res["x_int"] = x_int;
+    res.push_back({"x_int"_nm = x_int});
     res.push_back({"isnt_empty"_nm = isnt_empty});
     res.push_back({"value_min"_nm = value_min});
     res.push_back({"value_max"_nm = value_max});

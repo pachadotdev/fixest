@@ -1,1 +1,2 @@
-fixest::feols(mpg ~ wt, data = mtcars)
+library(fixest)
+check <- feols(mpg ~ wt, data = mtcars)

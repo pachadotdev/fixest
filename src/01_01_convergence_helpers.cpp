@@ -65,10 +65,10 @@
 
 	// the object returned
 	writable::list res;
-	res["mat_row"] = r_mat_row;
-	res["mat_col"] = r_mat_col;
-	res["mat_value_Ab"] = r_mat_value_Ab;
-	res["mat_value_Ba"] = r_mat_value_Ba;
+	res.push_back({"mat_row"_nm = r_mat_row});
+	res.push_back({"mat_col"_nm = r_mat_col});
+	res.push_back({"mat_value_Ab"_nm = r_mat_value_Ab});
+	res.push_back({"mat_value_Ba"_nm = r_mat_value_Ba});
 
 	UNPROTECT(4);
 

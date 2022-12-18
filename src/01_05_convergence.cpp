@@ -285,7 +285,7 @@
 	UNPROTECT(1);
 
 	writable::list res;
-	res["mu_new"] = mu;
+	res.push_back({"mu_new"_nm = mu});
 	res.push_back({"iter"_nm = iter});
 	res.push_back({"any_negative_poisson"_nm = any_negative_poisson});
 
@@ -496,7 +496,7 @@
 	UNPROTECT(1);
 
 	writable::list res;
-	res["mu_new"] = mu;
+	res.push_back({"mu_new"_nm = mu});
 	res.push_back({"iter"_nm = iter});
 
 	return (res);
@@ -705,7 +705,7 @@
 	UNPROTECT(1);
 
 	writable::list res;
-	res["mu_new"] = exp_mu;
+	res.push_back({"mu_new"_nm = exp_mu});
 	res.push_back({"iter"_nm = iter});
 	res.push_back({"any_negative_poisson"_nm = any_negative_poisson});
 
@@ -856,7 +856,7 @@
 	UNPROTECT(1);
 
 	writable::list res;
-	res["mu_new"] = exp_mu;
+	res.push_back({"mu_new"_nm = exp_mu});
 	res.push_back({"iter"_nm = iter});
 
 	return (res);
@@ -1117,7 +1117,7 @@
 	UNPROTECT(1);
 
 	writable::list res;
-	res["mu_new"] = mu;
+	res.push_back({"mu_new"_nm = mu});
 	res.push_back({"iter"_nm = iter});
 
 	return (res);
@@ -1286,7 +1286,7 @@
 	UNPROTECT(1);
 
 	writable::list res;
-	res["mu_new"] = mu;
+	res.push_back({"mu_new"_nm = mu});
 	res.push_back({"iter"_nm = iter});
 
 	return (res);

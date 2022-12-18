@@ -56,17 +56,17 @@
 
         // XtX
         mp_XtX(XtX, X, wX, nthreads);
-        res["XtX"] = XtX;
+        res.push_back({"XtX"_nm = XtX});
 
         // (ZX)'(ZX)
         mp_ZXtZX(ZXtZX, XtX, X, Z, wZ, nthreads);
-        res["ZXtZX"] = ZXtZX;
+        res.push_back({"ZXtZX"_nm = ZXtZX});
 
         // Xty
         if (!isX)
         {
             writable::doubles Xty(1);
-            res["Xty"] = Xty;
+            res.push_back({"Xty"_nm = Xty});
         }
         else if (is_y_list)
         {
@@ -80,13 +80,13 @@
                 Xty[v] = Xty_tmp;
             }
 
-            res["Xty"] = Xty;
+            res.push_back({"Xty"_nm = Xty});
         }
         else
         {
             writable::doubles Xty(K2);
             mp_Xty(Xty, wX, REAL(y), nthreads);
-            res["Xty"] = Xty;
+            res.push_back({"Xty"_nm = Xty});
         }
 
         // (ZX)'u
@@ -101,7 +101,7 @@
             ZXtu[v] = ZXtu_tmp;
         }
 
-        res["ZXtu"] = ZXtu;
+        res.push_back({"ZXtu"_nm = ZXtu});
 
         return res;
     }
@@ -121,17 +121,17 @@
 
     // XtX
     mp_sparse_XtX(XtX, n_j, start_j, all_i, x, X, nthreads);
-    res["XtX"] = XtX;
+    res.push_back({"XtX"_nm = XtX});
 
     // (xZ)'(ZX)
     mp_sparse_ZXtZX(ZXtZX, XtX, n_j, start_j, all_i, x, X, Z, wZ, nthreads);
-    res["ZXtZX"] = ZXtZX;
+    res.push_back({"ZXtZX"_nm = ZXtZX});
 
     // Xty
     if (!isX)
     {
         writable::doubles Xty(1);
-        res["Xty"] = Xty;
+        res.push_back({"Xty"_nm = Xty});
     }
     else if (is_y_list)
     {
@@ -145,13 +145,13 @@
             Xty[v] = Xty_tmp;
         }
 
-        res["Xty"] = Xty;
+        res.push_back({"Xty"_nm = Xty});
     }
     else
     {
         writable::doubles Xty(K2);
         mp_sparse_Xty(Xty, start_j, all_i, x, REAL(y), nthreads);
-        res["Xty"] = Xty;
+        res.push_back({"Xty"_nm = Xty});
     }
 
     // (ZX)'u
@@ -165,7 +165,7 @@
         ZXtu[v] = ZXtu_tmp;
     }
 
-    res["ZXtu"] = ZXtu;
+    res.push_back({"ZXtu"_nm = ZXtu});
 
     return res;
 }
@@ -220,14 +220,14 @@
         UXty[k] = val;
     }
 
-    res["UXty"] = UXty;
+    res.push_back({"UXty"_nm = UXty});
 
     // (UX)'(UX)
 
     if (sparse_check(X) == false)
     {
         mp_ZXtZX(UXtUX, XtX, X, U, wU, nthreads);
-        res["UXtUX"] = UXtUX;
+        res.push_back({"UXtUX"_nm = UXtUX});
     }
     else
     {
@@ -239,7 +239,7 @@
         set_sparse(n_j, start_j, all_i, x, X, w);
 
         mp_sparse_ZXtZX(UXtUX, XtX, n_j, start_j, all_i, x, X, U, wU, nthreads);
-        res["UXtUX"] = UXtUX;
+        res.push_back({"UXtUX"_nm = UXtUX});
     }
 
     return res;
