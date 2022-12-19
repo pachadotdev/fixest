@@ -16,6 +16,8 @@ info_inv = cpp_cholesky(xwx, collin.tol, nthreads)
 
 info_inv
 
+solve(xwx)
+
 feols(
     mpg ~ wt,
     data = mtcars

@@ -116,8 +116,7 @@ void tproduct_tri(writable::doubles_matrix<> &RRt, writable::doubles_matrix<> &R
     int iterSecond = ceil(2000000000 / flop / 5); // nber iter per 1/5 second
     double min_norm = X(0, 0);
 
-    for (int j = 0; j < K; ++j)
-    {
+    for (int j = 0; j < K; ++j) {
 
         if (j % iterSecond == 0)
         {
@@ -128,11 +127,11 @@ void tproduct_tri(writable::doubles_matrix<> &RRt, writable::doubles_matrix<> &R
         // implicit pivoting (it's like 0-rank variables are stacked in the end)
 
         double R_jj = X(j, j);
+
         for (int k = 0; k < j; ++k)
         {
 
-            if (id_excl[k] == true)
-                continue;
+            if (id_excl[k] == true) { continue; }
 
             R_jj -= R(k, j) * R(k, j);
         }
@@ -155,29 +154,29 @@ void tproduct_tri(writable::doubles_matrix<> &RRt, writable::doubles_matrix<> &R
             continue;
         }
 
-        if (min_norm > R_jj)
-            min_norm = R_jj;
+        if (min_norm > R_jj) { min_norm = R_jj; }
 
         R_jj = sqrt(R_jj);
 
         R(j, j) = R_jj;
 
-// TODO: OMP functions
-#pragma omp parallel for num_threads(nthreads) schedule(static, 1)
+        // TODO: OMP functions
+        #pragma omp parallel for num_threads(nthreads) schedule(static, 1)
         for (int i = j + 1; i < K; ++i)
         {
 
             double value = X(i, j);
             for (int k = 0; k < j; ++k)
             {
-                if (id_excl[k] == true)
-                    continue;
+                if (id_excl[k] == true) { continue; }
 
                 value -= R(k, i) * R(k, j);
             }
             R(j, i) = value / R_jj;
         }
     }
+
+    res.push_back({"R"_nm = R});
 
     // we reconstruct the R matrix, otherwise it's just a mess to handle excluded variables on the fly
     // changes are in place
@@ -216,13 +215,16 @@ void tproduct_tri(writable::doubles_matrix<> &RRt, writable::doubles_matrix<> &R
         K -= n_excl;
     }
 
+    res.push_back({"R"_nm = R});
+    res.push_back({"K"_nm = K});
+
     // Inversion of R, in place
     invert_tri(R, K, nthreads);
 
     writable::doubles_matrix<> XtX_inv(K, K);
     tproduct_tri(XtX_inv, R, nthreads);
 
-    res.push_back({"debug_inverttri"_nm = R});
+    res.push_back({"iR"_nm = R});
     res.push_back({"XtX_inv"_nm = XtX_inv});
     res.push_back({"id_excl"_nm = id_excl});
     res.push_back({"min_norm"_nm = min_norm});
