@@ -1,4 +1,5 @@
 devtools::load_all()
+Rcpp::sourceCpp("dev/correct_r_matrix.cpp")
 
 X = cbind(1, mtcars$wt)
 y = mtcars$mpg
@@ -14,16 +15,4 @@ xwx = info_products$XtX
 xwy = info_products$Xty
 info_inv = cpp_cholesky(xwx, collin.tol, nthreads)
 
-info_inv
-
-solve(xwx)
-
-feols(
-    mpg ~ wt,
-    data = mtcars
-)
-
-stats::lm(
-    mpg ~ wt,
-    data = mtcars
-)
+info_inv$R

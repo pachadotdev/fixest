@@ -215,7 +215,6 @@ void tproduct_tri(writable::doubles_matrix<> &RRt, writable::doubles_matrix<> &R
         K -= n_excl;
     }
 
-    res.push_back({"R"_nm = R});
     res.push_back({"K"_nm = K});
 
     // Inversion of R, in place
@@ -224,7 +223,6 @@ void tproduct_tri(writable::doubles_matrix<> &RRt, writable::doubles_matrix<> &R
     writable::doubles_matrix<> XtX_inv(K, K);
     tproduct_tri(XtX_inv, R, nthreads);
 
-    res.push_back({"iR"_nm = R});
     res.push_back({"XtX_inv"_nm = XtX_inv});
     res.push_back({"id_excl"_nm = id_excl});
     res.push_back({"min_norm"_nm = min_norm});

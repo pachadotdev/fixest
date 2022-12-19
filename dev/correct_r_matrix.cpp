@@ -211,7 +211,6 @@ List cpp_cholesky(NumericMatrix X, double tol = 1.0/100000.0/100000.0, int nthre
         K -= n_excl;
     }
 
-    res["R"] = R;
     res["K"] = K;
 
     // Inversion of R, in place
@@ -220,7 +219,6 @@ List cpp_cholesky(NumericMatrix X, double tol = 1.0/100000.0/100000.0, int nthre
     NumericMatrix XtX_inv(K, K);
     tproduct_tri(XtX_inv, R, nthreads);
 
-    res["iR"] = R;
     res["XtX_inv"] = XtX_inv;
     res["id_excl"] = id_excl;
     res["min_norm"] = min_norm;
