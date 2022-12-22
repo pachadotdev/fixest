@@ -1,6 +1,6 @@
 #include "04_0_linear_model.h"
 
-void invert_tri(writable::doubles_matrix<> &R, int K, int nthreads = 1)
+doubles_matrix<> invert_tri(writable::doubles_matrix<> &R, int K, int nthreads = 1)
 {
 
     // Strategy: we invert by bands (b) => better for parallelization
@@ -47,6 +47,8 @@ void invert_tri(writable::doubles_matrix<> &R, int K, int nthreads = 1)
             R(i, col) = numerator * R(i, i);
         }
     }
+
+    return(R);
 }
 
 void tproduct_tri(writable::doubles_matrix<> &RRt, writable::doubles_matrix<> &R, int nthreads = 1)
@@ -106,7 +108,12 @@ void tproduct_tri(writable::doubles_matrix<> &RRt, writable::doubles_matrix<> &R
     int K = X.ncol();
 
     writable::doubles_matrix<> R(K, K);
+
     writable::logicals id_excl(K);
+    for (int k = 0; k < K; ++k) {
+        id_excl[k] = false;
+    }
+
     int n_excl = 0;
 
     // we check for interrupt every 1s when it's the most computationally intensive
@@ -176,8 +183,6 @@ void tproduct_tri(writable::doubles_matrix<> &RRt, writable::doubles_matrix<> &R
         }
     }
 
-    res.push_back({"R"_nm = R});
-
     // we reconstruct the R matrix, otherwise it's just a mess to handle excluded variables on the fly
     // changes are in place
 
@@ -218,12 +223,14 @@ void tproduct_tri(writable::doubles_matrix<> &RRt, writable::doubles_matrix<> &R
     res.push_back({"K"_nm = K});
 
     // Inversion of R, in place
-    invert_tri(R, K, nthreads);
+    writable::doubles_matrix<> R_inv = invert_tri(R, K, nthreads);
 
-    writable::doubles_matrix<> XtX_inv(K, K);
-    tproduct_tri(XtX_inv, R, nthreads);
+    // writable::doubles_matrix<> XtX_inv(K, K);
+    // tproduct_tri(XtX_inv, R, nthreads);
 
-    res.push_back({"XtX_inv"_nm = XtX_inv});
+    res.push_back({"R"_nm = R});
+    res.push_back({"R_inv"_nm = R_inv});
+    // res.push_back({"XtX_inv"_nm = XtX_inv});
     res.push_back({"id_excl"_nm = id_excl});
     res.push_back({"min_norm"_nm = min_norm});
 
