@@ -7,13 +7,13 @@ void invert_tri(writable::doubles_matrix<> &R, int K, int nthreads = 1){
     // initialization of R prime
     for(int i=0 ; i<K ; ++i){
         for(int j=i+1 ; j<K ; ++j){
-            R(j, i) += (-1 * R(j, i)) + R(i, j);
+            R(j, i) += (-1.0 * R(j, i)) + R(i, j);
         }
     }
 
     // b0
     for(int i=0 ; i<K ; ++i){
-        R(i, i) = 1/R(i, i);
+        R(i, i) = 1.0 / R(i, i);
     }
 
     // Check for interrupts
@@ -48,7 +48,7 @@ void tproduct_tri(writable::doubles_matrix<> &RRt, writable::doubles_matrix<> &R
     // initialization of R prime
     for(int i=0 ; i<K ; ++i){
         for(int j=i+1 ; j<K ; ++j){
-            R(j, i) += (-1 * R(j, i)) + R(i, j);
+            R(j, i) += (-1.0 * R(j, i)) + R(i, j);
         }
     }
 
