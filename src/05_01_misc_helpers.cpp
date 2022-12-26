@@ -1,6 +1,7 @@
 #include "05_0_misc.h"
 
-[[cpp11::register]] std::string cpp_add_commas(double x, int r = 1, bool whole = true)
+[[cpp11::register]]
+std::string cpp_add_commas(double x, int r = 1, bool whole = true)
 {
     // a bit like (but not exactly equal to) format(x, nsmall = 1, big.mark = ",") but about 40-100 times faster
     // for whole numbers => no trailing digits

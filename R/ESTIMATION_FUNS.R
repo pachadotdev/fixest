@@ -426,10 +426,6 @@ feols = function(fml, data, vcov, weights, offset, subset, split, fsplit, cluste
 		nthreads = get("nthreads", env)
 		init = 0
 
-		message("DEBUG")
-		print(y)
-		print(X)
-
 		# demeaned variables
 		if(!is.null(dots$X_demean)){
 		    skip_fixef = TRUE
@@ -444,16 +440,10 @@ feols = function(fml, data, vcov, weights, offset, subset, split, fsplit, cluste
 			y = y - offset
 		}
 
-		message("DEBUG")
-		print(y)
-
 		# weights
 		weights = get("weights.value", env)
 		isWeight = length(weights) > 1
 		correct_0w = FALSE
-
-		message("DEBUG")
-		print(weights)
 
 		mem.clean = get("mem.clean", env)
 
@@ -468,9 +458,6 @@ feols = function(fml, data, vcov, weights, offset, subset, split, fsplit, cluste
 	}
 
 	isFixef = get("isFixef", env)
-
-	message("DEBUG")
-	print(dots)
 
 	# Used to solve with the reduced model ----
 	xwx = dots$xwx
@@ -1531,9 +1518,6 @@ feols = function(fml, data, vcov, weights, offset, subset, split, fsplit, cluste
 	    est = ols_fit(y_demean, X_demean, weights, correct_0w, collin.tol, nthreads,
 	                  xwx, xwy, only.coef = only.coef)
 
-	    message("DEBUG")
-	    print(est)
-
 	    if(only.coef){
 	        names(est) = colnames(X)
 	        return(est)
@@ -1726,11 +1710,6 @@ feols = function(fml, data, vcov, weights, offset, subset, split, fsplit, cluste
 		# coeftable
 		zvalue = coef/se
 		pvalue = 2*pt(-abs(zvalue), max(n - df_k, 1))
-
-		message("DEBUG")
-		print(coef)
-		print(se)
-		print(zvalue)
 
 		coeftable = data.frame("Estimate"=coef, "Std. Error"=se, "t value"=zvalue, "Pr(>|t|)"=pvalue)
 		names(coeftable) = c("Estimate", "Std. Error", "t value",  "Pr(>|t|)")

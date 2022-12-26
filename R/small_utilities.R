@@ -11,7 +11,7 @@ escape_regex = function(x){
 
     if(!is.finite(x)) return(as.character(x))
 
-    cpp_add_commas(x)
+    cpp_add_commas(x, r = 1, whole = TRUE)
 }
 
 addCommas = function(x){
