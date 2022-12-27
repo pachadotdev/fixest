@@ -6,7 +6,7 @@ devtools::load_all()
 test_chol_2x2 <- FALSE
 test_chol_3x3 <- FALSE
 
-test_simple_ols <- TRUE
+test_simple_ols <- FALSE
 
 # Test Choslesky 2x2 ----
 
@@ -63,3 +63,13 @@ if (test_simple_ols) {
     all.equal(fit1$coefficients, fit2$coefficients)
     all.equal(fit1$residuals, unname(fit2$residuals))
 }
+
+# weighted LM ----
+
+set.seed(0)
+base <- iris
+names(base) <- c("y", "x1", "x2", "x3", "species")
+base$offset_value <- unclass(base$species) - 0.95
+base$fe_2 <- rep(1:5, 30)
+
+feols(y ~ x1 | species[[x2]] + fe_2, offset = base$offset_value, data = base)
