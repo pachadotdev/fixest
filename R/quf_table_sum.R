@@ -5,7 +5,7 @@
 # double:
 quf_table_sum <- function(x, y, do_sum_y, rm_0, rm_1, rm_single, only_slope,
                           nthreads, do_refactor, r_x_sizes, obs2keep) {
-    cpppar_quf_table_sum(x = y, y = y, do_sum_y = do_sum_y, rm_0 = rm_0,
+    cpppar_quf_table_sum(x = x, y = y, do_sum_y = do_sum_y, rm_0 = rm_0,
                          rm_1 = rm_1, rm_single = rm_single,
                          only_slope = only_slope,
                          nthreads = as.integer(nthreads),
