@@ -181,7 +181,7 @@
 	}
 
 	writable::list res;
-	res["dxi_dbeta"] = dxi_dbeta;
+	res.push_back({"dxi_dbeta"_nm = dxi_dbeta});
 	res.push_back({"iter"_nm = iter_all_max});
 
 	return (res);
@@ -551,7 +551,7 @@ void computeDerivCoef(vector<double *> &pcoef_origin, vector<double *> &pcoef_de
 	}
 
 	writable::list res;
-	res["dxi_dbeta"] = dxi_dbeta;
+	res.push_back({"dxi_dbeta"_nm = dxi_dbeta});
 	res.push_back({"iter"_nm = iter_all_max});
 
 	return (res);
@@ -844,7 +844,7 @@ void computeDerivCoef_2(vector<double> &alpha_origin, vector<double> &alpha_dest
 	}
 
 	writable::list res;
-	res["dxi_dbeta"] = dxi_dbeta;
+	res.push_back({"dxi_dbeta"_nm = dxi_dbeta});
 	res.push_back({"iter"_nm = iter_all_max});
 
 	return (res);
@@ -1093,7 +1093,7 @@ void computeDerivCoef_2(vector<double> &alpha_origin, vector<double> &alpha_dest
 	}
 
 	writable::list res;
-	res["dxi_dbeta"] = dxi_dbeta;
+	res.push_back({"dxi_dbeta"_nm = dxi_dbeta});
 	res.push_back({"iter"_nm = iter_all_max});
 
 	return (res);

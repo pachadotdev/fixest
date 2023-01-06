@@ -6612,15 +6612,3 @@ path_to_relative = function(x){
 
     relpath
 }
-
-
-
-
-
-
-
-
-
-
-
-

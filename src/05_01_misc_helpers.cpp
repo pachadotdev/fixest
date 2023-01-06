@@ -1,6 +1,7 @@
 #include "05_0_misc.h"
 
-[[cpp11::register]] std::string cpp_add_commas(double x, int r = 1, bool whole = true)
+[[cpp11::register]]
+std::string cpp_add_commas(double x, int r = 1, bool whole = true)
 {
     // a bit like (but not exactly equal to) format(x, nsmall = 1, big.mark = ",") but about 40-100 times faster
     // for whole numbers => no trailing digits
@@ -135,7 +136,7 @@
     }
 
     writable::list res;
-    res["always_treated"] = always_treated;
+    res.push_back({"always_treated"_nm = always_treated});
     res.push_back({"ref"_nm = cohort_ref});
 
     return res;
@@ -314,7 +315,7 @@
     }
 
     writable::list res;
-    res["x_int"] = x_int;
+    res.push_back({"x_int"_nm = x_int});
     res.push_back({"isnt_empty"_nm = isnt_empty});
     res.push_back({"value_min"_nm = value_min});
     res.push_back({"value_max"_nm = value_max});

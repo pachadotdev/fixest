@@ -143,8 +143,6 @@ importFrom(stats, model.matrix, sigma, deviance, weights, terms,
 importFrom(utils, combn, head, tail, packageVersion, object.size, read.csv,
            write.csv, write.table, capture.output, as.roman)
 
-importFrom(Rcpp, evalCpp)
-
 importFrom(graphics, par, plot, box, axis, abline, points, text, title,
            lines, polygon, segments, plot.default, strwidth, strheight,
            rect)

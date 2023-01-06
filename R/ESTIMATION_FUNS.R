@@ -367,7 +367,7 @@ feols = function(fml, data, vcov, weights, offset, subset, split, fsplit, cluste
 
 	dots = list(...)
 
-	# 1st: is the call coming from feglm?
+	# 1st: is the call coming from feglm? ----
 	fromGLM = FALSE
 	skip_fixef = FALSE
 	if("fromGLM" %in% names(dots)){
@@ -459,13 +459,11 @@ feols = function(fml, data, vcov, weights, offset, subset, split, fsplit, cluste
 
 	isFixef = get("isFixef", env)
 
-	# Used to solve with the reduced model
+	# Used to solve with the reduced model ----
 	xwx = dots$xwx
 	xwy = dots$xwy
 
-	#
-	# Split ####
-	#
+	# Split ----
 
 	do_split = get("do_split", env)
 	if(do_split){
@@ -475,9 +473,7 @@ feols = function(fml, data, vcov, weights, offset, subset, split, fsplit, cluste
 	    return(res)
 	}
 
-	#
-	# Multi fixef ####
-	#
+	# Multi fixef ----
 
 	do_multi_fixef = get("do_multi_fixef", env)
 	if(do_multi_fixef){
@@ -487,10 +483,7 @@ feols = function(fml, data, vcov, weights, offset, subset, split, fsplit, cluste
 	    return(res)
 	}
 
-	#
-	# Multi LHS and RHS ####
-	#
-
+	# Multi LHS and RHS ----
 
 	do_multi_lhs = get("do_multi_lhs", env)
 	do_multi_rhs = get("do_multi_rhs", env)
@@ -872,7 +865,7 @@ feols = function(fml, data, vcov, weights, offset, subset, split, fsplit, cluste
 	                                         diffMax = fixef.tol, r_nb_id_Q = fixef_sizes,
 	                                         fe_id_list = fixef_id_list, table_id_I = fixef_table_vector,
 	                                         slope_flag_Q = slope_flag, slope_vars_list = slope_vars,
-	                                         r_init = init, nthreads = nthreads)
+	                                         r_init = init, nthreads = nthreads, save_fixef = FALSE)
 
 	                X_demean = vars_demean$X_demean
 	                y_demean = vars_demean$y_demean
@@ -883,7 +876,7 @@ feols = function(fml, data, vcov, weights, offset, subset, split, fsplit, cluste
 	                                                diffMax = fixef.tol, r_nb_id_Q = fixef_sizes,
 	                                                fe_id_list = fixef_id_list, table_id_I = fixef_table_vector,
 	                                                slope_flag_Q = slope_flag, slope_vars_list = slope_vars,
-	                                                r_init = init, nthreads = nthreads)
+	                                                r_init = init, nthreads = nthreads, save_fixef = FALSE)
 
 	                    iv.mat_demean = iv_vars_demean$X_demean
 	                    iv_lhs_demean = iv_vars_demean$y_demean
@@ -1051,13 +1044,13 @@ feols = function(fml, data, vcov, weights, offset, subset, split, fsplit, cluste
 	                                     diffMax = fixef.tol, r_nb_id_Q = fixef_sizes,
 	                                     fe_id_list = fixef_id_list, table_id_I = fixef_table_vector,
 	                                     slope_flag_Q = slope_flag, slope_vars_list = slope_vars,
-	                                     r_init = init, nthreads = nthreads)
+	                                     r_init = init, nthreads = nthreads, save_fixef = FALSE)
 
 	            iv_vars_demean = cpp_demean(iv_lhs, iv.mat, weights, iterMax = fixef.iter,
 	                                        diffMax = fixef.tol, r_nb_id_Q = fixef_sizes,
 	                                        fe_id_list = fixef_id_list, table_id_I = fixef_table_vector,
 	                                        slope_flag_Q = slope_flag, slope_vars_list = slope_vars,
-	                                        r_init = init, nthreads = nthreads)
+	                                        r_init = init, nthreads = nthreads, save_fixef = FALSE)
 
 	            X_demean = vars_demean$X_demean
 	            y_demean = vars_demean$y_demean
@@ -1443,7 +1436,7 @@ feols = function(fml, data, vcov, weights, offset, subset, split, fsplit, cluste
 		                         diffMax = fixef.tol, r_nb_id_Q = fixef_sizes,
 		                         fe_id_list = fixef_id_list, table_id_I = fixef_table_vector,
 		                         slope_flag_Q = slope_flag, slope_vars_list = slope_vars,
-		                         r_init = init, nthreads = nthreads)
+		                         r_init = init, nthreads = nthreads, save_fixef = FALSE)
 
 		y_demean = vars_demean$y_demean
 		if(onlyFixef){
@@ -4286,24 +4279,3 @@ multi_fixef = function(env, estfun){
     return(res_multi)
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

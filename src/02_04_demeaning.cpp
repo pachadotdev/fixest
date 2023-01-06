@@ -808,7 +808,7 @@ void demean_single_gnl(int v, PARAM_DEMEAN *args)
         }
     }
 
-    res["X_demean"] = X_demean;
+    res.push_back({"X_demean"_nm = X_demean});
 
     if (is_y_list && useY)
     {
@@ -860,11 +860,11 @@ void demean_single_gnl(int v, PARAM_DEMEAN *args)
     {
         if (isInit)
         {
-            res["means"] = r_init;
+            res.push_back({"means"_nm = r_init});
         }
         else
         {
-            res["means"] = output_values;
+            res.push_back({"means"_nm = output_values});
         }
     }
     else

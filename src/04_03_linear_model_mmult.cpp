@@ -217,7 +217,7 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y, 
 
         // XtX
         mp_XtX(XtX, X, wX, nthreads);
-        res["XtX"] = XtX;
+        res.push_back({"XtX"_nm = XtX});
 
         // Xty
         if (is_y_list)
@@ -232,13 +232,13 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y, 
                 Xty[v] = Xty_tmp;
             }
 
-            res["Xty"] = Xty;
+            res.push_back({"Xty"_nm = Xty});
         }
         else
         {
             writable::doubles Xty(K);
             mp_Xty(Xty, wX, REAL(y), nthreads);
-            res["Xty"] = Xty;
+            res.push_back({"Xty"_nm = Xty});
         }
 
         return res;
@@ -274,13 +274,13 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y, 
             Xty[v] = Xty_tmp;
         }
 
-        res["Xty"] = Xty;
+        res.push_back({"Xty"_nm = Xty});
     }
     else
     {
         writable::doubles Xty(K);
         mp_sparse_Xty(Xty, start_j, all_i, x, REAL(y), nthreads);
-        res["Xty"] = Xty;
+        res.push_back({"Xty"_nm = Xty});
     }
 
     return res;
