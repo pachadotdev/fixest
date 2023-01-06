@@ -18,3 +18,4 @@
 ^dev$
 ^vscode-install.r$
 ^vscode-test.r$
+^tests$

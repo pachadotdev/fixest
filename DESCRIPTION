@@ -52,20 +52,23 @@ Suggests:
     ggplot2,
     lfe,
     tinytex,
-    pdftools,
-    testthat (>= 3.0.0),
-    patrick
-LinkingTo: cpp11
+    pdftools
 SystemRequirements: C++11
 Depends: R(>= 3.5.0)
-Description: Fast and user-friendly estimation of econometric models with multiple fixed-effects. Includes ordinary least squares (OLS), generalized linear models (GLM) and the negative binomial.
-    The core of the package is based on optimized parallel C++ code, scaling especially well for large data sets. The method to obtain the fixed-effects coefficients is based on Berge (2018) <https://wwwen.uni.lu/content/download/110162/1299525/file/2018_13>.
-    Further provides tools to export and view the results of several estimations with intuitive design to cluster the standard-errors.
+Description: Fast and user-friendly estimation of generalized linear models with
+    multiple fixed effects and cluster the standard errors. The method to obtain
+    the estimated fixed-effects coefficients is based on Berge (2018) 
+    <https://ideas.repec.org//p/luc/wpaper/18-13.html>,
+    Correia(2016)
+    <http://scorreia.com/research/hdfe.pdf>, and
+    Gaure (2013)
+    <https://dx.doi.org/10.1016/j.csda.2013.03.024>. The codebase uses
+    vendoring, therefore the dependency code is fixed and stable until it is 
+    updated.
 License: Apache License (>= 2)
-BugReports: https://github.com/lrberge/fixest/issues
-URL: https://lrberge.github.io/fixest/, https://github.com/lrberge/fixest
+BugReports: https://github.com/pachadotdev/fixest2/issues
+URL: https://pacha.dev/fixest2/, https://github.com/pachadotdev/fixest2
 VignetteBuilder: knitr
 LazyData: true
 RoxygenNote: 7.2.1
 Encoding: UTF-8
-Config/testthat/edition: 3
