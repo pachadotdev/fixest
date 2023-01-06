@@ -76,8 +76,6 @@ base$fe_2 <- rep(1:5, 30)
 feols(y ~ x1, data = base)
 summary(lm(y ~ x1, data = base))
 
-# fails
 feols(y ~ x1 | fe_2, data = base)
 summary(lm(y ~ 0 + x1 + as.factor(fe_2), data = base))
 summary(lfe::felm(y ~ x1 | fe_2, data = base))
-
