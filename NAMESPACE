@@ -1,4 +1,4 @@
-useDynLib(fixest, .registration = TRUE)
+useDynLib(fixest2, .registration = TRUE)
 
 #
 # EXPORT

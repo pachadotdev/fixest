@@ -1012,13 +1012,13 @@ results2formattedList = function(dots, vcov = NULL, ssc = getFixest_ssc(), stage
     # Getting the default style values
     if(tex){
         if(!"style.tex" %in% names(opts)){
-            style = fixest::style.tex(main = "base")
+            style = fixest2::style.tex(main = "base")
         } else {
             style = style.tex
         }
     } else if(!tex){
         if(!"style.df" %in% names(opts)){
-            style = fixest::style.df(default = TRUE)
+            style = fixest2::style.df(default = TRUE)
         } else {
             # We rename style.df into style
             style = style.df
@@ -4239,7 +4239,7 @@ setFixest_etable = function(digits = 4, digits.stats = 5, fitstat,
     if(length(style.tex) > 0){
         # We ensure we always have ALL components provided
         if(length(opts$style.tex) == 0){
-            basic_style = fixest::style.tex(main = "base")
+            basic_style = fixest2::style.tex(main = "base")
         } else {
             basic_style = opts$style.tex
         }
@@ -4253,7 +4253,7 @@ setFixest_etable = function(digits = 4, digits.stats = 5, fitstat,
     if(length(style.df) > 0){
         # We ensure we always have ALL components provided
         if(length(opts$style.df) == 0){
-            basic_style = fixest::style.df(default = TRUE)
+            basic_style = fixest2::style.df(default = TRUE)
         } else {
             basic_style = opts$style.df
         }

@@ -1,38 +1,47 @@
-Package: fixest
+Package: fixest2
 Type: Package
 Title: Fast Fixed-Effects Estimations
-Version: 2022.05.25
+Version: 2022.01.06
 Authors@R: c(
     person(given = "Laurent",
         family = "Berge",
-        role = c("aut", "cre"),
-        email = "laurent.berge@u-bordeaux.fr"),
+        role = "aut"),
     person(given = "Sebastian",
         family = "Krantz",
         role = "ctb"),
     person(given = "Grant",
         family = "McDermott",
         role = "ctb",
-        email = "grantmcd@uoregon.edu",
         comment = c(ORCID = "0000-0001-7883-8573")),
     person(given = "Nic",
         family = "Crane",
-        role = "ctb",
-        email = "thisisnic@gmail.com"),
+        role = "ctb"),
     person(given = "Agustin",
         family = "Covarrubias",
-        role = "ctb",
-        email = "gh@agucova.dev"),
+        role = "ctb"),
     person(given = "Hernan",
         family = "Robledo",
-        role = "ctb",
-        email = "harobledo@uc.cl"),
+        role = "ctb"),
+    person(given = "Victor",
+        family = "Falkenheim",
+        role = "ths"),
     person(given = "Mauricio",
         family = "Vargas",
-        role = "ctb",
+        role = c("aut", "cre"),
         email = "mavargas11@uc.cl",
-        c(ORCID = "0000-0003-1017-7574")))
-Imports: stats, graphics, grDevices, tools, utils, methods, numDeriv, nlme, sandwich, dreamerr(>= 1.2.3)
+        c(ORCID = "0000-0003-1017-7574")),
+    )
+Imports: 
+    stats,
+    graphics,
+    grDevices,
+    tools,
+    utils,
+    methods,
+    numDeriv,
+    nlme,
+    sandwich,
+    dreamerr(>= 1.2.3)
 Suggests: 
     knitr,
     rmarkdown,
