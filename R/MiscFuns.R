@@ -3345,7 +3345,7 @@ demean = function(X, f, slope.vars, slope.flag, data, weights,
                              diffMax = tol, r_nb_id_Q = fixef_sizes,
                              fe_id_list = quf_info_all$quf, table_id_I = fixef_table_vector,
                              slope_flag_Q = slope.flag, slope_vars_list = slope.vars,
-                             r_init = 0, nthreads = nthreads)
+                             r_init = 0, nthreads = nthreads, save_fixef = FALSE)
 
     # Internal call
     if(fe_info){
