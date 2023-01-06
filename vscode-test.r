@@ -3,10 +3,10 @@ devtools::load_all()
 
 # Rcpp::sourceCpp("dev/correct_r_matrix.cpp")
 
-test_chol_2x2 <- FALSE
-test_chol_3x3 <- FALSE
+test_chol_2x2 <- T
+test_chol_3x3 <- T
 
-test_simple_ols <- FALSE
+test_simple_ols <- T
 
 # Test Choslesky 2x2 ----
 
@@ -72,4 +72,12 @@ names(base) <- c("y", "x1", "x2", "x3", "species")
 base$offset_value <- unclass(base$species) - 0.95
 base$fe_2 <- rep(1:5, 30)
 
-feols(y ~ x1 | species[[x2]] + fe_2, offset = base$offset_value, data = base)
+# works
+feols(y ~ x1, data = base)
+summary(lm(y ~ x1, data = base))
+
+# fails
+feols(y ~ x1 | fe_2, data = base)
+summary(lm(y ~ 0 + x1 + as.factor(fe_2), data = base))
+summary(lfe::felm(y ~ x1 | fe_2, data = base))
+
