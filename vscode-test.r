@@ -3,10 +3,9 @@ devtools::load_all()
 
 # Rcpp::sourceCpp("dev/correct_r_matrix.cpp")
 
-test_chol_2x2 <- T
-test_chol_3x3 <- T
-
-test_simple_ols <- T
+test_chol_2x2 <- F
+test_chol_3x3 <- F
+test_simple_ols <- F
 
 # Test Choslesky 2x2 ----
 

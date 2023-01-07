@@ -1,3 +1,8 @@
+# fixest 2022.01.06
+
+This is the first version where formulas with fixed effects terms work. It 
+needs additional testing.
+
 # fixest2 2022.05.25
 
 This is the first version of the fork with a changelog (this file).

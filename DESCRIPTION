@@ -29,7 +29,7 @@ Authors@R: c(
         family = "Vargas",
         role = c("aut", "cre"),
         email = "mavargas11@uc.cl",
-        c(ORCID = "0000-0003-1017-7574")),
+        c(ORCID = "0000-0003-1017-7574"))
     )
 Imports: 
     stats,
@@ -53,7 +53,6 @@ Suggests:
     lfe,
     tinytex,
     pdftools
-SystemRequirements: C++11
 Depends: R(>= 3.5.0)
 Description: Fast and user-friendly estimation of generalized linear models with
     multiple fixed effects and cluster the standard errors. The method to obtain
@@ -72,3 +71,5 @@ VignetteBuilder: knitr
 LazyData: true
 RoxygenNote: 7.2.1
 Encoding: UTF-8
+LinkingTo: cpp11
+SystemRequirements: C++11
