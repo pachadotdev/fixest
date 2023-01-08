@@ -46,7 +46,7 @@
 #'
 #' @section Lagging variables:
 #'
-#' To use leads/lags of variables in the estimation, you can: i) either provide the argument \code{panel.id}, ii) either set your data set as a panel with the function \code{\link[fixest2]{panel}}. Doing either of the two will give you acceess to the lagging functions \code{\link[fixest2]{l}},  \code{\link[fixest:l]{f}} and \code{\link[fixest:l]{d}}.
+#' To use leads/lags of variables in the estimation, you can: i) either provide the argument \code{panel.id}, ii) either set your data set as a panel with the function \code{\link[fixest2]{panel}}. Doing either of the two will give you acceess to the lagging functions \code{\link[fixest2]{l}},  \code{\link[fixest2:l]{f}} and \code{\link[fixest2:l]{d}}.
 #'
 #' You can provide several leads/lags/differences at once: e.g. if your formula is equal to \code{f(y) ~ l(x, -1:1)}, it means that the dependent variable is equal to the lead of \code{y}, and you will have as explanatory variables the lead of \code{x1}, \code{x1} and the lag of \code{x1}. See the examples in function \code{\link[fixest2]{l}} for more details.
 #'
@@ -58,7 +58,7 @@
 #'
 #'  It is important to note that *if you do not care about the standard-errors of the interactions*, then you can add interactions in the fixed-effects part of the formula, it will be incomparably faster (using the syntax \code{factor_var[continuous_var]}, as explained in the section \dQuote{Varying slopes}).
 #'
-#' The function \code{\link[fixest:i]{i}} has in fact more arguments, please see details in its associated help page.
+#' The function \code{\link[fixest2:i]{i}} has in fact more arguments, please see details in its associated help page.
 #'
 #' @section On standard-errors:
 #'
@@ -66,7 +66,7 @@
 #'
 #' The following vignette: \href{https://lrberge.github.io/fixest/articles/standard_errors.html}{On standard-errors} describes in details how the standard-errors are computed in \code{fixest} and how you can replicate standard-errors from other software.
 #'
-#' You can use the functions \code{\link[fixest2]{setFixest_vcov}} and \code{\link[fixest:ssc]{setFixest_ssc}} to permanently set the way the standard-errors are computed.
+#' You can use the functions \code{\link[fixest2]{setFixest_vcov}} and \code{\link[fixest2:ssc]{setFixest_ssc}} to permanently set the way the standard-errors are computed.
 #'
 #' @section Instrumental variables:
 #'
@@ -160,7 +160,7 @@
 #' @seealso
 #' See also \code{\link[fixest2]{summary.fixest}} to see the results with the appropriate standard-errors, \code{\link[fixest2]{fixef.fixest}} to extract the fixed-effects coefficients, and the function \code{\link[fixest2]{etable}} to visualize the results of multiple estimations. For plotting coefficients: see \code{\link[fixest2]{coefplot}}.
 #'
-#' And other estimation methods: \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feglm}}, \code{\link[fixest:feglm]{fepois}}, \code{\link[fixest:femlm]{fenegbin}}, \code{\link[fixest2]{feNmlm}}.
+#' And other estimation methods: \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feglm}}, \code{\link[fixest2:feglm]{fepois}}, \code{\link[fixest2:femlm]{fenegbin}}, \code{\link[fixest2]{feNmlm}}.
 #'
 #' @author
 #' Laurent Berge
@@ -2071,7 +2071,7 @@ feols.fit <- function(y, X, fixef_df, vcov, offset, split, fsplit, cluster, se, 
 #'
 #' @seealso
 #' See also \code{\link[fixest2]{summary.fixest}} to see the results with the appropriate standard-errors, \code{\link[fixest2]{fixef.fixest}} to extract the fixed-effects coefficients, and the function \code{\link[fixest2]{etable}} to visualize the results of multiple estimations.
-#' And other estimation methods: \code{\link[fixest2]{feols}}, \code{\link[fixest2]{femlm}}, \code{\link[fixest:femlm]{fenegbin}}, \code{\link[fixest2]{feNmlm}}.
+#' And other estimation methods: \code{\link[fixest2]{feols}}, \code{\link[fixest2]{femlm}}, \code{\link[fixest2:femlm]{fenegbin}}, \code{\link[fixest2]{feNmlm}}.
 #'
 #' @author
 #' Laurent Berge
@@ -2965,7 +2965,7 @@ feglm.fit <- function(y, X, fixef_df, family = "gaussian", vcov, offset, split,
 #'
 #' @seealso
 #' See also \code{\link[fixest2]{summary.fixest}} to see the results with the appropriate standard-errors, \code{\link[fixest2]{fixef.fixest}} to extract the fixed-effects coefficients, and the function \code{\link[fixest2]{etable}} to visualize the results of multiple estimations.
-#' And other estimation methods: \code{\link[fixest2]{feols}}, \code{\link[fixest2]{feglm}}, \code{\link[fixest:feglm]{fepois}}, \code{\link[fixest2]{feNmlm}}.
+#' And other estimation methods: \code{\link[fixest2]{feols}}, \code{\link[fixest2]{feglm}}, \code{\link[fixest2:feglm]{fepois}}, \code{\link[fixest2]{feNmlm}}.
 #'
 #' @author
 #' Laurent Berge
@@ -3253,7 +3253,7 @@ fepois <- function(fml, data, vcov, offset, weights, subset, split, fsplit,
 #'  @seealso
 #' See also \code{\link[fixest2]{summary.fixest}} to see the results with the appropriate standard-errors, \code{\link[fixest2]{fixef.fixest}} to extract the fixed-effects coefficients, and the function \code{\link[fixest2]{etable}} to visualize the results of multiple estimations.
 #'
-#' And other estimation methods: \code{\link[fixest2]{feols}}, \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feglm}}, \code{\link[fixest:feglm]{fepois}}, \code{\link[fixest:femlm]{fenegbin}}.
+#' And other estimation methods: \code{\link[fixest2]{feols}}, \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feglm}}, \code{\link[fixest2:feglm]{fepois}}, \code{\link[fixest2:femlm]{fenegbin}}.
 #'
 #' @author
 #' Laurent Berge

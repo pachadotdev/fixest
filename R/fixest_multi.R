@@ -266,7 +266,7 @@ summary.fixest_multi <- function(object, type = "short", vcov = NULL, se = NULL,
 #'
 #' @seealso
 #' The main fixest estimation functions: \code{\link[fixest2]{feols}},
-#' \code{\link[fixest:feglm]{fepois}}, \code{\link[fixest:femlm]{fenegbin}},
+#' \code{\link[fixest2:feglm]{fepois}}, \code{\link[fixest2:femlm]{fenegbin}},
 #' \code{\link[fixest2]{feglm}}, \code{\link[fixest2]{feNmlm}}. Tools for multiple
 #' fixest estimations: \code{\link[fixest2]{summary.fixest_multi}},
 #' \code{\link[fixest2]{print.fixest_multi}},

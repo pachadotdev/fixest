@@ -16,7 +16,7 @@
 #' Returns a vector of the same length as the number of observations in the original data set. Ignored observations due to NA or perfect fit are re-introduced and their weights set to NA.
 #'
 #' @seealso
-#' \code{\link[fixest2]{feols}}, \code{\link[fixest:feglm]{fepois}}, \code{\link[fixest2]{feglm}}, \code{\link[fixest:femlm]{fenegbin}}, \code{\link[fixest2]{feNmlm}}.
+#' \code{\link[fixest2]{feols}}, \code{\link[fixest2:feglm]{fepois}}, \code{\link[fixest2]{feglm}}, \code{\link[fixest2:femlm]{fenegbin}}, \code{\link[fixest2]{feNmlm}}.
 #'
 #' @examples
 #'
@@ -48,7 +48,7 @@ weights.fixest <- function(object, ...) {
 #' Returns a numeric scalar.
 #'
 #' @seealso
-#' \code{\link[fixest2]{feols}}, \code{\link[fixest:feglm]{fepois}}, \code{\link[fixest2]{feglm}}, \code{\link[fixest:femlm]{fenegbin}}, \code{\link[fixest2]{feNmlm}}.
+#' \code{\link[fixest2]{feols}}, \code{\link[fixest2:feglm]{fepois}}, \code{\link[fixest2]{feglm}}, \code{\link[fixest2:femlm]{fenegbin}}, \code{\link[fixest2]{feNmlm}}.
 #'
 #'
 #' @examples
@@ -71,7 +71,7 @@ sigma.fixest <- function(object, ...) {
 #' Returns a numeric scalar equal to the deviance.
 #'
 #' @seealso
-#' \code{\link[fixest2]{feols}}, \code{\link[fixest:feglm]{fepois}}, \code{\link[fixest2]{feglm}}, \code{\link[fixest:femlm]{fenegbin}}, \code{\link[fixest2]{feNmlm}}.
+#' \code{\link[fixest2]{feols}}, \code{\link[fixest2:feglm]{fepois}}, \code{\link[fixest2]{feglm}}, \code{\link[fixest2:femlm]{fenegbin}}, \code{\link[fixest2]{feNmlm}}.
 #'
 #' @examples
 #'
@@ -132,7 +132,7 @@ deviance.fixest <- function(object, ...) {
 #' @param ... Not currently used.
 #'
 #' @details
-#' Hat values are not available for \code{\link[fixest:femlm]{fenegbin}}, \code{\link[fixest2]{femlm}} and \code{\link[fixest2]{feNmlm}} estimations.
+#' Hat values are not available for \code{\link[fixest2:femlm]{fenegbin}}, \code{\link[fixest2]{femlm}} and \code{\link[fixest2]{feNmlm}} estimations.
 #'
 #' When there are fixed-effects, the hat values of the reduced form are different from the hat values of the full model. And we cannot get costlessly the hat values of the full model from the reduced form. It would require to reestimate the model with the fixed-effects as regular variables.
 #'
@@ -163,7 +163,7 @@ hatvalues.fixest <- function(model, ...) {
   method <- model$method_type
   family <- model$family
 
-  msg <- "hatvalues.fixest: 'hatvalues' is not implemented for estimations with fixed-effects."
+  msg <- "hatvalues.fixest2: 'hatvalues' is not implemented for estimations with fixed-effects."
 
   # An error is in fact nicer than a message + NA return due to the interplay with sandwich
   if (!is.null(model$fixef_id)) {

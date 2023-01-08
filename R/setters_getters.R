@@ -106,7 +106,7 @@ getFixest_dict <- function() {
 
 #' Sets/gets formula macros
 #'
-#' You can set formula macros globally with \code{setFixest_fml}. These macros can then be used in \code{fixest} estimations or when using the function \code{\link[fixest:setFixest_fml]{xpd}}.
+#' You can set formula macros globally with \code{setFixest_fml}. These macros can then be used in \code{fixest} estimations or when using the function \code{\link[fixest2:setFixest_fml]{xpd}}.
 #'
 #' @inherit xpd examples
 #'

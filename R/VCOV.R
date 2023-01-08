@@ -2443,7 +2443,7 @@ getFixest_ssc <- function() {
 
 #' Sets the default type of standard errors to be used
 #'
-#' This functions defines or extracts the default type of standard-errors to computed in \code{fixest} \code{\link[fixest:summary.fixest]{summary}}, and \code{\link[fixest:vcov.fixest]{vcov}}.
+#' This functions defines or extracts the default type of standard-errors to computed in \code{fixest} \code{\link[fixest2:summary.fixest]{summary}}, and \code{\link[fixest2:vcov.fixest]{vcov}}.
 #'
 #' @param no_FE Character scalar equal to either: \code{"iid"} (default), or \code{"hetero"}. The type of standard-errors to use by default for estimations without fixed-effects.
 #' @param one_FE Character scalar equal to either: \code{"iid"}, \code{"hetero"}, or \code{"cluster"} (default). The type of standard-errors to use by default for estimations with \emph{one} fixed-effect.

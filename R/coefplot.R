@@ -70,7 +70,7 @@
 #' @param i.select Integer scalar, default is 1. In \code{iplot}, used to select which variable created with \code{i()} to select. Only used when there are several variables created with \code{\link[fixest2]{i}}. This is an index, just try increasing numbers to hopefully obtain what you want. Note that it works much better when the variables are "pure" \code{i()} variables and not interacted with other variables. For example: \code{i(species, x1)} is good while \code{i(species):x1} isn't. The latter will also work but the index may feel weird in case there are many \code{i()} variables.
 #'
 #' @seealso
-#' See \code{\link[fixest2]{setFixest_coefplot}} to set the default values of \code{coefplot}, and the estimation functions: e.g. \code{\link[fixest2]{feols}}, \code{\link[fixest:feglm]{fepois}}, \code{\link[fixest2]{feglm}}, \code{\link[fixest:femlm]{fenegbin}}.
+#' See \code{\link[fixest2]{setFixest_coefplot}} to set the default values of \code{coefplot}, and the estimation functions: e.g. \code{\link[fixest2]{feols}}, \code{\link[fixest2:feglm]{fepois}}, \code{\link[fixest2]{feglm}}, \code{\link[fixest2:femlm]{fenegbin}}.
 #'
 #' @section Setting custom default values:
 #' The function \code{coefplot} dispose of many arguments to parametrize the plots. Most of these arguments can be set once an for all using the function \code{\link[fixest2]{setFixest_coefplot}}. See Example 3 below for a demonstration.

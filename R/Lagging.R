@@ -664,7 +664,7 @@ lag_fml <- lag.formula
 #'
 #' When the initial data set was also a \code{data.table}, not all operations are supported and some may dissolve the \code{fixest_panel}. This is the case when creating subselections of the initial data with additional attributes (e.g. pdt[x>0, .(x, y, z)] would dissolve the \code{fixest_panel}, meaning only a data.table would be the result of the call).
 #'
-#' If the initial data set was also a \code{data.table}, then you can create new variables from lags and leads using the functions \code{\link[fixest2]{l}}() and \code{\link[fixest:l]{f}}(). See the example.
+#' If the initial data set was also a \code{data.table}, then you can create new variables from lags and leads using the functions \code{\link[fixest2]{l}}() and \code{\link[fixest2:l]{f}}(). See the example.
 #'
 #'
 #' @return
@@ -674,9 +674,9 @@ lag_fml <- lag.formula
 #' Laurent Berge
 #'
 #' @seealso
-#' The estimation methods \code{\link[fixest2]{feols}}, \code{\link[fixest:feglm]{fepois}} and \code{\link[fixest2]{feglm}}.
+#' The estimation methods \code{\link[fixest2]{feols}}, \code{\link[fixest2:feglm]{fepois}} and \code{\link[fixest2]{feglm}}.
 #'
-#' The functions \code{\link[fixest2]{l}} and \code{\link[fixest:l]{f}} to create lags and leads within \code{}fixest_panel objects.
+#' The functions \code{\link[fixest2]{l}} and \code{\link[fixest2:l]{f}} to create lags and leads within \code{}fixest_panel objects.
 #'
 #' @examples
 #'
@@ -789,7 +789,7 @@ unpanel <- function(x) {
 
 #' Method to subselect from a \code{fixest_panel}
 #'
-#' Subselection from a \code{fixest_panel} which has been created with the function \code{\link[fixest2]{panel}}. Also allows to create lag/lead variables with functions \code{\link[fixest2]{l}}()/\code{\link[fixest:l]{f}}() if the \code{fixest_panel} is also a \code{\link[data.table]{data.table}}.
+#' Subselection from a \code{fixest_panel} which has been created with the function \code{\link[fixest2]{panel}}. Also allows to create lag/lead variables with functions \code{\link[fixest2]{l}}()/\code{\link[fixest2:l]{f}}() if the \code{fixest_panel} is also a \code{\link[data.table]{data.table}}.
 #'
 #' @param x A \code{fixest_panel} object, created with the function \code{\link[fixest2]{panel}}.
 #' @param i Row subselection. Allows \code{\link[data.table]{data.table}} style selection (provided the data is also a data.table).

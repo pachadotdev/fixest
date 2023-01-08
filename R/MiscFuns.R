@@ -1488,7 +1488,7 @@ did_means <- function(fml, base, treat_var, post_var, tex = FALSE, treat_dict,
 #' Laurent Berge
 #'
 #' @seealso
-#' \code{\link[fixest:coefplot]{iplot}} to plot interactions or factors created with \code{i()}, \code{\link[fixest2]{feols}} for OLS estimation with multiple fixed-effects.
+#' \code{\link[fixest2:coefplot]{iplot}} to plot interactions or factors created with \code{i()}, \code{\link[fixest2]{feols}} for OLS estimation with multiple fixed-effects.
 #'
 #' See the function \code{\link[fixest2]{bin}} for binning variables.
 #'
