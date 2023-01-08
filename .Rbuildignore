@@ -19,3 +19,4 @@
 ^vscode-install.r$
 ^vscode-test.r$
 ^tests$
+^LICENSE.md$

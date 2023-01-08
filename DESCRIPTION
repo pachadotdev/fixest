@@ -43,8 +43,6 @@ Imports:
     sandwich,
     dreamerr (>= 1.2.3)
 Suggests: 
-    knitr,
-    rmarkdown,
     data.table,
     plm,
     MASS,
@@ -69,10 +67,8 @@ Description: Fast and user-friendly estimation of generalized linear models with
 License: Apache License (>= 2)
 BugReports: https://github.com/pachadotdev/fixest2/issues
 URL: https://pacha.dev/fixest2/, https://github.com/pachadotdev/fixest2
-VignetteBuilder: knitr
 LazyData: true
 RoxygenNote: 7.2.3
 Encoding: UTF-8
 LinkingTo: cpp11
 SystemRequirements: C++11
-Config/testthat/edition: 3
