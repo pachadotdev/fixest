@@ -19,21 +19,20 @@
 #' setFixest_notes(TRUE)
 #' feols(Ozone ~ Solar.R, airquality)
 #'
-setFixest_notes = function(x){
-    check_arg(x, "mbt logical scalar")
+setFixest_notes <- function(x) {
+  check_arg(x, "mbt logical scalar")
 
-    options("fixest_notes" = x)
+  options("fixest_notes" = x)
 }
 
 #' @rdname setFixest_notes
-getFixest_notes = function(){
+getFixest_notes <- function() {
+  x <- getOption("fixest_notes")
+  if (length(x) != 1 || !is.logical(x) || is.na(x)) {
+    stop("The value of getOption(\"fixest_notes\") is currently not legal. Please use function setFixest_notes to set it to an appropriate value. ")
+  }
 
-    x = getOption("fixest_notes")
-    if(length(x) != 1 || !is.logical(x) || is.na(x)){
-        stop("The value of getOption(\"fixest_notes\") is currently not legal. Please use function setFixest_notes to set it to an appropriate value. ")
-    }
-
-    x
+  x
 }
 
 #' Sets/gets the dictionary relabeling the variables
@@ -50,61 +49,59 @@ getFixest_notes = function(){
 #' @examples
 #'
 #' data(trade)
-#' est = feols(log(Euros) ~ log(dist_km)|Origin+Destination+Product, trade)
+#' est <- feols(log(Euros) ~ log(dist_km) | Origin + Destination + Product, trade)
 #' # we export the result & rename some variables
-#' esttex(est, dict = c("log(Euros)"="Euros (ln)", Origin="Country of Origin"))
+#' esttex(est, dict = c("log(Euros)" = "Euros (ln)", Origin = "Country of Origin"))
 #'
 #' # If you export many tables, it can be more convenient to use setFixest_dict:
-#' setFixest_dict(c("log(Euros)"="Euros (ln)", Origin="Country of Origin"))
+#' setFixest_dict(c("log(Euros)" = "Euros (ln)", Origin = "Country of Origin"))
 #' esttex(est) # variables are properly relabeled
 #'
-setFixest_dict = function(dict){
+setFixest_dict <- function(dict) {
+  if (missing(dict) || is.null(dict)) {
+    options("fixest_dict" = NULL)
+    return(invisible())
+  }
 
-    if(missing(dict) || is.null(dict)){
-        options("fixest_dict" = NULL)
-        return(invisible())
-    }
+  #
+  # Controls
+  #
 
-    #
-    # Controls
-    #
+  if (!is.character(dict) || !isVector(dict)) {
+    stop("Argument 'dict' must be a character vector.")
+  }
 
-    if(!is.character(dict) || !isVector(dict)){
-        stop("Argument 'dict' must be a character vector.")
-    }
+  if (anyNA(dict)) {
+    stop("Argument 'dict' must be a character vector without NAs.")
+  }
 
-    if(anyNA(dict)){
-        stop("Argument 'dict' must be a character vector without NAs.")
-    }
+  # Formatting the names
+  dict_names <- names(dict)
+  if (is.null(dict_names)) {
+    stop("Argument 'dict', the dictionary, must be a named vector. Currently it has no names.")
+  }
 
-    # Formatting the names
-    dict_names = names(dict)
-    if(is.null(dict_names)){
-        stop("Argument 'dict', the dictionary, must be a named vector. Currently it has no names.")
-    }
+  dict_names <- gsub(" +", "", dict_names)
+  td <- table(dict_names)
+  if (any(td > 1)) {
+    qui <- which(dict_names %in% names(td)[td > 1])
+    name_dup <- unique(names(dict)[qui])
+    stop("Argument 'dict' contains duplicated names: ", enumerate_items(name_dup))
+  }
 
-    dict_names = gsub(" +", "", dict_names)
-    td = table(dict_names)
-    if(any(td > 1)){
-        qui = which(dict_names %in% names(td)[td > 1])
-        name_dup = unique(names(dict)[qui])
-        stop("Argument 'dict' contains duplicated names: ", enumerate_items(name_dup))
-    }
-
-    options("fixest_dict" = dict)
+  options("fixest_dict" = dict)
 }
 
 #' @rdname setFixest_dict
-getFixest_dict = function(){
-
-    x = getOption("fixest_dict")
-    if(length(x) > 0){
-        if(!is.character(x) || !isVector(x) || anyNA(x)){
-            stop("The value of getOption(\"fixest_dict\") is currently not legal. Please use function setFixest_dict to set it to an appropriate value. ")
-        }
+getFixest_dict <- function() {
+  x <- getOption("fixest_dict")
+  if (length(x) > 0) {
+    if (!is.character(x) || !isVector(x) || anyNA(x)) {
+      stop("The value of getOption(\"fixest_dict\") is currently not legal. Please use function setFixest_dict to set it to an appropriate value. ")
     }
+  }
 
-    x
+  x
 }
 
 #' Sets/gets formula macros
@@ -129,29 +126,27 @@ getFixest_dict = function(){
 #'
 #'
 #'
-setFixest_fml = function(..., reset = FALSE){
+setFixest_fml <- function(..., reset = FALSE) {
+  check_arg(reset, get, "logical scalar")
 
-    check_arg(reset, get, "logical scalar")
+  fml_macro <- parse_macros(..., reset = reset, frame = parent.frame())
 
-    fml_macro = parse_macros(..., reset = reset, frame = parent.frame())
-
-    options("fixest_fml_macro" = fml_macro)
-
+  options("fixest_fml_macro" = fml_macro)
 }
 
 #' @rdname setFixest_fml
-getFixest_fml = function(){
-    fml_macro = getOption("fixest_fml_macro")
-    if(is.null(fml_macro)){
-        options("fixest_fml_macro" = list())
-        fml_macro = list()
-    } else if(!is.list(fml_macro)){
-        options("fixest_fml_macro" = list())
-        warning("The value of getOption(\"fixest_fml_macro\") is not legal, it has been reset. Please use only 'setFixest_fml' to set formula macro variables.")
-        fml_macro = list()
-    }
+getFixest_fml <- function() {
+  fml_macro <- getOption("fixest_fml_macro")
+  if (is.null(fml_macro)) {
+    options("fixest_fml_macro" = list())
+    fml_macro <- list()
+  } else if (!is.list(fml_macro)) {
+    options("fixest_fml_macro" = list())
+    warning("The value of getOption(\"fixest_fml_macro\") is not legal, it has been reset. Please use only 'setFixest_fml' to set formula macro variables.")
+    fml_macro <- list()
+  }
 
-    fml_macro
+  fml_macro
 }
 
 
@@ -178,68 +173,63 @@ getFixest_fml = function(){
 #' # => changing this default
 #'
 #' # Let's create data with singletons
-#' base = iris
-#' names(base) = c("y", "x1", "x2", "x3", "species")
-#' base$fe_singletons = as.character(base$species)
-#' base$fe_singletons[1:5] = letters[1:5]
+#' base <- iris
+#' names(base) <- c("y", "x1", "x2", "x3", "species")
+#' base$fe_singletons <- as.character(base$species)
+#' base$fe_singletons[1:5] <- letters[1:5]
 #'
-#' res          = feols(y ~ x1 + x2 | fe_singletons, base)
-#' res_noSingle = feols(y ~ x1 + x2 | fe_singletons, base, fixef.rm = "single")
+#' res <- feols(y ~ x1 + x2 | fe_singletons, base)
+#' res_noSingle <- feols(y ~ x1 + x2 | fe_singletons, base, fixef.rm = "single")
 #'
 #' # New defaults
 #' setFixest_estimation(fixef.rm = "single")
-#' res_newDefault = feols(y ~ x1 + x2 | fe_singletons, base)
+#' res_newDefault <- feols(y ~ x1 + x2 | fe_singletons, base)
 #'
 #' etable(res, res_noSingle, res_newDefault)
 #'
 #' # Resetting the defaults
 #' setFixest_estimation(reset = TRUE)
 #'
-#'
-#'
-setFixest_estimation = function(data = NULL, panel.id = NULL, fixef.rm = "perfect", fixef.tol = 1e-6, fixef.iter = 10000, collin.tol = 1e-10, lean = FALSE, verbose = 0, warn = TRUE, combine.quick = NULL, demeaned = FALSE, mem.clean = FALSE, glm.iter = 25, glm.tol = 1e-8, reset = FALSE){
+setFixest_estimation <- function(data = NULL, panel.id = NULL, fixef.rm = "perfect", fixef.tol = 1e-6, fixef.iter = 10000, collin.tol = 1e-10, lean = FALSE, verbose = 0, warn = TRUE, combine.quick = NULL, demeaned = FALSE, mem.clean = FALSE, glm.iter = 25, glm.tol = 1e-8, reset = FALSE) {
+  check_arg_plus(fixef.rm, "match(none, perfect, singleton, both)")
+  check_arg(fixef.tol, collin.tol, glm.tol, "numeric scalar GT{0}")
+  check_arg(fixef.iter, glm.iter, "integer scalar GE{1}")
+  check_arg(verbose, "integer scalar GE{0}")
+  check_arg(lean, warn, demeaned, mem.clean, reset, "logical scalar")
+  check_arg(combine.quick, "NULL logical scalar")
+  check_arg(panel.id, "NULL character vector len(,2) no na | os formula")
 
-    check_arg_plus(fixef.rm, "match(none, perfect, singleton, both)")
-    check_arg(fixef.tol, collin.tol, glm.tol, "numeric scalar GT{0}")
-    check_arg(fixef.iter, glm.iter, "integer scalar GE{1}")
-    check_arg(verbose, "integer scalar GE{0}")
-    check_arg(lean, warn, demeaned, mem.clean, reset, "logical scalar")
-    check_arg(combine.quick, "NULL logical scalar")
-    check_arg(panel.id, "NULL character vector len(,2) no na | os formula")
-
-    if(!missing(data)){
-        check_arg(data, "NULL data.frame | matrix")
-        if(!is.null(data)){
-            data = deparse_long(substitute(data))
-            class(data) = "default_data"
-        }
+  if (!missing(data)) {
+    check_arg(data, "NULL data.frame | matrix")
+    if (!is.null(data)) {
+      data <- deparse_long(substitute(data))
+      class(data) <- "default_data"
     }
+  }
 
-    # Getting the existing defaults
-    opts = getOption("fixest_estimation")
+  # Getting the existing defaults
+  opts <- getOption("fixest_estimation")
 
-    if(reset || is.null(opts)){
-        opts = list()
-    } else if(!is.list(opts)){
-        warning("Wrong formatting of option 'fixest_estimation', all options are reset.")
-        opts = list()
-    }
+  if (reset || is.null(opts)) {
+    opts <- list()
+  } else if (!is.list(opts)) {
+    warning("Wrong formatting of option 'fixest_estimation', all options are reset.")
+    opts <- list()
+  }
 
-    # Saving the default values
-    mc = match.call()
-    args_default = setdiff(names(mc)[-1], "reset")
+  # Saving the default values
+  mc <- match.call()
+  args_default <- setdiff(names(mc)[-1], "reset")
 
-    # NOTA: we don't allow delayed evaluation => all arguments must have hard values
-    for(v in args_default){
-        opts[[v]] = eval(as.name(v))
-    }
+  # NOTA: we don't allow delayed evaluation => all arguments must have hard values
+  for (v in args_default) {
+    opts[[v]] <- eval(as.name(v))
+  }
 
-    options(fixest_estimation = opts)
-
+  options(fixest_estimation = opts)
 }
 
 #' @rdname setFixest_estimation
-getFixest_estimation = function(){
-    getOption("fixest_estimation")
+getFixest_estimation <- function() {
+  getOption("fixest_estimation")
 }
-

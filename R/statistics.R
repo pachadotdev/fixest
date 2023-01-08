@@ -19,7 +19,7 @@
 #'
 #' # Some data and estimation
 #' data(trade)
-#' est = fepois(Euros ~ log(dist_km) | Origin^Product + Year, trade)
+#' est <- fepois(Euros ~ log(dist_km) | Origin^Product + Year, trade)
 #'
 #' #
 #' # Coeftable/se/tstat/pvalue
@@ -34,13 +34,13 @@
 #' # Now with two-way clustered standard-errors
 #' #  and using coeftable()
 #'
-#' coeftable(est, cluster = ~Origin + Product)
-#' se(est, cluster = ~Origin + Product)
-#' pvalue(est, cluster = ~Origin + Product)
-#' tstat(est, cluster = ~Origin + Product)
+#' coeftable(est, cluster = ~ Origin + Product)
+#' se(est, cluster = ~ Origin + Product)
+#' pvalue(est, cluster = ~ Origin + Product)
+#' tstat(est, cluster = ~ Origin + Product)
 #'
 #' # Or you can cluster only once:
-#' est_sum = summary(est, cluster = ~Origin + Product)
+#' est_sum <- summary(est, cluster = ~ Origin + Product)
 #' coeftable(est_sum)
 #' se(est_sum)
 #' tstat(est_sum)
@@ -49,182 +49,174 @@
 #' # You can use the arguments keep, drop, order
 #' # to rearrange the results
 #'
-#' base = iris
-#' names(base) = c("y", "x1", "x2", "x3", "species")
+#' base <- iris
+#' names(base) <- c("y", "x1", "x2", "x3", "species")
 #'
-#' est_iv = feols(y ~ x1 | x2 ~ x3, base)
+#' est_iv <- feols(y ~ x1 | x2 ~ x3, base)
 #'
 #' tstat(est_iv, keep = "x1")
 #' coeftable(est_iv, keep = "x1|Int")
 #'
 #' coeftable(est_iv, order = "!Int")
 #'
-#'
-#'
-coeftable = function(object, vcov = NULL, ssc = NULL, cluster = NULL, keep, drop, order, ...){
-    # We don't explicitly refer to the other arguments
+coeftable <- function(object, vcov = NULL, ssc = NULL, cluster = NULL, keep, drop, order, ...) {
+  # We don't explicitly refer to the other arguments
 
-    check_arg(keep, drop, order, "NULL character vector no na")
+  check_arg(keep, drop, order, "NULL character vector no na")
 
-    IS_FIXEST = "fixest" %in% class(object)
-    # IS_FIXEST_MULI = "fixest_multi" %in% class(object)
-    # IS_FIXEST_LIST = "fixest_multi" %in% class(object)
+  IS_FIXEST <- "fixest" %in% class(object)
+  # IS_FIXEST_MULI = "fixest_multi" %in% class(object)
+  # IS_FIXEST_LIST = "fixest_multi" %in% class(object)
 
-    if(IS_FIXEST){
-        if(!isTRUE(object$summary) || !(all_missing(vcov, ssc, cluster) && ...length() > 0)){
-            object = summary(object, vcov = vcov, ssc = ssc, cluster = cluster, ...)
-        }
-    } else {
-        if(!any(grepl("summary", class(object)))){
-            # Known issue:
-            # - if vcov/.../order are also args of summary, that will be a problem
+  if (IS_FIXEST) {
+    if (!isTRUE(object$summary) || !(all_missing(vcov, ssc, cluster) && ...length() > 0)) {
+      object <- summary(object, vcov = vcov, ssc = ssc, cluster = cluster, ...)
+    }
+  } else {
+    if (!any(grepl("summary", class(object)))) {
+      # Known issue:
+      # - if vcov/.../order are also args of summary, that will be a problem
 
-            args = list(object = object)
+      args <- list(object = object)
 
-            if(...length() > 0){
-                args = append(args, list(...))
-            }
+      if (...length() > 0) {
+        args <- append(args, list(...))
+      }
 
-            object = do.call("summary", args)
-        }
+      object <- do.call("summary", args)
+    }
+  }
+
+  # Let's find out the coefficients table
+  if (IS_FIXEST) {
+    res <- object$coeftable
+  } else {
+    list_mat <- object[sapply(object, is.matrix)]
+
+    ok <- FALSE
+    for (i in seq_along(list_mat)) {
+      mat <- list_mat[[i]]
+      if (!is.null(colnames(mat)) && any(grepl("(?i)(estimate|value|Pr\\()", colnames(mat)))) {
+        ok <- TRUE
+        res <- mat
+      }
     }
 
-    # Let's find out the coefficients table
-    if(IS_FIXEST){
-        res = object$coeftable
-    } else {
-        list_mat = object[sapply(object, is.matrix)]
+    if (ok == FALSE) {
+      stop("Sorry, the coeffficients table could not be extracted.")
+    }
+  }
 
-        ok = FALSE
-        for(i in seq_along(list_mat)){
-            mat = list_mat[[i]]
-            if(!is.null(colnames(mat)) && any(grepl("(?i)(estimate|value|Pr\\()", colnames(mat)))){
-                ok = TRUE
-                res = mat
-            }
-        }
+  if (!missnull(keep) || !missnull(drop) || !missnull(order)) {
+    r_names <- rownames(res)
+    r_names <- keep_apply(r_names, keep)
+    r_names <- drop_apply(r_names, drop)
+    r_names <- order_apply(r_names, order)
 
-        if(ok == FALSE){
-            stop("Sorry, the coeffficients table could not be extracted.")
-        }
-
+    if (length(r_names) == 0) {
+      return(NULL)
     }
 
-    if(!missnull(keep) || !missnull(drop) || !missnull(order)){
-        r_names = rownames(res)
-        r_names = keep_apply(r_names, keep)
-        r_names = drop_apply(r_names, drop)
-        r_names = order_apply(r_names, order)
+    res <- res[r_names, , drop = FALSE]
+  }
 
-        if(length(r_names) == 0){
-            return(NULL)
-        }
-
-        res = res[r_names, , drop = FALSE]
-    }
-
-    res
+  res
 }
 
 #' @describeIn coeftable Extracts the p-value of an estimation
-pvalue = function(object, vcov = NULL, ssc = NULL, cluster = NULL, keep, drop, order, ...){
+pvalue <- function(object, vcov = NULL, ssc = NULL, cluster = NULL, keep, drop, order, ...) {
+  check_arg(keep, drop, order, "NULL character vector no na")
 
-    check_arg(keep, drop, order, "NULL character vector no na")
+  mat <- coeftable(object, vcov = vcov, ssc = ssc, cluster = cluster, ...)
 
-    mat = coeftable(object, vcov = vcov, ssc = ssc, cluster = cluster, ...)
+  if (ncol(mat) != 4) {
+    stop("No appropriate coefficient table found (number of columns is ", ncol(mat), " instead of 4), sorry.")
+  }
 
-    if(ncol(mat) != 4){
-        stop("No appropriate coefficient table found (number of columns is ", ncol(mat), " instead of 4), sorry.")
+  res <- mat[, 4]
+  if (is.null(names(res))) {
+    names(res) <- rownames(mat)
+  }
+
+  if (!missnull(keep) || !missnull(drop) || !missnull(order)) {
+    r_names <- names(res)
+    r_names <- keep_apply(r_names, keep)
+    r_names <- drop_apply(r_names, drop)
+    r_names <- order_apply(r_names, order)
+
+    if (length(r_names) == 0) {
+      return(numeric(0))
     }
 
-    res = mat[, 4]
-    if(is.null(names(res))) {
-        names(res) = rownames(mat)
-    }
+    res <- res[r_names]
+  }
 
-    if(!missnull(keep) || !missnull(drop) || !missnull(order)){
-        r_names = names(res)
-        r_names = keep_apply(r_names, keep)
-        r_names = drop_apply(r_names, drop)
-        r_names = order_apply(r_names, order)
-
-        if(length(r_names) == 0){
-            return(numeric(0))
-        }
-
-        res = res[r_names]
-    }
-
-    res
+  res
 }
 
 #' @describeIn coeftable Extracts the t-statistics of an estimation
-tstat = function(object, vcov = NULL, ssc = NULL, cluster = NULL, keep, drop, order, ...){
+tstat <- function(object, vcov = NULL, ssc = NULL, cluster = NULL, keep, drop, order, ...) {
+  check_arg(keep, drop, order, "NULL character vector no na")
 
-    check_arg(keep, drop, order, "NULL character vector no na")
+  mat <- coeftable(object, vcov = vcov, ssc = ssc, cluster = cluster, ...)
 
-    mat = coeftable(object, vcov = vcov, ssc = ssc, cluster = cluster, ...)
+  if (ncol(mat) != 4) {
+    stop("No appropriate coefficient table found (number of columns is ", ncol(mat), " instead of 4), sorry.")
+  }
 
-    if(ncol(mat) != 4){
-        stop("No appropriate coefficient table found (number of columns is ", ncol(mat), " instead of 4), sorry.")
+  res <- mat[, 3]
+  if (is.null(names(res))) {
+    names(res) <- rownames(mat)
+  }
+
+  if (!missnull(keep) || !missnull(drop) || !missnull(order)) {
+    r_names <- names(res)
+    r_names <- keep_apply(r_names, keep)
+    r_names <- drop_apply(r_names, drop)
+    r_names <- order_apply(r_names, order)
+
+    if (length(r_names) == 0) {
+      return(numeric(0))
     }
 
-    res = mat[, 3]
-    if(is.null(names(res))) {
-        names(res) = rownames(mat)
-    }
+    res <- res[r_names]
+  }
 
-    if(!missnull(keep) || !missnull(drop) || !missnull(order)){
-        r_names = names(res)
-        r_names = keep_apply(r_names, keep)
-        r_names = drop_apply(r_names, drop)
-        r_names = order_apply(r_names, order)
-
-        if(length(r_names) == 0){
-            return(numeric(0))
-        }
-
-        res = res[r_names]
-    }
-
-    res
+  res
 }
 
 #' @describeIn coeftable Extracts the standard-error of an estimation
-se = function(object, vcov = NULL, ssc = NULL, cluster = NULL, keep, drop, order, ...){
+se <- function(object, vcov = NULL, ssc = NULL, cluster = NULL, keep, drop, order, ...) {
+  check_arg(keep, drop, order, "NULL character vector no na")
 
-    check_arg(keep, drop, order, "NULL character vector no na")
+  if (is.matrix(object) && nrow(object) == ncol(object)) {
+    # special case => object is a VCOV matrix and NOT an estimation
+    res <- sqrt(diag(object))
+  } else {
+    mat <- coeftable(object, vcov = vcov, ssc = ssc, cluster = cluster, ...)
 
-    if(is.matrix(object) && nrow(object) == ncol(object)){
-        # special case => object is a VCOV matrix and NOT an estimation
-        res = sqrt(diag(object))
-
-    } else {
-
-        mat = coeftable(object, vcov = vcov, ssc = ssc, cluster = cluster, ...)
-
-        if(ncol(mat) != 4){
-            stop("No appropriate coefficient table found (number of columns is ", ncol(mat), " instead of 4), sorry.")
-        }
-
-        res = mat[, 2]
-        if(is.null(names(res))) {
-            names(res) = rownames(mat)
-        }
+    if (ncol(mat) != 4) {
+      stop("No appropriate coefficient table found (number of columns is ", ncol(mat), " instead of 4), sorry.")
     }
 
-    if(!missnull(keep) || !missnull(drop) || !missnull(order)){
-        r_names = names(res)
-        r_names = keep_apply(r_names, keep)
-        r_names = drop_apply(r_names, drop)
-        r_names = order_apply(r_names, order)
+    res <- mat[, 2]
+    if (is.null(names(res))) {
+      names(res) <- rownames(mat)
+    }
+  }
 
-        if(length(r_names) == 0){
-            return(numeric(0))
-        }
+  if (!missnull(keep) || !missnull(drop) || !missnull(order)) {
+    r_names <- names(res)
+    r_names <- keep_apply(r_names, keep)
+    r_names <- drop_apply(r_names, drop)
+    r_names <- order_apply(r_names, order)
 
-        res = res[r_names]
+    if (length(r_names) == 0) {
+      return(numeric(0))
     }
 
-    res
+    res <- res[r_names]
+  }
+
+  res
 }

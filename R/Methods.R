@@ -20,18 +20,20 @@
 #'
 #' @examples
 #'
-#' est = feols(Petal.Length ~ Petal.Width, iris, weights = ~as.integer(Sepal.Length) - 3.99)
+#' est <- feols(Petal.Length ~ Petal.Width, iris, weights = ~ as.integer(Sepal.Length) - 3.99)
 #' weights(est)
 #'
-weights.fixest = function(object, ...){
-    w = object[["weights"]]
+weights.fixest <- function(object, ...) {
+  w <- object[["weights"]]
 
-    # To comply with stats default
-    if(is.null(w)) return(NULL)
+  # To comply with stats default
+  if (is.null(w)) {
+    return(NULL)
+  }
 
-    w = fill_with_na(w, object)
+  w <- fill_with_na(w, object)
 
-    w
+  w
 }
 
 
@@ -51,13 +53,11 @@ weights.fixest = function(object, ...){
 #'
 #' @examples
 #'
-#' est = feols(Petal.Length ~ Petal.Width, iris)
+#' est <- feols(Petal.Length ~ Petal.Width, iris)
 #' sigma(est)
 #'
-#'
-#'
-sigma.fixest = function(object, ...){
-    sqrt(deviance(object) / (object$nobs - object$nparams))
+sigma.fixest <- function(object, ...) {
+  sqrt(deviance(object) / (object$nobs - object$nparams))
 }
 
 
@@ -75,57 +75,51 @@ sigma.fixest = function(object, ...){
 #'
 #' @examples
 #'
-#' est = feols(Petal.Length ~ Petal.Width, iris)
+#' est <- feols(Petal.Length ~ Petal.Width, iris)
 #' deviance(est)
 #'
-#' est_pois = fepois(Petal.Length ~ Petal.Width, iris)
+#' est_pois <- fepois(Petal.Length ~ Petal.Width, iris)
 #' deviance(est_pois)
 #'
-deviance.fixest = function(object, ...){
+deviance.fixest <- function(object, ...) {
+  if (isTRUE(object$lean)) {
+    # LATER: recompute it
+    stop("The method 'deviance.fixest' cannot be applied to 'lean' fixest objects. Please re-estimate with 'lean = FALSE'.")
+  }
 
-    if(isTRUE(object$lean)){
-        # LATER: recompute it
-        stop("The method 'deviance.fixest' cannot be applied to 'lean' fixest objects. Please re-estimate with 'lean = FALSE'.")
+  method <- object$method
+  family <- object$family
+  r <- object$residuals
+  w <- object[["weights"]]
+  if (is.null(w)) w <- rep(1, length(r))
+
+  if (is.null(r) && !method %in% c("fepois", "feglm")) {
+    stop("The method 'deviance.fixest' cannot be applied to a 'lean' summary. Please apply it to the estimation object directly.")
+  }
+
+  if (method %in% c("feols", "feols.fit") || (method %in% c("femlm", "feNmlm") && family == "gaussian")) {
+    res <- sum(w * r**2)
+  } else if (method %in% c("fepois", "feglm")) {
+    res <- object$deviance
+  } else {
+    mu <- object$fitted.values
+    theta <- ifelse(family == "negbin", object$theta, 1)
+
+    # dev.resids function
+    if (family == "poisson") {
+      dev.resids <- poisson()$dev.resids
+    } else if (family == "logit") {
+      dev.resids <- binomial()$dev.resids
+    } else if (family == "negbin") {
+      dev.resids <- function(y, mu, wt) 2 * wt * (y * log(pmax(1, y) / mu) - (y + theta) * log((y + theta) / (mu + theta)))
     }
 
-    method = object$method
-    family = object$family
-    r = object$residuals
-    w = object[["weights"]]
-    if(is.null(w)) w = rep(1, length(r))
+    y <- r + mu
 
-    if(is.null(r) && !method %in% c("fepois", "feglm")){
-        stop("The method 'deviance.fixest' cannot be applied to a 'lean' summary. Please apply it to the estimation object directly.")
-    }
+    res <- sum(dev.resids(y, mu, w))
+  }
 
-    if(method %in% c("feols", "feols.fit") || (method %in% c("femlm", "feNmlm") && family == "gaussian")){
-        res = sum(w * r**2)
-
-    } else if(method %in% c("fepois", "feglm")){
-        res = object$deviance
-
-    } else {
-        mu = object$fitted.values
-        theta = ifelse(family == "negbin", object$theta, 1)
-
-        # dev.resids function
-        if(family == "poisson"){
-            dev.resids = poisson()$dev.resids
-
-        } else if(family == "logit"){
-            dev.resids = binomial()$dev.resids
-
-        } else if(family == "negbin"){
-            dev.resids = function(y, mu, wt) 2 * wt * (y * log(pmax(1, y)/mu) - (y + theta) * log((y + theta)/(mu + theta)))
-
-        }
-
-        y = r + mu
-
-        res = sum(dev.resids(y, mu, w))
-    }
-
-    res
+  res
 }
 
 
@@ -147,50 +141,47 @@ deviance.fixest = function(object, ...){
 #'
 #' @examples
 #'
-#' est = feols(Petal.Length ~ Petal.Width + Sepal.Width, iris)
+#' est <- feols(Petal.Length ~ Petal.Width + Sepal.Width, iris)
 #' head(hatvalues(est))
 #'
-#'
-hatvalues.fixest = function(model, ...){
-    # Only works for feglm/feols objects + no fixed-effects
-    # When there are fixed-effects the hatvalues of the reduced form is different from
-    #  the hatvalues of the full model. And we cannot get costlessly the hatvalues of the full
-    #  model from the reduced form. => we need to reestimate the model with the FEs as
-    #  regular variables.
+hatvalues.fixest <- function(model, ...) {
+  # Only works for feglm/feols objects + no fixed-effects
+  # When there are fixed-effects the hatvalues of the reduced form is different from
+  #  the hatvalues of the full model. And we cannot get costlessly the hatvalues of the full
+  #  model from the reduced form. => we need to reestimate the model with the FEs as
+  #  regular variables.
 
-    if(isTRUE(model$lean)){
-        # LATER: recompute it
-        stop("The method 'hatvalues.fixest' cannot be applied to 'lean' fixest objects. Please re-estimate with 'lean = FALSE'.")
-    }
+  if (isTRUE(model$lean)) {
+    # LATER: recompute it
+    stop("The method 'hatvalues.fixest' cannot be applied to 'lean' fixest objects. Please re-estimate with 'lean = FALSE'.")
+  }
 
-    if(is_user_level_call()){
-        validate_dots()
-    }
+  if (is_user_level_call()) {
+    validate_dots()
+  }
 
-    method = model$method_type
-    family = model$family
+  method <- model$method_type
+  family <- model$family
 
-    msg = "hatvalues.fixest: 'hatvalues' is not implemented for estimations with fixed-effects."
+  msg <- "hatvalues.fixest: 'hatvalues' is not implemented for estimations with fixed-effects."
 
-    # An error is in fact nicer than a message + NA return due to the interplay with sandwich
-    if(!is.null(model$fixef_id)){
-        stop(msg)
-    }
+  # An error is in fact nicer than a message + NA return due to the interplay with sandwich
+  if (!is.null(model$fixef_id)) {
+    stop(msg)
+  }
 
-    if(method == "feols"){
-        X = model.matrix(model)
+  if (method == "feols") {
+    X <- model.matrix(model)
 
-        res = cpp_diag_XUtX(X, model$cov.iid / model$sigma2)
+    res <- cpp_diag_XUtX(X, model$cov.iid / model$sigma2)
+  } else if (method == "feglm") {
+    XW <- model.matrix(model) * sqrt(model$irls_weights)
+    res <- cpp_diag_XUtX(XW, model$cov.iid)
+  } else {
+    stop("'hatvalues' is currently not implemented for function ", method, ".")
+  }
 
-    } else if(method == "feglm"){
-        XW = model.matrix(model) * sqrt(model$irls_weights)
-        res = cpp_diag_XUtX(XW, model$cov.iid)
-
-    } else {
-        stop("'hatvalues' is currently not implemented for function ", method, ".")
-    }
-
-    res
+  res
 }
 
 #' Extracts the scores from a fixest estimation
@@ -206,18 +197,18 @@ hatvalues.fixest = function(model, ...){
 #' @examples
 #'
 #' data(iris)
-#' est = feols(Petal.Length ~ Petal.Width + Sepal.Width, iris)
+#' est <- feols(Petal.Length ~ Petal.Width + Sepal.Width, iris)
 #' head(estfun(est))
 #'
-estfun.fixest = function(x, ...){
-    # 'scores' is an object always contained in fixest estimations
+estfun.fixest <- function(x, ...) {
+  # 'scores' is an object always contained in fixest estimations
 
-    if(isTRUE(x$lean)){
-        # LATER: recompute it
-        stop("The method 'estfun.fixest' cannot be applied to 'lean' fixest objects. Please re-estimate with 'lean = FALSE'.")
-    }
+  if (isTRUE(x$lean)) {
+    # LATER: recompute it
+    stop("The method 'estfun.fixest' cannot be applied to 'lean' fixest objects. Please re-estimate with 'lean = FALSE'.")
+  }
 
-    x$scores
+  x$scores
 }
 
 
@@ -255,97 +246,24 @@ NULL
 #'
 #' @examples
 #'
-#' est = feols(Petal.Length ~ Petal.Width + Sepal.Width, iris)
+#' est <- feols(Petal.Length ~ Petal.Width + Sepal.Width, iris)
 #' bread(est)
 #'
-bread.fixest = function(x, ...){
+bread.fixest <- function(x, ...) {
+  if (is_user_level_call()) {
+    validate_dots()
+  }
 
-    if(is_user_level_call()){
-        validate_dots()
-    }
+  method <- x$method_type
+  family <- x$family
 
-    method = x$method_type
-    family = x$family
+  if (method == "feols") {
+    res <- x$cov.iid / x$sigma2 * x$nobs
+  } else if (method == "feglm") {
+    res <- x$cov.iid * x$nobs
+  } else {
+    stop("'bread' is not currently implemented for function ", method, ".")
+  }
 
-    if(method == "feols"){
-
-        res = x$cov.iid / x$sigma2 * x$nobs
-
-    } else if(method == "feglm"){
-
-        res = x$cov.iid * x$nobs
-
-    } else {
-        stop("'bread' is not currently implemented for function ", method, ".")
-    }
-
-    res
+  res
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

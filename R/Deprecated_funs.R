@@ -20,9 +20,3 @@
 #   - obs2remove
 #   - summary.fixest.obs2remove
 #
-
-
-
-
-
-
