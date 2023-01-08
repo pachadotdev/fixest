@@ -30,9 +30,7 @@
 }
 
 .onAttach = function(libname, pkgname) {
-    rlang::inform("FIXEST")
-    rlang::inform(c("i" = "This is a fork of the original project created by Laurent Berge."))
-    rlang::inform(c("i" = "Visit https://buymeacoffee.com/pacha if you decide to donate and contribute to improve this project."))
+    message("=== fixest2 ===")
+    message("This is a fork of the original fixest project created by Laurent Berge.")
+    message("Visit https://buymeacoffee.com/pacha if you decide to donate and contribute to improve this project.")
 }
-
-

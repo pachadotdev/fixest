@@ -41,7 +41,7 @@ Imports:
     numDeriv,
     nlme,
     sandwich,
-    dreamerr(>= 1.2.3)
+    dreamerr (>= 1.2.3)
 Suggests: 
     knitr,
     rmarkdown,
@@ -52,7 +52,9 @@ Suggests:
     ggplot2,
     lfe,
     tinytex,
-    pdftools
+    pdftools,
+    testthat (>= 3.0.0),
+    patrick
 Depends: R(>= 3.5.0)
 Description: Fast and user-friendly estimation of generalized linear models with
     multiple fixed effects and cluster the standard errors. The method to obtain
@@ -69,7 +71,8 @@ BugReports: https://github.com/pachadotdev/fixest2/issues
 URL: https://pacha.dev/fixest2/, https://github.com/pachadotdev/fixest2
 VignetteBuilder: knitr
 LazyData: true
-RoxygenNote: 7.2.1
+RoxygenNote: 7.2.3
 Encoding: UTF-8
 LinkingTo: cpp11
 SystemRequirements: C++11
+Config/testthat/edition: 3
