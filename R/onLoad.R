@@ -30,7 +30,5 @@
 }
 
 .onAttach <- function(libname, pkgname) {
-  message("=== fixest2 ===")
-  message("This is a fork of the original fixest project created by Laurent Berge.")
-  message("Visit https://buymeacoffee.com/pacha if you decide to donate and contribute to improve this project.")
+    packageStartupMessage("=== fixest2 ===\nThis is a fork of the original fixest project created by Laurent Berge.\nVisit https://buymeacoffee.com/pacha if you decide to donate and contribute to improve this project.")
 }

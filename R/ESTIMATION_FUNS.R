@@ -13,7 +13,7 @@
 #' @inheritParams femlm
 #' @inheritSection xpd Dot square bracket operator in formulas
 #'
-#' @param fml A formula representing the relation to be estimated. For example: \code{fml = z~x+y}. To include fixed-effects, insert them in this formula using a pipe: e.g. \code{fml = z~x+y | fe_1+fe_2}. You can combine two fixed-effects with \code{^}: e.g. \code{fml = z~x+y|fe_1^fe_2}, see details. You can also use variables with varying slopes using square brackets: e.g. in \code{fml = z~y|fe_1[x] + fe_2}, see details. To add IVs, insert the endogenous vars./instruments after a pipe, like in \code{y ~ x | c(x_endo1, x_endo2) ~ x_inst1 + x_inst2}. Note that it should always be the last element, see details. Multiple estimations can be performed at once: for multiple dep. vars, wrap them in \code{c()}: ex \code{c(y1, y2)}. For multiple indep. vars, use the stepwise functions: ex \code{x1 + csw(x2, x3)}. The formula \code{fml = c(y1, y2) ~ x1 + cw0(x2, x3)} leads to 6 estimation, see details. Square brackets starting with a dot can be used to call global variables: \code{y.[i] ~ x.[1:2]} will lead to \code{y3 ~ x1 + x2} if \code{i} is equal to 3 in the current environment (see details in \code{\link[fixest]{xpd}}).
+#' @param fml A formula representing the relation to be estimated. For example: \code{fml = z~x+y}. To include fixed-effects, insert them in this formula using a pipe: e.g. \code{fml = z~x+y | fe_1+fe_2}. You can combine two fixed-effects with \code{^}: e.g. \code{fml = z~x+y|fe_1^fe_2}, see details. You can also use variables with varying slopes using square brackets: e.g. in \code{fml = z~y|fe_1[x] + fe_2}, see details. To add IVs, insert the endogenous vars./instruments after a pipe, like in \code{y ~ x | c(x_endo1, x_endo2) ~ x_inst1 + x_inst2}. Note that it should always be the last element, see details. Multiple estimations can be performed at once: for multiple dep. vars, wrap them in \code{c()}: ex \code{c(y1, y2)}. For multiple indep. vars, use the stepwise functions: ex \code{x1 + csw(x2, x3)}. The formula \code{fml = c(y1, y2) ~ x1 + cw0(x2, x3)} leads to 6 estimation, see details. Square brackets starting with a dot can be used to call global variables: \code{y.[i] ~ x.[1:2]} will lead to \code{y3 ~ x1 + x2} if \code{i} is equal to 3 in the current environment (see details in \code{\link[fixest2]{xpd}}).
 #' @param weights A formula or a numeric vector. Each observation can be weighted, the weights must be greater than 0. If equal to a formula, it should be one-sided: for example \code{~ var_weight}.
 #' @param verbose Integer. Higher values give more information. In particular, it can detail the number of iterations in the demeaning algorithm (the first number is the left-hand-side, the other numbers are the right-hand-side variables).
 #' @param demeaned Logical, default is \code{FALSE}. Only used in the presence of fixed-effects: should the centered variables be returned? If \code{TRUE}, it creates the items \code{y_demeaned} and \code{X_demeaned}.
@@ -29,7 +29,7 @@
 #' @section Combining the fixed-effects:
 #' You can combine two variables to make it a new fixed-effect using \code{^}. The syntax is as follows: \code{fe_1^fe_2}. Here you created a new variable which is the combination of the two variables fe_1 and fe_2. This is identical to doing \code{paste0(fe_1, "_", fe_2)} but more convenient.
 #'
-#' Note that pasting is a costly operation, especially for large data sets. Thus, the internal algorithm uses a numerical trick which is fast, but the drawback is that the identity of each observation is lost (i.e. they are now equal to a meaningless number instead of being equal to \code{paste0(fe_1, "_", fe_2)}). These \dQuote{identities} are useful only if you're interested in the value of the fixed-effects (that you can extract with \code{\link[fixest]{fixef.fixest}}). If you're only interested in coefficients of the variables, it doesn't matter. Anyway, you can use \code{combine.quick = FALSE} to tell the internal algorithm to use \code{paste} instead of the numerical trick. By default, the numerical trick is performed only for large data sets.
+#' Note that pasting is a costly operation, especially for large data sets. Thus, the internal algorithm uses a numerical trick which is fast, but the drawback is that the identity of each observation is lost (i.e. they are now equal to a meaningless number instead of being equal to \code{paste0(fe_1, "_", fe_2)}). These \dQuote{identities} are useful only if you're interested in the value of the fixed-effects (that you can extract with \code{\link[fixest2]{fixef.fixest}}). If you're only interested in coefficients of the variables, it doesn't matter. Anyway, you can use \code{combine.quick = FALSE} to tell the internal algorithm to use \code{paste} instead of the numerical trick. By default, the numerical trick is performed only for large data sets.
 #'
 #' @section Varying slopes:
 #' You can add variables with varying slopes in the fixed-effect part of the formula. The syntax is as follows: fixef_var[var1, var2]. Here the variables var1 and var2 will be with varying slopes (one slope per value in fixef_var) and the fixed-effect fixef_var will also be added.
@@ -46,15 +46,15 @@
 #'
 #' @section Lagging variables:
 #'
-#' To use leads/lags of variables in the estimation, you can: i) either provide the argument \code{panel.id}, ii) either set your data set as a panel with the function \code{\link[fixest]{panel}}. Doing either of the two will give you acceess to the lagging functions \code{\link[fixest]{l}},  \code{\link[fixest:l]{f}} and \code{\link[fixest:l]{d}}.
+#' To use leads/lags of variables in the estimation, you can: i) either provide the argument \code{panel.id}, ii) either set your data set as a panel with the function \code{\link[fixest2]{panel}}. Doing either of the two will give you acceess to the lagging functions \code{\link[fixest2]{l}},  \code{\link[fixest:l]{f}} and \code{\link[fixest:l]{d}}.
 #'
-#' You can provide several leads/lags/differences at once: e.g. if your formula is equal to \code{f(y) ~ l(x, -1:1)}, it means that the dependent variable is equal to the lead of \code{y}, and you will have as explanatory variables the lead of \code{x1}, \code{x1} and the lag of \code{x1}. See the examples in function \code{\link[fixest]{l}} for more details.
+#' You can provide several leads/lags/differences at once: e.g. if your formula is equal to \code{f(y) ~ l(x, -1:1)}, it means that the dependent variable is equal to the lead of \code{y}, and you will have as explanatory variables the lead of \code{x1}, \code{x1} and the lag of \code{x1}. See the examples in function \code{\link[fixest2]{l}} for more details.
 #'
 #' @section Interactions:
 #'
 #' You can interact a numeric variable with a "factor-like" variable by using \code{i(factor_var, continuous_var, ref)}, where \code{continuous_var} will be interacted with each value of \code{factor_var} and the argument \code{ref} is a value of \code{factor_var} taken as a reference (optional).
 #'
-#' Using this specific way to create interactions leads to a different display of the interacted values in \code{\link[fixest]{etable}} and offers a special representation of the interacted coefficients in the function \code{\link[fixest]{coefplot}}. See examples.
+#' Using this specific way to create interactions leads to a different display of the interacted values in \code{\link[fixest2]{etable}} and offers a special representation of the interacted coefficients in the function \code{\link[fixest2]{coefplot}}. See examples.
 #'
 #'  It is important to note that *if you do not care about the standard-errors of the interactions*, then you can add interactions in the fixed-effects part of the formula, it will be incomparably faster (using the syntax \code{factor_var[continuous_var]}, as explained in the section \dQuote{Varying slopes}).
 #'
@@ -62,11 +62,11 @@
 #'
 #' @section On standard-errors:
 #'
-#' Standard-errors can be computed in different ways, you can use the arguments \code{se} and \code{ssc} in \code{\link[fixest]{summary.fixest}} to define how to compute them. By default, in the presence of fixed-effects, standard-errors are automatically clustered.
+#' Standard-errors can be computed in different ways, you can use the arguments \code{se} and \code{ssc} in \code{\link[fixest2]{summary.fixest}} to define how to compute them. By default, in the presence of fixed-effects, standard-errors are automatically clustered.
 #'
 #' The following vignette: \href{https://lrberge.github.io/fixest/articles/standard_errors.html}{On standard-errors} describes in details how the standard-errors are computed in \code{fixest} and how you can replicate standard-errors from other software.
 #'
-#' You can use the functions \code{\link[fixest]{setFixest_vcov}} and \code{\link[fixest:ssc]{setFixest_ssc}} to permanently set the way the standard-errors are computed.
+#' You can use the functions \code{\link[fixest2]{setFixest_vcov}} and \code{\link[fixest:ssc]{setFixest_ssc}} to permanently set the way the standard-errors are computed.
 #'
 #' @section Instrumental variables:
 #'
@@ -79,7 +79,7 @@
 #'
 #' If you want to estimate a model without exogenous variables, use \code{"1"} as a placeholder: e.g. \code{fml = y ~ 1 | x_endo + x_inst}.
 #'
-#' By default, the second stage regression is returned. You can access the first stage(s) regressions either directly in the slot \code{iv_first_stage} (not recommended), or using the argument \code{stage = 1} from the function \code{\link[fixest]{summary.fixest}}. For example \code{summary(iv_est, stage = 1)} will give the first stage(s). Note that using summary you can display both the second and first stages at the same time using, e.g., \code{stage = 1:2} (using \code{2:1} would reverse the order).
+#' By default, the second stage regression is returned. You can access the first stage(s) regressions either directly in the slot \code{iv_first_stage} (not recommended), or using the argument \code{stage = 1} from the function \code{\link[fixest2]{summary.fixest}}. For example \code{summary(iv_est, stage = 1)} will give the first stage(s). Note that using summary you can display both the second and first stages at the same time using, e.g., \code{stage = 1:2} (using \code{2:1} would reverse the order).
 #'
 #'
 #' @section Multiple estimations:
@@ -105,13 +105,13 @@
 #'
 #' To use multiple dependent variables in \code{fixest} estimations, you need to include them in a vector: like in \code{c(y1, y2, y3)}.
 #'
-#' First, if names are stored in a vector, they can readily be inserted in a formula to perform multiple estimations using the dot square bracket operator. For instance if \code{my_lhs = c("y1", "y2")}, calling \code{fixest} with, say \code{feols(.[my_lhs] ~ x1, etc)} is equivalent to using \code{feols(c(y1, y2) ~ x1, etc)}. Beware that this is a special feature unique to the \emph{left-hand-side} of \code{fixest} estimations (the default behavior of the DSB operator is to aggregate with sums, see \code{\link[fixest]{xpd}}).
+#' First, if names are stored in a vector, they can readily be inserted in a formula to perform multiple estimations using the dot square bracket operator. For instance if \code{my_lhs = c("y1", "y2")}, calling \code{fixest} with, say \code{feols(.[my_lhs] ~ x1, etc)} is equivalent to using \code{feols(c(y1, y2) ~ x1, etc)}. Beware that this is a special feature unique to the \emph{left-hand-side} of \code{fixest} estimations (the default behavior of the DSB operator is to aggregate with sums, see \code{\link[fixest2]{xpd}}).
 #'
-#' Second, you can use a regular expression to grep the left-hand-sides on the fly. When the \code{..("regex")} feature is used naked on the LHS, the variables grepped are inserted into \code{c()}. For example \code{..("Pe") ~ Sepal.Length, iris} is equivalent to \code{c(Petal.Length, Petal.Width) ~ Sepal.Length, iris}. Beware that this is a special feature unique to the \emph{left-hand-side} of \code{fixest} estimations (the default behavior of \code{..("regex")} is to aggregate with sums, see \code{\link[fixest]{xpd}}).
+#' Second, you can use a regular expression to grep the left-hand-sides on the fly. When the \code{..("regex")} feature is used naked on the LHS, the variables grepped are inserted into \code{c()}. For example \code{..("Pe") ~ Sepal.Length, iris} is equivalent to \code{c(Petal.Length, Petal.Width) ~ Sepal.Length, iris}. Beware that this is a special feature unique to the \emph{left-hand-side} of \code{fixest} estimations (the default behavior of \code{..("regex")} is to aggregate with sums, see \code{\link[fixest2]{xpd}}).
 #'
 #' @section Argument sliding:
 #'
-#' When the data set has been set up globally using \code{\link[fixest]{setFixest_estimation}}\code{(data = data_set)}, the argument \code{vcov} can be used implicitly. This means that calls such as \code{feols(y ~ x, "HC1")}, or \code{feols(y ~ x, ~id)}, are valid: i) the data is automatically deduced from the global settings, and ii) the \code{vcov} is deduced to be the second argument.
+#' When the data set has been set up globally using \code{\link[fixest2]{setFixest_estimation}}\code{(data = data_set)}, the argument \code{vcov} can be used implicitly. This means that calls such as \code{feols(y ~ x, "HC1")}, or \code{feols(y ~ x, ~id)}, are valid: i) the data is automatically deduced from the global settings, and ii) the \code{vcov} is deduced to be the second argument.
 #'
 #' @section Piping:
 #'
@@ -119,7 +119,7 @@
 #'
 #'
 #' @return
-#' A \code{fixest} object. Note that \code{fixest} objects contain many elements and most of them are for internal use, they are presented here only for information. To access them, it is safer to use the user-level methods (e.g. \code{\link[fixest]{vcov.fixest}}, \code{\link[fixest]{resid.fixest}}, etc) or functions (like for instance \code{\link[fixest]{fitstat}} to access any fit statistic).
+#' A \code{fixest} object. Note that \code{fixest} objects contain many elements and most of them are for internal use, they are presented here only for information. To access them, it is safer to use the user-level methods (e.g. \code{\link[fixest2]{vcov.fixest}}, \code{\link[fixest2]{resid.fixest}}, etc) or functions (like for instance \code{\link[fixest2]{fitstat}} to access any fit statistic).
 #' \item{nobs}{The number of observations.}
 #' \item{fml}{The linear formula of the call.}
 #' \item{call}{The call of the function.}
@@ -158,9 +158,9 @@
 #'
 #'
 #' @seealso
-#' See also \code{\link[fixest]{summary.fixest}} to see the results with the appropriate standard-errors, \code{\link[fixest]{fixef.fixest}} to extract the fixed-effects coefficients, and the function \code{\link[fixest]{etable}} to visualize the results of multiple estimations. For plotting coefficients: see \code{\link[fixest]{coefplot}}.
+#' See also \code{\link[fixest2]{summary.fixest}} to see the results with the appropriate standard-errors, \code{\link[fixest2]{fixef.fixest}} to extract the fixed-effects coefficients, and the function \code{\link[fixest2]{etable}} to visualize the results of multiple estimations. For plotting coefficients: see \code{\link[fixest2]{coefplot}}.
 #'
-#' And other estimation methods: \code{\link[fixest]{femlm}}, \code{\link[fixest]{feglm}}, \code{\link[fixest:feglm]{fepois}}, \code{\link[fixest:femlm]{fenegbin}}, \code{\link[fixest]{feNmlm}}.
+#' And other estimation methods: \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feglm}}, \code{\link[fixest:feglm]{fepois}}, \code{\link[fixest:femlm]{fenegbin}}, \code{\link[fixest2]{feNmlm}}.
 #'
 #' @author
 #' Laurent Berge
@@ -2024,10 +2024,10 @@ feols.fit <- function(y, X, fixef_df, vcov, offset, split, fsplit, cluster, se, 
 #' @param notes Logical. By default, three notes are displayed: when NAs are removed, when some fixed-effects are removed because of only 0 (or 0/1) outcomes, or when a variable is dropped because of collinearity. To avoid displaying these messages, you can set \code{notes = FALSE}. You can remove these messages permanently by using \code{setFixest_notes(FALSE)}.
 #'
 #' @details
-#' The core of the GLM are the weighted OLS estimations. These estimations are performed with \code{\link[fixest]{feols}}. The method used to demean each variable along the fixed-effects is based on Berge (2018), since this is the same problem to solve as for the Gaussian case in a ML setup.
+#' The core of the GLM are the weighted OLS estimations. These estimations are performed with \code{\link[fixest2]{feols}}. The method used to demean each variable along the fixed-effects is based on Berge (2018), since this is the same problem to solve as for the Gaussian case in a ML setup.
 #'
 #' @return
-#' A \code{fixest} object. Note that \code{fixest} objects contain many elements and most of them are for internal use, they are presented here only for information. To access them, it is safer to use the user-level methods (e.g. \code{\link[fixest]{vcov.fixest}}, \code{\link[fixest]{resid.fixest}}, etc) or functions (like for instance \code{\link[fixest]{fitstat}} to access any fit statistic).
+#' A \code{fixest} object. Note that \code{fixest} objects contain many elements and most of them are for internal use, they are presented here only for information. To access them, it is safer to use the user-level methods (e.g. \code{\link[fixest2]{vcov.fixest}}, \code{\link[fixest2]{resid.fixest}}, etc) or functions (like for instance \code{\link[fixest2]{fitstat}} to access any fit statistic).
 #' \item{nobs}{The number of observations.}
 #' \item{fml}{The linear formula of the call.}
 #' \item{call}{The call of the function.}
@@ -2070,8 +2070,8 @@ feols.fit <- function(y, X, fixef_df, vcov, offset, split, fsplit, cluster, se, 
 #'
 #'
 #' @seealso
-#' See also \code{\link[fixest]{summary.fixest}} to see the results with the appropriate standard-errors, \code{\link[fixest]{fixef.fixest}} to extract the fixed-effects coefficients, and the function \code{\link[fixest]{etable}} to visualize the results of multiple estimations.
-#' And other estimation methods: \code{\link[fixest]{feols}}, \code{\link[fixest]{femlm}}, \code{\link[fixest:femlm]{fenegbin}}, \code{\link[fixest]{feNmlm}}.
+#' See also \code{\link[fixest2]{summary.fixest}} to see the results with the appropriate standard-errors, \code{\link[fixest2]{fixef.fixest}} to extract the fixed-effects coefficients, and the function \code{\link[fixest2]{etable}} to visualize the results of multiple estimations.
+#' And other estimation methods: \code{\link[fixest2]{feols}}, \code{\link[fixest2]{femlm}}, \code{\link[fixest:femlm]{fenegbin}}, \code{\link[fixest2]{feNmlm}}.
 #'
 #' @author
 #' Laurent Berge
@@ -2920,14 +2920,14 @@ feglm.fit <- function(y, X, fixef_df, family = "gaussian", vcov, offset, split,
 #' @inheritSection feols Tricks to estimate multiple LHS
 #' @inheritSection xpd Dot square bracket operator in formulas
 #'
-#' @param fml A formula representing the relation to be estimated. For example: \code{fml = z~x+y}. To include fixed-effects, insert them in this formula using a pipe: e.g. \code{fml = z~x+y|fixef_1+fixef_2}. Multiple estimations can be performed at once: for multiple dep. vars, wrap them in \code{c()}: ex \code{c(y1, y2)}. For multiple indep. vars, use the stepwise functions: ex \code{x1 + csw(x2, x3)}. The formula \code{fml = c(y1, y2) ~ x1 + cw0(x2, x3)} leads to 6 estimation, see details. Square brackets starting with a dot can be used to call global variables: \code{y.[i] ~ x.[1:2]} will lead to \code{y3 ~ x1 + x2} if \code{i} is equal to 3 in the current environment (see details in \code{\link[fixest]{xpd}}).
+#' @param fml A formula representing the relation to be estimated. For example: \code{fml = z~x+y}. To include fixed-effects, insert them in this formula using a pipe: e.g. \code{fml = z~x+y|fixef_1+fixef_2}. Multiple estimations can be performed at once: for multiple dep. vars, wrap them in \code{c()}: ex \code{c(y1, y2)}. For multiple indep. vars, use the stepwise functions: ex \code{x1 + csw(x2, x3)}. The formula \code{fml = c(y1, y2) ~ x1 + cw0(x2, x3)} leads to 6 estimation, see details. Square brackets starting with a dot can be used to call global variables: \code{y.[i] ~ x.[1:2]} will lead to \code{y3 ~ x1 + x2} if \code{i} is equal to 3 in the current environment (see details in \code{\link[fixest2]{xpd}}).
 #' @param start Starting values for the coefficients. Can be: i) a numeric of length 1 (e.g. \code{start = 0}, the default), ii) a numeric vector of the exact same length as the number of variables, or iii) a named vector of any length (the names will be used to initialize the appropriate coefficients).
 #'
 #' @details
-#' Note that the functions \code{\link[fixest]{feglm}} and \code{\link[fixest]{femlm}} provide the same results when using the same families but differ in that the latter is a direct maximum likelihood optimization (so the two can really have different convergence rates).
+#' Note that the functions \code{\link[fixest2]{feglm}} and \code{\link[fixest2]{femlm}} provide the same results when using the same families but differ in that the latter is a direct maximum likelihood optimization (so the two can really have different convergence rates).
 #'
 #' @return
-#' A \code{fixest} object. Note that \code{fixest} objects contain many elements and most of them are for internal use, they are presented here only for information. To access them, it is safer to use the user-level methods (e.g. \code{\link[fixest]{vcov.fixest}}, \code{\link[fixest]{resid.fixest}}, etc) or functions (like for instance \code{\link[fixest]{fitstat}} to access any fit statistic).
+#' A \code{fixest} object. Note that \code{fixest} objects contain many elements and most of them are for internal use, they are presented here only for information. To access them, it is safer to use the user-level methods (e.g. \code{\link[fixest2]{vcov.fixest}}, \code{\link[fixest2]{resid.fixest}}, etc) or functions (like for instance \code{\link[fixest2]{fitstat}} to access any fit statistic).
 #' \item{nobs}{The number of observations.}
 #' \item{fml}{The linear formula of the call.}
 #' \item{call}{The call of the function.}
@@ -2964,8 +2964,8 @@ feglm.fit <- function(y, X, fixef_df, family = "gaussian", vcov, offset, split,
 #'
 #'
 #' @seealso
-#' See also \code{\link[fixest]{summary.fixest}} to see the results with the appropriate standard-errors, \code{\link[fixest]{fixef.fixest}} to extract the fixed-effects coefficients, and the function \code{\link[fixest]{etable}} to visualize the results of multiple estimations.
-#' And other estimation methods: \code{\link[fixest]{feols}}, \code{\link[fixest]{feglm}}, \code{\link[fixest:feglm]{fepois}}, \code{\link[fixest]{feNmlm}}.
+#' See also \code{\link[fixest2]{summary.fixest}} to see the results with the appropriate standard-errors, \code{\link[fixest2]{fixef.fixest}} to extract the fixed-effects coefficients, and the function \code{\link[fixest2]{etable}} to visualize the results of multiple estimations.
+#' And other estimation methods: \code{\link[fixest2]{feols}}, \code{\link[fixest2]{feglm}}, \code{\link[fixest:feglm]{fepois}}, \code{\link[fixest2]{feNmlm}}.
 #'
 #' @author
 #' Laurent Berge
@@ -3144,7 +3144,7 @@ fepois <- function(fml, data, vcov, offset, weights, subset, split, fsplit,
 
 #' Fixed effects nonlinear maximum likelihood models
 #'
-#' This function estimates maximum likelihood models (e.g., Poisson or Logit) with non-linear in parameters right-hand-sides and is efficient to handle any number of fixed effects. If you do not use non-linear in parameters right-hand-side, use \code{\link[fixest]{femlm}} or \code{\link[fixest]{feglm}} instead (their design is simpler).
+#' This function estimates maximum likelihood models (e.g., Poisson or Logit) with non-linear in parameters right-hand-sides and is efficient to handle any number of fixed effects. If you do not use non-linear in parameters right-hand-side, use \code{\link[fixest2]{femlm}} or \code{\link[fixest2]{feglm}} instead (their design is simpler).
 #'
 #' @inheritParams summary.fixest
 #' @inheritParams panel
@@ -3157,7 +3157,7 @@ fepois <- function(fml, data, vcov, offset, weights, subset, split, fsplit,
 #' @inheritSection feols Tricks to estimate multiple LHS
 #' @inheritSection xpd Dot square bracket operator in formulas
 #'
-#' @param fml A formula. This formula gives the linear formula to be estimated (it is similar to a \code{lm} formula), for example: \code{fml = z~x+y}. To include fixed-effects variables, insert them in this formula using a pipe (e.g. \code{fml = z~x+y|fixef_1+fixef_2}). To include a non-linear in parameters element, you must use the argment \code{NL.fml}. Multiple estimations can be performed at once: for multiple dep. vars, wrap them in \code{c()}: ex \code{c(y1, y2)}. For multiple indep. vars, use the stepwise functions: ex \code{x1 + csw(x2, x3)}. This leads to 6 estimation \code{fml = c(y1, y2) ~ x1 + cw0(x2, x3)}. See details. Square brackets starting with a dot can be used to call global variables: \code{y.[i] ~ x.[1:2]} will lead to \code{y3 ~ x1 + x2} if \code{i} is equal to 3 in the current environment (see details in \code{\link[fixest]{xpd}}).
+#' @param fml A formula. This formula gives the linear formula to be estimated (it is similar to a \code{lm} formula), for example: \code{fml = z~x+y}. To include fixed-effects variables, insert them in this formula using a pipe (e.g. \code{fml = z~x+y|fixef_1+fixef_2}). To include a non-linear in parameters element, you must use the argment \code{NL.fml}. Multiple estimations can be performed at once: for multiple dep. vars, wrap them in \code{c()}: ex \code{c(y1, y2)}. For multiple indep. vars, use the stepwise functions: ex \code{x1 + csw(x2, x3)}. This leads to 6 estimation \code{fml = c(y1, y2) ~ x1 + cw0(x2, x3)}. See details. Square brackets starting with a dot can be used to call global variables: \code{y.[i] ~ x.[1:2]} will lead to \code{y3 ~ x1 + x2} if \code{i} is equal to 3 in the current environment (see details in \code{\link[fixest2]{xpd}}).
 #' @param start Starting values for the coefficients in the linear part (for the non-linear part, use NL.start). Can be: i) a numeric of length 1 (e.g. \code{start = 0}, the default), ii) a numeric vector of the exact same length as the number of variables, or iii) a named vector of any length (the names will be used to initialize the appropriate coefficients).
 #' @param NL.fml A formula. If provided, this formula represents the non-linear part of the right hand side (RHS). Note that contrary to the \code{fml} argument, the coefficients must explicitly appear in this formula. For instance, it can be \code{~a*log(b*x + c*x^3)}, where \code{a}, \code{b}, and \code{c} are the coefficients to be estimated. Note that only the RHS of the formula is to be provided, and NOT the left hand side.
 #' @param split A one sided formula representing a variable (eg \code{split = ~var}) or a vector. If provided, the sample is split according to the variable and one estimation is performed for each value of that variable. If you also want to include the estimation for the full sample, use the argument \code{fsplit} instead.
@@ -3175,7 +3175,7 @@ fepois <- function(fml, data, vcov, offset, weights, subset, split, fsplit,
 #' @param useHessian Logical. Should the Hessian be computed in the optimization stage? Default is \code{TRUE}.
 #' @param hessian.args List of arguments to be passed to function \code{\link[numDeriv]{genD}}. Defaults is missing. Only used with the presence of \code{NL.fml}.
 #' @param opt.control List of elements to be passed to the optimization method \code{\link[stats]{nlminb}}. See the help page of \code{\link[stats]{nlminb}} for more information.
-#' @param nthreads The number of threads. Can be: a) an integer lower than, or equal to, the maximum number of threads; b) 0: meaning all available threads will be used; c) a number strictly between 0 and 1 which represents the fraction of all threads to use. The default is to use 50\% of all threads. You can set permanently the number of threads used within this package using the function \code{\link[fixest]{setFixest_nthreads}}.
+#' @param nthreads The number of threads. Can be: a) an integer lower than, or equal to, the maximum number of threads; b) 0: meaning all available threads will be used; c) a number strictly between 0 and 1 which represents the fraction of all threads to use. The default is to use 50\% of all threads. You can set permanently the number of threads used within this package using the function \code{\link[fixest2]{setFixest_nthreads}}.
 #' @param verbose Integer, default is 0. It represents the level of information that should be reported during the optimisation process. If \code{verbose=0}: nothing is reported. If \code{verbose=1}: the value of the coefficients and the likelihood are reported. If \code{verbose=2}: \code{1} + information on the computing time of the null model, the fixed-effects coefficients and the hessian are reported.
 #' @param theta.init Positive numeric scalar. The starting value of the dispersion parameter if \code{family="negbin"}. By default, the algorithm uses as a starting value the theta obtained from the model with only the intercept.
 #' @param fixef.rm Can be equal to "perfect" (default), "singleton", "both" or "none". Controls which observations are to be removed. If "perfect", then observations having a fixed-effect with perfect fit (e.g. only 0 outcomes in Poisson estimations) will be removed. If "singleton", all observations for which a fixed-effect appears only once will be removed. The meaning of "both" and "none" is direct.
@@ -3217,7 +3217,7 @@ fepois <- function(fml, data, vcov, offset, weights, subset, split, fsplit,
 #' The over-dispersion parameter of the Negative Binomial family, theta, is capped at 10,000. If theta reaches this high value, it means that there is no overdispersion.
 #'
 #' @return
-#' A \code{fixest} object. Note that \code{fixest} objects contain many elements and most of them are for internal use, they are presented here only for information. To access them, it is safer to use the user-level methods (e.g. \code{\link[fixest]{vcov.fixest}}, \code{\link[fixest]{resid.fixest}}, etc) or functions (like for instance \code{\link[fixest]{fitstat}} to access any fit statistic).
+#' A \code{fixest} object. Note that \code{fixest} objects contain many elements and most of them are for internal use, they are presented here only for information. To access them, it is safer to use the user-level methods (e.g. \code{\link[fixest2]{vcov.fixest}}, \code{\link[fixest2]{resid.fixest}}, etc) or functions (like for instance \code{\link[fixest2]{fitstat}} to access any fit statistic).
 #' \item{coefficients}{The named vector of coefficients.}
 #' \item{coeftable}{The table of the coefficients with their standard errors, z-values and p-values.}
 #' \item{loglik}{The loglikelihood.}
@@ -3251,9 +3251,9 @@ fepois <- function(fml, data, vcov, offset, weights, subset, split, fsplit,
 #' \item{theta}{In the case of a negative binomial estimation: the overdispersion parameter.}
 #'
 #'  @seealso
-#' See also \code{\link[fixest]{summary.fixest}} to see the results with the appropriate standard-errors, \code{\link[fixest]{fixef.fixest}} to extract the fixed-effects coefficients, and the function \code{\link[fixest]{etable}} to visualize the results of multiple estimations.
+#' See also \code{\link[fixest2]{summary.fixest}} to see the results with the appropriate standard-errors, \code{\link[fixest2]{fixef.fixest}} to extract the fixed-effects coefficients, and the function \code{\link[fixest2]{etable}} to visualize the results of multiple estimations.
 #'
-#' And other estimation methods: \code{\link[fixest]{feols}}, \code{\link[fixest]{femlm}}, \code{\link[fixest]{feglm}}, \code{\link[fixest:feglm]{fepois}}, \code{\link[fixest:femlm]{fenegbin}}.
+#' And other estimation methods: \code{\link[fixest2]{feols}}, \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feglm}}, \code{\link[fixest:feglm]{fepois}}, \code{\link[fixest:femlm]{fenegbin}}.
 #'
 #' @author
 #' Laurent Berge

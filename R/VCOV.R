@@ -13,21 +13,21 @@
 
 #' Computes the variance/covariance of a \code{fixest} object
 #'
-#' This function extracts the variance-covariance of estimated parameters from a model estimated with \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}.
+#' This function extracts the variance-covariance of estimated parameters from a model estimated with \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}.
 #'
 #' @inheritParams summary.fixest
 #' @inheritParams nobs.fixest
 #'
 #' @param attr Logical, defaults to \code{FALSE}. Whether to include the attributes describing how the VCOV was computed.
-#' @param ... Other arguments to be passed to \code{\link[fixest]{summary.fixest}}.
+#' @param ... Other arguments to be passed to \code{\link[fixest2]{summary.fixest}}.
 #'
-#' The computation of the VCOV matrix is first done in \code{\link[fixest]{summary.fixest}}.
+#' The computation of the VCOV matrix is first done in \code{\link[fixest2]{summary.fixest}}.
 #'
 #' @details
 #' For an explanation on how the standard-errors are computed and what is the exact meaning of the arguments, please have a look at the dedicated vignette: \href{https://lrberge.github.io/fixest/articles/standard_errors.html}{On standard-errors}.
 #'
 #' @seealso
-#' You can also compute VCOVs with the following functions: \code{\link[fixest]{vcov_cluster}}, \code{\link[fixest]{vcov_hac}}, \code{\link[fixest]{vcov_conley}}.
+#' You can also compute VCOVs with the following functions: \code{\link[fixest2]{vcov_cluster}}, \code{\link[fixest2]{vcov_hac}}, \code{\link[fixest2]{vcov_conley}}.
 #'
 #' @return
 #' It returns a \eqn{K\times K} square matrix where \eqn{K} is the number of variables of the fitted model.
@@ -37,7 +37,7 @@
 #' Laurent Berge
 #'
 #' @seealso
-#' See also the main estimation functions \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}. \code{\link[fixest]{summary.fixest}}, \code{\link[fixest]{confint.fixest}}, \code{\link[fixest]{resid.fixest}}, \code{\link[fixest]{predict.fixest}}, \code{\link[fixest]{fixef.fixest}}.
+#' See also the main estimation functions \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}. \code{\link[fixest2]{summary.fixest}}, \code{\link[fixest2]{confint.fixest}}, \code{\link[fixest2]{resid.fixest}}, \code{\link[fixest2]{predict.fixest}}, \code{\link[fixest2]{fixef.fixest}}.
 #'
 #' @examples
 #'
@@ -1016,11 +1016,11 @@ vcov.fixest <- function(object, vcov = NULL, se = NULL, cluster, ssc = NULL, att
 
 #' Governs the small sample correction in \code{fixest} VCOVs
 #'
-#' Provides how the small sample correction should be calculated in \code{\link[fixest]{vcov.fixest}}/\code{\link[fixest]{summary.fixest}}.
+#' Provides how the small sample correction should be calculated in \code{\link[fixest2]{vcov.fixest}}/\code{\link[fixest2]{summary.fixest}}.
 #'
 #' @param adj Logical scalar, defaults to \code{TRUE}. Whether to apply a small sample adjustment of the form \code{(n - 1) / (n - K)}, with \code{K} the number of estimated parameters. If \code{FALSE}, then no adjustment is made.
 #' @param fixef.K Character scalar equal to \code{"nested"} (default), \code{"none"} or \code{"full"}. In the small sample adjustment, how to account for the fixed-effects parameters. If \code{"none"}, the fixed-effects parameters are discarded, meaning the number of parameters (\code{K}) is only equal to the number of variables. If \code{"full"}, then the number of parameters is equal to the number of variables plus the number of fixed-effects. Finally, if \code{"nested"}, then the number of parameters is equal to the number of variables plus the number of fixed-effects that *are not* nested in the clusters used to cluster the standard-errors.
-#' @param fixef.force_exact Logical, default is \code{FALSE}. If there are 2 or more fixed-effects, these fixed-effects they can be irregular, meaning they can provide the same information. If so, the "real" number of parameters should be lower than the total number of fixed-effects. If \code{fixef.force_exact = TRUE}, then \code{\link[fixest]{fixef.fixest}} is first run to determine the exact number of parameters among the fixed-effects. Mostly, panels of the type individual-firm require \code{fixef.force_exact = TRUE} (but it adds computational costs).
+#' @param fixef.force_exact Logical, default is \code{FALSE}. If there are 2 or more fixed-effects, these fixed-effects they can be irregular, meaning they can provide the same information. If so, the "real" number of parameters should be lower than the total number of fixed-effects. If \code{fixef.force_exact = TRUE}, then \code{\link[fixest2]{fixef.fixest}} is first run to determine the exact number of parameters among the fixed-effects. Mostly, panels of the type individual-firm require \code{fixef.force_exact = TRUE} (but it adds computational costs).
 #' @param cluster.adj Logical scalar, default is \code{TRUE}. How to make the small sample correction when clustering the standard-errors? If \code{TRUE} a \code{G/(G-1)} correction is performed with \code{G} the number of cluster values.
 #' @param cluster.df Either "conventional" or "min" (default). Only relevant when the variance-covariance matrix is two-way clustered (or higher). It governs how the small sample adjustment for the clusters is to be performed. [Sorry for the jargon that follows.] By default a unique adjustment is made, of the form G_min/(G_min-1) with G_min the smallest G_i. If \code{cluster.df="conventional"} then the i-th "sandwich" matrix is adjusted with G_i/(G_i-1) with G_i the number of unique clusters.
 #' @param t.df Either "conventional", "min" (default) or an integer scalar. Only relevant when the variance-covariance matrix is clustered. It governs how the p-values should be computed. By default, the degrees of freedom of the Student t distribution is equal to the minimum size of the clusters with which the VCOV has been clustered. If \code{t.df="conventional"}, then the degrees of freedom of the Student t distribution is equal to the number of observations minus the number of estimated variables. You can also pass a number to manually specify the DoF of the t-distribution.
@@ -1036,7 +1036,7 @@ vcov.fixest <- function(object, vcov = NULL, se = NULL, cluster, ssc = NULL, att
 #' Laurent Berge
 #'
 #' @seealso
-#' \code{\link[fixest]{summary.fixest}}, \code{\link[fixest]{vcov.fixest}}
+#' \code{\link[fixest2]{summary.fixest}}, \code{\link[fixest2]{vcov.fixest}}
 #'
 #' @examples
 #'
@@ -1163,12 +1163,12 @@ dof <- function(adj = TRUE, fixef.K = "nested", cluster.adj = TRUE, cluster.df =
 #'
 #' @param x A \code{fixest} object.
 #' @param cluster Either i) a character vector giving the names of the variables onto which to cluster, or ii) a formula giving those names, or iii) a vector/list/data.frame giving the hard values of the clusters. Note that in cases i) and ii) the variables are fetched directly in the data set used for the estimation.
-#' @param ssc An object returned by the function \code{\link[fixest]{ssc}}. It specifies how to perform the small sample correction.
+#' @param ssc An object returned by the function \code{\link[fixest2]{ssc}}. It specifies how to perform the small sample correction.
 #'
 #' @return
 #' If the first argument is a \code{fixest} object, then a VCOV is returned (i.e. a symmetric matrix).
 #'
-#' If the first argument is not a \code{fixest} object, then a) implicitly the arguments are shifted to the left (i.e. \code{vcov_cluster(~var1 + var2)} is equivalent to \code{vcov_cluster(cluster = ~var1 + var2)}) and b) a VCOV-\emph{request} is returned and NOT a VCOV. That VCOV-request can then be used in the argument \code{vcov} of various \code{fixest} functions (e.g. \code{\link[fixest]{vcov.fixest}} or even in the estimation calls).
+#' If the first argument is not a \code{fixest} object, then a) implicitly the arguments are shifted to the left (i.e. \code{vcov_cluster(~var1 + var2)} is equivalent to \code{vcov_cluster(cluster = ~var1 + var2)}) and b) a VCOV-\emph{request} is returned and NOT a VCOV. That VCOV-request can then be used in the argument \code{vcov} of various \code{fixest} functions (e.g. \code{\link[fixest2]{vcov.fixest}} or even in the estimation calls).
 #'
 #' @author
 #' Laurent Berge
@@ -1306,7 +1306,7 @@ vcov_cluster <- function(x, cluster = NULL, ssc = NULL) {
 #'
 #' There are currently three VCOV types: Newey-West applied to time series, Newey-West applied to a panel setting (when the argument 'unit' is not missing), and Driscoll-Kraay.
 #'
-#' The functions on this page without the prefix "vcov_" do not compute VCOVs directly but are meant to be used in the argument \code{vcov} of \code{fixest} functions (e.g. in \code{\link[fixest]{vcov.fixest}} or even in the estimation calls).
+#' The functions on this page without the prefix "vcov_" do not compute VCOVs directly but are meant to be used in the argument \code{vcov} of \code{fixest} functions (e.g. in \code{\link[fixest2]{vcov.fixest}} or even in the estimation calls).
 #'
 #' Note that for Driscoll-Kraay VCOVs, to ensure its properties the number of periods should be long enough (a minimum of 20 periods or so).
 #'
@@ -1335,7 +1335,7 @@ vcov_cluster <- function(x, cluster = NULL, ssc = NULL) {
 #' @return
 #' If the first argument is a \code{fixest} object, then a VCOV is returned (i.e. a symmetric matrix).
 #'
-#' If the first argument is not a \code{fixest} object, then a) implicitly the arguments are shifted to the left (i.e. \code{vcov_DK(~year)} is equivalent to \code{vcov_DK(time = ~year)}) and b) a VCOV-\emph{request} is returned and NOT a VCOV. That VCOV-request can then be used in the argument \code{vcov} of various \code{fixest} functions (e.g. \code{\link[fixest]{vcov.fixest}} or even in the estimation calls).
+#' If the first argument is not a \code{fixest} object, then a) implicitly the arguments are shifted to the left (i.e. \code{vcov_DK(~year)} is equivalent to \code{vcov_DK(time = ~year)}) and b) a VCOV-\emph{request} is returned and NOT a VCOV. That VCOV-request can then be used in the argument \code{vcov} of various \code{fixest} functions (e.g. \code{\link[fixest2]{vcov.fixest}} or even in the estimation calls).
 #'
 #' @examples
 #'
@@ -1472,7 +1472,7 @@ vcov_NW <- function(x, unit = NULL, time = NULL, lag = NULL, ssc = NULL) {
 #'
 #' If the cutoff is not provided, an estimation of it is given. This cutoff ensures that a minimum of units lie within it and is robust to sub-sampling. This automatic cutoff is only here for convenience, the most appropriate cutoff shall depend on the application and shall be provided by the user.
 #'
-#' The function \code{conley} does not compute VCOVs directly but is meant to be used in the argument \code{vcov} of \code{fixest} functions (e.g. in \code{\link[fixest]{vcov.fixest}} or even in the estimation calls).
+#' The function \code{conley} does not compute VCOVs directly but is meant to be used in the argument \code{vcov} of \code{fixest} functions (e.g. in \code{\link[fixest2]{vcov.fixest}} or even in the estimation calls).
 #'
 #' @inheritParams vcov_cluster
 #'
@@ -1485,7 +1485,7 @@ vcov_NW <- function(x, unit = NULL, time = NULL, lag = NULL, ssc = NULL) {
 #' @return
 #' If the first argument is a \code{fixest} object, then a VCOV is returned (i.e. a symmetric matrix).
 #'
-#' If the first argument is not a \code{fixest} object, then a) implicitly the arguments are shifted to the left (i.e. \code{vcov_conley("lat", "long")} is equivalent to \code{vcov_conley(lat = "lat", lon = "long")}) and b) a VCOV-\emph{request} is returned and NOT a VCOV. That VCOV-request can then be used in the argument \code{vcov} of various \code{fixest} functions (e.g. \code{\link[fixest]{vcov.fixest}} or even in the estimation calls).
+#' If the first argument is not a \code{fixest} object, then a) implicitly the arguments are shifted to the left (i.e. \code{vcov_conley("lat", "long")} is equivalent to \code{vcov_conley(lat = "lat", lon = "long")}) and b) a VCOV-\emph{request} is returned and NOT a VCOV. That VCOV-request can then be used in the argument \code{vcov} of various \code{fixest} functions (e.g. \code{\link[fixest2]{vcov.fixest}} or even in the estimation calls).
 #'
 #' @references
 #' Conley TG (1999). "GMM Estimation with Cross Sectional Dependence", \emph{Journal of Econometrics}, 92, 1-45.
@@ -2421,7 +2421,7 @@ is_function_in_it <- function(x) {
 
 #' @rdname ssc
 #'
-#' @param ssc.type An object of class \code{ssc.type} obtained with the function \code{\link[fixest]{ssc}}.
+#' @param ssc.type An object of class \code{ssc.type} obtained with the function \code{\link[fixest2]{ssc}}.
 setFixest_ssc <- function(ssc.type = ssc()) {
   if (!"ssc.type" %in% class(ssc.type)) {
     stop("The argument 'ssc' must be an object created by the function ssc().")

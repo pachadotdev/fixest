@@ -1,6 +1,6 @@
 #' Design matrix of a \code{fixest} object
 #'
-#' This function creates the left-hand-side or the right-hand-side(s) of a \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}} estimation.
+#' This function creates the left-hand-side or the right-hand-side(s) of a \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}} estimation.
 #'
 #' @method model.matrix fixest
 #'
@@ -19,7 +19,7 @@
 #' It returns either a vector, a matrix or a data.frame. It returns a vector for the dependent variable ("lhs"), a data.frame for the fixed-effects ("fixef") and a matrix for any other type.
 #'
 #' @seealso
-#' See also the main estimation functions \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}. \code{\link[fixest]{formula.fixest}}, \code{\link[fixest]{update.fixest}}, \code{\link[fixest]{summary.fixest}}, \code{\link[fixest]{vcov.fixest}}.
+#' See also the main estimation functions \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}. \code{\link[fixest2]{formula.fixest}}, \code{\link[fixest2]{update.fixest}}, \code{\link[fixest2]{summary.fixest}}, \code{\link[fixest2]{vcov.fixest}}.
 #'
 #'
 #' @author

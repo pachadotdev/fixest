@@ -4,14 +4,14 @@
 
 #' Extracts the number of observations form a \code{fixest} object
 #'
-#' This function simply extracts the number of observations form a \code{fixest} object, obtained using the functions \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}.
+#' This function simply extracts the number of observations form a \code{fixest} object, obtained using the functions \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}.
 #'
 #' @inheritParams summary.fixest
 #'
 #' @param ... Not currently used.
 #'
 #' @seealso
-#' See also the main estimation functions \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}. Use \code{\link[fixest]{summary.fixest}} to see the results with the appropriate standard-errors, \code{\link[fixest]{fixef.fixest}} to extract the fixed-effects coefficients, and the function \code{\link[fixest]{etable}} to visualize the results of multiple estimations.
+#' See also the main estimation functions \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}. Use \code{\link[fixest2]{summary.fixest}} to see the results with the appropriate standard-errors, \code{\link[fixest2]{fixef.fixest}} to extract the fixed-effects coefficients, and the function \code{\link[fixest2]{etable}} to visualize the results of multiple estimations.
 #'
 #' @author
 #' Laurent Berge
@@ -52,7 +52,7 @@ nobs.fixest <- function(object, ...) {
 #' It return a numeric vector, with length the same as the number of objects taken as arguments.
 #'
 #' @seealso
-#' See also the main estimation functions \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}. Other statictics methods: \code{\link[fixest]{BIC.fixest}}, \code{\link[fixest]{logLik.fixest}}, \code{\link[fixest]{nobs.fixest}}.
+#' See also the main estimation functions \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}. Other statictics methods: \code{\link[fixest2]{BIC.fixest}}, \code{\link[fixest2]{logLik.fixest}}, \code{\link[fixest2]{nobs.fixest}}.
 #'
 #' @author
 #' Laurent Berge
@@ -107,7 +107,7 @@ AIC.fixest <- function(object, ..., k = 2) {
 #' It return a numeric vector, with length the same as the number of objects taken as arguments.
 #'
 #' @seealso
-#' See also the main estimation functions \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}. Other statistics functions: \code{\link[fixest]{AIC.fixest}}, \code{\link[fixest]{logLik.fixest}}.
+#' See also the main estimation functions \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}. Other statistics functions: \code{\link[fixest2]{AIC.fixest}}, \code{\link[fixest2]{logLik.fixest}}.
 #'
 #' @author
 #' Laurent Berge
@@ -151,13 +151,13 @@ BIC.fixest <- function(object, ...) {
 #' @param ... Not currently used.
 #'
 #' @details
-#' This function extracts the log-likelihood based on the model fit. You can have more information on the likelihoods in the details of the function \code{\link[fixest]{femlm}}.
+#' This function extracts the log-likelihood based on the model fit. You can have more information on the likelihoods in the details of the function \code{\link[fixest2]{femlm}}.
 #'
 #' @return
 #' It returns a numeric scalar.
 #'
 #' @seealso
-#' See also the main estimation functions \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}. Other statistics functions: \code{\link[fixest]{AIC.fixest}}, \code{\link[fixest]{BIC.fixest}}.
+#' See also the main estimation functions \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}. Other statistics functions: \code{\link[fixest2]{AIC.fixest}}, \code{\link[fixest2]{BIC.fixest}}.
 #'
 #' @author
 #' Laurent Berge
@@ -189,7 +189,7 @@ logLik.fixest <- function(object, ...) {
 
 #' Extracts the coefficients from a \code{fixest} estimation
 #'
-#' This function extracts the coefficients obtained from a model estimated with \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}.
+#' This function extracts the coefficients obtained from a model estimated with \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}.
 #'
 #' @inheritParams nobs.fixest
 #' @inheritParams etable
@@ -198,9 +198,9 @@ logLik.fixest <- function(object, ...) {
 #' @param ... Not currently used.
 #'
 #' @details
-#' The coefficients are the ones that have been found to maximize the log-likelihood of the specified model. More information can be found on the models from the estimations help pages: \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}.
+#' The coefficients are the ones that have been found to maximize the log-likelihood of the specified model. More information can be found on the models from the estimations help pages: \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}.
 #'
-#' Note that if the model has been estimated with fixed-effects, to obtain the fixed-effect coefficients, you need to use the function \code{\link[fixest]{fixef.fixest}}.
+#' Note that if the model has been estimated with fixed-effects, to obtain the fixed-effect coefficients, you need to use the function \code{\link[fixest2]{fixef.fixest}}.
 #'
 #' @return
 #' This function returns a named numeric vector.
@@ -209,7 +209,7 @@ logLik.fixest <- function(object, ...) {
 #' Laurent Berge
 #'
 #' @seealso
-#' See also the main estimation functions \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}. \code{\link[fixest]{summary.fixest}}, \code{\link[fixest]{confint.fixest}}, \code{\link[fixest]{vcov.fixest}}, \code{\link[fixest]{etable}}, \code{\link[fixest]{fixef.fixest}}.
+#' See also the main estimation functions \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}. \code{\link[fixest2]{summary.fixest}}, \code{\link[fixest2]{confint.fixest}}, \code{\link[fixest2]{vcov.fixest}}, \code{\link[fixest2]{etable}}, \code{\link[fixest2]{fixef.fixest}}.
 #'
 #' @examples
 #'
@@ -278,7 +278,7 @@ coefficients.fixest <- coef.fixest
 
 #' Extracts fitted values from a \code{fixest} fit
 #'
-#' This function extracts the fitted values from a model estimated with \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}. The fitted values that are returned are the \emph{expected predictor}.
+#' This function extracts the fitted values from a model estimated with \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}. The fitted values that are returned are the \emph{expected predictor}.
 #'
 #' @inheritParams nobs.fixest
 #'
@@ -287,7 +287,7 @@ coefficients.fixest <- coef.fixest
 #' @param ... Not currently used.
 #'
 #' @details
-#' This function returns the \emph{expected predictor} of a \code{fixest} fit. The likelihood functions are detailed in \code{\link[fixest]{femlm}} help page.
+#' This function returns the \emph{expected predictor} of a \code{fixest} fit. The likelihood functions are detailed in \code{\link[fixest2]{femlm}} help page.
 #'
 #' @return
 #' It returns a numeric vector of length the number of observations used to estimate the model.
@@ -299,7 +299,7 @@ coefficients.fixest <- coef.fixest
 #' Laurent Berge
 #'
 #' @seealso
-#' See also the main estimation functions \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}. \code{\link[fixest]{resid.fixest}}, \code{\link[fixest]{predict.fixest}}, \code{\link[fixest]{summary.fixest}}, \code{\link[fixest]{vcov.fixest}}, \code{\link[fixest]{fixef.fixest}}.
+#' See also the main estimation functions \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}. \code{\link[fixest2]{resid.fixest}}, \code{\link[fixest2]{predict.fixest}}, \code{\link[fixest2]{summary.fixest}}, \code{\link[fixest2]{vcov.fixest}}, \code{\link[fixest2]{fixef.fixest}}.
 #'
 #' @examples
 #'
@@ -363,11 +363,11 @@ fitted.values.fixest <- fitted.fixest
 
 #' Extracts residuals from a \code{fixest} object
 #'
-#' This function extracts residuals from a fitted model estimated with \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}.
+#' This function extracts residuals from a fitted model estimated with \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}.
 #'
 #' @inheritParams nobs.fixest
 #'
-#' @param type A character scalar, either \code{"response"} (default), \code{"deviance"}, \code{"pearson"}, or \code{"working"}. Note that the \code{"working"} corresponds to the residuals from the weighted least square and only applies to \code{\link[fixest]{feglm}} models.
+#' @param type A character scalar, either \code{"response"} (default), \code{"deviance"}, \code{"pearson"}, or \code{"working"}. Note that the \code{"working"} corresponds to the residuals from the weighted least square and only applies to \code{\link[fixest2]{feglm}} models.
 #' @param na.rm Logical, default is \code{TRUE}. Whether to remove the observations with NAs from the original data set. If \code{FALSE}, then the vector returned is always of the same length as the original data set.
 #' @param ... Not currently used.
 #'
@@ -379,7 +379,7 @@ fitted.values.fixest <- fitted.fixest
 #' Laurent Berge
 #'
 #' @seealso
-#' See also the main estimation functions \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}. \code{\link[fixest]{fitted.fixest}}, \code{\link[fixest]{predict.fixest}}, \code{\link[fixest]{summary.fixest}}, \code{\link[fixest]{vcov.fixest}}, \code{\link[fixest]{fixef.fixest}}.
+#' See also the main estimation functions \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}. \code{\link[fixest2]{fitted.fixest}}, \code{\link[fixest2]{predict.fixest}}, \code{\link[fixest2]{summary.fixest}}, \code{\link[fixest2]{vcov.fixest}}, \code{\link[fixest2]{fixef.fixest}}.
 #'
 #' @examples
 #'
@@ -485,7 +485,7 @@ residuals.fixest <- resid.fixest
 
 #' Predict method for \code{fixest} fits
 #'
-#' This function obtains prediction from a fitted model estimated with \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}.
+#' This function obtains prediction from a fitted model estimated with \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}.
 #'
 #' @inheritParams nobs.fixest
 #' @inheritParams fitted.fixest
@@ -512,7 +512,7 @@ residuals.fixest <- resid.fixest
 #' Laurent Berge
 #'
 #' @seealso
-#' See also the main estimation functions \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}. \code{\link[fixest]{update.fixest}}, \code{\link[fixest]{summary.fixest}}, \code{\link[fixest]{vcov.fixest}}, \code{\link[fixest]{fixef.fixest}}.
+#' See also the main estimation functions \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}. \code{\link[fixest2]{update.fixest}}, \code{\link[fixest2]{summary.fixest}}, \code{\link[fixest2]{vcov.fixest}}, \code{\link[fixest2]{fixef.fixest}}.
 #'
 #' @examples
 #'
@@ -1011,7 +1011,7 @@ predict.fixest <- function(object, newdata, type = c("response", "link"), se.fit
 
 #' Confidence interval for parameters estimated with \code{fixest}
 #'
-#' This function computes the confidence interval of parameter estimates obtained from a model estimated with \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}.
+#' This function computes the confidence interval of parameter estimates obtained from a model estimated with \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}.
 #'
 #' @inheritParams nobs.fixest
 #' @inheritParams vcov.fixest
@@ -1103,7 +1103,7 @@ confint.fixest <- function(object, parm, level = 0.95, vcov, se, cluster, ssc = 
 
 #' Updates a \code{fixest} estimation
 #'
-#' Updates and re-estimates a \code{fixest} model (estimated with \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}). This function updates the formulas and use previous starting values to estimate a new \code{fixest} model. The data is obtained from the original \code{call}.
+#' Updates and re-estimates a \code{fixest} model (estimated with \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}). This function updates the formulas and use previous starting values to estimate a new \code{fixest} model. The data is obtained from the original \code{call}.
 #'
 #' @method update fixest
 #'
@@ -1112,13 +1112,13 @@ confint.fixest <- function(object, parm, level = 0.95, vcov, se, cluster, ssc = 
 #' @param fml.update Changes to be made to the original argument \code{fml}. See more information on \code{\link[stats]{update.formula}}. You can add/withdraw both variables and fixed-effects. E.g. \code{. ~ . + x2 | . + z2} would add the variable \code{x2} and the cluster \code{z2} to the former estimation.
 #' @param nframes (Advanced users.) Defaults to 1. Number of frames up the stack where to perform the evaluation of the updated call. By default, this is the parent frame.
 #' @param evaluate Logical, default is \code{TRUE}. If \code{FALSE}, only the updated call is returned.
-#' @param ... Other arguments to be passed to the functions \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}.
+#' @param ... Other arguments to be passed to the functions \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}.
 #'
 #' @return
-#' It returns a \code{fixest} object (see details in \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}).
+#' It returns a \code{fixest} object (see details in \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}).
 #'
 #' @seealso
-#' See also the main estimation functions \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}. \code{\link[fixest]{predict.fixest}}, \code{\link[fixest]{summary.fixest}}, \code{\link[fixest]{vcov.fixest}}, \code{\link[fixest]{fixef.fixest}}.
+#' See also the main estimation functions \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}. \code{\link[fixest2]{predict.fixest}}, \code{\link[fixest2]{summary.fixest}}, \code{\link[fixest2]{vcov.fixest}}, \code{\link[fixest2]{fixef.fixest}}.
 #'
 #' @author
 #' Laurent Berge
@@ -1311,10 +1311,10 @@ update.fixest <- function(object, fml.update, nframes = 1, evaluate = TRUE, ...)
 
 #' Extract the formula of a \code{fixest} fit
 #'
-#' This function extracts the formula from a \code{fixest} estimation (obtained with \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}). If the estimation was done with fixed-effects, they are added in the formula after a pipe (\dQuote{|}). If the estimation was done with a non linear in parameters part, then this will be added in the formula in between \code{I()}.
+#' This function extracts the formula from a \code{fixest} estimation (obtained with \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}). If the estimation was done with fixed-effects, they are added in the formula after a pipe (\dQuote{|}). If the estimation was done with a non linear in parameters part, then this will be added in the formula in between \code{I()}.
 #'
 #'
-#' @param x An object of class \code{fixest}. Typically the result of a \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}} estimation.
+#' @param x An object of class \code{fixest}. Typically the result of a \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}} estimation.
 #' @param type A character scalar. Default is \code{type = "full"} which gives back a formula containing the linear part of the model along with the fixed-effects (if any) and the IV part (if any). If \code{type = "linear"} then only the linear formula is returned. If \code{type = "NL"} then only the non linear in parameters part is returned.
 #' @param ... Not currently used.
 #'
@@ -1322,7 +1322,7 @@ update.fixest <- function(object, fml.update, nframes = 1, evaluate = TRUE, ...)
 #' It returns a formula.
 #'
 #' @seealso
-#' See also the main estimation functions \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}. \code{\link[fixest]{model.matrix.fixest}}, \code{\link[fixest]{update.fixest}}, \code{\link[fixest]{summary.fixest}}, \code{\link[fixest]{vcov.fixest}}.
+#' See also the main estimation functions \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}. \code{\link[fixest2]{model.matrix.fixest}}, \code{\link[fixest2]{update.fixest}}, \code{\link[fixest2]{summary.fixest}}, \code{\link[fixest2]{vcov.fixest}}.
 #'
 #' @author
 #' Laurent Berge
@@ -1383,7 +1383,7 @@ formula.fixest <- function(x, type = c("full", "linear", "iv", "NL"), ...) {
 #'
 #' This function extracts the terms of a \code{fixest} estimation, excluding the fixed-effects part.
 #'
-#' @param x A \code{fixest} object. Obtained using the functions \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}.
+#' @param x A \code{fixest} object. Obtained using the functions \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}.
 #' @param ... Not currently used.
 #'
 #' @return

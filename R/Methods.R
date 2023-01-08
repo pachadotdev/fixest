@@ -16,7 +16,7 @@
 #' Returns a vector of the same length as the number of observations in the original data set. Ignored observations due to NA or perfect fit are re-introduced and their weights set to NA.
 #'
 #' @seealso
-#' \code{\link[fixest]{feols}}, \code{\link[fixest:feglm]{fepois}}, \code{\link[fixest]{feglm}}, \code{\link[fixest:femlm]{fenegbin}}, \code{\link[fixest]{feNmlm}}.
+#' \code{\link[fixest2]{feols}}, \code{\link[fixest:feglm]{fepois}}, \code{\link[fixest2]{feglm}}, \code{\link[fixest:femlm]{fenegbin}}, \code{\link[fixest2]{feNmlm}}.
 #'
 #' @examples
 #'
@@ -48,7 +48,7 @@ weights.fixest <- function(object, ...) {
 #' Returns a numeric scalar.
 #'
 #' @seealso
-#' \code{\link[fixest]{feols}}, \code{\link[fixest:feglm]{fepois}}, \code{\link[fixest]{feglm}}, \code{\link[fixest:femlm]{fenegbin}}, \code{\link[fixest]{feNmlm}}.
+#' \code{\link[fixest2]{feols}}, \code{\link[fixest:feglm]{fepois}}, \code{\link[fixest2]{feglm}}, \code{\link[fixest:femlm]{fenegbin}}, \code{\link[fixest2]{feNmlm}}.
 #'
 #'
 #' @examples
@@ -71,7 +71,7 @@ sigma.fixest <- function(object, ...) {
 #' Returns a numeric scalar equal to the deviance.
 #'
 #' @seealso
-#' \code{\link[fixest]{feols}}, \code{\link[fixest:feglm]{fepois}}, \code{\link[fixest]{feglm}}, \code{\link[fixest:femlm]{fenegbin}}, \code{\link[fixest]{feNmlm}}.
+#' \code{\link[fixest2]{feols}}, \code{\link[fixest:feglm]{fepois}}, \code{\link[fixest2]{feglm}}, \code{\link[fixest:femlm]{fenegbin}}, \code{\link[fixest2]{feNmlm}}.
 #'
 #' @examples
 #'
@@ -126,13 +126,13 @@ deviance.fixest <- function(object, ...) {
 
 #' Hat values for \code{fixest} objects
 #'
-#' Computes the hat values for \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}} estimations. Only works when there are no fixed-effects.
+#' Computes the hat values for \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}} estimations. Only works when there are no fixed-effects.
 #'
 #' @param model A fixest object. For instance from feols or feglm.
 #' @param ... Not currently used.
 #'
 #' @details
-#' Hat values are not available for \code{\link[fixest:femlm]{fenegbin}}, \code{\link[fixest]{femlm}} and \code{\link[fixest]{feNmlm}} estimations.
+#' Hat values are not available for \code{\link[fixest:femlm]{fenegbin}}, \code{\link[fixest2]{femlm}} and \code{\link[fixest2]{feNmlm}} estimations.
 #'
 #' When there are fixed-effects, the hat values of the reduced form are different from the hat values of the full model. And we cannot get costlessly the hat values of the full model from the reduced form. It would require to reestimate the model with the fixed-effects as regular variables.
 #'
@@ -188,7 +188,7 @@ hatvalues.fixest <- function(model, ...) {
 #'
 #' Extracts the scores from a fixest estimation.
 #'
-#' @param x A \code{fixest} object, obtained for instance from \code{\link[fixest]{feols}}.
+#' @param x A \code{fixest} object, obtained for instance from \code{\link[fixest2]{feols}}.
 #' @param ... Not currently used.
 #'
 #' @return
@@ -217,7 +217,7 @@ estfun.fixest <- function(x, ...) {
 #' The package \pkg{fixest} does not use \code{estfun} or \code{bread} from \pkg{sandwich}, but these methods have been implemented to allow users to leverage the variances from \pkg{sandwich}.
 #'
 #' \itemize{
-#' \item Here is the help from package \pkg{sandwich}: \code{\link[sandwich:estfun]{estfun}} and \code{\link[sandwich:bread]{bread}}. The help from package \pkg{fixest} is here: \code{\link[fixest]{estfun.fixest}} and \code{\link[fixest]{bread.fixest}}.
+#' \item Here is the help from package \pkg{sandwich}: \code{\link[sandwich:estfun]{estfun}} and \code{\link[sandwich:bread]{bread}}. The help from package \pkg{fixest} is here: \code{\link[fixest2]{estfun.fixest}} and \code{\link[fixest2]{bread.fixest}}.
 #' }
 #'
 #'
@@ -238,7 +238,7 @@ NULL
 #'
 #' Extracts the bread matrix from fixest objects to be used to compute sandwich variance-covariance matrices.
 #'
-#' @param x A \code{fixest} object, obtained for instance from \code{\link[fixest]{feols}}.
+#' @param x A \code{fixest} object, obtained for instance from \code{\link[fixest2]{feols}}.
 #' @param ... Not currently used.
 #'
 #' @return

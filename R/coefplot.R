@@ -9,12 +9,12 @@
 
 #' Plots confidence intervals and point estimates
 #'
-#' This function plots the results of estimations (coefficients and confidence intervals). The function \code{iplot} restricts the output to variables created with \code{\link[fixest]{i}}, either interactions with factors or raw factors.
+#' This function plots the results of estimations (coefficients and confidence intervals). The function \code{iplot} restricts the output to variables created with \code{\link[fixest2]{i}}, either interactions with factors or raw factors.
 #'
 #' @inheritParams etable
 #' @inheritSection etable Arguments keep, drop and order
 #'
-#' @param object Can be either: i) an estimation object (obtained for example from \code{\link[fixest]{feols}}, ii) a list of estimation objects (several results will be plotted at once), iii) a matrix of coefficients table, iv) a numeric vector of the point estimates -- the latter requiring the extra arguments \code{sd} or \code{ci_low} and \code{ci_high}.
+#' @param object Can be either: i) an estimation object (obtained for example from \code{\link[fixest2]{feols}}, ii) a list of estimation objects (several results will be plotted at once), iii) a matrix of coefficients table, iv) a numeric vector of the point estimates -- the latter requiring the extra arguments \code{sd} or \code{ci_low} and \code{ci_high}.
 #' @param sd The standard errors of the estimates. It may be missing.
 #' @param ci_low If \code{sd} is not provided, the lower bound of the confidence interval. For each estimate.
 #' @param ci_high If \code{sd} is not provided, the upper bound of the confidence interval. For each estimate.
@@ -61,23 +61,23 @@
 #' @param lab.min.cex The minimum size of the coefficients labels, as set by the internal algorithm. Default is 0.85.
 #' @param lab.max.mar The maximum size the left margin can take when trying to fit the coefficient labels into it (only when \code{horiz = TRUE}). This is used in the internal algorithm fitting the coefficient labels. Default is \code{0.25}.
 #' @param lab.fit The method to fit the coefficient labels into the plotting region (only when \code{horiz = FALSE}). Can be \code{"auto"} (the default), \code{"simple"}, \code{"multi"} or \code{"tilted"}. If \code{"simple"}, then the classic axis is drawn. If \code{"multi"}, then the coefficient labels are fit horizontally across several lines, such that they don't collide. If \code{"tilted"}, then the labels are tilted. If \code{"auto"}, an automatic choice between the three is made.
-#' @param main The title of the plot. Default is \code{"Effect on __depvar__"}. You can use the special variable \code{__depvar__} to set the title (useful when you set the plot default with \code{\link[fixest]{setFixest_coefplot}}).
+#' @param main The title of the plot. Default is \code{"Effect on __depvar__"}. You can use the special variable \code{__depvar__} to set the title (useful when you set the plot default with \code{\link[fixest2]{setFixest_coefplot}}).
 #' @param value.lab The label to appear on the side of the coefficient values. If \code{horiz = FALSE}, the label appears in the y-axis. If \code{horiz = TRUE}, then it appears on the x-axis. The default is equal to \code{"Estimate and __ci__ Conf. Int."}, with \code{__ci__} a special variable giving the value of the confidence interval.
 #' @param xlab The label of the x-axis, default is \code{NULL}. Note that if \code{horiz = TRUE}, it overrides the value of the argument \code{value.lab}.
 #' @param ylab The label of the y-axis, default is \code{NULL}. Note that if \code{horiz = FALSE}, it overrides the value of the argument \code{value.lab}.
 #' @param sub A subtitle, default is \code{NULL}.
-#' @param style A character scalar giving the style of the plot to be used. You can set styles with the function \code{\link[fixest]{setFixest_coefplot}}, setting all the default values of the function. If missing, then it switches to either "default" or "iplot", depending on the calling function.
-#' @param i.select Integer scalar, default is 1. In \code{iplot}, used to select which variable created with \code{i()} to select. Only used when there are several variables created with \code{\link[fixest]{i}}. This is an index, just try increasing numbers to hopefully obtain what you want. Note that it works much better when the variables are "pure" \code{i()} variables and not interacted with other variables. For example: \code{i(species, x1)} is good while \code{i(species):x1} isn't. The latter will also work but the index may feel weird in case there are many \code{i()} variables.
+#' @param style A character scalar giving the style of the plot to be used. You can set styles with the function \code{\link[fixest2]{setFixest_coefplot}}, setting all the default values of the function. If missing, then it switches to either "default" or "iplot", depending on the calling function.
+#' @param i.select Integer scalar, default is 1. In \code{iplot}, used to select which variable created with \code{i()} to select. Only used when there are several variables created with \code{\link[fixest2]{i}}. This is an index, just try increasing numbers to hopefully obtain what you want. Note that it works much better when the variables are "pure" \code{i()} variables and not interacted with other variables. For example: \code{i(species, x1)} is good while \code{i(species):x1} isn't. The latter will also work but the index may feel weird in case there are many \code{i()} variables.
 #'
 #' @seealso
-#' See \code{\link[fixest]{setFixest_coefplot}} to set the default values of \code{coefplot}, and the estimation functions: e.g. \code{\link[fixest]{feols}}, \code{\link[fixest:feglm]{fepois}}, \code{\link[fixest]{feglm}}, \code{\link[fixest:femlm]{fenegbin}}.
+#' See \code{\link[fixest2]{setFixest_coefplot}} to set the default values of \code{coefplot}, and the estimation functions: e.g. \code{\link[fixest2]{feols}}, \code{\link[fixest:feglm]{fepois}}, \code{\link[fixest2]{feglm}}, \code{\link[fixest:femlm]{fenegbin}}.
 #'
 #' @section Setting custom default values:
-#' The function \code{coefplot} dispose of many arguments to parametrize the plots. Most of these arguments can be set once an for all using the function \code{\link[fixest]{setFixest_coefplot}}. See Example 3 below for a demonstration.
+#' The function \code{coefplot} dispose of many arguments to parametrize the plots. Most of these arguments can be set once an for all using the function \code{\link[fixest2]{setFixest_coefplot}}. See Example 3 below for a demonstration.
 #'
 #' @section iplot:
 #'
-#' The function \code{iplot} restricts \code{coefplot} to interactions or factors created with the function \code{\link[fixest]{i}}. Only \emph{one} of the i-variables will be plotted at a time. If you have several i-variables, you can navigate through them with the \code{i.select} argument.
+#' The function \code{iplot} restricts \code{coefplot} to interactions or factors created with the function \code{\link[fixest2]{i}}. Only \emph{one} of the i-variables will be plotted at a time. If you have several i-variables, you can navigate through them with the \code{i.select} argument.
 #'
 #' The argument \code{i.select} is an index that will go through all the i-variables. It will work well if the variables are pure, meaning not interacted with other variables. If the i-variables are interacted, the index may have an odd behavior but will (in most cases) work all the same, just try some numbers up until you (hopefully) obtain the graph you want.
 #'
@@ -2209,7 +2209,7 @@ gen_iplot <- function() {
 
 #' Sets the defaults of coefplot
 #'
-#' You can set the default values of most arguments of \code{\link[fixest]{coefplot}} with this function.
+#' You can set the default values of most arguments of \code{\link[fixest2]{coefplot}} with this function.
 #'
 #' @inheritParams coefplot
 #'
@@ -2219,7 +2219,7 @@ gen_iplot <- function() {
 #' Doesn't return anything.
 #'
 #' @seealso
-#' \code{\link[fixest]{coefplot}}
+#' \code{\link[fixest2]{coefplot}}
 #'
 #' @examples
 #'

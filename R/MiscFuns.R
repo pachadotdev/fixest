@@ -4,7 +4,7 @@
 #'
 #' @inheritParams feNmlm
 #'
-#' @param object A \code{fixest} estimation (e.g. obtained using \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}).
+#' @param object A \code{fixest} estimation (e.g. obtained using \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}).
 #' @param notes Logical. Whether to display a note when the fixed-effects coefficients are not regular.
 #' @param sorted Logical, default is \code{TRUE}. Whether to order the fixed-effects by their names. If \code{FALSE}, then the order used in the demeaning algorithm is used.
 #'
@@ -17,7 +17,7 @@
 #' If there is more than 1 fixed-effect, then the attribute \dQuote{references} is created. This is a vector of length the number of fixed-effects, each element contains the number of coefficients set as references. By construction, the elements of the first fixed-effect dimension are never set as references. In the presence of regular fixed-effects, there should be Q-1 references (with Q the number of fixed-effects).
 #'
 #' @seealso
-#' \code{\link[fixest]{plot.fixest.fixef}}. See also the main estimation functions \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}. Use \code{\link[fixest]{summary.fixest}} to see the results with the appropriate standard-errors, \code{\link[fixest]{fixef.fixest}} to extract the fixed-effect coefficients, and the function \code{\link[fixest]{etable}} to visualize the results of multiple estimations.
+#' \code{\link[fixest2]{plot.fixest.fixef}}. See also the main estimation functions \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}. Use \code{\link[fixest2]{summary.fixest}} to see the results with the appropriate standard-errors, \code{\link[fixest2]{fixef.fixest}} to extract the fixed-effect coefficients, and the function \code{\link[fixest2]{etable}} to visualize the results of multiple estimations.
 #'
 #' @author
 #' Laurent Berge
@@ -348,7 +348,7 @@ fixef.fixest <- function(object, notes = getFixest_notes(), sorted = TRUE, nthre
 #' The package \pkg{fixest} uses the \code{fixef} method from \pkg{nlme}. Unfortunately, re-exporting this method is required in order not to attach package \pkg{nlme}.
 #'
 #' \itemize{
-#' \item Here is the help from package \pkg{nlme}: \code{\link[nlme:fixed.effects]{fixef}}. The help from package \pkg{fixest} is here: \code{\link[fixest]{fixef.fixest}}.
+#' \item Here is the help from package \pkg{nlme}: \code{\link[nlme:fixed.effects]{fixef}}. The help from package \pkg{fixest} is here: \code{\link[fixest2]{fixef.fixest}}.
 #' }
 #'
 #' @note
@@ -367,7 +367,7 @@ NULL
 
 #' Displaying the most notable fixed-effects
 #'
-#' This function plots the 5 fixed-effects with the highest and lowest values, for each of the fixed-effect dimension. It takes as an argument the fixed-effects obtained from the function \code{\link{fixef.fixest}} after an estimation using \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}.
+#' This function plots the 5 fixed-effects with the highest and lowest values, for each of the fixed-effect dimension. It takes as an argument the fixed-effects obtained from the function \code{\link{fixef.fixest}} after an estimation using \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}.
 #'
 #' @method plot fixest.fixef
 #'
@@ -380,7 +380,7 @@ NULL
 #' If the data are not regular in the fixed-effect coefficients, this means that several \sQuote{reference points} are set to obtain the fixed-effects, thereby impeding their interpretation. In this case a warning is raised.
 #'
 #' @seealso
-#' \code{\link[fixest]{fixef.fixest}} to extract clouster coefficients. See also the main estimation function \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}. Use \code{\link[fixest]{summary.fixest}} to see the results with the appropriate standard-errors, the function \code{\link[fixest]{etable}} to visualize the results of multiple estimations.
+#' \code{\link[fixest2]{fixef.fixest}} to extract clouster coefficients. See also the main estimation function \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}. Use \code{\link[fixest2]{summary.fixest}} to see the results with the appropriate standard-errors, the function \code{\link[fixest2]{etable}} to visualize the results of multiple estimations.
 #'
 #' @author
 #' Laurent Berge
@@ -431,10 +431,10 @@ plot.fixest.fixef <- function(x, n = 5, ...) {
 
 #' Collinearity diagnostics for \code{fixest} objects
 #'
-#' In some occasions, the optimization algorithm of \code{\link[fixest]{femlm}} may fail to converge, or the variance-covariance matrix may not be available. The most common reason of why this happens is colllinearity among variables. This function helps to find out which set of variables is problematic.
+#' In some occasions, the optimization algorithm of \code{\link[fixest2]{femlm}} may fail to converge, or the variance-covariance matrix may not be available. The most common reason of why this happens is colllinearity among variables. This function helps to find out which set of variables is problematic.
 #'
 #'
-#' @param x A \code{fixest} object obtained from, e.g. functions \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}.
+#' @param x A \code{fixest} object obtained from, e.g. functions \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}.
 #' @param verbose An integer. If higher than or equal to 1, then a note is prompted at each step of the algorithm. By default \code{verbose = 0} for small problems and to 1 for large problems.
 #'
 #' @details
@@ -1475,11 +1475,11 @@ did_means <- function(fml, base, treat_var, post_var, tex = FALSE, treat_dict,
 #' @param keep A vector of values to be kept from \code{factor_var} (all others are dropped). By default they should be values from \code{factor_var} and if \code{keep} is a character vector partial matching is applied. Use "@" as the first character to enable regular expression matching instead.
 #' @param ref2 A vector of values to be dropped from \code{var}. By default they should be values from \code{var} and if \code{ref2} is a character vector partial matching is applied. Use "@" as the first character to enable regular expression matching instead.
 #' @param keep2 A vector of values to be kept from \code{var} (all others are dropped). By default they should be values from \code{var} and if \code{keep2} is a character vector partial matching is applied. Use "@" as the first character to enable regular expression matching instead.
-#' @param bin2 A list or vector defining the binning of the second variable. See help for the argument \code{bin} for details (or look at the help of the function \code{\link[fixest]{bin}}). You can use \code{.()} for \code{list()}.
+#' @param bin2 A list or vector defining the binning of the second variable. See help for the argument \code{bin} for details (or look at the help of the function \code{\link[fixest2]{bin}}). You can use \code{.()} for \code{list()}.
 #' @param ... Not currently used.
 #'
 #' @details
-#' To interact fixed-effects, this function should not be used: instead use directly the syntax \code{fe1^fe2} in the fixed-effects part of the formula. Please see the details and examples in the help page of \code{\link[fixest]{feols}}.
+#' To interact fixed-effects, this function should not be used: instead use directly the syntax \code{fe1^fe2} in the fixed-effects part of the formula. Please see the details and examples in the help page of \code{\link[fixest2]{feols}}.
 #'
 #' @return
 #' It returns a matrix with number of rows the length of \code{factor_var}. If there is no interacted variable or it is interacted with a numeric variable, the number of columns is equal to the number of cases contained in \code{factor_var} minus the reference(s). If the interacted variable is a factor, the number of columns is the number of combined cases between \code{factor_var} and \code{var}.
@@ -1488,9 +1488,9 @@ did_means <- function(fml, base, treat_var, post_var, tex = FALSE, treat_dict,
 #' Laurent Berge
 #'
 #' @seealso
-#' \code{\link[fixest:coefplot]{iplot}} to plot interactions or factors created with \code{i()}, \code{\link[fixest]{feols}} for OLS estimation with multiple fixed-effects.
+#' \code{\link[fixest:coefplot]{iplot}} to plot interactions or factors created with \code{i()}, \code{\link[fixest2]{feols}} for OLS estimation with multiple fixed-effects.
 #'
-#' See the function \code{\link[fixest]{bin}} for binning variables.
+#' See the function \code{\link[fixest2]{bin}} for binning variables.
 #'
 #' @examples
 #'
@@ -1903,7 +1903,7 @@ i_noref <- function(factor_var, var, ref, bin, keep, ref2, keep2, bin2) {
 #' With any data, using \code{"!bin::digit"} groups every digit consecutive values starting from the first value.
 #' Using \code{"!!bin::digit"} is the same but starting from the last value.
 #' With numeric vectors you can: a) use \code{"cut::n"} to cut the vector into \code{n} equal parts, b) use \code{"cut::a]b["} to create the following bins: \code{[min, a]}, \code{]a, b[}, \code{[b, max]}.
-#' The latter syntax is a sequence of number/quartile (q0 to q4)/percentile (p0 to p100) followed by an open or closed square bracket. You can add custom bin names by adding them in the character vector after \code{'cut::values'}. See details and examples. Dot square bracket expansion (see \code{\link[fixest]{dsb}}) is enabled.
+#' The latter syntax is a sequence of number/quartile (q0 to q4)/percentile (p0 to p100) followed by an open or closed square bracket. You can add custom bin names by adding them in the character vector after \code{'cut::values'}. See details and examples. Dot square bracket expansion (see \code{\link[fixest2]{dsb}}) is enabled.
 #'
 #' @section "Cutting" a numeric vector:
 #'
@@ -1921,7 +1921,7 @@ i_noref <- function(factor_var, var, ref, bin, keep, ref2, keep2, bin2) {
 #'
 #' @section \code{bin} vs \code{ref}:
 #'
-#' The functions \code{\link[fixest]{bin}} and \code{\link[fixest]{ref}} are able to do the same thing, then why use one instead of the other? Here are the differences:
+#' The functions \code{\link[fixest2]{bin}} and \code{\link[fixest2]{ref}} are able to do the same thing, then why use one instead of the other? Here are the differences:
 #'
 #' \itemize{
 #' \item{}{\code{ref} always returns a factor. This is in contrast with \code{bin} which returns, when possible, a vector of the same type as the vector in input.}
@@ -1936,7 +1936,7 @@ i_noref <- function(factor_var, var, ref, bin, keep, ref2, keep2, bin2) {
 #' Laurent Berge
 #'
 #' @seealso
-#' To re-factor variables: \code{\link[fixest]{ref}}.
+#' To re-factor variables: \code{\link[fixest2]{ref}}.
 #'
 #' @examples
 #'
@@ -2056,7 +2056,7 @@ bin <- function(x, bin) {
 #' @inheritSection bin \code{bin} vs \code{ref}
 #'
 #' @param x A vector of any type (must be atomic though).
-#' @param ref A vector or a list, or special binning values (explained later). If a vector, it must correspond to (partially matched) values of the vector \code{x}. The vector \code{x} which will be transformed into a factor and these values will be placed first in the levels. That's the main usage of this function. You can also bin on-the-fly the values of \code{x}, using the same syntax as the function \code{\link[fixest]{bin}}. Here's a description of what bin does: To create a new value from old values, use \code{bin = list("new_value"=old_values)} with \code{old_values} a vector of existing values. You can use \code{.()} for \code{list()}.
+#' @param ref A vector or a list, or special binning values (explained later). If a vector, it must correspond to (partially matched) values of the vector \code{x}. The vector \code{x} which will be transformed into a factor and these values will be placed first in the levels. That's the main usage of this function. You can also bin on-the-fly the values of \code{x}, using the same syntax as the function \code{\link[fixest2]{bin}}. Here's a description of what bin does: To create a new value from old values, use \code{bin = list("new_value"=old_values)} with \code{old_values} a vector of existing values. You can use \code{.()} for \code{list()}.
 #' It accepts regular expressions, but they must start with an \code{"@"}, like in \code{bin="@Aug|Dec"}. It accepts one-sided formulas which must contain the variable \code{x}, e.g. \code{bin=list("<2" = ~x < 2)}.
 #' The names of the list are the new names. If the new name is missing, the first value matched becomes the new name. In the name, adding \code{"@d"}, with \code{d} a digit, will relocate the value in position \code{d}: useful to change the position of factors.
 #' If the vector \code{x} is numeric, you can use the special value \code{"bin::digit"} to group every \code{digit} element.
@@ -2064,7 +2064,7 @@ bin <- function(x, bin) {
 #' With any data, using \code{"!bin::digit"} groups every digit consecutive values starting from the first value.
 #' Using \code{"!!bin::digit"} is the same but starting from the last value.
 #' With numeric vectors you can: a) use \code{"cut::n"} to cut the vector into \code{n} equal parts, b) use \code{"cut::a]b["} to create the following bins: \code{[min, a]}, \code{]a, b[}, \code{[b, max]}.
-#' The latter syntax is a sequence of number/quartile (q0 to q4)/percentile (p0 to p100) followed by an open or closed square bracket. You can add custom bin names by adding them in the character vector after \code{'cut::values'}. See details and examples. Dot square bracket expansion (see \code{\link[fixest]{dsb}}) is enabled.
+#' The latter syntax is a sequence of number/quartile (q0 to q4)/percentile (p0 to p100) followed by an open or closed square bracket. You can add custom bin names by adding them in the character vector after \code{'cut::values'}. See details and examples. Dot square bracket expansion (see \code{\link[fixest2]{dsb}}) is enabled.
 #'
 #' @return
 #' It returns a factor of the same length as \code{x}, where levels have been modified according to the argument \code{ref}.
@@ -2073,7 +2073,7 @@ bin <- function(x, bin) {
 #' Laurent Berge
 #'
 #' @seealso
-#' To bin the values of a vectors: \code{\link[fixest]{bin}}.
+#' To bin the values of a vectors: \code{\link[fixest2]{bin}}.
 #'
 #' @examples
 #'
@@ -2210,13 +2210,13 @@ ref <- function(x, ref) {
 #'
 #' You can include a full variable from the environment in the same way: \code{for(y in c("a", "b")) xpd(.[y] ~ x)} will create the two formulas \code{a ~ x} and \code{b ~ x}.
 #'
-#' The DSB can even be used within variable names, but then the variable must be nested in character form. For example \code{y ~ .["x.[1:2]_sq"]} will create \code{y ~ x1_sq + x2_sq}. Using the character form is important to avoid a formula parsing error. Double quotes must be used. Note that the character string that is nested will be parsed with the function \code{\link[fixest]{dsb}}, and thus it will return a vector.
+#' The DSB can even be used within variable names, but then the variable must be nested in character form. For example \code{y ~ .["x.[1:2]_sq"]} will create \code{y ~ x1_sq + x2_sq}. Using the character form is important to avoid a formula parsing error. Double quotes must be used. Note that the character string that is nested will be parsed with the function \code{\link[fixest2]{dsb}}, and thus it will return a vector.
 #'
 #' By default, the DSB operator expands vectors into sums. You can add a comma, like in \code{.[, x]}, to expand with commas--the content can then be used within functions. For instance: \code{c(x.[, 1:2])} will create \code{c(x1, x2)} (and \emph{not} \code{c(x1 + x2)}).
 #'
 #' In all \code{fixest} estimations, this special parsing is enabled, so you don't need to use \code{xpd}.
 #'
-#' You can even use multiple square brackets within a single variable, but then the use of nesting is required. For example, the following \code{xpd(y ~ .[".[letters[1:2]]_.[1:2]"])} will create \code{y ~ a_1 + b_2}. Remember that the nested character string is parsed with \code{\link[fixest]{dsb}}, which explains this behavior.
+#' You can even use multiple square brackets within a single variable, but then the use of nesting is required. For example, the following \code{xpd(y ~ .[".[letters[1:2]]_.[1:2]"])} will create \code{y ~ a_1 + b_2}. Remember that the nested character string is parsed with \code{\link[fixest2]{dsb}}, which explains this behavior.
 #'
 #' @section Regular expressions:
 #'
@@ -2235,7 +2235,7 @@ ref <- function(x, ref) {
 #'
 #'
 #' @seealso
-#' \code{\link[fixest]{setFixest_fml}} to set formula macros, and \code{\link[fixest]{dsb}} to modify character strings with the DSB operator.
+#' \code{\link[fixest2]{setFixest_fml}} to set formula macros, and \code{\link[fixest2]{dsb}} to modify character strings with the DSB operator.
 #'
 #' @examples
 #'
@@ -2791,7 +2791,7 @@ to_integer <- function(..., sorted = FALSE, add_items = FALSE, items.list = FALS
 #'
 #' @inheritSection feols Varying slopes
 #'
-#' @param X A matrix, vector, data.frame or a list OR a formula OR a \code{\link[fixest]{feols}} estimation. If equal to a formula, then the argument \code{data} is required, and it must be of the type: \code{x1 + x2 ~ f1 + fe2} with on the LHS the variables to be centered, and on the RHS the factors used for centering. Note that you can use variables with varying slopes with the syntax \code{fe[v1, v2]} (see details in \code{\link[fixest]{feols}}). If a \code{feols} estimation, all variables (LHS+RHS) are demeaned and then returned (only if it was estimated with fixed-effects). Otherwise, it must represent the data to be centered. Of course the number of observations of that data must be the same as the factors used for centering (argument \code{f}).
+#' @param X A matrix, vector, data.frame or a list OR a formula OR a \code{\link[fixest2]{feols}} estimation. If equal to a formula, then the argument \code{data} is required, and it must be of the type: \code{x1 + x2 ~ f1 + fe2} with on the LHS the variables to be centered, and on the RHS the factors used for centering. Note that you can use variables with varying slopes with the syntax \code{fe[v1, v2]} (see details in \code{\link[fixest2]{feols}}). If a \code{feols} estimation, all variables (LHS+RHS) are demeaned and then returned (only if it was estimated with fixed-effects). Otherwise, it must represent the data to be centered. Of course the number of observations of that data must be the same as the factors used for centering (argument \code{f}).
 #' @param f A matrix, vector, data.frame or list. The factors used to center the variables in argument \code{X}. Matrices will be coerced using \code{as.data.frame}.
 #' @param slope.vars A vector, matrix or list representing the variables with varying slopes. Matrices will be coerced using \code{as.data.frame}. Note that if this argument is used it MUST be in conjunction with the argument \code{slope.flag} that maps the factors to which the varying slopes are attached. See examples.
 #' @param slope.flag An integer vector of the same length as the number of variables in \code{f} (the factors used for centering). It indicates for each factor the number of variables with varying slopes to which it is associated. Positive values mean that the raw factor should also be included in the centering, negative values that it should be excluded. Sorry it's complicated... but see the examples it may get clearer.
@@ -3407,7 +3407,7 @@ obs <- function(x) {
 #'
 #' Checks the convergence of a \code{feols} estimation by computing the first-order conditions of all fixed-effects (all should be close to 0)
 #'
-#' @param x A \code{\link[fixest]{feols}} estimation that should contain fixed-effects.
+#' @param x A \code{\link[fixest2]{feols}} estimation that should contain fixed-effects.
 #' @param object An object returned by \code{check_conv_feols}.
 #' @param type Either "short" (default) or "detail". If "short", only the maximum absolute FOC are displayed, otherwise the 2 smallest and the 2 largest FOC are reported for each fixed-effect and each variable.
 #' @param ... Not currently used.
@@ -4218,7 +4218,7 @@ len_unique <- function(x, nthreads = getFixest_nthreads()) {
 
 #' Replicates \code{fixest} objects
 #'
-#' Simple function that replicates \code{fixest} objects while (optionally) computing different standard-errors. Useful mostly in combination with \code{\link[fixest]{etable}} or \code{\link[fixest]{coefplot}}.
+#' Simple function that replicates \code{fixest} objects while (optionally) computing different standard-errors. Useful mostly in combination with \code{\link[fixest2]{etable}} or \code{\link[fixest2]{coefplot}}.
 #'
 #' @param x Either a \code{fixest} object, either a list of \code{fixest} objects created with \code{.l()}.
 #' @param times Integer vector giving the number of repetitions of the vector of elements. By default \code{times = 1}. It must be either of length 1, either of the same length as the argument \code{x}.

@@ -227,7 +227,7 @@ d <- function(x, lag = 1, fill = NA) {
 
 #' Lags a variable in a \code{fixest} estimation
 #'
-#' Produce lags or leads in the formulas of \code{fixest} estimations or when creating variables in a \code{\link[data.table]{data.table}}. The data must be set as a panel beforehand (either with the function \code{\link[fixest]{panel}} or with the argument \code{panel.id} in the estimation).
+#' Produce lags or leads in the formulas of \code{fixest} estimations or when creating variables in a \code{\link[data.table]{data.table}}. The data must be set as a panel beforehand (either with the function \code{\link[fixest2]{panel}} or with the argument \code{panel.id} in the estimation).
 #'
 #' @param x The variable.
 #' @param lag A vector of integers giving the number of lags. Negative values lead to leads. This argument can be a vector when using it in fixest estimations. When creating variables in a \code{\link[data.table]{data.table}}, it **must** be of length one.
@@ -235,10 +235,10 @@ d <- function(x, lag = 1, fill = NA) {
 #' @param fill A scalar, default is \code{NA}. How to fill the missing values due to the lag/lead? Note that in a \code{fixest} estimation, 'fill' must be numeric (not required when creating new variables).
 #'
 #' @return
-#' These functions can only be used i) in a formula of a \code{fixest} estimation, or ii) when creating variables within a \code{fixest_panel} object (obtained with function \code{\link[fixest]{panel}}) which is alaos a \code{\link[data.table]{data.table}}.
+#' These functions can only be used i) in a formula of a \code{fixest} estimation, or ii) when creating variables within a \code{fixest_panel} object (obtained with function \code{\link[fixest2]{panel}}) which is alaos a \code{\link[data.table]{data.table}}.
 #'
 #' @seealso
-#' The function \code{\link[fixest]{panel}} changes \code{data.frames} into a panel from which the functions \code{l} and \code{f} can be called. Otherwise you can set the panel 'live' during the estimation using the argument \code{panel.id} (see for example in the function \code{\link[fixest]{feols}}).
+#' The function \code{\link[fixest2]{panel}} changes \code{data.frames} into a panel from which the functions \code{l} and \code{f} can be called. Otherwise you can set the panel 'live' during the estimation using the argument \code{panel.id} (see for example in the function \code{\link[fixest2]{feols}}).
 #'
 #' @examples
 #'
@@ -486,7 +486,7 @@ d__expand <- function(x, k = 1, fill) {
 #' Laurent Berge
 #'
 #' @seealso
-#' Alternatively, the function \code{\link[fixest]{panel}} changes a \code{data.frame} into a panel from which the functions \code{l} and \code{f} (creating leads and lags) can be called. Otherwise you can set the panel 'live' during the estimation using the argument \code{panel.id} (see for example in the function \code{\link[fixest]{feols}}).
+#' Alternatively, the function \code{\link[fixest2]{panel}} changes a \code{data.frame} into a panel from which the functions \code{l} and \code{f} (creating leads and lags) can be called. Otherwise you can set the panel 'live' during the estimation using the argument \code{panel.id} (see for example in the function \code{\link[fixest2]{feols}}).
 #'
 #' @examples
 #' # simple example with an unbalanced panel
@@ -655,7 +655,7 @@ lag_fml <- lag.formula
 #' Constructs a \code{fixest} panel data base out of a data.frame which allows to use leads and lags in \code{fixest} estimations and to create new variables from leads and lags if the data.frame was also a \code{\link[data.table]{data.table}}.
 #'
 #' @param data A data.frame.
-#' @param panel.id The panel identifiers. Can either be: i) a one sided formula (e.g. \code{panel.id = ~id+time}), ii) a character vector of length 2 (e.g. \code{panel.id=c('id', 'time')}, or iii) a character scalar of two variables separated by a comma (e.g. \code{panel.id='id,time'}). Note that you can combine variables with \code{^} only inside formulas (see the dedicated section in \code{\link[fixest]{feols}}).
+#' @param panel.id The panel identifiers. Can either be: i) a one sided formula (e.g. \code{panel.id = ~id+time}), ii) a character vector of length 2 (e.g. \code{panel.id=c('id', 'time')}, or iii) a character scalar of two variables separated by a comma (e.g. \code{panel.id='id,time'}). Note that you can combine variables with \code{^} only inside formulas (see the dedicated section in \code{\link[fixest2]{feols}}).
 #' @param time.step The method to compute the lags, default is \code{NULL} (which means automatically set). Can be equal to: \code{"unitary"}, \code{"consecutive"}, \code{"within.consecutive"}, or to a number. If \code{"unitary"}, then the largest common divisor between consecutive time periods is used (typically if the time variable represents years, it will be 1). This method can apply only to integer (or convertible to integer) variables. If \code{"consecutive"}, then the time variable can be of any type: two successive time periods represent a lag of 1. If \code{"witihn.consecutive"} then **within a given id**, two successive time periods represent a lag of 1. Finally, if the time variable is numeric, you can provide your own numeric time step.
 #' @param duplicate.method If several observations have the same id and time values, then the notion of lag is not defined for them. If \code{duplicate.method = "none"} (default) and duplicate values are found, this leads to an error. You can use \code{duplicate.method = "first"} so that the first occurrence of identical id/time observations will be used as lag.
 #'
@@ -664,7 +664,7 @@ lag_fml <- lag.formula
 #'
 #' When the initial data set was also a \code{data.table}, not all operations are supported and some may dissolve the \code{fixest_panel}. This is the case when creating subselections of the initial data with additional attributes (e.g. pdt[x>0, .(x, y, z)] would dissolve the \code{fixest_panel}, meaning only a data.table would be the result of the call).
 #'
-#' If the initial data set was also a \code{data.table}, then you can create new variables from lags and leads using the functions \code{\link[fixest]{l}}() and \code{\link[fixest:l]{f}}(). See the example.
+#' If the initial data set was also a \code{data.table}, then you can create new variables from lags and leads using the functions \code{\link[fixest2]{l}}() and \code{\link[fixest:l]{f}}(). See the example.
 #'
 #'
 #' @return
@@ -674,9 +674,9 @@ lag_fml <- lag.formula
 #' Laurent Berge
 #'
 #' @seealso
-#' The estimation methods \code{\link[fixest]{feols}}, \code{\link[fixest:feglm]{fepois}} and \code{\link[fixest]{feglm}}.
+#' The estimation methods \code{\link[fixest2]{feols}}, \code{\link[fixest:feglm]{fepois}} and \code{\link[fixest2]{feglm}}.
 #'
-#' The functions \code{\link[fixest]{l}} and \code{\link[fixest:l]{f}} to create lags and leads within \code{}fixest_panel objects.
+#' The functions \code{\link[fixest2]{l}} and \code{\link[fixest:l]{f}} to create lags and leads within \code{}fixest_panel objects.
 #'
 #' @examples
 #'
@@ -744,7 +744,7 @@ panel <- function(data, panel.id, time.step = NULL, duplicate.method = c("none",
 #'
 #' Transforms a \code{fixest_panel} object into a regular data.frame.
 #'
-#' @param x A \code{fixest_panel} object (obtained from function \code{\link[fixest]{panel}}).
+#' @param x A \code{fixest_panel} object (obtained from function \code{\link[fixest2]{panel}}).
 #'
 #' @return
 #' Returns a data set of the exact same dimension. Only the attribute 'panel_info' is erased.
@@ -753,7 +753,7 @@ panel <- function(data, panel.id, time.step = NULL, duplicate.method = c("none",
 #' Laurent Berge
 #'
 #' @seealso
-#' Alternatively, the function \code{\link[fixest]{panel}} changes a \code{data.frame} into a panel from which the functions \code{l} and \code{f} (creating leads and lags) can be called. Otherwise you can set the panel 'live' during the estimation using the argument \code{panel.id} (see for example in the function \code{\link[fixest]{feols}}).
+#' Alternatively, the function \code{\link[fixest2]{panel}} changes a \code{data.frame} into a panel from which the functions \code{l} and \code{f} (creating leads and lags) can be called. Otherwise you can set the panel 'live' during the estimation using the argument \code{panel.id} (see for example in the function \code{\link[fixest2]{feols}}).
 #'
 #' @examples
 #'
@@ -789,9 +789,9 @@ unpanel <- function(x) {
 
 #' Method to subselect from a \code{fixest_panel}
 #'
-#' Subselection from a \code{fixest_panel} which has been created with the function \code{\link[fixest]{panel}}. Also allows to create lag/lead variables with functions \code{\link[fixest]{l}}()/\code{\link[fixest:l]{f}}() if the \code{fixest_panel} is also a \code{\link[data.table]{data.table}}.
+#' Subselection from a \code{fixest_panel} which has been created with the function \code{\link[fixest2]{panel}}. Also allows to create lag/lead variables with functions \code{\link[fixest2]{l}}()/\code{\link[fixest:l]{f}}() if the \code{fixest_panel} is also a \code{\link[data.table]{data.table}}.
 #'
-#' @param x A \code{fixest_panel} object, created with the function \code{\link[fixest]{panel}}.
+#' @param x A \code{fixest_panel} object, created with the function \code{\link[fixest2]{panel}}.
 #' @param i Row subselection. Allows \code{\link[data.table]{data.table}} style selection (provided the data is also a data.table).
 #' @param j Variable selection. Allows \code{\link[data.table]{data.table}} style selection/variable creation (provided the data is also a data.table).
 #' @param ... Other arguments to be passed to \code{[.data.frame} or \code{\link[data.table]{data.table}} (or whatever the class of the initial data).
@@ -806,7 +806,7 @@ unpanel <- function(x) {
 #' Laurent Berge
 #'
 #' @seealso
-#' Alternatively, the function \code{\link[fixest]{panel}} changes a \code{data.frame} into a panel from which the functions \code{l} and \code{f} (creating leads and lags) can be called. Otherwise you can set the panel 'live' during the estimation using the argument \code{panel.id} (see for example in the function \code{\link[fixest]{feols}}).
+#' Alternatively, the function \code{\link[fixest2]{panel}} changes a \code{data.frame} into a panel from which the functions \code{l} and \code{f} (creating leads and lags) can be called. Otherwise you can set the panel 'live' during the estimation using the argument \code{panel.id} (see for example in the function \code{\link[fixest2]{feols}}).
 #'
 #' @examples
 #'

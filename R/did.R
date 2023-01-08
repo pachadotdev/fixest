@@ -19,12 +19,12 @@
 #' @param att Logical, default is \code{FALSE}. If \code{TRUE}: then the total average treatment effect for the treated is computed (instead of the ATT for each relative period).
 #' @param no_agg Logical, default is \code{FALSE}. If \code{TRUE}: then there is no aggregation, leading to the estimation of all \code{cohort x time to treatment} coefficients.
 #' @param bin A list of values to be grouped, a vector, or the special value \code{"bin::digit"}. The binning will be applied to both the cohort and the period (to bin them separately, see \code{bin.c} and \code{bin.p}). To create a new value from old values, use \code{bin = list("new_value"=old_values)} with \code{old_values} a vector of existing values. It accepts regular expressions, but they must start with an \code{"@"}, like in \code{bin="@Aug|Dec"}. The names of the list are the new names. If the new name is missing, the first value matched becomes the new name. Feeding in a vector is like using a list without name and only a single element. If the vector is numeric, you can use the special value \code{"bin::digit"} to group every \code{digit} element. For example if \code{x} represent years, using \code{bin="bin::2"} create bins of two years. Using \code{"!bin::digit"} groups every digit consecutive values starting from the first value. Using \code{"!!bin::digit"} is the same bu starting from the last value. In both cases, \code{x} is not required to be numeric.
-#' @param bin.rel A list or a vector defining which values to bin. Only applies to the relative periods and \emph{not} the cohorts. Please refer to the help of the argument \code{bin} to understand the different ways to do the binning (or look at the help of \code{\link[fixest]{bin}}).
-#' @param bin.c A list or a vector defining which values to bin. Only applies to the cohort. Please refer to the help of the argument \code{bin} to understand the different ways to do the binning (or look at the help of \code{\link[fixest]{bin}}).
-#' @param bin.p A list or a vector defining which values to bin. Only applies to the period. Please refer to the help of the argument \code{bin} to understand the different ways to do the binning (or look at the help of \code{\link[fixest]{bin}}).
+#' @param bin.rel A list or a vector defining which values to bin. Only applies to the relative periods and \emph{not} the cohorts. Please refer to the help of the argument \code{bin} to understand the different ways to do the binning (or look at the help of \code{\link[fixest2]{bin}}).
+#' @param bin.c A list or a vector defining which values to bin. Only applies to the cohort. Please refer to the help of the argument \code{bin} to understand the different ways to do the binning (or look at the help of \code{\link[fixest2]{bin}}).
+#' @param bin.p A list or a vector defining which values to bin. Only applies to the period. Please refer to the help of the argument \code{bin} to understand the different ways to do the binning (or look at the help of \code{\link[fixest2]{bin}}).
 #'
 #' @details
-#' This function creates a matrix of \code{cohort x relative_period} interactions, and if used within a \code{fixest} estimation, the coefficients will automatically be aggregated to obtain the ATT for each relative period. In practice, the coefficients are aggregated with the \code{\link[fixest]{aggregate.fixest}} function whose argument \code{agg} is automatically set to the appropriate value.
+#' This function creates a matrix of \code{cohort x relative_period} interactions, and if used within a \code{fixest} estimation, the coefficients will automatically be aggregated to obtain the ATT for each relative period. In practice, the coefficients are aggregated with the \code{\link[fixest2]{aggregate.fixest}} function whose argument \code{agg} is automatically set to the appropriate value.
 #'
 #' The SA method requires relative periods (negative/positive for before/after the treatment). Either the user can compute the RP (relative periods) by his/her own, either the RPs are computed on the fly from the periods and the cohorts (which then should represent the treatment period).
 #'
@@ -44,7 +44,7 @@
 #'
 #' The argument \code{bin.rel} applies only to the relative periods (hence not to the cohorts) once they have been created.
 #'
-#' To understand how binning works, please have a look at the help and examples of the function \code{\link[fixest]{bin}}.
+#' To understand how binning works, please have a look at the help and examples of the function \code{\link[fixest2]{bin}}.
 #'
 #' Binning can be done in many different ways: just remember that it is not because it is possible that it does makes sense!
 #'
@@ -344,10 +344,10 @@ sunab_att <- function(cohort, period, ref.c = NULL, ref.p = -1) {
 #' @param agg A character scalar describing the variable names to be aggregated, it is pattern-based. All variables that match the pattern will be aggregated. It must be of the form \code{"(root)"}, the parentheses must be there and the resulting variable name will be \code{"root"}. You can add another root with parentheses: \code{"(root1)regex(root2)"}, in which case the resulting name is \code{"root1::root2"}. To name the resulting variable differently you can pass a named vector: \code{c("name" = "pattern")} or \code{c("name" = "pattern(root2)")}. It's a bit intricate sorry, please see the examples.
 #' @param full Logical scalar, defaults to \code{FALSE}. If \code{TRUE}, then all coefficients are returned, not only the aggregated coefficients.
 #' @param use_weights Logical, default is \code{TRUE}. If the estimation was weighted, whether the aggregation should take into account the weights. Basically if the weights reflected frequency it should be \code{TRUE}.
-#' @param ... Arguments to be passed to \code{\link[fixest]{summary.fixest}}.
+#' @param ... Arguments to be passed to \code{\link[fixest2]{summary.fixest}}.
 #'
 #' @details
-#' This is a function helping to replicate the estimator from Sun and Abraham (2020). You first need to perform an estimation with cohort and relative periods dummies (typically using the function \code{\link[fixest]{i}}), this leads to estimators of the cohort average treatment effect on the treated (CATT). Then you can use this function to retrieve the average treatment effect on each relative period, or for any other way you wish to aggregate the CATT.
+#' This is a function helping to replicate the estimator from Sun and Abraham (2020). You first need to perform an estimation with cohort and relative periods dummies (typically using the function \code{\link[fixest2]{i}}), this leads to estimators of the cohort average treatment effect on the treated (CATT). Then you can use this function to retrieve the average treatment effect on each relative period, or for any other way you wish to aggregate the CATT.
 #'
 #' Note that contrary to the SA article, here the cohort share in the sample is considered to be a perfect measure for the cohort share in the population.
 #'
