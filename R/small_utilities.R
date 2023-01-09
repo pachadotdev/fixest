@@ -506,6 +506,14 @@ extract_fe_slope <- function(t) {
   list(fixef_vars = fixef_vars, slope_vars = slope_vars, slope_fe = slope_fe, slope_terms = slope_terms, fe_all = fe_all)
 }
 
+deparse_short <- function(x) {
+  x_dp <- deparse(x)
+  if (length(x_dp) > 1) {
+    x_dp <- paste0(x_dp, "...")
+  }
+  x_dp
+}
+
 deparse_long <- function(x) {
   dep_x <- deparse(x, width.cutoff = 500)
   if (length(dep_x) == 1) {
