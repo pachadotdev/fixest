@@ -542,7 +542,8 @@ std::string cpp_add_commas(double x, int r = 1, bool whole = true)
 // Getting the cluster coefficients
 //
 
-[[cpp11::register]] list cpp_get_fe_gnl(int Q, int N, doubles sumFE, integers_matrix<> dumMat, integers cluster_sizes, integers obsCluster)
+[[cpp11::register]]
+list cpp_get_fe_gnl(int Q, int N, writable::doubles sumFE, writable::integers_matrix<> dumMat, writable::integers cluster_sizes, writable::integers obsCluster)
 {
     // This function returns a list of the cluster coefficients for each cluster
     // dumMat: the matrix of cluster ID for each observation, with cpp index style
@@ -559,7 +560,7 @@ std::string cpp_add_commas(double x, int r = 1, bool whole = true)
 
     // Creation of the indices to put all the cluster values into a single vector
     int nb_coef = 0;
-    integers nb_ref[Q]; // nb_ref takes the nb of elements set as ref
+    writable::integers nb_ref[Q]; // nb_ref takes the nb of elements set as ref
 
     for (int q = 0; q < Q; q++)
     {
@@ -567,12 +568,12 @@ std::string cpp_add_commas(double x, int r = 1, bool whole = true)
         nb_coef += cluster_sizes[q];
     }
 
-    doubles cluster_values[nb_coef];
-    integers cluster_visited[nb_coef]; // whether a value has been already assigned
+    writable::doubles cluster_values[nb_coef];
+    writable::integers cluster_visited[nb_coef]; // whether a value has been already assigned
 
     // index of the cluster
-    writable::integers pindex_cluster(Q);
-    writable::integers index_cluster(nb_coef);
+    std::vector<int*> pindex_cluster(Q);
+    std::vector<int> index_cluster(nb_coef);
 
     for (int i = 0; i < nb_coef; i++)
     {
@@ -580,7 +581,7 @@ std::string cpp_add_commas(double x, int r = 1, bool whole = true)
     }
 
     // TODO: .data() comes from Rcpp, what does it exactly do?
-    // pindex_cluster[0] = index_cluster.data();
+    pindex_cluster[0] = index_cluster.data();
     for (int q = 1; q < Q; q++)
     {
         pindex_cluster[q] = pindex_cluster[q - 1] + cluster_sizes[q - 1];
@@ -588,7 +589,7 @@ std::string cpp_add_commas(double x, int r = 1, bool whole = true)
 
     // Now we create the vector of observations for each cluster
     // we need a starting and an end vector as well
-    writable::integers start_cluster(nb_coef), end_cluster(nb_coef);
+    writable::integers start_cluster[nb_coef], end_cluster[nb_coef];
 
     int index;
     int k;
@@ -614,11 +615,13 @@ std::string cpp_add_commas(double x, int r = 1, bool whole = true)
             if (k == 0)
             {
                 start_cluster[index] = 0;
+                // TODO: viable overload
                 end_cluster[index] += tableCluster[k];
             }
             else
             {
-                start_cluster[index] += end_cluster[index - 1];
+                start_cluster[index] = end_cluster[index - 1];
+                // TODO: incomplete type
                 end_cluster[index] += end_cluster[index - 1] + tableCluster[k];
             }
         }
@@ -634,8 +637,8 @@ std::string cpp_add_commas(double x, int r = 1, bool whole = true)
     int nb2do = N, nb2do_next = N;
     for (int i = 0; i < nb2do; i++)
     {
-        id2do[i] += i;
-        id2do_next[i] += i;
+        id2do[i] = i;
+        id2do_next[i] = i;
     }
 
     // Other indices and variables
@@ -724,16 +727,17 @@ std::string cpp_add_commas(double x, int r = 1, bool whole = true)
                     // 3) we set the cluster value to 0
                     cluster_values[index] = 0;
                     // 4) we update the mat_done matrix for the elements of this cluster
+                    // TODO: int/integers conversion
                     for (int i = start_cluster[index]; i < end_cluster[index]; i++)
                     {
                         // TODO: why does this subset a vector in a matrix way??
-                        obs = obsCluster(i, q);
+                        obs = obsCluster[i, q];
                         mat_done(obs, q) = 1;
                         rowsums[obs]++;
                     }
                     // 5) => we save the information on which cluster was set as a reference
                     // TODO: move this to cpp11 grammar
-                    nb_ref(q)++;
+                    nb_ref[q]++;
                 }
             }
         }
@@ -802,7 +806,7 @@ std::string cpp_add_commas(double x, int r = 1, bool whole = true)
                         // we can loop over all q because cluster_values is initialized to 0
                         // TODO: go back and convert pindex_cluster to matrix?
                         index = pindex_cluster[l][dumMat(obs, l)];
-                        // TODO: doubles vs cpp11::doubles?
+                        // TODO: double vs cpp11::doubles?
                         other_value += cluster_values[index];
                     }
 
@@ -859,13 +863,13 @@ std::string cpp_add_commas(double x, int r = 1, bool whole = true)
             index = pindex[k];
             // index = start(q) + k;
             // TODO: overload
-            quoi[k] += cluster_values[index];
+            quoi[k] = cluster_values[index];
         }
         res[q] = quoi;
     }
 
     // TODO: call operator
-    res(Q) = nb_ref;
+    res[Q] = nb_ref;
 
     return (res);
 }
