@@ -779,6 +779,8 @@ fixest_env <- function(fml, data, family = c("poisson", "negbin", "logit", "gaus
       if (isFixef) {
         fe_vars <- names(fixef_df)
         data_names <- c(data_names, fe_vars)
+      } else {
+          fe_vars <- character(0)
       }
     } else {
       data_names <- names(data)

@@ -1,3 +1,17 @@
+# fixest 2022.01.09
+
+There are some out-of-sync corrections in the original fixest
+(https://github.com/pachadotdev/fixest2/compare/master...lrberge:fixest:master)
+
+I will add these changes by hand, provided I passed styler and refactored the R 
+code a bit
+
+Added:
+
+- Fix behavior formula in .[] within xpd 
+- Fix bug aggregation time = 't'
+- Fix bug when vcov used in feols.fit w/t fixed-effects
+
 # fixest 2022.01.06
 
 This is the first version where formulas with fixed effects terms work. It 
