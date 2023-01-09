@@ -871,5 +871,5 @@ list cpp_get_fe_gnl(int Q, int N, writable::doubles sumFE, writable::integers_ma
     // TODO: call operator
     res[Q] = nb_ref;
 
-    return (res);
+    return res;
 }
