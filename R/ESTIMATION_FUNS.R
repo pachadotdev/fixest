@@ -3615,7 +3615,7 @@ feNmlm <- function(fml, data, family = c("poisson", "negbin", "logit", "gaussian
   } else {
     sq.cor <- stats::cor(lhs, expected.predictor)**2
   }
-  ssr_null <- cpp_ssr_null(lhs)
+  ssr_null <- cpp_ssr_null(lhs, 1)
 
   # The scores
   scores <- femlm_scores(coef, env)

@@ -78,7 +78,7 @@ femlm_only_clusters <- function(env) {
   # calcul r2 naif
   res$naive.r2 <- 1 - sum(residuals**2) / sum((lhs - mean(lhs))**2)
 
-  ssr_null <- cpp_ssr_null(lhs)
+  ssr_null <- cpp_ssr_null(lhs, 0)
 
   res$loglik <- loglik
   res$n <- length(lhs)
@@ -295,7 +295,7 @@ femlm_ll <- function(coef, env) {
     assign("ll_fe_only", ll, env)
     ep <- famFuns$expected.predictor(mu, exp_mu)
     # assign("ssr_fe_only", drop(crossprod(y - ep)), env)
-    assign("ssr_fe_only", cpp_ssq(y - ep), env)
+    assign("ssr_fe_only", cpp_ssq(y - ep, 1), env)
   }
 
   evolutionLL <- ll - pastLL
