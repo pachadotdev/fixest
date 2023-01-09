@@ -254,6 +254,10 @@ dot_square_bracket <- function(x, frame = .GlobalEnv, regex = FALSE, text = FALS
         x_split[i], "]' led to an error:",
         up = up + 1
       )
+
+      if (length(value) == 2 && value[1] == "~") {
+        value <- char_to_vars(value[2])
+      }
     }
 
 
@@ -2133,4 +2137,47 @@ fixest_CI_factor <- function(x, level, vcov) {
   }
 
   fact
+}
+
+#  x = ~a + (b + c) + d*k
+extract_vars_simple <- function(x) {
+  # We don't apply terms!
+  # => m * (a + b) is not expanded
+  # a bit slow
+
+  check_arg(x, "formula")
+
+  res <- c()
+  x <- x[[length(x)]]
+
+  while (is_operator(x, "+")) {
+    res <- c(res, deparse_long(x[[3]]))
+    x <- x[[2]]
+  }
+
+  res <- c(res, deparse_long(x))
+
+  rev(res)
+}
+
+# x = "a + (b + c) + d*k"
+char_to_vars <- function(x) {
+  check_arg(x, "character scalar")
+
+  if (!grepl("(", x, fixed = TRUE)) {
+    res <- trimws(strsplit(x, "+", fixed = TRUE)[[1]])
+    return(res)
+  }
+
+  res <- c()
+  x <- str2lang(x)
+
+  while (is_operator(x, "+")) {
+    res <- c(res, deparse_long(x[[3]]))
+    x <- x[[2]]
+  }
+
+  res <- c(res, deparse_long(x))
+
+  rev(res)
 }
