@@ -560,7 +560,7 @@ list cpp_get_fe_gnl(int Q, int N, writable::doubles sumFE, writable::integers_ma
 
     // Creation of the indices to put all the cluster values into a single vector
     int nb_coef = 0;
-    writable::integers nb_ref[Q]; // nb_ref takes the nb of elements set as ref
+    int nb_ref[Q]; // nb_ref takes the nb of elements set as ref
 
     for (int q = 0; q < Q; q++)
     {
@@ -568,8 +568,8 @@ list cpp_get_fe_gnl(int Q, int N, writable::doubles sumFE, writable::integers_ma
         nb_coef += cluster_sizes[q];
     }
 
-    writable::doubles cluster_values[nb_coef];
-    writable::integers cluster_visited[nb_coef]; // whether a value has been already assigned
+    double cluster_values[nb_coef];
+    int cluster_visited[nb_coef]; // whether a value has been already assigned
 
     // index of the cluster
     std::vector<int*> pindex_cluster(Q);
@@ -589,16 +589,17 @@ list cpp_get_fe_gnl(int Q, int N, writable::doubles sumFE, writable::integers_ma
 
     // Now we create the vector of observations for each cluster
     // we need a starting and an end vector as well
-    writable::integers start_cluster[nb_coef], end_cluster[nb_coef];
+    int start_cluster[nb_coef];
+    int end_cluster[nb_coef];
 
     int index;
     int k;
 
     for (int q = 0; q < Q; q++)
     {
-
         // table cluster: nber of elements for each cluster class
-        writable::integers tableCluster(cluster_sizes[q]);
+        writable::integers tableCluster;
+        tableCluster.push_back(cluster_sizes[q]);
         for (int i = 0; i < N; i++)
         {
             k = dumMat(i, q);
@@ -608,21 +609,15 @@ list cpp_get_fe_gnl(int Q, int N, writable::doubles sumFE, writable::integers_ma
         // now creation of the start/end vectors
         for (int k = 0; k < cluster_sizes[q]; k++)
         {
-            // TODO: no viable conversion from integers to int* here
             int *pindex = pindex_cluster[q];
             index = pindex[k];
             // index = start(q) + k;
-            if (k == 0)
-            {
+            if (k == 0) {
                 start_cluster[index] = 0;
-                // TODO: viable overload
-                end_cluster[index] += tableCluster[k];
-            }
-            else
-            {
+                end_cluster[index] = tableCluster[k];
+            } else {
                 start_cluster[index] = end_cluster[index - 1];
-                // TODO: incomplete type
-                end_cluster[index] += end_cluster[index - 1] + tableCluster[k];
+                end_cluster[index] = end_cluster[index - 1] + tableCluster[k];
             }
         }
     }
@@ -731,12 +726,12 @@ list cpp_get_fe_gnl(int Q, int N, writable::doubles sumFE, writable::integers_ma
                     for (int i = start_cluster[index]; i < end_cluster[index]; i++)
                     {
                         // TODO: why does this subset a vector in a matrix way??
+                        // original https://github.com/pachadotdev/fixest2/blob/master/src/misc_funs.cpp#L382
                         obs = obsCluster[i, q];
                         mat_done(obs, q) = 1;
                         rowsums[obs]++;
                     }
                     // 5) => we save the information on which cluster was set as a reference
-                    // TODO: move this to cpp11 grammar
                     nb_ref[q]++;
                 }
             }
@@ -793,12 +788,11 @@ list cpp_get_fe_gnl(int Q, int N, writable::doubles sumFE, writable::integers_ma
                         // selection of the q that is equal to 0
                     }
 
-                    // TODO: integers vs int*
                     int *pindex = pindex_cluster[q];
                     int index_select = pindex[dumMat(obs, q)];
 
                     // Finding the value of the cluster coefficient
-                    other_value = 0;
+                    other_value = 0.0;
                     // Computing the sum of the other cluster values
                     // and finding the cluster to be updated (q_select)
                     for (int l = 0; l < Q; l++)
@@ -818,6 +812,7 @@ list cpp_get_fe_gnl(int Q, int N, writable::doubles sumFE, writable::integers_ma
                     for (int j = start_cluster[index_select]; j < end_cluster[index_select]; j++)
                     {
                         // TODO: comma operator here is meaningless
+                        // original: https://github.com/pachadotdev/fixest2/blob/master/src/misc_funs.cpp#L453
                         obs = obsCluster[j, q];
                         mat_done(obs, q) = 1;
                         rowsums[obs]++;
@@ -868,7 +863,7 @@ list cpp_get_fe_gnl(int Q, int N, writable::doubles sumFE, writable::integers_ma
         res[q] = quoi;
     }
 
-    // TODO: call operator
+    // TODO: viable overload
     res[Q] = nb_ref;
 
     return res;
