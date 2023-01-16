@@ -47,7 +47,7 @@ License: Apache License (>= 2)
 BugReports: https://github.com/pachadotdev/fixest2/issues
 URL: https://pacha.dev/fixest2/, https://github.com/pachadotdev/fixest2
 LazyData: true
-RoxygenNote: 7.2.3
+RoxygenNote: 7.2.2
 Encoding: UTF-8
 LinkingTo: cpp11
 SystemRequirements: C++11

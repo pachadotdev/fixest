@@ -12,7 +12,6 @@ Added:
 - Fix bug aggregation time = 't' (0a17816346949ff39614f393c128f1d48040f94d)
 - Fix bug when vcov used in feols.fit w/t fixed-effects (324d43ad8363e5f9e51230df63f0bb6e859744e7)
 - Fix bug sample_df when varname too long (17b989fb954af41e02fb2257844efad6d945d8ac)
-- Add fdim to print the dimension of a data set, in an user-readable way (0bc317e7d5a895b3822f3f130fdde8cd8a12429c)
 
 # fixest 2022.01.06
 
