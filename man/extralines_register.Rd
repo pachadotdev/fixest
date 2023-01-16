@@ -14,30 +14,27 @@ extralines_register(type, fun, alias)
 \item{alias}{A character scalar. This is the alias to be used in lieu of the type name to form the row name.}
 }
 \description{
-This function is used to create \code{extralines} (which is an argument of \code{\link[fixest]{etable}}) macros that can be easily summoned in \code{\link[fixest]{etable}}.
+This function is used to create \code{extralines} (which is an argument of \code{\link[fixest2]{etable}}) macros that can be easily summoned in \code{\link[fixest2]{etable}}.
 }
 \details{
-You can register as many macros as you wish, the only constraint is that the type name should not conflict with a \code{\link[fixest]{fitstat}} type name.
+You can register as many macros as you wish, the only constraint is that the type name should not conflict with a \code{\link[fixest2]{fitstat}} type name.
 }
 \examples{
 
 
 # We register a function computing the standard-deviation of the dependent variable
-my_fun = function(x) sd(model.matrix(x, type = "lhs"))
+my_fun <- function(x) sd(model.matrix(x, type = "lhs"))
 extralines_register("sdy", my_fun, "SD(y)")
 
 # An estimation
 data(iris)
-est = feols(Petal.Length ~ Sepal.Length | Species, iris)
+est <- feols(Petal.Length ~ Sepal.Length | Species, iris)
 
 # Now we can easily create a row with the mean of y.
 # We just "summon" it in a one-sided formula
-etable(est, extralines = ~ sdy)
+etable(est, extralines = ~sdy)
 
 # We can change the alias on the fly:
-etable(est, extralines = list("_Standard deviation of the dep. var." = ~ sdy))
-
-
-
+etable(est, extralines = list("_Standard deviation of the dep. var." = ~sdy))
 
 }

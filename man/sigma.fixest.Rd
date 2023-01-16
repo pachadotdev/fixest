@@ -19,12 +19,10 @@ Extract the estimated standard deviation of the errors from \code{fixest} estima
 }
 \examples{
 
-est = feols(Petal.Length ~ Petal.Width, iris)
+est <- feols(Petal.Length ~ Petal.Width, iris)
 sigma(est)
-
-
 
 }
 \seealso{
-\code{\link[fixest]{feols}}, \code{\link[fixest:feglm]{fepois}}, \code{\link[fixest]{feglm}}, \code{\link[fixest:femlm]{fenegbin}}, \code{\link[fixest]{feNmlm}}.
+\code{\link[fixest2]{feols}}, \code{\link[fixest2:feglm]{fepois}}, \code{\link[fixest2]{feglm}}, \code{\link[fixest2:femlm]{fenegbin}}, \code{\link[fixest2]{feNmlm}}.
 }

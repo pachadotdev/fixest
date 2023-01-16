@@ -18,15 +18,15 @@
 )
 }
 \arguments{
-\item{object}{A \code{fixest} object. Obtained using the functions \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}.}
+\item{object}{A \code{fixest} object. Obtained using the functions \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}.}
 
-\item{vcov}{Versatile argument to specify the VCOV. In general, it is either a character scalar equal to a VCOV type, either a formula of the form: \code{vcov_type ~ variables}. The VCOV types implemented are: "iid", "hetero" (or "HC1"), "cluster", "twoway", "NW" (or "newey_west"), "DK" (or "driscoll_kraay"), and "conley". It also accepts object from \code{\link[fixest]{vcov_cluster}}, \code{\link[fixest:vcov_hac]{vcov_NW}}, \code{\link[fixest:vcov_hac]{NW}}, \code{\link[fixest:vcov_hac]{vcov_DK}}, \code{\link[fixest:vcov_hac]{DK}}, \code{\link[fixest]{vcov_conley}} and \code{\link[fixest:vcov_conley]{conley}}. It also accepts covariance matrices computed externally. Finally it accepts functions to compute the covariances. See the `vcov` documentation in the \href{https://lrberge.github.io/fixest/articles/fixest_walkthrough.html#the-vcov-argument-1}{vignette}.}
+\item{vcov}{Versatile argument to specify the VCOV. In general, it is either a character scalar equal to a VCOV type, either a formula of the form: \code{vcov_type ~ variables}. The VCOV types implemented are: "iid", "hetero" (or "HC1"), "cluster", "twoway", "NW" (or "newey_west"), "DK" (or "driscoll_kraay"), and "conley". It also accepts object from \code{\link[fixest2]{vcov_cluster}}, \code{\link[fixest2:vcov_hac]{vcov_NW}}, \code{\link[fixest2:vcov_hac]{NW}}, \code{\link[fixest2:vcov_hac]{vcov_DK}}, \code{\link[fixest2:vcov_hac]{DK}}, \code{\link[fixest2]{vcov_conley}} and \code{\link[fixest2:vcov_conley]{conley}}. It also accepts covariance matrices computed externally. Finally it accepts functions to compute the covariances. See the `vcov` documentation in the \href{https://lrberge.github.io/fixest/articles/fixest_walkthrough.html#the-vcov-argument-1}{vignette}.}
 
 \item{se}{Character scalar. Which kind of standard error should be computed: \dQuote{standard}, \dQuote{hetero}, \dQuote{cluster}, \dQuote{twoway}, \dQuote{threeway} or \dQuote{fourway}? By default if there are clusters in the estimation: \code{se = "cluster"}, otherwise \code{se = "iid"}. Note that this argument is deprecated, you should use \code{vcov} instead.}
 
 \item{cluster}{Tells how to cluster the standard-errors (if clustering is requested). Can be either a list of vectors, a character vector of variable names, a formula or an integer vector. Assume we want to perform 2-way clustering over \code{var1} and \code{var2} contained in the data.frame \code{base} used for the estimation. All the following \code{cluster} arguments are valid and do the same thing: \code{cluster = base[, c("var1", "var2")]}, \code{cluster = c("var1", "var2")}, \code{cluster = ~var1+var2}. If the two variables were used as fixed-effects in the estimation, you can leave it blank with \code{vcov = "twoway"} (assuming \code{var1} [resp. \code{var2}] was the 1st [res. 2nd] fixed-effect). You can interact two variables using \code{^} with the following syntax: \code{cluster = ~var1^var2} or \code{cluster = "var1^var2"}.}
 
-\item{ssc}{An object of class \code{ssc.type} obtained with the function \code{\link[fixest]{ssc}}. Represents how the degree of freedom correction should be done.You must use the function \code{\link[fixest]{ssc}} for this argument. The arguments and defaults of the function \code{\link[fixest]{ssc}} are: \code{adj = TRUE}, \code{fixef.K="nested"}, \code{cluster.adj = TRUE}, \code{cluster.df = "min"}, \code{t.df = "min"}, \code{fixef.force_exact=FALSE)}. See the help of the function \code{\link[fixest]{ssc}} for details.}
+\item{ssc}{An object of class \code{ssc.type} obtained with the function \code{\link[fixest2]{ssc}}. Represents how the degree of freedom correction should be done.You must use the function \code{\link[fixest2]{ssc}} for this argument. The arguments and defaults of the function \code{\link[fixest2]{ssc}} are: \code{adj = TRUE}, \code{fixef.K="nested"}, \code{cluster.adj = TRUE}, \code{cluster.df = "min"}, \code{t.df = "min"}, \code{fixef.force_exact=FALSE)}. See the help of the function \code{\link[fixest2]{ssc}} for details.}
 
 \item{attr}{Logical, defaults to \code{FALSE}. Whether to include the attributes describing how the VCOV was computed.}
 
@@ -34,18 +34,18 @@
 
 \item{keepBounded}{(Advanced users -- \code{feNmlm} with non-linear part and bounded coefficients only.) Logical, default is \code{FALSE}. If \code{TRUE}, then the bounded coefficients (if any) are treated as unrestricted coefficients and their S.E. is computed (otherwise it is not).}
 
-\item{nthreads}{The number of threads. Can be: a) an integer lower than, or equal to, the maximum number of threads; b) 0: meaning all available threads will be used; c) a number strictly between 0 and 1 which represents the fraction of all threads to use. The default is to use 50\% of all threads. You can set permanently the number of threads used within this package using the function \code{\link[fixest]{setFixest_nthreads}}.}
+\item{nthreads}{The number of threads. Can be: a) an integer lower than, or equal to, the maximum number of threads; b) 0: meaning all available threads will be used; c) a number strictly between 0 and 1 which represents the fraction of all threads to use. The default is to use 50\% of all threads. You can set permanently the number of threads used within this package using the function \code{\link[fixest2]{setFixest_nthreads}}.}
 
-\item{...}{Other arguments to be passed to \code{\link[fixest]{summary.fixest}}.
+\item{...}{Other arguments to be passed to \code{\link[fixest2]{summary.fixest}}.
 
-The computation of the VCOV matrix is first done in \code{\link[fixest]{summary.fixest}}.}
+The computation of the VCOV matrix is first done in \code{\link[fixest2]{summary.fixest}}.}
 }
 \value{
 It returns a \eqn{K\times K} square matrix where \eqn{K} is the number of variables of the fitted model.
 If \code{attr = TRUE}, this matrix has an attribute \dQuote{type} specifying how this variance/covariance matrix has been computed.
 }
 \description{
-This function extracts the variance-covariance of estimated parameters from a model estimated with \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}.
+This function extracts the variance-covariance of estimated parameters from a model estimated with \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}.
 }
 \details{
 For an explanation on how the standard-errors are computed and what is the exact meaning of the arguments, please have a look at the dedicated vignette: \href{https://lrberge.github.io/fixest/articles/standard_errors.html}{On standard-errors}.
@@ -56,7 +56,7 @@ For an explanation on how the standard-errors are computed and what is the exact
 data(base_did)
 
 # Simple estimation on a panel
-est = feols(y ~ x1, base_did)
+est <- feols(y ~ x1, base_did)
 
 # ======== #
 # IID VCOV #
@@ -88,10 +88,10 @@ se(vcov(est, cluster ~ id))
 # Alternative ways:
 
 # -> cluster is implicitly assumed when a one-sided formula is provided
-se(vcov(est, ~ id))
+se(vcov(est, ~id))
 
 # -> using the argument cluster instead of vcov
-se(vcov(est, cluster = ~ id))
+se(vcov(est, cluster = ~id))
 
 # For two-/three- way clustering, just add more variables:
 se(vcov(est, ~ id + period))
@@ -103,7 +103,7 @@ se(vcov(est, ~ id + period))
 # is directly inferred from the FEs used in the estimation, so you don't need
 # to explicitly add them.
 
-est_fe = feols(y ~ x1 | id + period, base_did)
+est_fe <- feols(y ~ x1 | id + period, base_did)
 
 # Clustered along "id"
 se(vcov(est_fe, "cluster"))
@@ -151,7 +151,7 @@ se(vcov(est, vcov_DK(time = "period", lag = 3)))
 # When the estimation contains a panel identifier, you don't need
 # to re-write them later on
 
-est_panel = feols(y ~ x1, base_did, panel.id = ~id + period)
+est_panel <- feols(y ~ x1, base_did, panel.id = ~ id + period)
 
 # Both methods, NM and DK, now work automatically
 se(vcov(est_panel, "NW"))
@@ -163,7 +163,7 @@ se(vcov(est_panel, "DK"))
 # =================================== #
 
 data(quakes)
-est_geo = feols(depth ~ mag, quakes)
+est_geo <- feols(depth ~ mag, quakes)
 
 # ------------|
 # Conley VCOV |
@@ -201,13 +201,11 @@ se(vcov(est, ssc = ssc(adj = FALSE)))
 se(vcov(est, iid ~ ssc(adj = FALSE)))
 se(vcov(est, DK ~ period + ssc(adj = FALSE)))
 
-
-
 }
 \seealso{
-You can also compute VCOVs with the following functions: \code{\link[fixest]{vcov_cluster}}, \code{\link[fixest]{vcov_hac}}, \code{\link[fixest]{vcov_conley}}.
+You can also compute VCOVs with the following functions: \code{\link[fixest2]{vcov_cluster}}, \code{\link[fixest2]{vcov_hac}}, \code{\link[fixest2]{vcov_conley}}.
 
-See also the main estimation functions \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}. \code{\link[fixest]{summary.fixest}}, \code{\link[fixest]{confint.fixest}}, \code{\link[fixest]{resid.fixest}}, \code{\link[fixest]{predict.fixest}}, \code{\link[fixest]{fixef.fixest}}.
+See also the main estimation functions \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}. \code{\link[fixest2]{summary.fixest}}, \code{\link[fixest2]{confint.fixest}}, \code{\link[fixest2]{resid.fixest}}, \code{\link[fixest2]{predict.fixest}}, \code{\link[fixest2]{fixef.fixest}}.
 }
 \author{
 Laurent Berge

@@ -7,7 +7,7 @@
 \method{bread}{fixest}(x, ...)
 }
 \arguments{
-\item{x}{A \code{fixest} object, obtained for instance from \code{\link[fixest]{feols}}.}
+\item{x}{A \code{fixest} object, obtained for instance from \code{\link[fixest2]{feols}}.}
 
 \item{...}{Not currently used.}
 }
@@ -19,7 +19,7 @@ Extracts the bread matrix from fixest objects to be used to compute sandwich var
 }
 \examples{
 
-est = feols(Petal.Length ~ Petal.Width + Sepal.Width, iris)
+est <- feols(Petal.Length ~ Petal.Width + Sepal.Width, iris)
 bread(est)
 
 }

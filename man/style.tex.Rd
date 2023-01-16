@@ -105,13 +105,13 @@ style.tex(
 
 \item{interaction.combine}{Character scalar, defaults to \code{" $\\times$ "}. When the estimation contains interactions, then the variables names (after aliasing) are combined with this argument. For example: if \code{dict = c(x1="Wind", x2="Rain")} and you have the following interaction \code{x1:x2}, then it will be renamed (by default) \code{Wind $\\times$ Rain} -- using \code{interaction.combine = "*"} would lead to \code{Wind*Rain}.}
 
-\item{i.equal}{Character scalar, defaults to \code{" $=$ "}. Only affects factor variables created with the function \code{\link[fixest]{i}}, tells how the variable should be linked to its value. For example if you have the Species factor from the iris data set, by default the display of the variable is \code{Species $=$ Setosa}, etc. If \code{i.equal = ": "} the display becomes \code{Species: Setosa}.}
+\item{i.equal}{Character scalar, defaults to \code{" $=$ "}. Only affects factor variables created with the function \code{\link[fixest2]{i}}, tells how the variable should be linked to its value. For example if you have the Species factor from the iris data set, by default the display of the variable is \code{Species $=$ Setosa}, etc. If \code{i.equal = ": "} the display becomes \code{Species: Setosa}.}
 }
 \value{
 Returns a list containing the style parameters.
 }
 \description{
-This function describes the style of Latex tables to be exported with the function \code{\link[fixest]{etable}}.
+This function describes the style of Latex tables to be exported with the function \code{\link[fixest2]{etable}}.
 }
 \details{
 The \code{\\checkmark} command, used in the "aer" style (in argument \code{yesNo}), is in the \code{amssymb} package.
@@ -123,22 +123,25 @@ Note that all titles (\code{depvar.title}, \code{depvar.title}, etc) are not esc
 \examples{
 
 # Multiple estimations => see details in feols
-aq = airquality
-est = feols(c(Ozone, Solar.R) ~
-                Wind + csw(Temp, Temp^2, Temp^3) | Month + Day,
-            data = aq)
+aq <- airquality
+est <- feols(
+  c(Ozone, Solar.R) ~
+    Wind + csw(Temp, Temp^2, Temp^3) | Month + Day,
+  data = aq
+)
 
 # Playing a bit with the styles
 etable(est, tex = TRUE)
 etable(est, tex = TRUE, style.tex = style.tex("aer"))
 
 etable(est, tex = TRUE, style.tex = style.tex("aer",
-                                      var.title = "\\\\emph{Expl. Vars.}",
-                                      model.format = "[i]",
-                                      yesNo = "x",
-                                      tabular = "*"))
+  var.title = "\\\\emph{Expl. Vars.}",
+  model.format = "[i]",
+  yesNo = "x",
+  tabular = "*"
+))
 
 }
 \seealso{
-\code{\link[fixest]{etable}}
+\code{\link[fixest2]{etable}}
 }

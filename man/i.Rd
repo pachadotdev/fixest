@@ -23,13 +23,13 @@ For example if \code{x} represents years, using \code{bin="bin::2"} creates bins
 With any data, using \code{"!bin::digit"} groups every digit consecutive values starting from the first value.
 Using \code{"!!bin::digit"} is the same but starting from the last value.
 With numeric vectors you can: a) use \code{"cut::n"} to cut the vector into \code{n} equal parts, b) use \code{"cut::a]b["} to create the following bins: \code{[min, a]}, \code{]a, b[}, \code{[b, max]}.
-The latter syntax is a sequence of number/quartile (q0 to q4)/percentile (p0 to p100) followed by an open or closed square bracket. You can add custom bin names by adding them in the character vector after \code{'cut::values'}. See details and examples. Dot square bracket expansion (see \code{\link[fixest]{dsb}}) is enabled.}
+The latter syntax is a sequence of number/quartile (q0 to q4)/percentile (p0 to p100) followed by an open or closed square bracket. You can add custom bin names by adding them in the character vector after \code{'cut::values'}. See details and examples. Dot square bracket expansion (see \code{\link[fixest2]{dsb}}) is enabled.}
 
 \item{ref2}{A vector of values to be dropped from \code{var}. By default they should be values from \code{var} and if \code{ref2} is a character vector partial matching is applied. Use "@" as the first character to enable regular expression matching instead.}
 
 \item{keep2}{A vector of values to be kept from \code{var} (all others are dropped). By default they should be values from \code{var} and if \code{keep2} is a character vector partial matching is applied. Use "@" as the first character to enable regular expression matching instead.}
 
-\item{bin2}{A list or vector defining the binning of the second variable. See help for the argument \code{bin} for details (or look at the help of the function \code{\link[fixest]{bin}}). You can use \code{.()} for \code{list()}.}
+\item{bin2}{A list or vector defining the binning of the second variable. See help for the argument \code{bin} for details (or look at the help of the function \code{\link[fixest2]{bin}}). You can use \code{.()} for \code{list()}.}
 
 \item{...}{Not currently used.}
 }
@@ -40,7 +40,7 @@ It returns a matrix with number of rows the length of \code{factor_var}. If ther
 Treat a variable as a factor, or interacts a variable with a factor. Values to be dropped/kept from the factor can be easily set. Note that to interact fixed-effects, this function should not be used: instead use directly the syntax \code{fe1^fe2}.
 }
 \details{
-To interact fixed-effects, this function should not be used: instead use directly the syntax \code{fe1^fe2} in the fixed-effects part of the formula. Please see the details and examples in the help page of \code{\link[fixest]{feols}}.
+To interact fixed-effects, this function should not be used: instead use directly the syntax \code{fe1^fe2} in the fixed-effects part of the formula. Please see the details and examples in the help page of \code{\link[fixest2]{feols}}.
 }
 \examples{
 
@@ -48,8 +48,8 @@ To interact fixed-effects, this function should not be used: instead use directl
 # Simple illustration
 #
 
-x = rep(letters[1:4], 3)[1:10]
-y = rep(1:4, c(1, 2, 3, 4))
+x <- rep(letters[1:4], 3)[1:10]
+y <- rep(1:4, c(1, 2, 3, 4))
 
 # interaction
 data.frame(x, y, i(x, y, ref = TRUE))
@@ -58,7 +58,7 @@ data.frame(x, y, i(x, y, ref = TRUE))
 data.frame(x, i(x, "b"))
 
 # you can interact factors too
-z = rep(c("e", "f", "g"), c(5, 3, 2))
+z <- rep(c("e", "f", "g"), c(5, 3, 2))
 data.frame(x, z, i(x, z))
 
 # to force a numeric variable to be treated as a factor: use i.
@@ -77,13 +77,13 @@ data.frame(x, i(x, bin = .(ab = "@a|b")))
 
 data(base_did)
 # We interact the variable 'period' with the variable 'treat'
-est_did = feols(y ~ x1 + i(period, treat, 5) | id + period, base_did)
+est_did <- feols(y ~ x1 + i(period, treat, 5) | id + period, base_did)
 
 # => plot only interactions with iplot
 iplot(est_did)
 
 # Using i() for factors
-est_bis = feols(y ~ x1 + i(period, keep = 3:6) + i(period, treat, 5) | id, base_did)
+est_bis <- feols(y ~ x1 + i(period, keep = 3:6) + i(period, treat, 5) | id, base_did)
 
 # we plot the second set of variables created with i()
 # => we need to use keep (otherwise only the first one is represented)
@@ -98,14 +98,14 @@ etable(est_bis, dict = c("6" = "six"))
 
 # We use the i. prefix to consider week as a factor
 data(airquality)
-aq = airquality
-aq$week = aq$Day \%/\% 7 + 1
+aq <- airquality
+aq$week <- aq$Day \%/\% 7 + 1
 
 # Interacting Month and week:
-res_2F = feols(Ozone ~ Solar.R + i(Month, i.week), aq)
+res_2F <- feols(Ozone ~ Solar.R + i(Month, i.week), aq)
 
 # Same but dropping the 5th Month and 1st week
-res_2F_bis = feols(Ozone ~ Solar.R + i(Month, i.week, ref = 5, ref2 = 1), aq)
+res_2F_bis <- feols(Ozone ~ Solar.R + i(Month, i.week, ref = 5, ref2 = 1), aq)
 
 etable(res_2F, res_2F_bis)
 
@@ -119,13 +119,11 @@ feols(Ozone ~ i(Month, bin = "bin::2"), airquality)
 
 feols(Ozone ~ i(Month, bin = list(summer = 7:9)), airquality)
 
-
-
 }
 \seealso{
-\code{\link[fixest:coefplot]{iplot}} to plot interactions or factors created with \code{i()}, \code{\link[fixest]{feols}} for OLS estimation with multiple fixed-effects.
+\code{\link[fixest2:coefplot]{iplot}} to plot interactions or factors created with \code{i()}, \code{\link[fixest2]{feols}} for OLS estimation with multiple fixed-effects.
 
-See the function \code{\link[fixest]{bin}} for binning variables.
+See the function \code{\link[fixest2]{bin}} for binning variables.
 }
 \author{
 Laurent Berge

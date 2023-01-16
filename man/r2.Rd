@@ -7,7 +7,7 @@
 r2(x, type = "all", full_names = FALSE)
 }
 \arguments{
-\item{x}{A \code{fixest} object, e.g. obtained with function \code{\link[fixest]{feglm}} or \code{\link[fixest]{feols}}.}
+\item{x}{A \code{fixest} object, e.g. obtained with function \code{\link[fixest2]{feglm}} or \code{\link[fixest2]{feols}}.}
 
 \item{type}{A character vector representing the R2 to compute. The R2 codes are of the form: "wapr2" with letters "w" (within), "a" (adjusted) and "p" (pseudo) possibly missing. E.g. to get the regular R2: use \code{type = "r2"}, the within adjusted R2: use \code{type = "war2"}, the pseudo R2: use \code{type = "pr2"}, etc. Use \code{"cor2"} for the squared correlation. By default, all R2s are computed.}
 
@@ -17,7 +17,7 @@ r2(x, type = "all", full_names = FALSE)
 Returns a named vector.
 }
 \description{
-Reports different R2s for \code{fixest} estimations (e.g. \code{\link[fixest]{feglm}} or \code{\link[fixest]{feols}}).
+Reports different R2s for \code{fixest} estimations (e.g. \code{\link[fixest2]{feglm}} or \code{\link[fixest2]{feols}}).
 }
 \details{
 The pseudo R2s are the McFaddens R2s, that is the ratio of log-likelihoods.
@@ -34,7 +34,7 @@ For the adjusted within-R2s, the adjustment factor is \code{(n - nb_fe) / (n - n
 data(trade)
 
 # We estimate the effect of distance on trade (with 3 fixed-effects)
-est = feols(log(Euros) ~ log(dist_km)|Origin+Destination+Product, trade)
+est <- feols(log(Euros) ~ log(dist_km) | Origin + Destination + Product, trade)
 
 # Squared correlation:
 r2(est, "cor2")

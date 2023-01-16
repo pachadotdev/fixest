@@ -27,7 +27,7 @@
 Returns a list of the appropriate length. Each element of the list is a \code{fixest} object.
 }
 \description{
-Simple function that replicates \code{fixest} objects while (optionally) computing different standard-errors. Useful mostly in combination with \code{\link[fixest]{etable}} or \code{\link[fixest]{coefplot}}.
+Simple function that replicates \code{fixest} objects while (optionally) computing different standard-errors. Useful mostly in combination with \code{\link[fixest2]{etable}} or \code{\link[fixest2]{coefplot}}.
 }
 \details{
 To apply \code{rep.fixest} on a list of \code{fixest} objects, it is absolutely necessary to use \code{.l()} and not \code{list()}.
@@ -36,9 +36,9 @@ To apply \code{rep.fixest} on a list of \code{fixest} objects, it is absolutely 
 
 # Let's show results with different standard-errors
 
-est = feols(Ozone ~ Solar.R + Wind + Temp, data = airquality)
+est <- feols(Ozone ~ Solar.R + Wind + Temp, data = airquality)
 
-my_vcov = list(~ Month, ~ Day, ~ Day + Month)
+my_vcov <- list(~Month, ~Day, ~ Day + Month)
 
 etable(rep(est, vcov = my_vcov))
 
@@ -48,12 +48,11 @@ coefplot(rep(est, vcov = my_vcov), drop = "Int")
 # To rep multiple objects, you need to use .l()
 #
 
-est_bis = feols(Ozone ~ Solar.R + Wind + Temp | Month, airquality)
+est_bis <- feols(Ozone ~ Solar.R + Wind + Temp | Month, airquality)
 
 etable(rep(.l(est, est_bis), vcov = my_vcov))
 
 # using each
 etable(rep(.l(est, est_bis), each = 3, vcov = my_vcov))
-
 
 }

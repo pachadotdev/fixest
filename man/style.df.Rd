@@ -52,7 +52,7 @@ style.df(
 
 \item{interaction.combine}{Character scalar, defaults to \code{" x "}. When the estimation contains interactions, then the variables names (after aliasing) are combined with this argument. For example: if \code{dict = c(x1="Wind", x2="Rain")} and you have the following interaction \code{x1:x2}, then it will be renamed (by default) \code{Wind x Rain} -- using \code{interaction.combine = "*"} would lead to \code{Wind*Rain}.}
 
-\item{i.equal}{Character scalar, defaults to \code{" = "}. Only affects factor variables created with the function \code{\link[fixest]{i}}, tells how the variable should be linked to its value. For example if you have the Species factor from the iris data set, by default the display of the variable is \code{Species = Setosa}, etc. If \code{i.equal = ": "} the display becomes \code{Species: Setosa}.}
+\item{i.equal}{Character scalar, defaults to \code{" = "}. Only affects factor variables created with the function \code{\link[fixest2]{i}}, tells how the variable should be linked to its value. For example if you have the Species factor from the iris data set, by default the display of the variable is \code{Species = Setosa}, etc. If \code{i.equal = ": "} the display becomes \code{Species: Setosa}.}
 
 \item{default}{Logical, default is \code{FALSE}. If \code{TRUE}, all the values not provided by the user are set to their default.}
 }
@@ -60,7 +60,7 @@ style.df(
 It returns an object of class \code{fixest_style_df}.
 }
 \description{
-This function describes the style of data.frames created with the function \code{\link[fixest]{etable}}.
+This function describes the style of data.frames created with the function \code{\link[fixest2]{etable}}.
 }
 \details{
 @inheritParams etable
@@ -71,18 +71,21 @@ The title elements (\code{depvar.title}, \code{fixef.title}, \code{slopes.title}
 \examples{
 
 # Multiple estimations => see details in feols
-aq = airquality
-est = feols(c(Ozone, Solar.R) ~
-                Wind + csw(Temp, Temp^2, Temp^3) | Month + Day,
-            data = aq)
+aq <- airquality
+est <- feols(
+  c(Ozone, Solar.R) ~
+    Wind + csw(Temp, Temp^2, Temp^3) | Month + Day,
+  data = aq
+)
 
 
 # Default result
 etable(est)
 
 # Playing a bit with the styles
-etable(est, style.df = style.df(fixef.title = "", fixef.suffix = " FE",
-                                 stats.line = " ", yesNo = "yes"))
-
+etable(est, style.df = style.df(
+  fixef.title = "", fixef.suffix = " FE",
+  stats.line = " ", yesNo = "yes"
+))
 
 }

@@ -127,11 +127,11 @@ iplot(
 )
 }
 \arguments{
-\item{object}{Can be either: i) an estimation object (obtained for example from \code{\link[fixest]{feols}}, ii) a list of estimation objects (several results will be plotted at once), iii) a matrix of coefficients table, iv) a numeric vector of the point estimates -- the latter requiring the extra arguments \code{sd} or \code{ci_low} and \code{ci_high}.}
+\item{object}{Can be either: i) an estimation object (obtained for example from \code{\link[fixest2]{feols}}, ii) a list of estimation objects (several results will be plotted at once), iii) a matrix of coefficients table, iv) a numeric vector of the point estimates -- the latter requiring the extra arguments \code{sd} or \code{ci_low} and \code{ci_high}.}
 
 \item{...}{Other arguments to be passed to \code{summary}, if \code{object} is an estimation, and/or to the function \code{plot} or \code{lines} (if \code{add = TRUE}).}
 
-\item{style}{A character scalar giving the style of the plot to be used. You can set styles with the function \code{\link[fixest]{setFixest_coefplot}}, setting all the default values of the function. If missing, then it switches to either "default" or "iplot", depending on the calling function.}
+\item{style}{A character scalar giving the style of the plot to be used. You can set styles with the function \code{\link[fixest2]{setFixest_coefplot}}, setting all the default values of the function. If missing, then it switches to either "default" or "iplot", depending on the calling function.}
 
 \item{sd}{The standard errors of the estimates. It may be missing.}
 
@@ -145,7 +145,7 @@ iplot(
 
 \item{horiz}{A logical scalar, default is \code{FALSE}. Whether to display the confidence intervals horizontally instead of vertically.}
 
-\item{dict}{A named character vector or a logical scalar. It changes the original variable names to the ones contained in the \code{dict}ionary. E.g. to change the variables named \code{a} and \code{b3} to (resp.) \dQuote{$log(a)$} and to \dQuote{$bonus^3$}, use \code{dict=c(a="$log(a)$",b3="$bonus^3$")}. By default, it is equal to \code{getFixest_dict()}, a default dictionary which can be set with \code{\link[fixest]{setFixest_dict}}. You can use \code{dict = FALSE} to disable it. By default \code{dict} modifies the entries in the global dictionary, to disable this behavior, use "reset" as the first element (ex: \code{dict=c("reset", mpg="Miles per gallon")}).}
+\item{dict}{A named character vector or a logical scalar. It changes the original variable names to the ones contained in the \code{dict}ionary. E.g. to change the variables named \code{a} and \code{b3} to (resp.) \dQuote{$log(a)$} and to \dQuote{$bonus^3$}, use \code{dict=c(a="$log(a)$",b3="$bonus^3$")}. By default, it is equal to \code{getFixest_dict()}, a default dictionary which can be set with \code{\link[fixest2]{setFixest_dict}}. You can use \code{dict = FALSE} to disable it. By default \code{dict} modifies the entries in the global dictionary, to disable this behavior, use "reset" as the first element (ex: \code{dict=c("reset", mpg="Miles per gallon")}).}
 
 \item{keep}{Character vector. This element is used to display only a subset of variables. This should be a vector of regular expressions (see \code{\link[base]{regex}} help for more info). Each variable satisfying any of the regular expressions will be kept. This argument is applied post aliasing (see argument \code{dict}). Example: you have the variable \code{x1} to \code{x55} and want to display only \code{x1} to \code{x9}, then you could use \code{keep = "x[[:digit:]]$"}. If the first character is an exclamation mark, the effect is reversed (e.g. keep = "!Intercept" means: every variable that does not contain \dQuote{Intercept} is kept). See details.}
 
@@ -231,7 +231,7 @@ iplot(
 
 \item{group.par}{A list of parameters controlling the display of the group. The parameters controlling the line are: \code{lwd}, \code{tcl} (length of the tick), \code{line.adj} (adjustment of the position, default is 0), \code{tick} (whether to add the ticks), \code{lwd.ticks}, \code{col.ticks}. Then the parameters controlling the text: \code{text.adj} (adjustment of the position, default is 0), \code{text.cex}, \code{text.font}, \code{text.col}.}
 
-\item{main}{The title of the plot. Default is \code{"Effect on __depvar__"}. You can use the special variable \code{__depvar__} to set the title (useful when you set the plot default with \code{\link[fixest]{setFixest_coefplot}}).}
+\item{main}{The title of the plot. Default is \code{"Effect on __depvar__"}. You can use the special variable \code{__depvar__} to set the title (useful when you set the plot default with \code{\link[fixest2]{setFixest_coefplot}}).}
 
 \item{value.lab}{The label to appear on the side of the coefficient values. If \code{horiz = FALSE}, the label appears in the y-axis. If \code{horiz = TRUE}, then it appears on the x-axis. The default is equal to \code{"Estimate and __ci__ Conf. Int."}, with \code{__ci__} a special variable giving the value of the confidence interval.}
 
@@ -241,25 +241,25 @@ iplot(
 
 \item{sub}{A subtitle, default is \code{NULL}.}
 
-\item{i.select}{Integer scalar, default is 1. In \code{iplot}, used to select which variable created with \code{i()} to select. Only used when there are several variables created with \code{\link[fixest]{i}}. This is an index, just try increasing numbers to hopefully obtain what you want. Note that it works much better when the variables are "pure" \code{i()} variables and not interacted with other variables. For example: \code{i(species, x1)} is good while \code{i(species):x1} isn't. The latter will also work but the index may feel weird in case there are many \code{i()} variables.}
+\item{i.select}{Integer scalar, default is 1. In \code{iplot}, used to select which variable created with \code{i()} to select. Only used when there are several variables created with \code{\link[fixest2]{i}}. This is an index, just try increasing numbers to hopefully obtain what you want. Note that it works much better when the variables are "pure" \code{i()} variables and not interacted with other variables. For example: \code{i(species, x1)} is good while \code{i(species):x1} isn't. The latter will also work but the index may feel weird in case there are many \code{i()} variables.}
 }
 \description{
-This function plots the results of estimations (coefficients and confidence intervals). The function \code{iplot} restricts the output to variables created with \code{\link[fixest]{i}}, either interactions with factors or raw factors.
+This function plots the results of estimations (coefficients and confidence intervals). The function \code{iplot} restricts the output to variables created with \code{\link[fixest2]{i}}, either interactions with factors or raw factors.
 }
 \section{Functions}{
 \itemize{
-\item \code{iplot}: Plots the coefficients generated with i()
-}}
+\item \code{iplot()}: Plots the coefficients generated with i()
 
+}}
 \section{Setting custom default values}{
 
-The function \code{coefplot} dispose of many arguments to parametrize the plots. Most of these arguments can be set once an for all using the function \code{\link[fixest]{setFixest_coefplot}}. See Example 3 below for a demonstration.
+The function \code{coefplot} dispose of many arguments to parametrize the plots. Most of these arguments can be set once an for all using the function \code{\link[fixest2]{setFixest_coefplot}}. See Example 3 below for a demonstration.
 }
 
 \section{iplot}{
 
 
-The function \code{iplot} restricts \code{coefplot} to interactions or factors created with the function \code{\link[fixest]{i}}. Only \emph{one} of the i-variables will be plotted at a time. If you have several i-variables, you can navigate through them with the \code{i.select} argument.
+The function \code{iplot} restricts \code{coefplot} to interactions or factors created with the function \code{\link[fixest2]{i}}. Only \emph{one} of the i-variables will be plotted at a time. If you have several i-variables, you can navigate through them with the \code{i.select} argument.
 
 The argument \code{i.select} is an index that will go through all the i-variables. It will work well if the variables are pure, meaning not interacted with other variables. If the i-variables are interacted, the index may have an odd behavior but will (in most cases) work all the same, just try some numbers up until you (hopefully) obtain the graph you want.
 
@@ -288,14 +288,14 @@ The argument \code{order} takes in a vector of regular expressions, the order wi
 #
 
 # Estimation on Iris data with one fixed-effect (Species)
-est = feols(Petal.Length ~ Petal.Width + Sepal.Length +
-            Sepal.Width | Species, iris)
+est <- feols(Petal.Length ~ Petal.Width + Sepal.Length +
+  Sepal.Width | Species, iris)
 
 # Estimation results with clustered standard-errors
 # (the default when fixed-effects are present)
-est_clu = summary(est)
+est_clu <- summary(est)
 # Now with "regular" standard-errors
-est_std = summary(est, se = "iid")
+est_std <- summary(est, se = "iid")
 
 # You can plot the two results at once
 coefplot(list(est_clu, est_std))
@@ -311,14 +311,18 @@ coefplot(est, x.shift = -.2)
 
 # Second set of results: this time with
 #  standard-errors that are not clustered.
-coefplot(est, se = "iid", x.shift = .2,
-         add = TRUE, col = 2, ci.lty = 2, pch=15)
+coefplot(est,
+  se = "iid", x.shift = .2,
+  add = TRUE, col = 2, ci.lty = 2, pch = 15
+)
 
- # Note that we used 'se', an argument that will
- #  be passed to summary.fixest
+# Note that we used 'se', an argument that will
+#  be passed to summary.fixest
 
-legend("topright", col = 1:2, pch = 20, lwd = 1, lty = 1:2,
-       legend = c("Clustered", "IID"), title = "Standard-Errors")
+legend("topright",
+  col = 1:2, pch = 20, lwd = 1, lty = 1:2,
+  legend = c("Clustered", "IID"), title = "Standard-Errors"
+)
 
 
 #
@@ -329,10 +333,10 @@ legend("topright", col = 1:2, pch = 20, lwd = 1, lty = 1:2,
 # Now we estimate and plot the "yearly" treatment effects
 
 data(base_did)
-base_inter = base_did
+base_inter <- base_did
 
 # We interact the variable 'period' with the variable 'treat'
-est_did = feols(y ~ x1 + i(period, treat, 5) | id+period, base_inter)
+est_did <- feols(y ~ x1 + i(period, treat, 5) | id + period, base_inter)
 
 # In the estimation, the variable treat is interacted
 #  with each value of period but 5, set as a reference
@@ -363,18 +367,20 @@ iplot(est_did, ref.line = FALSE, pt.join = TRUE)
 # What if the interacted variable is not numeric?
 
 # Let's create a "month" variable
-all_months = c("aug", "sept", "oct", "nov", "dec", "jan",
-               "feb", "mar", "apr", "may", "jun", "jul")
-base_inter$period_month = all_months[base_inter$period]
+all_months <- c(
+  "aug", "sept", "oct", "nov", "dec", "jan",
+  "feb", "mar", "apr", "may", "jun", "jul"
+)
+base_inter$period_month <- all_months[base_inter$period]
 
 # The new estimation
-est = feols(y ~ x1 + i(period_month, treat, "oct") | id+period, base_inter)
+est <- feols(y ~ x1 + i(period_month, treat, "oct") | id + period, base_inter)
 # Since 'period_month' of type character, coefplot sorts it
 iplot(est)
 
 # To respect a plotting order, use a factor
-base_inter$month_factor = factor(base_inter$period_month, levels = all_months)
-est = feols(y ~ x1 + i(month_factor, treat, "oct") | id+period, base_inter)
+base_inter$month_factor <- factor(base_inter$period_month, levels = all_months)
+est <- feols(y ~ x1 + i(month_factor, treat, "oct") | id + period, base_inter)
 iplot(est)
 
 
@@ -387,14 +393,18 @@ iplot(est)
 # you can set *your* default by using the function
 # setFixest_coefplot()
 
-dict = c("Petal.Length"="Length (Petal)", "Petal.Width"="Width (Petal)",
-         "Sepal.Length"="Length (Sepal)", "Sepal.Width"="Width (Sepal)")
+dict <- c(
+  "Petal.Length" = "Length (Petal)", "Petal.Width" = "Width (Petal)",
+  "Sepal.Length" = "Length (Sepal)", "Sepal.Width" = "Width (Sepal)"
+)
 
-setFixest_coefplot(ci.col = 2, pt.col = "darkblue", ci.lwd = 3,
-                   pt.cex = 2, pt.pch = 15, ci.width = 0, dict = dict)
+setFixest_coefplot(
+  ci.col = 2, pt.col = "darkblue", ci.lwd = 3,
+  pt.cex = 2, pt.pch = 15, ci.width = 0, dict = dict
+)
 
-est = feols(Petal.Length ~ Petal.Width + Sepal.Length +
-                Sepal.Width + i(Species), iris)
+est <- feols(Petal.Length ~ Petal.Width + Sepal.Length +
+  Sepal.Width + i(Species), iris)
 
 # And that's it
 coefplot(est)
@@ -415,8 +425,8 @@ coefplot(est)
 # You can further use the special character "^^" to clean
 #  the beginning of the coef. name: particularly useful for factors
 
-est = feols(Petal.Length ~ Petal.Width + Sepal.Length +
-                Sepal.Width + Species, iris)
+est <- feols(Petal.Length ~ Petal.Width + Sepal.Length +
+  Sepal.Width + Species, iris)
 
 # No grouping:
 coefplot(est)
@@ -427,10 +437,9 @@ coefplot(est, group = list(Sepal = "Sepal", Species = "Species"))
 # now we group + clean the beginning of the names using the special character ^^
 coefplot(est, group = list(Sepal = "^^Sepal.", Species = "^^Species"))
 
-
 }
 \seealso{
-See \code{\link[fixest]{setFixest_coefplot}} to set the default values of \code{coefplot}, and the estimation functions: e.g. \code{\link[fixest]{feols}}, \code{\link[fixest:feglm]{fepois}}, \code{\link[fixest]{feglm}}, \code{\link[fixest:femlm]{fenegbin}}.
+See \code{\link[fixest2]{setFixest_coefplot}} to set the default values of \code{coefplot}, and the estimation functions: e.g. \code{\link[fixest2]{feols}}, \code{\link[fixest2:feglm]{fepois}}, \code{\link[fixest2]{feglm}}, \code{\link[fixest2:femlm]{fenegbin}}.
 }
 \author{
 Laurent Berge

@@ -15,13 +15,13 @@
 )
 }
 \arguments{
-\item{object}{A \code{fixest} estimation (e.g. obtained using \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}).}
+\item{object}{A \code{fixest} estimation (e.g. obtained using \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}).}
 
 \item{notes}{Logical. Whether to display a note when the fixed-effects coefficients are not regular.}
 
 \item{sorted}{Logical, default is \code{TRUE}. Whether to order the fixed-effects by their names. If \code{FALSE}, then the order used in the demeaning algorithm is used.}
 
-\item{nthreads}{The number of threads. Can be: a) an integer lower than, or equal to, the maximum number of threads; b) 0: meaning all available threads will be used; c) a number strictly between 0 and 1 which represents the fraction of all threads to use. The default is to use 50\% of all threads. You can set permanently the number of threads used within this package using the function \code{\link[fixest]{setFixest_nthreads}}.}
+\item{nthreads}{The number of threads. Can be: a) an integer lower than, or equal to, the maximum number of threads; b) 0: meaning all available threads will be used; c) a number strictly between 0 and 1 which represents the fraction of all threads to use. The default is to use 50\% of all threads. You can set permanently the number of threads used within this package using the function \code{\link[fixest2]{setFixest_nthreads}}.}
 
 \item{fixef.tol}{Precision used to obtain the fixed-effects. Defaults to \code{1e-5}. It corresponds to the maximum absolute difference allowed between two coefficients of successive iterations. Argument \code{fixef.tol} cannot be lower than \code{10000*.Machine$double.eps}. Note that this parameter is dynamically controlled by the algorithm.}
 
@@ -45,10 +45,10 @@ If the fixed-effect coefficients not regular, then several reference points need
 data(trade)
 
 # We estimate the effect of distance on trade => we account for 3 fixed-effects
-est_pois = femlm(Euros ~ log(dist_km)|Origin+Destination+Product, trade)
+est_pois <- femlm(Euros ~ log(dist_km) | Origin + Destination + Product, trade)
 
 # Obtaining the fixed-effects coefficients:
-fe_trade = fixef(est_pois)
+fe_trade <- fixef(est_pois)
 
 # The fixed-effects of the first fixed-effect dimension:
 head(fe_trade$Origin)
@@ -61,7 +61,7 @@ plot(fe_trade)
 
 }
 \seealso{
-\code{\link[fixest]{plot.fixest.fixef}}. See also the main estimation functions \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}. Use \code{\link[fixest]{summary.fixest}} to see the results with the appropriate standard-errors, \code{\link[fixest]{fixef.fixest}} to extract the fixed-effect coefficients, and the function \code{\link[fixest]{etable}} to visualize the results of multiple estimations.
+\code{\link[fixest2]{plot.fixest.fixef}}. See also the main estimation functions \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}. Use \code{\link[fixest2]{summary.fixest}} to see the results with the appropriate standard-errors, \code{\link[fixest2]{fixef.fixest}} to extract the fixed-effect coefficients, and the function \code{\link[fixest2]{etable}} to visualize the results of multiple estimations.
 }
 \author{
 Laurent Berge

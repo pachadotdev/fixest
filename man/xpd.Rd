@@ -39,13 +39,13 @@ To summon values from the environment, simply put the variable in square bracket
 
 You can include a full variable from the environment in the same way: \code{for(y in c("a", "b")) xpd(.[y] ~ x)} will create the two formulas \code{a ~ x} and \code{b ~ x}.
 
-The DSB can even be used within variable names, but then the variable must be nested in character form. For example \code{y ~ .["x.[1:2]_sq"]} will create \code{y ~ x1_sq + x2_sq}. Using the character form is important to avoid a formula parsing error. Double quotes must be used. Note that the character string that is nested will be parsed with the function \code{\link[fixest]{dsb}}, and thus it will return a vector.
+The DSB can even be used within variable names, but then the variable must be nested in character form. For example \code{y ~ .["x.[1:2]_sq"]} will create \code{y ~ x1_sq + x2_sq}. Using the character form is important to avoid a formula parsing error. Double quotes must be used. Note that the character string that is nested will be parsed with the function \code{\link[fixest2]{dsb}}, and thus it will return a vector.
 
 By default, the DSB operator expands vectors into sums. You can add a comma, like in \code{.[, x]}, to expand with commas--the content can then be used within functions. For instance: \code{c(x.[, 1:2])} will create \code{c(x1, x2)} (and \emph{not} \code{c(x1 + x2)}).
 
 In all \code{fixest} estimations, this special parsing is enabled, so you don't need to use \code{xpd}.
 
-You can even use multiple square brackets within a single variable, but then the use of nesting is required. For example, the following \code{xpd(y ~ .[".[letters[1:2]]_.[1:2]"])} will create \code{y ~ a_1 + b_2}. Remember that the nested character string is parsed with \code{\link[fixest]{dsb}}, which explains this behavior.
+You can even use multiple square brackets within a single variable, but then the use of nesting is required. For example, the following \code{xpd(y ~ .[".[letters[1:2]]_.[1:2]"])} will create \code{y ~ a_1 + b_2}. Remember that the nested character string is parsed with \code{\link[fixest2]{dsb}}, which explains this behavior.
 }
 
 \section{Regular expressions}{
@@ -63,24 +63,26 @@ Note that the dot square bracket operator (DSB, see before) is applied before th
 # Small examples with airquality data
 data(airquality)
 # we set two macro variables
-setFixest_fml(..ctrl = ~ Temp + Day,
-              ..ctrl_long = ~ poly(Temp, 2) + poly(Day, 2))
+setFixest_fml(
+  ..ctrl = ~ Temp + Day,
+  ..ctrl_long = ~ poly(Temp, 2) + poly(Day, 2)
+)
 
 # Using the macro in lm with xpd:
 lm(xpd(Ozone ~ Wind + ..ctrl), airquality)
 lm(xpd(Ozone ~ Wind + ..ctrl_long), airquality)
 
 # You can use the macros without xpd() in fixest estimations
-a = feols(Ozone ~ Wind + ..ctrl, airquality)
-b = feols(Ozone ~ Wind + ..ctrl_long, airquality)
+a <- feols(Ozone ~ Wind + ..ctrl, airquality)
+b <- feols(Ozone ~ Wind + ..ctrl_long, airquality)
 etable(a, b, keep = "Int|Win")
 
 
 # Using .[]
 
-base = setNames(iris, c("y", "x1", "x2", "x3", "species"))
-i = 2:3
-z = "species"
+base <- setNames(iris, c("y", "x1", "x2", "x3", "species"))
+i <- 2:3
+z <- "species"
 lm(xpd(y ~ x.[2:3] + .[z]), base)
 
 # No xpd() needed in feols
@@ -97,16 +99,16 @@ feols(y ~ x.[2:3] + .[z], base)
 # we want to look at the effect of x1 on y
 # controlling for different variables
 
-base = iris
-names(base) = c("y", "x1", "x2", "x3", "species")
+base <- iris
+names(base) <- c("y", "x1", "x2", "x3", "species")
 
 # We first create a matrix with all possible combinations of variables
-my_args = lapply(names(base)[-(1:2)], function(x) c("", x))
-(all_combs = as.matrix(do.call("expand.grid", my_args)))
+my_args <- lapply(names(base)[-(1:2)], function(x) c("", x))
+(all_combs <- as.matrix(do.call("expand.grid", my_args)))
 
-res_all = list()
-for(i in 1:nrow(all_combs)){
-  res_all[[i]] = feols(xpd(y ~ x1 + ..v, ..v = all_combs[i, ]), base)
+res_all <- list()
+for (i in 1:nrow(all_combs)) {
+  res_all[[i]] <- feols(xpd(y ~ x1 + ..v, ..v = all_combs[i, ]), base)
 }
 
 etable(res_all)
@@ -132,7 +134,7 @@ feols(Armed.Forces ~ Population + ..("GNP|ployed"), longley)
 lm(xpd(Armed.Forces ~ Population + regex("GNP|ployed"), data = longley), longley)
 
 # Stepwise estimation with regex: use a comma after the parenthesis
-feols(Armed.Forces ~ Population + sw(regex(,"GNP|ployed")), longley)
+feols(Armed.Forces ~ Population + sw(regex(, "GNP|ployed")), longley)
 
 # Multiple LHS
 etable(feols(..("GNP|ployed") ~ Population, longley))
@@ -143,7 +145,7 @@ etable(feols(..("GNP|ployed") ~ Population, longley))
 #
 
 # to create a one sided formula from a character vector
-vars = letters[1:5]
+vars <- letters[1:5]
 xpd(rhs = vars)
 
 # Alternatively, to replace the RHS
@@ -161,38 +163,38 @@ xpd(lhs = "y", rhs = vars)
 xpd(y ~ x.[1:5] + z.[2:3])
 
 # You can summon variables from the environment
-var = "a"
+var <- "a"
 xpd(y ~ x.[var])
 
 # ... the variables can be multiple
-vars = LETTERS[1:3]
+vars <- LETTERS[1:3]
 xpd(y ~ x.[vars])
 
 # You can have "complex" variable names but they must be nested in character form
 xpd(y ~ .["x.[vars]_sq"])
 
 # DSB can be used within regular expressions
-re = c("GNP", "Pop")
+re <- c("GNP", "Pop")
 xpd(Unemployed ~ regex(".[re]"), data = longley)
 
 # => equivalent to regex("GNP|Pop")
 
 # Use .[,var] (NOTE THE COMMA!) to expand with commas
 # !! can break the formula if missused
-vars = c("wage", "unemp")
-xpd(c(y.[,1:3]) ~ csw(.[,vars]))
+vars <- c("wage", "unemp")
+xpd(c(y.[, 1:3]) ~ csw(.[, vars]))
 
 
 # Example of use of .[] within a loop
-res_all = list()
-for(p in 1:3){
-  res_all[[p]] = feols(Ozone ~ Wind + poly(Temp, .[p]), airquality)
+res_all <- list()
+for (p in 1:3) {
+  res_all[[p]] <- feols(Ozone ~ Wind + poly(Temp, .[p]), airquality)
 }
 
 etable(res_all)
 
 # The former can be compactly estimated with:
-res_compact = feols(Ozone ~ Wind + sw(.[, "poly(Temp, .[1:3])"]), airquality)
+res_compact <- feols(Ozone ~ Wind + sw(.[, "poly(Temp, .[1:3])"]), airquality)
 
 etable(res_compact)
 
@@ -212,10 +214,9 @@ etable(res_compact)
 # Hence sw(.[, "poly(Temp, .[1:3])"]) becomes:
 #       sw(poly(Temp, 1), poly(Temp, 2), poly(Temp, 3))
 
-
 }
 \seealso{
-\code{\link[fixest]{setFixest_fml}} to set formula macros, and \code{\link[fixest]{dsb}} to modify character strings with the DSB operator.
+\code{\link[fixest2]{setFixest_fml}} to set formula macros, and \code{\link[fixest2]{dsb}} to modify character strings with the DSB operator.
 }
 \author{
 Laurent Berge

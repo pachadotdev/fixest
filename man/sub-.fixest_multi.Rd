@@ -19,7 +19,7 @@
 
 \item{fixef}{An integer vector or a logical scalar. It represents the fixed-effects identifiers for which the results should be extracted. Only valid when the \code{fixest} estimation contained fixed-effects in a stepwise fashion. You can use \code{.N} to refer to the last element. If logical, all elements are selected in both cases, but \code{FALSE} leads \code{fixef} to become the rightmost key (just try it out).}
 
-\item{iv}{An integer vector or a logical scalar. It represent the stages of the IV. Note that the length can be greater than 2 when there are multiple endogenous regressors (the first stage corresponding to multiple estimations). Note that the order of the stages depends on the \code{stage} argument from \code{\link[fixest]{summary.fixest}}. If logical, all elements are selected in both cases, but \code{FALSE} leads \code{iv} to become the rightmost key (just try it out).}
+\item{iv}{An integer vector or a logical scalar. It represent the stages of the IV. Note that the length can be greater than 2 when there are multiple endogenous regressors (the first stage corresponding to multiple estimations). Note that the order of the stages depends on the \code{stage} argument from \code{\link[fixest2]{summary.fixest}}. If logical, all elements are selected in both cases, but \code{FALSE} leads \code{iv} to become the rightmost key (just try it out).}
 
 \item{I}{An integer vector. Represents the root element to extract.}
 
@@ -41,9 +41,11 @@ Use logical keys to easily reorder. For example, say the object \code{res} conta
 \examples{
 
 # Estimation with multiple samples/LHS/RHS
-aq = airquality[airquality$Month \%in\% 5:6, ]
-est_split = feols(c(Ozone, Solar.R) ~ sw(poly(Wind, 2), poly(Temp, 2)),
-                  aq, split = ~ Month)
+aq <- airquality[airquality$Month \%in\% 5:6, ]
+est_split <- feols(c(Ozone, Solar.R) ~ sw(poly(Wind, 2), poly(Temp, 2)),
+  aq,
+  split = ~Month
+)
 
 # By default: sample is the root
 etable(est_split)
@@ -62,5 +64,13 @@ etable(est_split[i = c(1, .N)])
 
 }
 \seealso{
-The main fixest estimation functions: \code{\link[fixest]{feols}}, \code{\link[fixest:feglm]{fepois}}, \code{\link[fixest:femlm]{fenegbin}}, \code{\link[fixest]{feglm}}, \code{\link[fixest]{feNmlm}}. Tools for mutliple fixest estimations: \code{\link[fixest]{summary.fixest_multi}}, \code{\link[fixest]{print.fixest_multi}}, \code{\link[fixest]{as.list.fixest_multi}}, \code{\link[fixest]{sub-sub-.fixest_multi}}, \code{\link[fixest]{sub-.fixest_multi}}, \code{\link[fixest]{cash-.fixest_multi}}.
+The main fixest estimation functions: \code{\link[fixest2]{feols}},
+\code{\link[fixest2:feglm]{fepois}}, \code{\link[fixest2:femlm]{fenegbin}},
+\code{\link[fixest2]{feglm}}, \code{\link[fixest2]{feNmlm}}. Tools for multiple
+fixest estimations: \code{\link[fixest2]{summary.fixest_multi}},
+\code{\link[fixest2]{print.fixest_multi}},
+\code{\link[fixest2]{as.list.fixest_multi}},
+\code{\link[fixest2]{sub-sub-.fixest_multi}},
+\code{\link[fixest2]{sub-.fixest_multi}},
+\code{\link[fixest2]{cash-.fixest_multi}}.
 }

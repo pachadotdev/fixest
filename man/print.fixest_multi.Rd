@@ -9,23 +9,31 @@
 \arguments{
 \item{x}{A \code{fixest_multi} object, obtained from a \code{fixest} estimation leading to multiple results.}
 
-\item{...}{Other arguments to be passed to \code{\link[fixest]{summary.fixest_multi}}.}
+\item{...}{Other arguments to be passed to \code{\link[fixest2]{summary.fixest_multi}}.}
 }
 \description{
 Displays summary information on fixest_multi objects in the R console.
 }
 \examples{
 
-base = iris
-names(base) = c("y", "x1", "x2", "x3", "species")
+base <- iris
+names(base) <- c("y", "x1", "x2", "x3", "species")
 
 # Multiple estimation
-res = feols(y ~ csw(x1, x2, x3), base, split = ~species)
+res <- feols(y ~ csw(x1, x2, x3), base, split = ~species)
 
 # Let's print all that
 res
 
 }
 \seealso{
-The main fixest estimation functions: \code{\link[fixest]{feols}}, \code{\link[fixest:feglm]{fepois}}, \code{\link[fixest:femlm]{fenegbin}}, \code{\link[fixest]{feglm}}, \code{\link[fixest]{feNmlm}}. Tools for mutliple fixest estimations: \code{\link[fixest]{summary.fixest_multi}}, \code{\link[fixest]{print.fixest_multi}}, \code{\link[fixest]{as.list.fixest_multi}}, \code{\link[fixest]{sub-sub-.fixest_multi}}, \code{\link[fixest]{sub-.fixest_multi}}, \code{\link[fixest]{cash-.fixest_multi}}.
+The main fixest estimation functions: \code{\link[fixest2]{feols}},
+\code{\link[fixest2:feglm]{fepois}}, \code{\link[fixest2:femlm]{fenegbin}},
+\code{\link[fixest2]{feglm}}, \code{\link[fixest2]{feNmlm}}. Tools for multiple
+fixest estimations: \code{\link[fixest2]{summary.fixest_multi}},
+\code{\link[fixest2]{print.fixest_multi}},
+\code{\link[fixest2]{as.list.fixest_multi}},
+\code{\link[fixest2]{sub-sub-.fixest_multi}},
+\code{\link[fixest2]{sub-.fixest_multi}},
+\code{\link[fixest2]{cash-.fixest_multi}}.
 }
