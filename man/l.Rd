@@ -22,38 +22,38 @@ l(x, lag = 1, fill = NA)
 \item{lag}{A vector of integers giving the number of lags. Negative values lead to leads. This argument can be a vector when using it in fixest estimations. When creating variables in a \code{\link[data.table]{data.table}}, it **must** be of length one.}
 }
 \value{
-These functions can only be used i) in a formula of a \code{fixest} estimation, or ii) when creating variables within a \code{fixest_panel} object (obtained with function \code{\link[fixest]{panel}}) which is alaos a \code{\link[data.table]{data.table}}.
+These functions can only be used i) in a formula of a \code{fixest} estimation, or ii) when creating variables within a \code{fixest_panel} object (obtained with function \code{\link[fixest2]{panel}}) which is alaos a \code{\link[data.table]{data.table}}.
 }
 \description{
-Produce lags or leads in the formulas of \code{fixest} estimations or when creating variables in a \code{\link[data.table]{data.table}}. The data must be set as a panel beforehand (either with the function \code{\link[fixest]{panel}} or with the argument \code{panel.id} in the estimation).
+Produce lags or leads in the formulas of \code{fixest} estimations or when creating variables in a \code{\link[data.table]{data.table}}. The data must be set as a panel beforehand (either with the function \code{\link[fixest2]{panel}} or with the argument \code{panel.id} in the estimation).
 }
 \section{Functions}{
 \itemize{
-\item \code{f}: Forwards a variable (inverse of lagging) in a \code{fixest} estimation
+\item \code{f()}: Forwards a variable (inverse of lagging) in a \code{fixest} estimation
 
-\item \code{d}: Creates differences (i.e. x - lag(x)) in a \code{fixest} estimation
+\item \code{d()}: Creates differences (i.e. x - lag(x)) in a \code{fixest} estimation
+
 }}
-
 \examples{
 
 data(base_did)
 
 # Setting a data set as a panel...
-pdat = panel(base_did, ~ id + period)
+pdat <- panel(base_did, ~ id + period)
 
 # ...then using the functions l and f
-est1 = feols(y ~ l(x1, 0:1), pdat)
-est2 = feols(f(y) ~ l(x1, -1:1), pdat)
-est3 = feols(l(y) ~ l(x1, 0:3), pdat)
+est1 <- feols(y ~ l(x1, 0:1), pdat)
+est2 <- feols(f(y) ~ l(x1, -1:1), pdat)
+est3 <- feols(l(y) ~ l(x1, 0:3), pdat)
 etable(est1, est2, est3, order = c("f", "^x"), drop = "Int")
 
 # or using the argument panel.id
-feols(f(y) ~ l(x1, -1:1), base_did, panel.id = ~id + period)
-feols(d(y) ~ d(x1), base_did, panel.id = ~id + period)
+feols(f(y) ~ l(x1, -1:1), base_did, panel.id = ~ id + period)
+feols(d(y) ~ d(x1), base_did, panel.id = ~ id + period)
 
 # l() and f() can also be used within a data.table:
-if(require("data.table")){
-  pdat_dt = panel(as.data.table(base_did), ~id+period)
+if (require("data.table")) {
+  pdat_dt <- panel(as.data.table(base_did), ~ id + period)
   # Now since pdat_dt is also a data.table
   #   you can create lags/leads directly
   pdat_dt[, x1_l1 := l(x1)]
@@ -61,9 +61,7 @@ if(require("data.table")){
   pdat_dt[, c("x1_l1_fill0", "y_f2") := .(l(x1, fill = 0), f(y, 2))]
 }
 
-
-
 }
 \seealso{
-The function \code{\link[fixest]{panel}} changes \code{data.frames} into a panel from which the functions \code{l} and \code{f} can be called. Otherwise you can set the panel 'live' during the estimation using the argument \code{panel.id} (see for example in the function \code{\link[fixest]{feols}}).
+The function \code{\link[fixest2]{panel}} changes \code{data.frames} into a panel from which the functions \code{l} and \code{f} can be called. Otherwise you can set the panel 'live' during the estimation using the argument \code{panel.id} (see for example in the function \code{\link[fixest2]{feols}}).
 }

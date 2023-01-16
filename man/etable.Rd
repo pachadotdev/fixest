@@ -253,17 +253,17 @@ esttex(
 )
 }
 \arguments{
-\item{...}{Used to capture different \code{fixest} estimation objects (obtained with \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}). Note that any other type of element is discarded. Note that you can give a list of \code{fixest} objects.}
+\item{...}{Used to capture different \code{fixest} estimation objects (obtained with \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}). Note that any other type of element is discarded. Note that you can give a list of \code{fixest} objects.}
 
-\item{vcov}{Versatile argument to specify the VCOV. In general, it is either a character scalar equal to a VCOV type, either a formula of the form: \code{vcov_type ~ variables}. The VCOV types implemented are: "iid", "hetero" (or "HC1"), "cluster", "twoway", "NW" (or "newey_west"), "DK" (or "driscoll_kraay"), and "conley". It also accepts object from \code{\link[fixest]{vcov_cluster}}, \code{\link[fixest:vcov_hac]{vcov_NW}}, \code{\link[fixest:vcov_hac]{NW}}, \code{\link[fixest:vcov_hac]{vcov_DK}}, \code{\link[fixest:vcov_hac]{DK}}, \code{\link[fixest]{vcov_conley}} and \code{\link[fixest:vcov_conley]{conley}}. It also accepts covariance matrices computed externally. Finally it accepts functions to compute the covariances. See the `vcov` documentation in the \href{https://lrberge.github.io/fixest/articles/fixest_walkthrough.html#the-vcov-argument-1}{vignette}.}
+\item{vcov}{Versatile argument to specify the VCOV. In general, it is either a character scalar equal to a VCOV type, either a formula of the form: \code{vcov_type ~ variables}. The VCOV types implemented are: "iid", "hetero" (or "HC1"), "cluster", "twoway", "NW" (or "newey_west"), "DK" (or "driscoll_kraay"), and "conley". It also accepts object from \code{\link[fixest2]{vcov_cluster}}, \code{\link[fixest2:vcov_hac]{vcov_NW}}, \code{\link[fixest2:vcov_hac]{NW}}, \code{\link[fixest2:vcov_hac]{vcov_DK}}, \code{\link[fixest2:vcov_hac]{DK}}, \code{\link[fixest2]{vcov_conley}} and \code{\link[fixest2:vcov_conley]{conley}}. It also accepts covariance matrices computed externally. Finally it accepts functions to compute the covariances. See the `vcov` documentation in the \href{https://lrberge.github.io/fixest/articles/fixest_walkthrough.html#the-vcov-argument-1}{vignette}.}
 
 \item{stage}{Can be equal to \code{2} (default), \code{1}, \code{1:2} or \code{2:1}. Only used if the object is an IV estimation: defines the stage to which \code{summary} should be applied. If \code{stage = 1} and there are multiple endogenous regressors or if \code{stage} is of length 2, then an object of class \code{fixest_multi} is returned.}
 
-\item{agg}{A character scalar describing the variable names to be aggregated, it is pattern-based. All variables that match the pattern will be aggregated. It must be of the form \code{"(root)"}, the parentheses must be there and the resulting variable name will be \code{"root"}. You can add another root with parentheses: \code{"(root1)regex(root2)"}, in which case the resulting name is \code{"root1::root2"}. To name the resulting variable differently you can pass a named vector: \code{c("name" = "pattern")} or \code{c("name" = "pattern(root2)")}. It's a bit intricate sorry, please see the examples.}
+\item{agg}{A character scalar describing the variable names to be aggregated, it is pattern-based. For [`sunab`] estimations, the following keywords work: "att", "period", "cohort" and `FALSE` (to have full disaggregation). All variables that match the pattern will be aggregated. It must be of the form \code{"(root)"}, the parentheses must be there and the resulting variable name will be \code{"root"}. You can add another root with parentheses: \code{"(root1)regex(root2)"}, in which case the resulting name is \code{"root1::root2"}. To name the resulting variable differently you can pass a named vector: \code{c("name" = "pattern")} or \code{c("name" = "pattern(root2)")}. It's a bit intricate sorry, please see the examples.}
 
 \item{se}{Character scalar. Which kind of standard error should be computed: \dQuote{standard}, \dQuote{hetero}, \dQuote{cluster}, \dQuote{twoway}, \dQuote{threeway} or \dQuote{fourway}? By default if there are clusters in the estimation: \code{se = "cluster"}, otherwise \code{se = "iid"}. Note that this argument is deprecated, you should use \code{vcov} instead.}
 
-\item{ssc}{An object of class \code{ssc.type} obtained with the function \code{\link[fixest]{ssc}}. Represents how the degree of freedom correction should be done.You must use the function \code{\link[fixest]{ssc}} for this argument. The arguments and defaults of the function \code{\link[fixest]{ssc}} are: \code{adj = TRUE}, \code{fixef.K="nested"}, \code{cluster.adj = TRUE}, \code{cluster.df = "min"}, \code{t.df = "min"}, \code{fixef.force_exact=FALSE)}. See the help of the function \code{\link[fixest]{ssc}} for details.}
+\item{ssc}{An object of class \code{ssc.type} obtained with the function \code{\link[fixest2]{ssc}}. Represents how the degree of freedom correction should be done.You must use the function \code{\link[fixest2]{ssc}} for this argument. The arguments and defaults of the function \code{\link[fixest2]{ssc}} are: \code{adj = TRUE}, \code{fixef.K="nested"}, \code{cluster.adj = TRUE}, \code{cluster.df = "min"}, \code{t.df = "min"}, \code{fixef.force_exact=FALSE)}. See the help of the function \code{\link[fixest2]{ssc}} for details.}
 
 \item{cluster}{Tells how to cluster the standard-errors (if clustering is requested). Can be either a list of vectors, a character vector of variable names, a formula or an integer vector. Assume we want to perform 2-way clustering over \code{var1} and \code{var2} contained in the data.frame \code{base} used for the estimation. All the following \code{cluster} arguments are valid and do the same thing: \code{cluster = base[, c("var1", "var2")]}, \code{cluster = c("var1", "var2")}, \code{cluster = ~var1+var2}. If the two variables were used as fixed-effects in the estimation, you can leave it blank with \code{vcov = "twoway"} (assuming \code{var1} [resp. \code{var2}] was the 1st [res. 2nd] fixed-effect). You can interact two variables using \code{^} with the following syntax: \code{cluster = ~var1^var2} or \code{cluster = "var1^var2"}.}
 
@@ -277,7 +277,7 @@ esttex(
 
 \item{tex}{Logical: whether the results should be a data.frame or a Latex table. By default, this argument is \code{TRUE} if the argument \code{file} (used for exportation) is not missing; it is equal to \code{FALSE} otherwise.}
 
-\item{fitstat}{A character vector or a one sided formula (both with only lowercase letters). A vector listing which fit statistics to display. The valid types are 'n', 'll', 'aic', 'bic' and r2 types like 'r2', 'pr2', 'war2', etc (see all valid types in \code{\link[fixest]{r2}}). Also accepts valid types from the function \code{\link[fixest]{fitstat}}. The default value depends on the models to display. Example of use: \code{fitstat=c('n', 'cor2', 'ar2', 'war2')}, or \code{fitstat=~n+cor2+ar2+war2} using a formula. You can use the dot to refer to default values:\code{ ~ . + ll} would add the log-likelihood to the default fit statistics.}
+\item{fitstat}{A character vector or a one sided formula (both with only lowercase letters). A vector listing which fit statistics to display. The valid types are 'n', 'll', 'aic', 'bic' and r2 types like 'r2', 'pr2', 'war2', etc (see all valid types in \code{\link[fixest2]{r2}}). Also accepts valid types from the function \code{\link[fixest2]{fitstat}}. The default value depends on the models to display. Example of use: \code{fitstat=c('n', 'cor2', 'ar2', 'war2')}, or \code{fitstat=~n+cor2+ar2+war2} using a formula. You can use the dot to refer to default values:\code{ ~ . + ll} would add the log-likelihood to the default fit statistics.}
 
 \item{title}{(Tex only.) Character scalar. The title of the Latex table.}
 
@@ -295,7 +295,7 @@ esttex(
 
 \item{order}{Character vector. This element is used if the user wants the variables to be ordered in a certain way. This should be a vector of regular expressions (see \code{\link[base]{regex}} help for more info). The variables satisfying the first regular expression will be placed first, then the order follows the sequence of regular expressions. This argument is applied post aliasing (see argument \code{dict}). Example: you have the following variables: \code{month1} to \code{month6}, then \code{x1} to \code{x5}, then \code{year1} to \code{year6}. If you want to display first the x's, then the years, then the months you could use: \code{order = c("x", "year")}. If the first character is an exclamation mark, the effect is reversed (e.g. order = "!Intercept" means: every variable that does not contain \dQuote{Intercept} goes first).  See details.}
 
-\item{dict}{A named character vector or a logical scalar. It changes the original variable names to the ones contained in the \code{dict}ionary. E.g. to change the variables named \code{a} and \code{b3} to (resp.) \dQuote{$log(a)$} and to \dQuote{$bonus^3$}, use \code{dict=c(a="$log(a)$",b3="$bonus^3$")}. By default, it is equal to \code{getFixest_dict()}, a default dictionary which can be set with \code{\link[fixest]{setFixest_dict}}. You can use \code{dict = FALSE} to disable it. By default \code{dict} modifies the entries in the global dictionary, to disable this behavior, use "reset" as the first element (ex: \code{dict=c("reset", mpg="Miles per gallon")}).}
+\item{dict}{A named character vector or a logical scalar. It changes the original variable names to the ones contained in the \code{dict}ionary. E.g. to change the variables named \code{a} and \code{b3} to (resp.) \dQuote{$log(a)$} and to \dQuote{$bonus^3$}, use \code{dict=c(a="$log(a)$",b3="$bonus^3$")}. By default, it is equal to \code{getFixest_dict()}, a default dictionary which can be set with \code{\link[fixest2]{setFixest_dict}}. You can use \code{dict = FALSE} to disable it. By default \code{dict} modifies the entries in the global dictionary, to disable this behavior, use "reset" as the first element (ex: \code{dict=c("reset", mpg="Miles per gallon")}).}
 
 \item{file}{A character scalar. If provided, the Latex (or data frame) table will be saved in a file whose path is \code{file}. If you provide this argument, then a Latex table will be exported, to export a regular \code{data.frame}, use argument \code{tex = FALSE}.}
 
@@ -325,13 +325,13 @@ esttex(
 
 \item{interaction.order}{Character vector of regular expressions. Only affects variables that are interacted like x1 and x2 in \code{feols(y ~ x1*x2, data)}. You can change the order in which the interacted variables are displayed: e.g. \code{interaction.order = "x2"} would lead to "x1 x x2" instead of "x1 x x2". Please look at the argument 'order' and the dedicated section in the help page for more information.}
 
-\item{i.equal}{Character scalar, defaults to \code{" $=$ "} when \code{tex = TRUE} and \code{" = "} otherwise. Only affects factor variables created with the function \code{\link[fixest]{i}}, tells how the variable should be linked to its value. For example if you have the \code{Species} factor from the \code{iris} data set, by default the display of the variable is \code{Species = Setosa}, etc. If \code{i.equal = ": "} the display becomes \code{Species: Setosa}.}
+\item{i.equal}{Character scalar, defaults to \code{" $=$ "} when \code{tex = TRUE} and \code{" = "} otherwise. Only affects factor variables created with the function \code{\link[fixest2]{i}}, tells how the variable should be linked to its value. For example if you have the \code{Species} factor from the \code{iris} data set, by default the display of the variable is \code{Species = Setosa}, etc. If \code{i.equal = ": "} the display becomes \code{Species: Setosa}.}
 
 \item{depvar}{Logical, default is \code{TRUE}. Whether a first line containing the dependent variables should be shown.}
 
-\item{style.tex}{An object created by the function \code{\link[fixest]{style.tex}}. It represents the style of the Latex table, see the documentation of \code{\link[fixest]{style.tex}}.}
+\item{style.tex}{An object created by the function \code{\link[fixest2]{style.tex}}. It represents the style of the Latex table, see the documentation of \code{\link[fixest2]{style.tex}}.}
 
-\item{style.df}{An object created by the function \code{\link[fixest]{style.df}. }It represents the style of the data frame returned (if \code{tex = FALSE}), see the documentation of \code{\link[fixest]{style.df}}.}
+\item{style.df}{An object created by the function \code{\link[fixest2]{style.df}. }It represents the style of the data frame returned (if \code{tex = FALSE}), see the documentation of \code{\link[fixest2]{style.df}}.}
 
 \item{notes}{(Tex only.) Character vector. If provided, a \code{"notes"} section will be added at the end right after the end of the table, containing the text of this argument. If it is a vector, it will be collapsed with new lines. If \code{tpt = TRUE}, the behavior is different: each element of the vector is an item. If the first element of the vector starts with \code{"@"}, then it will be included verbatim, and in case of \code{tpt = TRUE}, right before the first item. If that element is provided, it will replace the value defined in \code{style.tex(notes.intro)} or \code{style.tex(notes.tpt.intro)}.}
 
@@ -424,11 +424,11 @@ When the argument \code{postprocessing.tex} is not missing, two additional tags 
 }
 \section{Functions}{
 \itemize{
-\item \code{esttable}: Exports the results of multiple \code{fixest} estimations in a Latex table.
+\item \code{esttable()}: Exports the results of multiple \code{fixest} estimations in a Latex table.
 
-\item \code{esttex}: Exports the results of multiple \code{fixest} estimations in a Latex table.
+\item \code{esttex()}: Exports the results of multiple \code{fixest} estimations in a Latex table.
+
 }}
-
 \section{How does \code{digits} handle the number of decimals displayed?}{
 
 
@@ -467,7 +467,7 @@ If a list, it should be of the form \code{list("item1" = #item1, "item2" = #item
 
 If a function, it will be applied to each model and should return a scalar (\code{NA} values returned are accepted).
 
-If a formula, it must be one-sided and the elements in the formula must represent either \code{extralines} macros, either fit statistics (i.e. valid types of the function \code{\link[fixest]{fitstat}}). One new line will be added for each element of the formula. To register \code{extralines} macros, you must first register them in \code{\link[fixest]{extralines_register}}.
+If a formula, it must be one-sided and the elements in the formula must represent either \code{extralines} macros, either fit statistics (i.e. valid types of the function \code{\link[fixest2]{fitstat}}). One new line will be added for each element of the formula. To register \code{extralines} macros, you must first register them in \code{\link[fixest2]{extralines_register}}.
 
 Finally, you can combine as many lines as wished by nesting them in a list. The names of the nesting list are the row titles (values in the leftmost cell). For example \code{extralines = list(~r2, Controls = TRUE, Group = list("A"=2, "B"))} will add three lines, the titles of which are "R2", "Controls" and "Group".
 }
@@ -491,7 +491,7 @@ The placement in \code{fixef.group} is defined similarly, only the default place
 \section{Escaping special Latex characters}{
 
 
-By default on all instances (with the notable exception of the elements of \code{\link[fixest]{style.tex}}) special Latex characters are escaped. This means that \code{title="Exports in million $."} will be exported as "Exports in million \\$.": the dollar sign will be escaped. This is true for the following characters: &, $, \%, _, ^ and #.
+By default on all instances (with the notable exception of the elements of \code{\link[fixest2]{style.tex}}) special Latex characters are escaped. This means that \code{title="Exports in million $."} will be exported as "Exports in million \\$.": the dollar sign will be escaped. This is true for the following characters: &, $, \%, _, ^ and #.
 
 Note, importantly, that equations are NOT escaped. This means that \code{title="Functional form $a_i \\times x^b$, variation in \%."} will be displayed as: \code{"Functional form $a_i \\times x^b$, variation in \\\%."}: only the last percentage will be escaped.
 
@@ -507,8 +507,8 @@ Within anything that is Latex-escaped (see previous section), you can use a mark
 \examples{
 
 
-est1 = feols(Ozone ~ i(Month) / Wind + Temp, data = airquality)
-est2 = feols(Ozone ~ i(Month, Wind) + Temp | Month, data = airquality)
+est1 <- feols(Ozone ~ i(Month) / Wind + Temp, data = airquality)
+est2 <- feols(Ozone ~ i(Month, Wind) + Temp | Month, data = airquality)
 
 # Displaying the two results in a single table
 etable(est1, est2)
@@ -535,13 +535,15 @@ etable(est1, est2, order = c("^Month", " x "))
 # You can rename variables with dict = c(var1 = alias1, var2 = alias2, etc)
 # You can also rename values taken by factors.
 # Here's a full example:
-dict = c(Temp = "Temperature", "Month::5"="May", "6"="Jun")
+dict <- c(Temp = "Temperature", "Month::5" = "May", "6" = "Jun")
 etable(est1, est2, dict = dict)
 # Note the difference of treatment between Jun and May
 
 # Assume the following dictionary:
-dict = c("Month::5"="May", "Month::6"="Jun", "Month::7"="Jul",
-         "Month::8"="Aug", "Month::9"="Sep")
+dict <- c(
+  "Month::5" = "May", "Month::6" = "Jun", "Month::7" = "Jul",
+  "Month::8" = "Aug", "Month::9" = "Sep"
+)
 
 # We would like to keep only the Months, but now the names are all changed...
 # How to do?
@@ -553,7 +555,7 @@ etable(est1, est2, dict = dict, keep = "\%Month")
 # signif.code
 #
 
-etable(est1, est2, signif.code = c(" A"=0.01, " B"=0.05, " C"=0.1, " D"=0.15, " F"=1))
+etable(est1, est2, signif.code = c(" A" = 0.01, " B" = 0.05, " C" = 0.1, " D" = 0.15, " F" = 1))
 
 #
 # Using the argument style to customize Latex exports
@@ -564,12 +566,14 @@ etable(est1, est2, signif.code = c(" A"=0.01, " B"=0.05, " C"=0.1, " D"=0.15, " 
 
 # To drop the headers before each section, use:
 # Note that a space adds an extra line
-style_noHeaders = style.tex(var.title = "", fixef.title = "", stats.title = " ")
+style_noHeaders <- style.tex(var.title = "", fixef.title = "", stats.title = " ")
 etable(est1, est2, dict = dict, tex = TRUE, style.tex = style_noHeaders)
 
 # To change the lines of the table + dropping the table footer
-style_lines = style.tex(line.top = "\\\\toprule", line.bottom = "\\\\bottomrule",
-                    tablefoot = FALSE)
+style_lines <- style.tex(
+  line.top = "\\\\toprule", line.bottom = "\\\\bottomrule",
+  tablefoot = FALSE
+)
 etable(est1, est2, dict = dict, tex = TRUE, style.tex = style_lines)
 
 # Or you have the predefined type "aer"
@@ -583,9 +587,9 @@ etable(est1, est2, dict = dict, tex = TRUE, style.tex = style.tex("aer"))
 # You can achieve that with the group argument
 
 setFixest_fml(..ctrl = ~ poly(Wind, 2) + poly(Temp, 2))
-est_c0 = feols(Ozone ~ Solar.R, data = airquality)
-est_c1 = feols(Ozone ~ Solar.R + ..ctrl, data = airquality)
-est_c2 = feols(Ozone ~ Solar.R + Solar.R^2 + ..ctrl, data = airquality)
+est_c0 <- feols(Ozone ~ Solar.R, data = airquality)
+est_c1 <- feols(Ozone ~ Solar.R + ..ctrl, data = airquality)
+est_c2 <- feols(Ozone ~ Solar.R + Solar.R^2 + ..ctrl, data = airquality)
 
 etable(est_c0, est_c1, est_c2, group = list(Controls = "poly"))
 
@@ -593,16 +597,23 @@ etable(est_c0, est_c1, est_c2, group = list(Controls = "poly"))
 # with TRUE/FALSE where the variables were found
 
 # 'extralines' adds an extra line, where you can add the value for each model
-est_all  = feols(Ozone ~ Solar.R + Temp + Wind, data = airquality)
-est_sub1 = feols(Ozone ~ Solar.R + Temp + Wind, data = airquality,
-                 subset = ~ Month \%in\% 5:6)
-est_sub2 = feols(Ozone ~ Solar.R + Temp + Wind, data = airquality,
-                 subset = ~ Month \%in\% 7:8)
-est_sub3 = feols(Ozone ~ Solar.R + Temp + Wind, data = airquality,
-                 subset = ~ Month == 9)
+est_all <- feols(Ozone ~ Solar.R + Temp + Wind, data = airquality)
+est_sub1 <- feols(Ozone ~ Solar.R + Temp + Wind,
+  data = airquality,
+  subset = ~ Month \%in\% 5:6
+)
+est_sub2 <- feols(Ozone ~ Solar.R + Temp + Wind,
+  data = airquality,
+  subset = ~ Month \%in\% 7:8
+)
+est_sub3 <- feols(Ozone ~ Solar.R + Temp + Wind,
+  data = airquality,
+  subset = ~ Month == 9
+)
 
 etable(est_all, est_sub1, est_sub2, est_sub3,
-       extralines = list("Sub-sample" = c("All", "May-June", "Jul.-Aug.", "Sept.")))
+  extralines = list("Sub-sample" = c("All", "May-June", "Jul.-Aug.", "Sept."))
+)
 
 # You can monitor the placement of the new lines with two special characters
 # at the beginning of the row name.
@@ -620,7 +631,8 @@ etable(est_all, est_sub1, est_sub2, est_sub3,
 # Examples
 etable(est_c0, est_c1, est_c2, group = list("_Controls" = "poly"))
 etable(est_all, est_sub1, est_sub2, est_sub3,
-       extralines = list("^^Sub-sample" = c("All", "May-June", "Jul.-Aug.", "Sept.")))
+  extralines = list("^^Sub-sample" = c("All", "May-June", "Jul.-Aug.", "Sept."))
+)
 
 
 #
@@ -632,7 +644,7 @@ etable(est_all, est_sub1, est_sub2, est_sub3,
 # These lines will appear at the top of the table
 
 # first, 3 estimations
-est_header = feols(c(Ozone, Solar.R, Wind) ~  poly(Temp, 2), airquality)
+est_header <- feols(c(Ozone, Solar.R, Wind) ~ poly(Temp, 2), airquality)
 
 # header => vector: adds a line w/t title
 etable(est_header, headers = c("A", "A", "B"))
@@ -652,14 +664,18 @@ etable(est_header, headers = list(Group = list("A" = 2, "B")))
 # Note that "mid" and "top" are only distinguished when tex = TRUE
 
 # Placing the new header line at the bottom
-etable(est_header, headers = list("_Group" = c("A", "A", "B"),
-                                  "^Currency" = list("US $" = 2, "CA $" = 1)))
+etable(est_header, headers = list(
+  "_Group" = c("A", "A", "B"),
+  "^Currency" = list("US $" = 2, "CA $" = 1)
+))
 
 
 # In Latex, you can add "grouped underlines" (cmidrule from the booktabs package)
 # by adding ":_:" in the title:
-etable(est_header, tex = TRUE,
-       headers = list("^:_:Group" = c("A", "A", "B")))
+etable(est_header,
+  tex = TRUE,
+  headers = list("^:_:Group" = c("A", "A", "B"))
+)
 
 #
 # extralines and headers: .() for list()
@@ -677,9 +693,9 @@ etable(est_header, headers = .("^Currency" = .("US $" = 2, "CA $" = 1)))
 
 # You can group the fixed-effects line with fixef.group
 
-est_0fe = feols(Ozone ~ Solar.R + Temp + Wind, airquality)
-est_1fe = feols(Ozone ~ Solar.R + Temp + Wind | Month, airquality)
-est_2fe = feols(Ozone ~ Solar.R + Temp + Wind | Month + Day, airquality)
+est_0fe <- feols(Ozone ~ Solar.R + Temp + Wind, airquality)
+est_1fe <- feols(Ozone ~ Solar.R + Temp + Wind | Month, airquality)
+est_2fe <- feols(Ozone ~ Solar.R + Temp + Wind | Month + Day, airquality)
 
 # A) automatic way => simply use fixef.group = TRUE
 
@@ -741,27 +757,27 @@ etable(est1, est2, fitstat = ~ ll + .)
 # Computing a different SE for each model
 #
 
-est = feols(Ozone ~ Solar.R + Wind + Temp, data = airquality)
+est <- feols(Ozone ~ Solar.R + Wind + Temp, data = airquality)
 
 #
 # Method 1: use summary
 
-s1 = summary(est, "iid")
-s2 = summary(est, cluster = ~ Month)
-s3 = summary(est, cluster = ~ Day)
-s4 = summary(est, cluster = ~ Day + Month)
+s1 <- summary(est, "iid")
+s2 <- summary(est, cluster = ~Month)
+s3 <- summary(est, cluster = ~Day)
+s4 <- summary(est, cluster = ~ Day + Month)
 
 etable(list(s1, s2, s3, s4))
 
 #
 # Method 2: using a list in the argument 'vcov'
 
-est_bis = feols(Ozone ~ Solar.R + Wind + Temp | Month, data = airquality)
-etable(est, est_bis, vcov = list("hetero", ~ Month))
+est_bis <- feols(Ozone ~ Solar.R + Wind + Temp | Month, data = airquality)
+etable(est, est_bis, vcov = list("hetero", ~Month))
 
 # When you have only one model, this model is replicated
 # along the elements of the vcov list.
-etable(est, vcov = list("hetero", ~ Month))
+etable(est, vcov = list("hetero", ~Month))
 
 #
 # Method 3: Using "each" or "times" in vcov
@@ -773,10 +789,10 @@ etable(est, vcov = list("hetero", ~ Month))
 
 
 # each
-etable(est, est_bis, vcov = list("each", "iid", ~ Month, ~ Day))
+etable(est, est_bis, vcov = list("each", "iid", ~Month, ~Day))
 
 # times
-etable(est, est_bis, vcov = list("times", "iid", ~ Month, ~ Day))
+etable(est, est_bis, vcov = list("times", "iid", ~Month, ~Day))
 
 #
 # Notes and markup
@@ -785,18 +801,18 @@ etable(est, est_bis, vcov = list("times", "iid", ~ Month, ~ Day))
 # Notes can be also be set in a dictionary
 # You can use markdown markup to put text into italic/bold
 
-dict = c("note 1" = "*Notes:* This data is not really random.",
-         "source 1" = "**Source:** the internet?")
+dict <- c(
+  "note 1" = "*Notes:* This data is not really random.",
+  "source 1" = "**Source:** the internet?"
+)
 
-est = feols(Ozone ~ csw(Solar.R, Wind, Temp), data = airquality)
+est <- feols(Ozone ~ csw(Solar.R, Wind, Temp), data = airquality)
 
 etable(est, dict = dict, tex = TRUE, notes = c("note 1", "source 1"))
 
-
-
 }
 \seealso{
-See also the main estimation functions \code{\link[fixest]{femlm}}, \code{\link[fixest]{feols}} or \code{\link[fixest]{feglm}}. Use \code{\link[fixest]{summary.fixest}} to see the results with the appropriate standard-errors, \code{\link[fixest]{fixef.fixest}} to extract the fixed-effects coefficients.
+See also the main estimation functions \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}. Use \code{\link[fixest2]{summary.fixest}} to see the results with the appropriate standard-errors, \code{\link[fixest2]{fixef.fixest}} to extract the fixed-effects coefficients.
 }
 \author{
 Laurent Berge

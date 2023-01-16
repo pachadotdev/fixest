@@ -22,7 +22,7 @@
 \arguments{
 \item{object}{A \code{fixes_multi} object.}
 
-\item{type}{A character scalar, either \code{"response"} (default), \code{"deviance"}, \code{"pearson"}, or \code{"working"}. Note that the \code{"working"} corresponds to the residuals from the weighted least square and only applies to \code{\link[fixest]{feglm}} models.}
+\item{type}{A character scalar, either \code{"response"} (default), \code{"deviance"}, \code{"pearson"}, or \code{"working"}. Note that the \code{"working"} corresponds to the residuals from the weighted least square and only applies to \code{\link[fixest2]{feglm}} models.}
 
 \item{na.rm}{Logical, default is \code{FALSE}. Should the NAs be kept? If \code{TRUE}, they are removed.}
 
@@ -36,11 +36,11 @@ Utility to extract the residuals from multiple \code{fixest} estimations. If pos
 }
 \examples{
 
-base = iris
-names(base) = c("y", "x1", "x2", "x3", "species")
+base <- iris
+names(base) <- c("y", "x1", "x2", "x3", "species")
 
 # A multiple estimation
-est = feols(y ~ x1 + csw0(x2, x3), base)
+est <- feols(y ~ x1 + csw0(x2, x3), base)
 
 # We can get all the residuals at once,
 # each column is a model

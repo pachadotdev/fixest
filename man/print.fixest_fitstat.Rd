@@ -7,19 +7,19 @@
 \method{print}{fixest_fitstat}(x, na.rm = FALSE, ...)
 }
 \arguments{
-\item{x}{An object resulting from the \code{\link[fixest]{fitstat}} function.}
+\item{x}{An object resulting from the \code{\link[fixest2]{fitstat}} function.}
 
 \item{na.rm}{Logical, default is \code{FALSE}. If \code{TRUE}, the statistics that are missing are not displayed.}
 
 \item{...}{Not currently used.}
 }
 \description{
-Displays a brief summary of selected fit statistics from the function \code{\link[fixest]{fitstat}}.
+Displays a brief summary of selected fit statistics from the function \code{\link[fixest2]{fitstat}}.
 }
 \examples{
 
 data(trade)
-gravity = feols(log(Euros) ~ log(dist_km) | Destination + Origin, trade)
+gravity <- feols(log(Euros) ~ log(dist_km) | Destination + Origin, trade)
 
 # Extracting the 'working' number of observations used to compute the pvalues
 fitstat(gravity, "g", simplify = TRUE)
@@ -49,6 +49,5 @@ etable(gravity, fitstat = ~ . + tstand + thc + t1w + t2w)
 
 # Note that the custom stats we created are can easily lead
 # to errors, but that's another story!
-
 
 }

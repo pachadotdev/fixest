@@ -9,7 +9,7 @@ panel(data, panel.id, time.step = NULL, duplicate.method = c("none", "first"))
 \arguments{
 \item{data}{A data.frame.}
 
-\item{panel.id}{The panel identifiers. Can either be: i) a one sided formula (e.g. \code{panel.id = ~id+time}), ii) a character vector of length 2 (e.g. \code{panel.id=c('id', 'time')}, or iii) a character scalar of two variables separated by a comma (e.g. \code{panel.id='id,time'}). Note that you can combine variables with \code{^} only inside formulas (see the dedicated section in \code{\link[fixest]{feols}}).}
+\item{panel.id}{The panel identifiers. Can either be: i) a one sided formula (e.g. \code{panel.id = ~id+time}), ii) a character vector of length 2 (e.g. \code{panel.id=c('id', 'time')}, or iii) a character scalar of two variables separated by a comma (e.g. \code{panel.id='id,time'}). Note that you can combine variables with \code{^} only inside formulas (see the dedicated section in \code{\link[fixest2]{feols}}).}
 
 \item{time.step}{The method to compute the lags, default is \code{NULL} (which means automatically set). Can be equal to: \code{"unitary"}, \code{"consecutive"}, \code{"within.consecutive"}, or to a number. If \code{"unitary"}, then the largest common divisor between consecutive time periods is used (typically if the time variable represents years, it will be 1). This method can apply only to integer (or convertible to integer) variables. If \code{"consecutive"}, then the time variable can be of any type: two successive time periods represent a lag of 1. If \code{"witihn.consecutive"} then **within a given id**, two successive time periods represent a lag of 1. Finally, if the time variable is numeric, you can provide your own numeric time step.}
 
@@ -26,46 +26,45 @@ This function allows you to use leads and lags in a \code{fixest} estimation wit
 
 When the initial data set was also a \code{data.table}, not all operations are supported and some may dissolve the \code{fixest_panel}. This is the case when creating subselections of the initial data with additional attributes (e.g. pdt[x>0, .(x, y, z)] would dissolve the \code{fixest_panel}, meaning only a data.table would be the result of the call).
 
-If the initial data set was also a \code{data.table}, then you can create new variables from lags and leads using the functions \code{\link[fixest]{l}}() and \code{\link[fixest:l]{f}}(). See the example.
+If the initial data set was also a \code{data.table}, then you can create new variables from lags and leads using the functions \code{\link[fixest2]{l}}() and \code{\link[fixest2:l]{f}}(). See the example.
 }
 \examples{
 
 data(base_did)
 
 # Setting a data set as a panel...
-pdat = panel(base_did, ~id+period)
+pdat <- panel(base_did, ~ id + period)
 
 # ...then using the functions l and f
-est1 = feols(y~l(x1, 0:1), pdat)
-est2 = feols(f(y)~l(x1, -1:1), pdat)
-est3 = feols(l(y)~l(x1, 0:3), pdat)
-etable(est1, est2, est3, order = c("f", "^x"), drop="Int")
+est1 <- feols(y ~ l(x1, 0:1), pdat)
+est2 <- feols(f(y) ~ l(x1, -1:1), pdat)
+est3 <- feols(l(y) ~ l(x1, 0:3), pdat)
+etable(est1, est2, est3, order = c("f", "^x"), drop = "Int")
 
 # or using the argument panel.id
-feols(f(y)~l(x1, -1:1), base_did, panel.id = ~id+period)
+feols(f(y) ~ l(x1, -1:1), base_did, panel.id = ~ id + period)
 
 # You can use panel.id in various ways:
-pdat = panel(base_did, ~id+period)
+pdat <- panel(base_did, ~ id + period)
 # is identical to:
-pdat = panel(base_did, c("id", "period"))
+pdat <- panel(base_did, c("id", "period"))
 # and also to:
-pdat = panel(base_did, "id,period")
+pdat <- panel(base_did, "id,period")
 
 # l() and f() can also be used within a data.table:
-if(require("data.table")){
-  pdat_dt = panel(as.data.table(base_did), ~id+period)
+if (require("data.table")) {
+  pdat_dt <- panel(as.data.table(base_did), ~ id + period)
   # Now since pdat_dt is also a data.table
   #   you can create lags/leads directly
   pdat_dt[, x1_l1 := l(x1)]
   pdat_dt[, c("x1_l1_fill0", "y_f2") := .(l(x1, fill = 0), f(y, 2))]
 }
 
-
 }
 \seealso{
-The estimation methods \code{\link[fixest]{feols}}, \code{\link[fixest:feglm]{fepois}} and \code{\link[fixest]{feglm}}.
+The estimation methods \code{\link[fixest2]{feols}}, \code{\link[fixest2:feglm]{fepois}} and \code{\link[fixest2]{feglm}}.
 
-The functions \code{\link[fixest]{l}} and \code{\link[fixest:l]{f}} to create lags and leads within \code{}fixest_panel objects.
+The functions \code{\link[fixest2]{l}} and \code{\link[fixest2:l]{f}} to create lags and leads within \code{}fixest_panel objects.
 }
 \author{
 Laurent Berge

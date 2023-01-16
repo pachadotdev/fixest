@@ -48,16 +48,18 @@ Lags a variable using panel id + time identifiers in a formula.
 }
 \examples{
 # simple example with an unbalanced panel
-base = data.frame(id = rep(1:2, each = 4),
-                  time = c(1, 2, 3, 4, 1, 4, 6, 9), x = 1:8)
+base <- data.frame(
+  id = rep(1:2, each = 4),
+  time = c(1, 2, 3, 4, 1, 4, 6, 9), x = 1:8
+)
 
-base$lag1 = lag(x~id+time,  1, base) # lag 1
-base$lead1 = lag(x~id+time, -1, base) # lead 1
-base$lag2_fill0 = lag(x~id+time, 2, base, fill = 0)
+base$lag1 <- lag(x ~ id + time, 1, base) # lag 1
+base$lead1 <- lag(x ~ id + time, -1, base) # lead 1
+base$lag2_fill0 <- lag(x ~ id + time, 2, base, fill = 0)
 # with time.step = "consecutive"
-base$lag1_consecutive = lag(x~id+time, 1, base, time.step = "consecutive")
+base$lag1_consecutive <- lag(x ~ id + time, 1, base, time.step = "consecutive")
 #   => works for indiv. 2 because 9 (resp. 6) is consecutive to 6 (resp. 4)
-base$lag1_within.consecutive = lag(x~id+time, 1, base, time.step = "within")
+base$lag1_within.consecutive <- lag(x ~ id + time, 1, base, time.step = "within")
 #   => now two consecutive years within each indiv is one lag
 
 print(base)
@@ -67,48 +69,52 @@ print(base)
 # e.g. c("1991q1", "1991q2", "1991q3") etc
 
 # with duplicates
-base_dup = data.frame(id = rep(1:2, each = 4),
-                      time = c(1, 1, 1, 2, 1, 2, 2, 3), x = 1:8)
+base_dup <- data.frame(
+  id = rep(1:2, each = 4),
+  time = c(1, 1, 1, 2, 1, 2, 2, 3), x = 1:8
+)
 
 # Error because of duplicate values for (id, time)
-try(lag(x~id+time, 1, base_dup))
+try(lag(x ~ id + time, 1, base_dup))
 
 
 # Error is bypassed, lag corresponds to first occurence of (id, time)
-lag(x~id+time, 1, base_dup, duplicate.method = "first")
+lag(x ~ id + time, 1, base_dup, duplicate.method = "first")
 
 
 # Playing with time steps
-base = data.frame(id = rep(1:2, each = 4),
-                  time = c(1, 2, 3, 4, 1, 4, 6, 9), x = 1:8)
+base <- data.frame(
+  id = rep(1:2, each = 4),
+  time = c(1, 2, 3, 4, 1, 4, 6, 9), x = 1:8
+)
 
 # time step: 0.5 (here equivalent to lag of 1)
-lag(x~id+time, 2, base, time.step = 0.5)
+lag(x ~ id + time, 2, base, time.step = 0.5)
 
 # Error: wrong time step
-try(lag(x~id+time, 2, base, time.step = 7))
+try(lag(x ~ id + time, 2, base, time.step = 7))
 
 # Adding NAs + unsorted IDs
-base = data.frame(id = rep(1:2, each = 4),
-                  time = c(4, NA, 3, 1, 2, NA, 1, 3), x = 1:8)
+base <- data.frame(
+  id = rep(1:2, each = 4),
+  time = c(4, NA, 3, 1, 2, NA, 1, 3), x = 1:8
+)
 
-base$lag1 = lag(x~id+time, 1, base)
-base$lag1_within = lag(x~id+time, 1, base, time.step = "w")
-base_bis = base[order(base$id, base$time),]
+base$lag1 <- lag(x ~ id + time, 1, base)
+base$lag1_within <- lag(x ~ id + time, 1, base, time.step = "w")
+base_bis <- base[order(base$id, base$time), ]
 
 print(base_bis)
 
 # You can create variables without specifying the data within data.table:
-if(require("data.table")){
-  base = data.table(id = rep(1:2, each = 3), year = 1990 + rep(1:3, 2), x = 1:6)
-  base[, x.l1 := lag(x~id+year, 1)]
+if (require("data.table")) {
+  base <- data.table(id = rep(1:2, each = 3), year = 1990 + rep(1:3, 2), x = 1:6)
+  base[, x.l1 := lag(x ~ id + year, 1)]
 }
-
-
 
 }
 \seealso{
-Alternatively, the function \code{\link[fixest]{panel}} changes a \code{data.frame} into a panel from which the functions \code{l} and \code{f} (creating leads and lags) can be called. Otherwise you can set the panel 'live' during the estimation using the argument \code{panel.id} (see for example in the function \code{\link[fixest]{feols}}).
+Alternatively, the function \code{\link[fixest2]{panel}} changes a \code{data.frame} into a panel from which the functions \code{l} and \code{f} (creating leads and lags) can be called. Otherwise you can set the panel 'live' during the estimation using the argument \code{panel.id} (see for example in the function \code{\link[fixest2]{feols}}).
 }
 \author{
 Laurent Berge

@@ -73,22 +73,21 @@ NAs are removed automatically: if the data contains NAs an information message w
 data(base_did)
 
 # means of treat/control
-did_means(y+x1+period~treat, base_did)
+did_means(y + x1 + period ~ treat, base_did)
 
 # same but inverting the difference
-did_means(y+x1+period~treat, base_did, diff.inv = TRUE)
+did_means(y + x1 + period ~ treat, base_did, diff.inv = TRUE)
 
 # now treat/control, before/after
-did_means(y+x1+period~treat|post, base_did)
+did_means(y + x1 + period ~ treat | post, base_did)
 
 # same but with a new line giving the number of unique "indiv" for each case
-did_means(y+x1+period~treat|post, base_did, indiv = "id")
+did_means(y + x1 + period ~ treat | post, base_did, indiv = "id")
 
 # same but with the treat case "0" coming first
-did_means(y+x1+period~treat|post, base_did, indiv = ~id, treat_first = 0)
+did_means(y + x1 + period ~ treat | post, base_did, indiv = ~id, treat_first = 0)
 
 # Selecting all the variables with "."
-did_means(.~treat|post, base_did, indiv = "id")
-
+did_means(. ~ treat | post, base_did, indiv = "id")
 
 }

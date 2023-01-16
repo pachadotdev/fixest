@@ -44,37 +44,33 @@ Note that this function is mostly useful when the overheads/estimation ratio is 
 # See https://twitter.com/grant_mcdermott/status/1487528757418102787
 
 # Simple function that computes a Bayesian bootstrap
-bboot = function(x, n_sim = 100){
+bboot <- function(x, n_sim = 100) {
   # We bootstrap on the weights
   # Works with fixed-effects/IVs
   #  and with any fixest function that accepts weights
 
-  core_env = update(x, only.coef = TRUE, only.env = TRUE)
-  n_obs = x$nobs
+  core_env <- update(x, only.coef = TRUE, only.env = TRUE)
+  n_obs <- x$nobs
 
-  res_all = vector("list", n_sim)
-  for(i in 1:n_sim){
+  res_all <- vector("list", n_sim)
+  for (i in 1:n_sim) {
     assign("weights.value", rexp(n_obs, rate = 1), core_env)
-    res_all[[i]] = est_env(env = core_env)
+    res_all[[i]] <- est_env(env = core_env)
   }
 
   do.call(rbind, res_all)
 }
 
 
-est = feols(mpg ~ wt + hp, mtcars)
+est <- feols(mpg ~ wt + hp, mtcars)
 
-boot_res = bboot(est)
-coef = colMeans(boot_res)
-std_err = apply(boot_res, 2, sd)
+boot_res <- bboot(est)
+coef <- colMeans(boot_res)
+std_err <- apply(boot_res, 2, sd)
 
 # Comparing the results with the main estimation
 coeftable(est)
 cbind(coef, std_err)
-
-
-
-
 
 }
 \author{

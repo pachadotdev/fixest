@@ -19,10 +19,10 @@ Simply extracts the weights used to estimate a \code{fixest} model.
 }
 \examples{
 
-est = feols(Petal.Length ~ Petal.Width, iris, weights = ~as.integer(Sepal.Length) - 3.99)
+est <- feols(Petal.Length ~ Petal.Width, iris, weights = ~ as.integer(Sepal.Length) - 3.99)
 weights(est)
 
 }
 \seealso{
-\code{\link[fixest]{feols}}, \code{\link[fixest:feglm]{fepois}}, \code{\link[fixest]{feglm}}, \code{\link[fixest:femlm]{fenegbin}}, \code{\link[fixest]{feNmlm}}.
+\code{\link[fixest2]{feols}}, \code{\link[fixest2:feglm]{fepois}}, \code{\link[fixest2]{feglm}}, \code{\link[fixest2:femlm]{fenegbin}}, \code{\link[fixest2]{feNmlm}}.
 }

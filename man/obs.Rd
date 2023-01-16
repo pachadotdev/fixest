@@ -17,20 +17,17 @@ This function extracts the observations used in \code{fixest} estimation.
 }
 \examples{
 
-base = iris
-names(base) = c("y", "x1", "x2", "x3", "species")
-base$y[1:5] = NA
+base <- iris
+names(base) <- c("y", "x1", "x2", "x3", "species")
+base$y[1:5] <- NA
 
 # Split sample estimations
-est_split = feols(y ~ x1, base, split = ~species)
-(obs_setosa = obs(est_split$setosa))
-(obs_versi = obs(est_split$versicolor))
+est_split <- feols(y ~ x1, base, split = ~species)
+(obs_setosa <- obs(est_split$setosa))
+(obs_versi <- obs(est_split$versicolor))
 
-est_versi = feols(y ~ x1, base, subset = obs_versi)
+est_versi <- feols(y ~ x1, base, subset = obs_versi)
 
 etable(est_split, est_versi)
-
-
-
 
 }

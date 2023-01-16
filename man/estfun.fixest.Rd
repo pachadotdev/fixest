@@ -7,7 +7,7 @@
 \method{estfun}{fixest}(x, ...)
 }
 \arguments{
-\item{x}{A \code{fixest} object, obtained for instance from \code{\link[fixest]{feols}}.}
+\item{x}{A \code{fixest} object, obtained for instance from \code{\link[fixest2]{feols}}.}
 
 \item{...}{Not currently used.}
 }
@@ -20,7 +20,7 @@ Extracts the scores from a fixest estimation.
 \examples{
 
 data(iris)
-est = feols(Petal.Length ~ Petal.Width + Sepal.Width, iris)
+est <- feols(Petal.Length ~ Petal.Width + Sepal.Width, iris)
 head(estfun(est))
 
 }

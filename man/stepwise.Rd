@@ -31,8 +31,8 @@ Finally, the prefix \code{c} means cumulative: each stepwise element is added to
 }
 \examples{
 
-base = iris
-names(base) = c("y", "x1", "x2", "x3", "species")
+base <- iris
+names(base) <- c("y", "x1", "x2", "x3", "species")
 
 # Regular stepwise
 feols(y ~ sw(x1, x2, x3), base)

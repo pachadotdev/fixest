@@ -23,7 +23,7 @@ demean(
 )
 }
 \arguments{
-\item{X}{A matrix, vector, data.frame or a list OR a formula OR a \code{\link[fixest]{feols}} estimation. If equal to a formula, then the argument \code{data} is required, and it must be of the type: \code{x1 + x2 ~ f1 + fe2} with on the LHS the variables to be centered, and on the RHS the factors used for centering. Note that you can use variables with varying slopes with the syntax \code{fe[v1, v2]} (see details in \code{\link[fixest]{feols}}). If a \code{feols} estimation, all variables (LHS+RHS) are demeaned and then returned (only if it was estimated with fixed-effects). Otherwise, it must represent the data to be centered. Of course the number of observations of that data must be the same as the factors used for centering (argument \code{f}).}
+\item{X}{A matrix, vector, data.frame or a list OR a formula OR a \code{\link[fixest2]{feols}} estimation. If equal to a formula, then the argument \code{data} is required, and it must be of the type: \code{x1 + x2 ~ f1 + fe2} with on the LHS the variables to be centered, and on the RHS the factors used for centering. Note that you can use variables with varying slopes with the syntax \code{fe[v1, v2]} (see details in \code{\link[fixest2]{feols}}). If a \code{feols} estimation, all variables (LHS+RHS) are demeaned and then returned (only if it was estimated with fixed-effects). Otherwise, it must represent the data to be centered. Of course the number of observations of that data must be the same as the factors used for centering (argument \code{f}).}
 
 \item{f}{A matrix, vector, data.frame or list. The factors used to center the variables in argument \code{X}. Matrices will be coerced using \code{as.data.frame}.}
 
@@ -83,18 +83,20 @@ In general, for convergence reasons, it is recommended to always add the fixed-e
 # Illustration of the FWL theorem
 data(trade)
 
-base = trade
-base$ln_dist = log(base$dist_km)
-base$ln_euros = log(base$Euros)
+base <- trade
+base$ln_dist <- log(base$dist_km)
+base$ln_euros <- log(base$Euros)
 
 # We center the two variables ln_dist and ln_euros
 #  on the factors Origin and Destination
-X_demean = demean(X = base[, c("ln_dist", "ln_euros")],
-                  f = base[, c("Origin", "Destination")])
-base[, c("ln_dist_dm", "ln_euros_dm")] = X_demean
+X_demean <- demean(
+  X = base[, c("ln_dist", "ln_euros")],
+  f = base[, c("Origin", "Destination")]
+)
+base[, c("ln_dist_dm", "ln_euros_dm")] <- X_demean
 
-est = feols(ln_euros_dm ~ ln_dist_dm, base)
-est_fe = feols(ln_euros ~ ln_dist | Origin + Destination, base)
+est <- feols(ln_euros_dm ~ ln_dist_dm, base)
+est_fe <- feols(ln_euros ~ ln_dist | Origin + Destination, base)
 
 # The results are the same as if we used the two factors
 # as fixed-effects
@@ -107,23 +109,25 @@ etable(est, est_fe, se = "st")
 # You can center on factors but also on variables with varying slopes
 
 # Let's have an illustration
-base = iris
-names(base) = c("y", "x1", "x2", "x3", "species")
+base <- iris
+names(base) <- c("y", "x1", "x2", "x3", "species")
 
 #
 # We center y and x1 on species and x2 * species
 
 # using a formula
-base_dm = demean(y + x1 ~ species[x2], data = base)
+base_dm <- demean(y + x1 ~ species[x2], data = base)
 
 # using vectors
-base_dm_bis = demean(X = base[, c("y", "x1")], f = base$species,
-                     slope.vars = base$x2, slope.flag = 1)
+base_dm_bis <- demean(
+  X = base[, c("y", "x1")], f = base$species,
+  slope.vars = base$x2, slope.flag = 1
+)
 
 # Let's look at the equivalences
-res_vs_1 = feols(y ~ x1 + species + x2:species, base)
-res_vs_2 = feols(y ~ x1, base_dm)
-res_vs_3 = feols(y ~ x1, base_dm_bis)
+res_vs_1 <- feols(y ~ x1 + species + x2:species, base)
+res_vs_2 <- feols(y ~ x1, base_dm)
+res_vs_3 <- feols(y ~ x1, base_dm_bis)
 
 # only the small sample adj. differ in the SEs
 etable(res_vs_1, res_vs_2, res_vs_3, keep = "x1")
@@ -131,14 +135,16 @@ etable(res_vs_1, res_vs_2, res_vs_3, keep = "x1")
 #
 # center on x2 * species and on another FE
 
-base$fe = rep(1:5, 10)
+base$fe <- rep(1:5, 10)
 
 # using a formula => double square brackets!
-base_dm = demean(y + x1 ~ fe + species[[x2]], data = base)
+base_dm <- demean(y + x1 ~ fe + species[[x2]], data = base)
 
 # using vectors => note slope.flag!
-base_dm_bis = demean(X = base[, c("y", "x1")], f = base[, c("fe", "species")],
-                     slope.vars = base$x2, slope.flag = c(0, -1))
+base_dm_bis <- demean(
+  X = base[, c("y", "x1")], f = base[, c("fe", "species")],
+  slope.vars = base$x2, slope.flag = c(0, -1)
+)
 
 # Explanations slope.flag = c(0, -1):
 # - the first 0: the first factor (fe) is associated to no variable
@@ -147,14 +153,11 @@ base_dm_bis = demean(X = base[, c("y", "x1")], f = base[, c("fe", "species")],
 #    *   -1 < 0: the second factor should not be included as such
 
 # Let's look at the equivalences
-res_vs_1 = feols(y ~ x1 + i(fe) + x2:species, base)
-res_vs_2 = feols(y ~ x1, base_dm)
-res_vs_3 = feols(y ~ x1, base_dm_bis)
+res_vs_1 <- feols(y ~ x1 + i(fe) + x2:species, base)
+res_vs_2 <- feols(y ~ x1, base_dm)
+res_vs_3 <- feols(y ~ x1, base_dm_bis)
 
 # only the small sample adj. differ in the SEs
 etable(res_vs_1, res_vs_2, res_vs_3, keep = "x1")
-
-
-
 
 }
