@@ -2065,7 +2065,9 @@ feols.fit <- function(y, X, fixef_df, vcov, offset, split, fsplit, cluster, se, 
 #' \item{weights}{(When relevant.) The weights formula.}
 #' \item{collin.var}{(When relevant.) Vector containing the variables removed because of collinearity.}
 #' \item{collin.coef}{(When relevant.) Vector of coefficients, where the values of the variables removed because of collinearity are NA.}
-#' \item{model}{A logical value indicating whether model frame should be included as a component of the returned value.}
+#'
+#'
+#'
 #'
 #' @seealso
 #' See also \code{\link[fixest2]{summary.fixest}} to see the results with the appropriate standard-errors, \code{\link[fixest2]{fixef.fixest}} to extract the fixed-effects coefficients, and the function \code{\link[fixest2]{etable}} to visualize the results of multiple estimations.
@@ -2138,7 +2140,7 @@ feglm <- function(fml, data, family = "gaussian", vcov, offset, weights, subset,
                   glm.iter = 25, glm.tol = 1e-8, nthreads = getFixest_nthreads(),
                   lean = FALSE, warn = TRUE, notes = getFixest_notes(), verbose = 0,
                   only.coef = FALSE,
-                  combine.quick, mem.clean = FALSE, only.env = FALSE, model = FALSE, env, ...) {
+                  combine.quick, mem.clean = FALSE, only.env = FALSE, env, ...) {
   if (missing(weights)) weights <- NULL
 
   time_start <- proc.time()
@@ -2160,7 +2162,7 @@ feglm <- function(fml, data, family = "gaussian", vcov, offset, weights, subset,
       nthreads = nthreads, lean = lean, warn = warn, notes = notes,
       verbose = verbose, combine.quick = combine.quick,
       mem.clean = mem.clean, only.coef = only.coef, origin = "feglm",
-      mc_origin = match.call(), call_env = call_env, model = model, ...
+      mc_origin = match.call(), call_env = call_env, ...
     ), silent = TRUE)
   } else if ((r <- !is.environment(env)) || !isTRUE(env$fixest_env)) {
     stop("Argument 'env' must be an environment created by a fixest estimation. Currently it is not ", ifelse(r, "an", "a 'fixest'"), " environment.")
@@ -2195,7 +2197,7 @@ feglm.fit <- function(y, X, fixef_df, family = "gaussian", vcov, offset, split,
                       fixef.tol = 1e-6, fixef.iter = 10000, collin.tol = 1e-10,
                       glm.iter = 25, glm.tol = 1e-8, nthreads = getFixest_nthreads(),
                       lean = FALSE, warn = TRUE, notes = getFixest_notes(), mem.clean = FALSE,
-                      verbose = 0, only.env = FALSE, only.coef = FALSE, model, env, ...) {
+                      verbose = 0, only.env = FALSE, only.coef = FALSE, env, ...) {
   dots <- list(...)
 
   lean_internal <- isTRUE(dots$lean_internal)
@@ -2263,7 +2265,7 @@ feglm.fit <- function(y, X, fixef_df, family = "gaussian", vcov, offset, split,
       glm.tol = glm.tol, notes = notes, mem.clean = mem.clean,
       only.coef = only.coef,
       warn = warn, verbose = verbose, origin = "feglm.fit",
-      mc_origin = match.call(), call_env = call_env, model = model, ...
+      mc_origin = match.call(), call_env = call_env, ...
     ), silent = TRUE)
 
     if ("try-error" %in% class(env)) {
@@ -2812,13 +2814,6 @@ feglm.fit <- function(y, X, fixef_df, family = "gaussian", vcov, offset, split,
 
   n <- length(y)
   res$nobs <- n
-
-  # Training dataset (issue #340)
-  if (isTRUE(res$model)) {
-      res$model <- X
-  } else {
-      res$model <- NULL
-  }
 
   df_k <- res$nparams
 

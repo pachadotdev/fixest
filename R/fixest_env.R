@@ -18,8 +18,7 @@ fixest_env <- function(fml, data, family = c("poisson", "negbin", "logit", "gaus
                        warn = TRUE, notes = getFixest_notes(), combine.quick, demeaned = FALSE,
                        origin_bis, origin = "feNmlm", mc_origin, mc_origin_bis, mc_origin_ter,
                        computeModel0 = FALSE, weights = NULL, only.coef = FALSE,
-                       debug = FALSE, mem.clean = FALSE, call_env = NULL, call_env_bis,
-                       model = FALSE, ...) {
+                       debug = FALSE, mem.clean = FALSE, call_env = NULL, call_env_bis, ...) {
   # INTERNAL function:
   # the estimation functions need input data in the exact format without any mistake possible (bc of c++)
   # this function takes care of implementing all the checks needed and providing the proper formatting
@@ -66,7 +65,7 @@ fixest_env <- function(fml, data, family = c("poisson", "negbin", "logit", "gaus
     "fml", "data", "panel.id", "offset", "subset", "split", "fsplit", "vcov",
     "cluster", "se", "ssc", "fixef.rm", "fixef.tol", "fixef.iter", "fixef",
     "nthreads", "lean", "verbose", "warn", "notes", "combine.quick",
-    "start", "only.env", "mem.clean", "only.coef", "model"
+    "start", "only.env", "mem.clean", "only.coef"
   )
 
   femlm_args <- c("family", "theta.init", "linear.start", "opt.control", "deriv.tol", "deriv.iter")
@@ -2875,9 +2874,6 @@ fixest_env <- function(fml, data, family = c("poisson", "negbin", "logit", "gaus
     }
   }
 
-  # logical for training data
-  res$model <- model
-
   assign("res", res, env)
 
   env
@@ -3996,10 +3992,6 @@ fixest_NA_results <- function(env) {
   res$summary <- TRUE
 
   # Fit stats
-
-  # logical for training data (i.e., new session fit stats)
-  res$model <- get("model", env)
-
   res$nobs <- nrow(X)
   res$ssr <- res$ssr_null <- res$ssr_fe_only <- res$sigma2 <- res$loglik <- res$ll_null <- res$ll_fe_only <- res$pseudo_r2 <- res$deviance <- res$sq.cor <- NA_real_
 

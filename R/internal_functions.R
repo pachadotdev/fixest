@@ -1335,7 +1335,7 @@ fetch_data <- function(x, prefix = "", suffix = "") {
 
   # 2) First non fixest frame
 
-  fixest_funs <- ls(getNamespace("fixest2"))
+  fixest_funs <- ls(getNamespace("fixest"))
 
   i <- 2
   sysOrigin <- sys.parent(i)
