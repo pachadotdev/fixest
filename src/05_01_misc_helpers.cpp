@@ -538,9 +538,7 @@ std::string cpp_add_commas(double x, int r = 1, bool whole = true)
     return pgcd;
 }
 
-//
 // Getting the cluster coefficients
-//
 
 [[cpp11::register]]
 list cpp_get_fe_gnl(int Q, int N, writable::doubles sumFE, writable::integers_matrix<> dumMat, writable::integers cluster_sizes, writable::integers obsCluster)
@@ -580,7 +578,6 @@ list cpp_get_fe_gnl(int Q, int N, writable::doubles sumFE, writable::integers_ma
         index_cluster[i] += i;
     }
 
-    // TODO: .data() comes from Rcpp, what does it exactly do?
     pindex_cluster[0] = index_cluster.data();
     for (int q = 1; q < Q; q++)
     {
@@ -651,9 +648,7 @@ list cpp_get_fe_gnl(int Q, int N, writable::doubles sumFE, writable::integers_ma
     {
         iter++;
 
-        //
         // Finding the row where to put the 0s
-        //
 
         if (iter == 1)
         {
@@ -692,11 +687,7 @@ list cpp_get_fe_gnl(int Q, int N, writable::doubles sumFE, writable::integers_ma
             }
         }
 
-        // Rprintf("Obs selected: %i\n", qui_max);
-
-        //
         // Putting the 0s, ie setting the references
-        //
 
         // the first element is spared
         first = true;
@@ -714,18 +705,15 @@ list cpp_get_fe_gnl(int Q, int N, writable::doubles sumFE, writable::integers_ma
                     // we set the cluster to 0
                     // 1) we find the cluster
                     id_cluster = dumMat(qui_max, q);
-                    // Rprintf("Cluster: %i\n", id_cluster + 1);
                     // 2) we get the index of the cluster vector
-                    // TODO: no viable conversion from integers to int* here
                     int *pindex = pindex_cluster[q];
                     index = pindex[id_cluster];
                     // 3) we set the cluster value to 0
                     cluster_values[index] = 0;
                     // 4) we update the mat_done matrix for the elements of this cluster
-                    // TODO: int/integers conversion
                     for (int i = start_cluster[index]; i < end_cluster[index]; i++)
                     {
-                        // TODO: why does this subset a vector in a matrix way??
+                        // TODO: expression result unused
                         // original https://github.com/pachadotdev/fixest2/blob/master/src/misc_funs.cpp#L382
                         obs = obsCluster[i, q];
                         mat_done(obs, q) = 1;
@@ -737,22 +725,16 @@ list cpp_get_fe_gnl(int Q, int N, writable::doubles sumFE, writable::integers_ma
             }
         }
 
-        //
         // LOOP OF ALL OTHER UPDATES (CRITICAL)
-        //
 
         iter_loop = 0;
         while (iter_loop < iterMax_loop)
         {
             iter_loop++;
 
-            // Rprintf("nb2do_next: %i -- nb2do: %i\n", nb2do_next, nb2do);
-
             R_CheckUserInterrupt();
 
-            //
             // Selection of indexes (new way) to be updated
-            //
 
             // initialisation of the observations to cover (before first loop the two are identical)
             if (iter_loop != 1)
@@ -798,20 +780,17 @@ list cpp_get_fe_gnl(int Q, int N, writable::doubles sumFE, writable::integers_ma
                     for (int l = 0; l < Q; l++)
                     {
                         // we can loop over all q because cluster_values is initialized to 0
-                        // TODO: go back and convert pindex_cluster to matrix?
                         index = pindex_cluster[l][dumMat(obs, l)];
-                        // TODO: double vs cpp11::doubles?
                         other_value += cluster_values[index];
                     }
 
                     // the index to update
-                    // TODO: no viable overloaded +=
                     cluster_values[index_select] += sumFE[obs] - other_value;
 
                     // Update of the mat_done
                     for (int j = start_cluster[index_select]; j < end_cluster[index_select]; j++)
                     {
-                        // TODO: comma operator here is meaningless
+                        // TODO: expression result unused
                         // original: https://github.com/pachadotdev/fixest2/blob/master/src/misc_funs.cpp#L453
                         obs = obsCluster[j, q];
                         mat_done(obs, q) = 1;
@@ -851,13 +830,11 @@ list cpp_get_fe_gnl(int Q, int N, writable::doubles sumFE, writable::integers_ma
     for (int q = 0; q < Q; q++)
     {
         writable::doubles quoi(cluster_sizes[q]);
-        // TODO: incompatible integers vs int*
         pindex = pindex_cluster[q];
         for (k = 0; k < cluster_sizes[q]; k++)
         {
             index = pindex[k];
             // index = start(q) + k;
-            // TODO: overload
             quoi[k] = cluster_values[index];
         }
         res[q] = quoi;
