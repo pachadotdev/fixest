@@ -692,8 +692,6 @@ list cpp_get_fe_gnl(int Q, int N, writable::doubles sumFE, writable::integers_ma
             }
         }
 
-        // Rprintf("Obs selected: %i\n", qui_max);
-
         //
         // Putting the 0s, ie setting the references
         //
@@ -745,8 +743,6 @@ list cpp_get_fe_gnl(int Q, int N, writable::doubles sumFE, writable::integers_ma
         while (iter_loop < iterMax_loop)
         {
             iter_loop++;
-
-            // Rprintf("nb2do_next: %i -- nb2do: %i\n", nb2do_next, nb2do);
 
             R_CheckUserInterrupt();
 
@@ -856,7 +852,6 @@ list cpp_get_fe_gnl(int Q, int N, writable::doubles sumFE, writable::integers_ma
         for (k = 0; k < cluster_sizes[q]; k++)
         {
             index = pindex[k];
-            // index = start(q) + k;
             // TODO: overload
             quoi[k] = cluster_values[index];
         }
