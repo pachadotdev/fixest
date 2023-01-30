@@ -397,7 +397,6 @@ summary(est_split, "compact")
 
 # You can still select which sample/LHS/RHS to display
 est_split[sample = 1:2, lhs = 1, rhs = 1]
-
 }
 \references{
 Berge, Laurent, 2018, "Efficient estimation of maximum likelihood models with multiple fixed-effects: the R package FENmlm." CREA Discussion Papers, 13 (\url{https://wwwen.uni.lu/content/download/110162/1299525/file/2018_13}).

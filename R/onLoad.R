@@ -7,9 +7,9 @@
   options("fixest_print" = list(type = "table"))
   options("fixest_fl_authorized" = FALSE)
 
-  setFixest_coefplot("all", reset = TRUE)
+  # setFixest_coefplot("all", reset = TRUE) # TODO: remove coefplot
   setFixest_ssc()
-  setFixest_etable()
+  # setFixest_etable() # TODO: remove etable
 
   # # To include later
   # cpp_setup_fork_presence()

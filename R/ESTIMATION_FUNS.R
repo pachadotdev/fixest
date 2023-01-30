@@ -359,7 +359,7 @@
 #'
 #' # Same for ..(, "regex")
 #' feols(y ~ csw(..(, "x")), base)
-#'
+#' @export
 feols <- function(fml, data, vcov, weights, offset, subset, split, fsplit, cluster, se,
                   ssc, panel.id, fixef, fixef.rm = "none", fixef.tol = 1e-6,
                   fixef.iter = 10000, collin.tol = 1e-10, nthreads = getFixest_nthreads(),
@@ -2132,7 +2132,7 @@ feols.fit <- function(y, X, fixef_df, vcov, offset, split, fsplit, cluster, se, 
 #'
 #' # You can still select which sample/LHS/RHS to display
 #' est_split[sample = 1:2, lhs = 1, rhs = 1]
-#'
+#' @export
 feglm <- function(fml, data, family = "gaussian", vcov, offset, weights, subset, split,
                   fsplit, cluster, se, ssc, panel.id, start = NULL,
                   etastart = NULL, mustart = NULL, fixef, fixef.rm = "perfect",

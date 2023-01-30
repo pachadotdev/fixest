@@ -4,7 +4,7 @@
 \alias{estfun.fixest}
 \title{Extracts the scores from a fixest estimation}
 \usage{
-\method{estfun}{fixest}(x, ...)
+estfun.fixest(x, ...)
 }
 \arguments{
 \item{x}{A \code{fixest} object, obtained for instance from \code{\link[fixest2]{feols}}.}

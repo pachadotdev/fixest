@@ -4,7 +4,7 @@
 \alias{fixef.fixest}
 \title{Extract the Fixed-Effects from a \code{fixest} estimation.}
 \usage{
-\method{fixef}{fixest}(
+fixef.fixest(
   object,
   notes = getFixest_notes(),
   sorted = TRUE,

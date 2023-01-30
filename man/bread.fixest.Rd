@@ -4,7 +4,7 @@
 \alias{bread.fixest}
 \title{Extracts the bread matrix from fixest objects}
 \usage{
-\method{bread}{fixest}(x, ...)
+bread.fixest(x, ...)
 }
 \arguments{
 \item{x}{A \code{fixest} object, obtained for instance from \code{\link[fixest2]{feols}}.}
