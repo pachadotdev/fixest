@@ -1,4 +1,8 @@
-#' @useDynLib fixest, .registration = TRUE
+#' @useDynLib fixest2, .registration = TRUE
+NULL
+
+#' @importFrom dreamerr check_arg check_arg_plus check_value check_value_plus
+#'  set_up
 NULL
 
 #' Trade data sample
