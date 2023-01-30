@@ -2,7 +2,17 @@
 NULL
 
 #' @importFrom dreamerr check_arg check_arg_plus check_value check_value_plus
-#'  set_up
+#'  set_up stop_up validate_dots
+NULL
+
+#' @importFrom stats .getXlevels AIC BIC aggregate as.formula binomial cancor
+#'  coef complete.cases confint deviance formula logLik median model.frame
+#'  model.matrix na.omit na.pass nlminb nobs pchisq pf pnorm poisson predict
+#'  pt qnorm qt quantile resid rnorm sd setNames terms update var
+NULL
+
+#' @importFrom utils as.roman capture.output combn head object.size
+#'  packageVersion read.csv tail write.csv
 NULL
 
 #' Trade data sample
