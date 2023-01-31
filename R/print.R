@@ -60,7 +60,7 @@
 #'
 #' # Back to default (NULL == default)
 #' setFixest_print(fitstat = NULL)
-#'
+#' @exportS3Method
 print.fixest <- function(x, n, type = "table", fitstat = NULL, ...) {
   # checking the arguments
   if (is_user_level_call()) {

@@ -2,7 +2,7 @@
 NULL
 
 #' @importFrom dreamerr check_arg check_arg_plus check_value check_value_plus
-#'  set_up stop_up validate_dots
+#'  set_up stop_up validate_dots sfill
 NULL
 
 #' @importFrom stats .getXlevels AIC BIC aggregate as.formula binomial cancor

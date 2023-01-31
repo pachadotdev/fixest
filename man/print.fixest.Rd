@@ -70,7 +70,6 @@ est_pois
 
 # Back to default (NULL == default)
 setFixest_print(fitstat = NULL)
-
 }
 \seealso{
 See also the main estimation functions \code{\link[fixest2]{femlm}}, \code{\link[fixest2]{feols}} or \code{\link[fixest2]{feglm}}. Use \code{\link[fixest2]{summary.fixest}} to see the results with the appropriate standard-errors, \code{\link[fixest2]{fixef.fixest}} to extract the fixed-effects coefficients, and the function \code{\link[fixest2]{etable}} to visualize the results of multiple estimations.
