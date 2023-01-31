@@ -1087,61 +1087,6 @@ listDefault <- function(x, variable, value) {
   }
 }
 
-hgrid <- function(lty = 3, col = "darkgray", ymin = -Inf, ymax = Inf, ...) {
-  # simple function that draws an horizontal grid
-
-  # Finding the coordinates
-  y <- axis(2, lwd = 0, labels = NA)
-
-  y <- y[y > ymin & y < ymax]
-
-  # now drawing the lines
-  if (length(y) > 0) {
-    abline(h = y, col = col, lty = lty, ...)
-  }
-}
-
-vgrid <- function(lty = 3, col = "darkgray", xmin = -Inf, xmax = Inf, ...) {
-  # simple function that draws an horizontal grid
-
-  # Finding the coordinates
-  x <- axis(1, lwd = 0, labels = NA)
-
-  x <- x[x > xmin & x < xmax]
-
-  # now drawing the lines
-  if (length(x) > 0) {
-    abline(v = x, col = col, lty = lty, ...)
-  }
-}
-
-shade_area <- function(y1, y2, x, xmin, xmax, col = "grey", ...) {
-  # fonction plus pratique que polygon
-  # elle permet de griser une partie delimitee par
-  # y1 et y2 pour chacune des valeurs de x
-  # on doit avoir la meme longueur de y1,y2 et x
-  # exemple:
-  # a=curve(x**2,-5,5)
-  # shade_area(a$y+1,a$y-1,a$x)
-  # qqes parametres graphiques:
-  # lwd / border (couleur du bord, peut etre NA) / lty
-
-  n <- length(x)
-  stopifnot(length(y1) == n | length(y1) == 1)
-  stopifnot(length(y2) == n | length(y2) == 1)
-
-  if (length(y1) == 1) y1 <- rep(y1, n)
-  if (length(y2) == 1) y2 <- rep(y2, n)
-
-  if (missing(xmin)) xmin <- min(x)
-  if (missing(xmax)) xmax <- max(x)
-
-  ind <- which(x >= xmin & x <= xmax)
-  x1 <- x[ind]
-  x2 <- x[rev(ind)]
-  polygon(c(x1, x2), c(y1[ind], y2[rev(ind)]), col = col, ...)
-}
-
 clean_interact_names <- function(x) {
   # GOD, why is it so complicated? Why?
   # Why do I have to spend so much time on that crap?
