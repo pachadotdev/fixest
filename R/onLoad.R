@@ -23,9 +23,6 @@
   # Aliases must come after the VCOV
   create_aliases()
 
-  # To circumvent a peculiar behavior from pkgdown
-  fix_pkgwdown_path()
-
   invisible()
 }
 
