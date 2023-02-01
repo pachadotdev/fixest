@@ -1041,7 +1041,7 @@ feglm.fit <- function(y, X, fixef_df, family = "gaussian", vcov, offset, split,
 #'
 #' # You can still select which sample/LHS/RHS to display
 #' est_split[sample = 1:2, lhs = 1, rhs = 1]
-#'
+#' @export
 femlm <- function(fml, data, family = c("poisson", "negbin", "logit", "gaussian"), vcov,
                   start = 0, fixef, fixef.rm = "perfect", offset, subset, split, fsplit,
                   cluster, se, ssc, panel.id, fixef.tol = 1e-5, fixef.iter = 10000,
