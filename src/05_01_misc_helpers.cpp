@@ -716,8 +716,6 @@ list cpp_get_fe_gnl(int Q,
                     // 4) we update the mat_done matrix for the elements of this cluster
                     for (int i = start_cluster[index]; i < end_cluster[index]; i++)
                     {
-                        // TODO: expression result unused assigning 'int' from incompatible type
-                        // original https://github.com/pachadotdev/fixest2/blob/master/src/misc_funs.cpp#L382
                         obs = obsCluster(i, q);
                         mat_done(obs, q) = 1;
                         rowsums[obs]++;
@@ -793,8 +791,6 @@ list cpp_get_fe_gnl(int Q,
                     // Update of the mat_done
                     for (int j = start_cluster[index_select]; j < end_cluster[index_select]; j++)
                     {
-                        // TODO: TODO: expression result unused assigning 'int' from incompatible type
-                        // original: https://github.com/pachadotdev/fixest2/blob/master/src/misc_funs.cpp#L453
                         obs = obsCluster(j, q);
                         mat_done(obs, q) = 1;
                         rowsums[obs]++;
