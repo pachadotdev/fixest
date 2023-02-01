@@ -718,7 +718,7 @@ list cpp_get_fe_gnl(int Q,
                     {
                         // TODO: expression result unused assigning 'int' from incompatible type
                         // original https://github.com/pachadotdev/fixest2/blob/master/src/misc_funs.cpp#L382
-                        obs = obsCluster[i, q];
+                        obs = obsCluster(i, q);
                         mat_done(obs, q) = 1;
                         rowsums[obs]++;
                     }
@@ -795,7 +795,7 @@ list cpp_get_fe_gnl(int Q,
                     {
                         // TODO: TODO: expression result unused assigning 'int' from incompatible type
                         // original: https://github.com/pachadotdev/fixest2/blob/master/src/misc_funs.cpp#L453
-                        obs = obsCluster[j, q];
+                        obs = obsCluster(j, q);
                         mat_done(obs, q) = 1;
                         rowsums[obs]++;
                     }
@@ -844,7 +844,7 @@ list cpp_get_fe_gnl(int Q,
     }
 
     // TODO: viable overload
-    res[Q] = nb_ref;
+    // res[Q] = nb_ref; // DOESN'T WORK
 
     return res;
 }
