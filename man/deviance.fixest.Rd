@@ -7,7 +7,7 @@
 \method{deviance}{fixest}(object, ...)
 }
 \arguments{
-\item{object}{A \code{fixest} object.}
+\item{object}{A `fixest` object.}
 
 \item{...}{Not currently used.}
 }
@@ -15,17 +15,17 @@
 Returns a numeric scalar equal to the deviance.
 }
 \description{
-Returns the deviance from a \code{fixest} estimation.
+Returns the deviance from a `fixest` estimation.
 }
 \examples{
 
-est <- feols(Petal.Length ~ Petal.Width, iris)
+est = feols(Petal.Length ~ Petal.Width, iris)
 deviance(est)
 
-est_pois <- fepois(Petal.Length ~ Petal.Width, iris)
+est_pois = fepois(Petal.Length ~ Petal.Width, iris)
 deviance(est_pois)
 
 }
 \seealso{
-\code{\link[fixest2]{feols}}, \code{\link[fixest2:feglm]{fepois}}, \code{\link[fixest2]{feglm}}, \code{\link[fixest2:femlm]{fenegbin}}, \code{\link[fixest2]{feNmlm}}.
+[`feols`], [`fepois`][fixest2::feglm], [`feglm`], [`fenegbin`][fixest2::femlm], [`feNmlm`].
 }

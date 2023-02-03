@@ -2,50 +2,48 @@
 % Please edit documentation in R/fixest_multi.R
 \name{[.fixest_multi}
 \alias{[.fixest_multi}
-\title{Subset a fixest_multi object}
+\title{Subsets a fixest_multi object}
 \usage{
-\method{[}{fixest_multi}(x, i, sample, lhs, rhs, fixef, iv, I, reorder = TRUE, drop = TRUE)
+\method{[}{fixest_multi}(x, i, sample, lhs, rhs, fixef, iv, I, reorder = TRUE, drop = FALSE)
 }
 \arguments{
-\item{x}{A \code{fixest_multi} object, obtained from a \code{fixest} estimation leading to multiple results.}
+\item{x}{A `fixest_multi` object, obtained from a `fixest` estimation leading to multiple results.}
 
 \item{i}{An integer vector. Represents the estimations to extract.}
 
-\item{sample}{An integer vector, a logical scalar, or a character vector. It represents the \code{sample} identifiers for which the results should be extracted. Only valid when the \code{fixest} estimation was a split sample. You can use \code{.N} to refer to the last element. If logical, all elements are selected in both cases, but \code{FALSE} leads \code{sample} to become the rightmost key (just try it out).}
+\item{sample}{An integer vector, a logical scalar, or a character vector. It represents the `sample` identifiers for which the results should be extracted. Only valid when the `fixest` estimation was a split sample. You can use `.N` to refer to the last element. If logical, all elements are selected in both cases, but `FALSE` leads `sample` to become the rightmost key (just try it out).}
 
-\item{lhs}{An integer vector, a logical scalar, or a character vector. It represents the left-hand-sides identifiers for which the results should be extracted. Only valid when the \code{fixest} estimation contained multiple left-hand-sides. You can use \code{.N} to refer to the last element. If logical, all elements are selected in both cases, but \code{FALSE} leads \code{lhs} to become the rightmost key (just try it out).}
+\item{lhs}{An integer vector, a logical scalar, or a character vector. It represents the left-hand-sides identifiers for which the results should be extracted. Only valid when the `fixest` estimation contained multiple left-hand-sides. You can use `.N` to refer to the last element. If logical, all elements are selected in both cases, but `FALSE` leads `lhs` to become the rightmost key (just try it out).}
 
-\item{rhs}{An integer vector or a logical scalar. It represents the right-hand-sides identifiers for which the results should be extracted. Only valid when the \code{fixest} estimation contained multiple right-hand-sides. You can use \code{.N} to refer to the last element. If logical, all elements are selected in both cases, but \code{FALSE} leads \code{rhs} to become the rightmost key (just try it out).}
+\item{rhs}{An integer vector or a logical scalar. It represents the right-hand-sides identifiers for which the results should be extracted. Only valid when the `fixest` estimation contained multiple right-hand-sides. You can use `.N` to refer to the last element. If logical, all elements are selected in both cases, but `FALSE` leads `rhs` to become the rightmost key (just try it out).}
 
-\item{fixef}{An integer vector or a logical scalar. It represents the fixed-effects identifiers for which the results should be extracted. Only valid when the \code{fixest} estimation contained fixed-effects in a stepwise fashion. You can use \code{.N} to refer to the last element. If logical, all elements are selected in both cases, but \code{FALSE} leads \code{fixef} to become the rightmost key (just try it out).}
+\item{fixef}{An integer vector or a logical scalar. It represents the fixed-effects identifiers for which the results should be extracted. Only valid when the `fixest` estimation contained fixed-effects in a stepwise fashion. You can use `.N` to refer to the last element. If logical, all elements are selected in both cases, but `FALSE` leads `fixef` to become the rightmost key (just try it out).}
 
-\item{iv}{An integer vector or a logical scalar. It represent the stages of the IV. Note that the length can be greater than 2 when there are multiple endogenous regressors (the first stage corresponding to multiple estimations). Note that the order of the stages depends on the \code{stage} argument from \code{\link[fixest2]{summary.fixest}}. If logical, all elements are selected in both cases, but \code{FALSE} leads \code{iv} to become the rightmost key (just try it out).}
+\item{iv}{An integer vector or a logical scalar. It represent the stages of the IV. Note that the length can be greater than 2 when there are multiple endogenous regressors (the first stage corresponding to multiple estimations). Note that the order of the stages depends on the `stage` argument from [`summary.fixest`]. If logical, all elements are selected in both cases, but `FALSE` leads `iv` to become the rightmost key (just try it out).}
 
 \item{I}{An integer vector. Represents the root element to extract.}
 
-\item{reorder}{Logical, default is \code{TRUE}. Indicates whether reordering of the results should be performed depending on the user input.}
+\item{reorder}{Logical, default is `TRUE`. Indicates whether reordering of the results should be performed depending on the user input.}
 
-\item{drop}{Logical, default is \code{TRUE}. If the result contains only one estimation, then if \code{drop = TRUE} it will be transformed into a \code{fixest} object (instead of \code{fixest_multi}).}
+\item{drop}{Logical, default is `FALSE`. If the result contains only one estimation, then if `drop = TRUE` it will be transformed into a `fixest` object (instead of `fixest_multi`).}
 }
 \value{
-It returns a \code{fixest_multi} object. If there is only one estimation left in the object, then the result is simplified into a \code{fixest} object.
+It returns a `fixest_multi` object. If there is only one estimation left in the object, then the result is simplified into a `fixest` object.
 }
 \description{
-Subset a fixest_multi object using different keys.
+Subsets a fixest_multi object using different keys.
 }
 \details{
-The order with we we use the keys matter. Every time a key \code{sample}, \code{lhs}, \code{rhs}, \code{fixef} or \code{iv} is used, a reordering is performed to consider the leftmost-side key to be the new root.
+The order with we we use the keys matter. Every time a key `sample`, `lhs`, `rhs`, `fixef` or `iv` is used, a reordering is performed to consider the leftmost-side key to be the new root.
 
-Use logical keys to easily reorder. For example, say the object \code{res} contains a multiple estimation with multiple left-hand-sides, right-hand-sides and fixed-effects. By default the results are ordered as follows: \code{lhs}, \code{fixef}, \code{rhs}. If you use \code{res[lhs = FALSE]}, then the new order is: \code{fixef}, \code{rhs}, \code{lhs}. With \code{res[rhs = TRUE, lhs = FALSE]} it becomes: \code{rhs}, \code{fixef}, \code{lhs}. In both cases you keep all estimations.
+Use logical keys to easily reorder. For example, say the object `res` contains a multiple estimation with multiple left-hand-sides, right-hand-sides and fixed-effects. By default the results are ordered as follows: `lhs`, `fixef`, `rhs`. If you use `res[lhs = FALSE]`, then the new order is: `fixef`, `rhs`, `lhs`. With `res[rhs = TRUE, lhs = FALSE]` it becomes: `rhs`, `fixef`, `lhs`. In both cases you keep all estimations.
 }
 \examples{
 
 # Estimation with multiple samples/LHS/RHS
-aq <- airquality[airquality$Month \%in\% 5:6, ]
-est_split <- feols(c(Ozone, Solar.R) ~ sw(poly(Wind, 2), poly(Temp, 2)),
-  aq,
-  split = ~Month
-)
+aq = airquality[airquality$Month \%in\% 5:6, ]
+est_split = feols(c(Ozone, Solar.R) ~ sw(poly(Wind, 2), poly(Temp, 2)),
+                  aq, split = ~ Month)
 
 # By default: sample is the root
 etable(est_split)
@@ -64,13 +62,5 @@ etable(est_split[i = c(1, .N)])
 
 }
 \seealso{
-The main fixest estimation functions: \code{\link[fixest2]{feols}},
-\code{\link[fixest2:feglm]{fepois}}, \code{\link[fixest2:femlm]{fenegbin}},
-\code{\link[fixest2]{feglm}}, \code{\link[fixest2]{feNmlm}}. Tools for multiple
-fixest estimations: \code{\link[fixest2]{summary.fixest_multi}},
-\code{\link[fixest2]{print.fixest_multi}},
-\code{\link[fixest2]{as.list.fixest_multi}},
-\code{\link[fixest2]{sub-sub-.fixest_multi}},
-\code{\link[fixest2]{sub-.fixest_multi}},
-\code{\link[fixest2]{cash-.fixest_multi}}.
+The main fixest estimation functions: [`feols`], [`fepois`][fixest2::feglm], [`fenegbin`][fixest2::femlm], [`feglm`], [`feNmlm`]. Tools for mutliple fixest estimations: [`summary.fixest_multi`], [`print.fixest_multi`], [`as.list.fixest_multi`], \code{\link[fixest]{sub-sub-.fixest_multi}}, \code{\link[fixest]{sub-.fixest_multi}}.
 }

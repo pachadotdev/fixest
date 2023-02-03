@@ -2,12 +2,12 @@
 % Please edit documentation in R/Methods.R
 \name{weights.fixest}
 \alias{weights.fixest}
-\title{Extracts the weights from a \code{fixest} object}
+\title{Extracts the weights from a `fixest` object}
 \usage{
 \method{weights}{fixest}(object, ...)
 }
 \arguments{
-\item{object}{A \code{fixest} object.}
+\item{object}{A `fixest` object.}
 
 \item{...}{Not currently used.}
 }
@@ -15,14 +15,14 @@
 Returns a vector of the same length as the number of observations in the original data set. Ignored observations due to NA or perfect fit are re-introduced and their weights set to NA.
 }
 \description{
-Simply extracts the weights used to estimate a \code{fixest} model.
+Simply extracts the weights used to estimate a `fixest` model.
 }
 \examples{
 
-est <- feols(Petal.Length ~ Petal.Width, iris, weights = ~ as.integer(Sepal.Length) - 3.99)
+est = feols(Petal.Length ~ Petal.Width, iris, weights = ~as.integer(Sepal.Length) - 3.99)
 weights(est)
 
 }
 \seealso{
-\code{\link[fixest2]{feols}}, \code{\link[fixest2:feglm]{fepois}}, \code{\link[fixest2]{feglm}}, \code{\link[fixest2:femlm]{fenegbin}}, \code{\link[fixest2]{feNmlm}}.
+[`feols`], [`fepois`][fixest2::feglm], [`feglm`], [`fenegbin`][fixest2::femlm], [`feNmlm`].
 }

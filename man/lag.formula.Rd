@@ -26,17 +26,17 @@ lag_fml(
 )
 }
 \arguments{
-\item{x}{A formula of the type \code{var ~ id + time} where \code{var} is the variable to be lagged, \code{id} is a variable representing the panel id, and \code{time} is the time variable of the panel.}
+\item{x}{A formula of the type `var ~ id + time` where `var` is the variable to be lagged, `id` is a variable representing the panel id, and `time` is the time variable of the panel.}
 
 \item{k}{An integer giving the number of lags. Default is 1. For leads, just use a negative number.}
 
 \item{data}{Optional, the data.frame in which to evaluate the formula. If not provided, variables will be fetched in the current environment.}
 
-\item{time.step}{The method to compute the lags, default is \code{NULL} (which means automatically set). Can be equal to: \code{"unitary"}, \code{"consecutive"}, \code{"within.consecutive"}, or to a number. If \code{"unitary"}, then the largest common divisor between consecutive time periods is used (typically if the time variable represents years, it will be 1). This method can apply only to integer (or convertible to integer) variables. If \code{"consecutive"}, then the time variable can be of any type: two successive time periods represent a lag of 1. If \code{"witihn.consecutive"} then **within a given id**, two successive time periods represent a lag of 1. Finally, if the time variable is numeric, you can provide your own numeric time step.}
+\item{time.step}{The method to compute the lags, default is `NULL` (which means automatically set). Can be equal to: `"unitary"`, `"consecutive"`, `"within.consecutive"`, or to a number. If `"unitary"`, then the largest common divisor between consecutive time periods is used (typically if the time variable represents years, it will be 1). This method can apply only to integer (or convertible to integer) variables. If `"consecutive"`, then the time variable can be of any type: two successive time periods represent a lag of 1. If `"witihn.consecutive"` then **within a given id**, two successive time periods represent a lag of 1. Finally, if the time variable is numeric, you can provide your own numeric time step.}
 
-\item{fill}{Scalar. How to fill the observations without defined lead/lag values. Default is \code{NA}.}
+\item{fill}{Scalar. How to fill the observations without defined lead/lag values. Default is `NA`.}
 
-\item{duplicate.method}{If several observations have the same id and time values, then the notion of lag is not defined for them. If \code{duplicate.method = "none"} (default) and duplicate values are found, this leads to an error. You can use \code{duplicate.method = "first"} so that the first occurrence of identical id/time observations will be used as lag.}
+\item{duplicate.method}{If several observations have the same id and time values, then the notion of lag is not defined for them. If `duplicate.method = "none"` (default) and duplicate values are found, this leads to an error. You can use `duplicate.method = "first"` so that the first occurrence of identical id/time observations will be used as lag.}
 
 \item{...}{Not currently used.}
 }
@@ -46,20 +46,23 @@ It returns a vector of the same type and length as the variable to be lagged in 
 \description{
 Lags a variable using panel id + time identifiers in a formula.
 }
+\section{Functions}{
+\itemize{
+\item \code{lag_fml()}: Lags a variable using a formula syntax
+
+}}
 \examples{
 # simple example with an unbalanced panel
-base <- data.frame(
-  id = rep(1:2, each = 4),
-  time = c(1, 2, 3, 4, 1, 4, 6, 9), x = 1:8
-)
+base = data.frame(id = rep(1:2, each = 4),
+                  time = c(1, 2, 3, 4, 1, 4, 6, 9), x = 1:8)
 
-base$lag1 <- lag(x ~ id + time, 1, base) # lag 1
-base$lead1 <- lag(x ~ id + time, -1, base) # lead 1
-base$lag2_fill0 <- lag(x ~ id + time, 2, base, fill = 0)
+base$lag1 = lag(x~id+time,  1, base) # lag 1
+base$lead1 = lag(x~id+time, -1, base) # lead 1
+base$lag2_fill0 = lag(x~id+time, 2, base, fill = 0)
 # with time.step = "consecutive"
-base$lag1_consecutive <- lag(x ~ id + time, 1, base, time.step = "consecutive")
+base$lag1_consecutive = lag(x~id+time, 1, base, time.step = "consecutive")
 #   => works for indiv. 2 because 9 (resp. 6) is consecutive to 6 (resp. 4)
-base$lag1_within.consecutive <- lag(x ~ id + time, 1, base, time.step = "within")
+base$lag1_within.consecutive = lag(x~id+time, 1, base, time.step = "within")
 #   => now two consecutive years within each indiv is one lag
 
 print(base)
@@ -69,52 +72,48 @@ print(base)
 # e.g. c("1991q1", "1991q2", "1991q3") etc
 
 # with duplicates
-base_dup <- data.frame(
-  id = rep(1:2, each = 4),
-  time = c(1, 1, 1, 2, 1, 2, 2, 3), x = 1:8
-)
+base_dup = data.frame(id = rep(1:2, each = 4),
+                      time = c(1, 1, 1, 2, 1, 2, 2, 3), x = 1:8)
 
 # Error because of duplicate values for (id, time)
-try(lag(x ~ id + time, 1, base_dup))
+try(lag(x~id+time, 1, base_dup))
 
 
 # Error is bypassed, lag corresponds to first occurence of (id, time)
-lag(x ~ id + time, 1, base_dup, duplicate.method = "first")
+lag(x~id+time, 1, base_dup, duplicate.method = "first")
 
 
 # Playing with time steps
-base <- data.frame(
-  id = rep(1:2, each = 4),
-  time = c(1, 2, 3, 4, 1, 4, 6, 9), x = 1:8
-)
+base = data.frame(id = rep(1:2, each = 4),
+                  time = c(1, 2, 3, 4, 1, 4, 6, 9), x = 1:8)
 
 # time step: 0.5 (here equivalent to lag of 1)
-lag(x ~ id + time, 2, base, time.step = 0.5)
+lag(x~id+time, 2, base, time.step = 0.5)
 
 # Error: wrong time step
-try(lag(x ~ id + time, 2, base, time.step = 7))
+try(lag(x~id+time, 2, base, time.step = 7))
 
 # Adding NAs + unsorted IDs
-base <- data.frame(
-  id = rep(1:2, each = 4),
-  time = c(4, NA, 3, 1, 2, NA, 1, 3), x = 1:8
-)
+base = data.frame(id = rep(1:2, each = 4),
+                  time = c(4, NA, 3, 1, 2, NA, 1, 3), x = 1:8)
 
-base$lag1 <- lag(x ~ id + time, 1, base)
-base$lag1_within <- lag(x ~ id + time, 1, base, time.step = "w")
-base_bis <- base[order(base$id, base$time), ]
+base$lag1 = lag(x~id+time, 1, base)
+base$lag1_within = lag(x~id+time, 1, base, time.step = "w")
+base_bis = base[order(base$id, base$time),]
 
 print(base_bis)
 
 # You can create variables without specifying the data within data.table:
-if (require("data.table")) {
-  base <- data.table(id = rep(1:2, each = 3), year = 1990 + rep(1:3, 2), x = 1:6)
-  base[, x.l1 := lag(x ~ id + year, 1)]
+if(require("data.table")){
+  base = data.table(id = rep(1:2, each = 3), year = 1990 + rep(1:3, 2), x = 1:6)
+  base[, x.l1 := lag(x~id+year, 1)]
 }
+
+
 
 }
 \seealso{
-Alternatively, the function \code{\link[fixest2]{panel}} changes a \code{data.frame} into a panel from which the functions \code{l} and \code{f} (creating leads and lags) can be called. Otherwise you can set the panel 'live' during the estimation using the argument \code{panel.id} (see for example in the function \code{\link[fixest2]{feols}}).
+Alternatively, the function [`panel`] changes a `data.frame` into a panel from which the functions `l` and `f` (creating leads and lags) can be called. Otherwise you can set the panel 'live' during the estimation using the argument `panel.id` (see for example in the function [`feols`]).
 }
 \author{
 Laurent Berge

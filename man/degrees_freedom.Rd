@@ -2,7 +2,8 @@
 % Please edit documentation in R/fitstats.R
 \name{degrees_freedom}
 \alias{degrees_freedom}
-\title{Gets the degrees of freedom of a \code{fixest} estimation}
+\alias{degrees_freedom_iid}
+\title{Gets the degrees of freedom of a `fixest` estimation}
 \usage{
 degrees_freedom(
   x,
@@ -14,40 +15,49 @@ degrees_freedom(
   ssc = NULL,
   stage = 2
 )
+
+degrees_freedom_iid(x, type)
 }
 \arguments{
-\item{x}{A \code{fixest} estimation.}
+\item{x}{A `fixest` estimation.}
 
-\item{type}{Character scalar, equal to "k", "resid", "t". If "k", then the number of regressors is returned. If "resid", then it is the "residuals degree of freedom", i.e. the number of observations minus the number of regressors. If "t", it is the degrees of freedom used in the t-test. Note that these values are affected by how the VCOV of \code{x} is computed, in particular when the VCOV is clustered.}
+\item{type}{Character scalar, equal to "k", "resid", "t". If "k", then the number of regressors is returned. If "resid", then it is the "residuals degree of freedom", i.e. the number of observations minus the number of regressors. If "t", it is the degrees of freedom used in the t-test. Note that these values are affected by how the VCOV of `x` is computed, in particular when the VCOV is clustered.}
 
-\item{vars}{A vector of variable names, of the regressors. This is optional. If provided, then \code{type} is set to 1 by default and the number of regressors contained in \code{vars} is returned. This is only useful in the presence of collinearity and we want a subset of the regressors only. (Mostly for internal use.)}
+\item{vars}{A vector of variable names, of the regressors. This is optional. If provided, then `type` is set to 1 by default and the number of regressors contained in `vars` is returned. This is only useful in the presence of collinearity and we want a subset of the regressors only. (Mostly for internal use.)}
 
-\item{vcov}{Versatile argument to specify the VCOV. In general, it is either a character scalar equal to a VCOV type, either a formula of the form: \code{vcov_type ~ variables}. The VCOV types implemented are: "iid", "hetero" (or "HC1"), "cluster", "twoway", "NW" (or "newey_west"), "DK" (or "driscoll_kraay"), and "conley". It also accepts object from \code{\link[fixest2]{vcov_cluster}}, \code{\link[fixest2:vcov_hac]{vcov_NW}}, \code{\link[fixest2:vcov_hac]{NW}}, \code{\link[fixest2:vcov_hac]{vcov_DK}}, \code{\link[fixest2:vcov_hac]{DK}}, \code{\link[fixest2]{vcov_conley}} and \code{\link[fixest2:vcov_conley]{conley}}. It also accepts covariance matrices computed externally. Finally it accepts functions to compute the covariances. See the `vcov` documentation in the \href{https://lrberge.github.io/fixest/articles/fixest_walkthrough.html#the-vcov-argument-1}{vignette}.}
+\item{vcov}{Versatile argument to specify the VCOV. In general, it is either a character scalar equal to a VCOV type, either a formula of the form: `vcov_type ~ variables`. The VCOV types implemented are: "iid", "hetero" (or "HC1"), "cluster", "twoway", "NW" (or "newey_west"), "DK" (or "driscoll_kraay"), and "conley". It also accepts object from [`vcov_cluster`], [`vcov_NW`][fixest2::vcov_hac], [`NW`][fixest2::vcov_hac], [`vcov_DK`][fixest2::vcov_hac], [`DK`][fixest2::vcov_hac], [`vcov_conley`] and [`conley`][fixest2::vcov_conley]. It also accepts covariance matrices computed externally. Finally it accepts functions to compute the covariances. See the `vcov` documentation in the [vignette](https://lrberge.github.io/fixest/articles/fixest_walkthrough.html#the-vcov-argument-1).}
 
-\item{se}{Character scalar. Which kind of standard error should be computed: \dQuote{standard}, \dQuote{hetero}, \dQuote{cluster}, \dQuote{twoway}, \dQuote{threeway} or \dQuote{fourway}? By default if there are clusters in the estimation: \code{se = "cluster"}, otherwise \code{se = "iid"}. Note that this argument is deprecated, you should use \code{vcov} instead.}
+\item{se}{Character scalar. Which kind of standard error should be computed: \dQuote{standard}, \dQuote{hetero}, \dQuote{cluster}, \dQuote{twoway}, \dQuote{threeway} or \dQuote{fourway}? By default if there are clusters in the estimation: `se = "cluster"`, otherwise `se = "iid"`. Note that this argument is deprecated, you should use `vcov` instead.}
 
-\item{cluster}{Tells how to cluster the standard-errors (if clustering is requested). Can be either a list of vectors, a character vector of variable names, a formula or an integer vector. Assume we want to perform 2-way clustering over \code{var1} and \code{var2} contained in the data.frame \code{base} used for the estimation. All the following \code{cluster} arguments are valid and do the same thing: \code{cluster = base[, c("var1", "var2")]}, \code{cluster = c("var1", "var2")}, \code{cluster = ~var1+var2}. If the two variables were used as fixed-effects in the estimation, you can leave it blank with \code{vcov = "twoway"} (assuming \code{var1} [resp. \code{var2}] was the 1st [res. 2nd] fixed-effect). You can interact two variables using \code{^} with the following syntax: \code{cluster = ~var1^var2} or \code{cluster = "var1^var2"}.}
+\item{cluster}{Tells how to cluster the standard-errors (if clustering is requested). Can be either a list of vectors, a character vector of variable names, a formula or an integer vector. Assume we want to perform 2-way clustering over `var1` and `var2` contained in the data.frame `base` used for the estimation. All the following `cluster` arguments are valid and do the same thing: `cluster = base[, c("var1", "var2")]`, `cluster = c("var1", "var2")`, `cluster = ~var1+var2`. If the two variables were used as fixed-effects in the estimation, you can leave it blank with `vcov = "twoway"` (assuming `var1` \[resp. `var2`\] was the 1st \[resp. 2nd\] fixed-effect). You can interact two variables using `^` with the following syntax: `cluster = ~var1^var2` or `cluster = "var1^var2"`.}
 
-\item{ssc}{An object of class \code{ssc.type} obtained with the function \code{\link[fixest2]{ssc}}. Represents how the degree of freedom correction should be done.You must use the function \code{\link[fixest2]{ssc}} for this argument. The arguments and defaults of the function \code{\link[fixest2]{ssc}} are: \code{adj = TRUE}, \code{fixef.K="nested"}, \code{cluster.adj = TRUE}, \code{cluster.df = "min"}, \code{t.df = "min"}, \code{fixef.force_exact=FALSE)}. See the help of the function \code{\link[fixest2]{ssc}} for details.}
+\item{ssc}{An object of class `ssc.type` obtained with the function [`ssc`]. Represents how the degree of freedom correction should be done.You must use the function [`ssc`] for this argument. The arguments and defaults of the function [`ssc`] are: `adj = TRUE`, `fixef.K="nested"`, `cluster.adj = TRUE`, `cluster.df = "min"`, `t.df = "min"`, `fixef.force_exact=FALSE)`. See the help of the function [`ssc`] for details.}
 
-\item{stage}{Either 1 or 2. Only concerns IV regressions, which stage to look at.}
+\item{stage}{Either 1 or 2. Only concerns IV regressions, which stage to look at.
+
+The type of VCOV can have an influence on the degrees of freedom. In particular, when the VCOV is clustered, the DoF returned will be in accordance with the way the small sample correction was performed when computing the VCOV. That type of value is in general not what we have in mind when we think of "degrees of freedom". To obtain the ones that are more intuitive, please use `degrees_freedom_iid` instead.}
 }
 \description{
-Simple utility to extract the degrees of freedom from a \code{fixest} estimation.
+Simple utility to extract the degrees of freedom from a `fixest` estimation.
 }
+\section{Functions}{
+\itemize{
+\item \code{degrees_freedom_iid()}: Gets the degrees of freedom of a `fixest` estimation
+
+}}
 \examples{
 
 # First: an estimation
 
-base <- iris
-names(base) <- c("y", "x1", "x2", "x3", "species")
-est <- feols(y ~ x1 + x2 | species, base)
+base = iris
+names(base) = c("y", "x1", "x2", "x3", "species")
+est = feols(y ~ x1 + x2 | species, base)
 
 # "Normal" standard-errors (SE)
-est_standard <- summary(est, se = "st")
+est_standard = summary(est, se = "st")
 
 # Clustered SEs
-est_clustered <- summary(est, se = "clu")
+est_clustered = summary(est, se = "clu")
 
 # The different degrees of freedom
 
@@ -58,5 +68,7 @@ degrees_freedom(est_clustered, type = "k") # fixed-effects are excluded
 # => different type 2 DoF (because of the clustering)
 degrees_freedom(est_standard, type = "resid") # => equivalent to the df.residual from lm
 degrees_freedom(est_clustered, type = "resid")
+
+
 
 }

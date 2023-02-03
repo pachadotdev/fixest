@@ -20,6 +20,9 @@ Prints the dimension of a data set, in an user-readable way
 fdim(iris)
 
 fdim(iris$Species)
+
+
+
 }
 \author{
 Laurent Berge

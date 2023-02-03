@@ -14,25 +14,25 @@ dsb(
 )
 }
 \arguments{
-\item{...}{Character scalars that will be collapsed with the argument \code{sep}. You can use \code{".[x]"} within each character string to insert the value of \code{x} in the string. You can add string operations in each \code{".[]"} instance with the syntax \code{"'arg'op ? x"} (resp. \code{"'arg'op ! x"}) to apply the operation \code{'op'} with the argument \code{'arg'} to \code{x} (resp. the verbatim of \code{x}). Otherwise, what to say? Ah, nesting is enabled, and since there's over 30 operators, it's a bit complicated to sort you out in this small space. But type \code{dsb("--help")} to prompt an (almost) extensive help.}
+\item{...}{Character scalars that will be collapsed with the argument `sep`. You can use `".[x]"` within each character string to insert the value of `x` in the string. You can add string operations in each `".[]"` instance with the syntax `"'arg'op ? x"` (resp. `"'arg'op ! x"`) to apply the operation `'op'` with the argument `'arg'` to `x` (resp. the verbatim of `x`). Otherwise, what to say? Ah, nesting is enabled, and since there's over 30 operators, it's a bit complicated to sort you out in this small space. But type `dsb("--help")` to prompt an (almost) extensive help.}
 
-\item{frame}{An environment used to evaluate the variables in \code{".[]"}.}
+\item{frame}{An environment used to evaluate the variables in `".[]"`.}
 
-\item{sep}{Character scalar, default is \code{""}. It is used to collapse all the elements in \code{...}.}
+\item{sep}{Character scalar, default is `""`. It is used to collapse all the elements in `...`.}
 
-\item{vectorize}{Logical, default is \code{FALSE}. If \code{TRUE}, Further, elements in \code{...} are NOT collapsed together, but instead vectorised.}
+\item{vectorize}{Logical, default is `FALSE`. If `TRUE`, Further, elements in `...` are NOT collapsed together, but instead vectorised.}
 
-\item{nest}{Logical, default is \code{TRUE}. Whether the original character strings should be nested into a \code{".[]"}. If \code{TRUE}, then things like \code{dsb("S!one, two")} are equivalent to \code{dsb(".[S!one, two]")} and hence create the vector \code{c("one", "two")}.}
+\item{nest}{Logical, default is `TRUE`. Whether the original character strings should be nested into a `".[]"`. If `TRUE`, then things like `dsb("S!one, two")` are equivalent to `dsb(".[S!one, two]")` and hence create the vector `c("one", "two")`.}
 
-\item{collapse}{Character scalar or \code{NULL} (default). If provided, the resulting character vector will be collapsed into a character scalar using this value as a separator.
+\item{collapse}{Character scalar or `NULL` (default). If provided, the resulting character vector will be collapsed into a character scalar using this value as a separator.
 
 
-There are over 30 basic string operations, it supports pluralization, it's fast (e.g. faster than \code{glue} in the benchmarks), string operations can be nested (it may be the most powerful feature), operators have sensible defaults.
+There are over 30 basic string operations, it supports pluralization, it's fast (e.g. faster than `glue` in the benchmarks), string operations can be nested (it may be the most powerful feature), operators have sensible defaults.
 
-See detailed help on the console with \code{dsb("--help")}. The real help is in fact in the "Examples" section.}
+See detailed help on the console with `dsb("--help")`. The real help is in fact in the "Examples" section.}
 }
 \value{
-It returns a character vector whose length depends on the elements and operations in \code{".[]"}.
+It returns a character vector whose length depends on the elements and operations in `".[]"`.
 }
 \description{
 Compactly performs many low level string operations. Advanced support for pluralization.
@@ -43,16 +43,14 @@ Compactly performs many low level string operations. Advanced support for plural
 # BASIC USAGE ####
 #
 
-x <- c("Romeo", "Juliet")
+x = c("Romeo", "Juliet")
 
 # .[x] inserts x
 dsb("Hello .[x]!")
 
 # elements in ... are collapsed with "" (default)
-dsb(
-  "Hello .[x[1]], ",
-  "how is .[x[2]] doing?"
-)
+dsb("Hello .[x[1]], ",
+    "how is .[x[2]] doing?")
 
 # Splitting a comma separated string
 # The mechanism is explained later
@@ -82,7 +80,7 @@ dsb("', *'S !J. Mills, David, Agnes, Dr Strong")
 # operation: usually 'arg'op with op an operation code.
 
 # Example: splitting
-x <- "hello dear"
+x = "hello dear"
 dsb(".[' 's ? x]")
 # x is split by ' '
 
@@ -153,7 +151,7 @@ dsb("', || or 'c?1:4")
 # syntax: 'pattern'x
 # Default is '[[:alnum:]]+'
 
-x <- "This years is... 2020"
+x = "This years is... 2020"
 dsb("x ? x")
 dsb("X ? x")
 
@@ -190,8 +188,8 @@ dsb("S, Q, C!Julia, David, Wilkins")
 # f, F: formats the string to fit the same length
 
 
-score <- c(-10, 2050)
-nm <- c("Wilkins", "David")
+score = c(-10, 2050)
+nm = c("Wilkins", "David")
 dsb("Monopoly scores:\n.['\n'c ! - .[f ? nm]: .[F ? score] US$]")
 
 # OK that example may have been a bit too complex,
@@ -224,14 +222,14 @@ dsb("pi = .['.2f'\% ? pi]")
 dsb("'[|]'a, ' + 'c!x.[1:4]")
 
 # Enumerations
-acad <- dsb("/you like admin, you enjoy working on weekends, you really love emails")
+acad = dsb("/you like admin, you enjoy working on weekends, you really love emails")
 dsb("Main reasons to pursue an academic career:\n .[':i:) 'a, C ? acad].")
 
 #
 # A: same as 'a' but adds at the begging/end of the full string (not on the elements)
 # special values: :n:, :N:, give the number of elements
 
-characters <- dsb("/David, Wilkins, Dora, Agnes")
+characters = dsb("/David, Wilkins, Dora, Agnes")
 dsb("There are .[':N: characters: 'A, C ? characters].")
 
 
@@ -247,7 +245,7 @@ dsb("stop, w!It is a tale told by an idiot, full of sound and fury, signifying n
 #         'n|s'k: same + adds 's' at the end of shortened strings
 #         'n||s'k: same but 's' counts in the n characters kept
 
-words <- dsb("/short, constitutional")
+words = dsb("/short, constitutional")
 dsb("5k ? words")
 
 dsb("'5|..'k ? words")
@@ -262,7 +260,7 @@ dsb("'5||..'k ? words")
 #
 # Special values :rest: and :REST:, give the number of items dropped
 
-bx <- dsb("/Pessac Leognan, Saint Emilion, Marguaux, Saint Julien, Pauillac")
+bx = dsb("/Pessac Leognan, Saint Emilion, Marguaux, Saint Julien, Pauillac")
 dsb("Bordeaux wines I like: .[3K, ', 'C ? bx].")
 
 dsb("Bordeaux wines I like: .['3|etc..'K, ', 'C ? bx].")
@@ -317,7 +315,7 @@ dsb("d!I am going to be annihilated")
 # D: deletes all elements
 # -> useful in conditions
 
-x <- dsb("/I'll, be, deleted")
+x = dsb("/I'll, be, deleted")
 dsb("D ? x")
 
 #
@@ -325,7 +323,7 @@ dsb("D ? x")
 # syntax: 's1|s2'i: inserts s1 first and s2 last
 # I: is the same as i but is 'invisibly' included
 
-characters <- dsb("/David, Wilkins, Dora, Agnes, Trotwood")
+characters = dsb("/David, Wilkins, Dora, Agnes, Trotwood")
 dsb("'Heep|Spenlow'i, C ? characters")
 
 dsb("'Heep|Spenlow'I, C ? characters")
@@ -340,7 +338,7 @@ dsb("'Heep|Spenlow'I, C ? characters")
 #
 # *s, *s_: adds 's' or 's ' depending on the number of elements
 
-nb <- 1:5
+nb = 1:5
 dsb("Number.[*s, D ? nb]: .[C ? nb]")
 dsb("Number.[*s, D ? 2 ]: .[C ? 2 ]")
 
@@ -353,11 +351,11 @@ dsb("Number.[*s, ': 'A, C ? nb]")
 # syntax: 'verb'v
 
 # Unpopular opinion?
-brand <- c("Apple", "Samsung")
+brand = c("Apple", "Samsung")
 dsb(".[V, C ? brand] overrated.")
 dsb(".[V, C ? brand[1]] overrated.")
 
-win <- dsb("/Peggoty, Agnes, Emily")
+win = dsb("/Peggoty, Agnes, Emily")
 dsb("The winner.[*s_, v, C ? win].")
 dsb("The winner.[*s_, v, C ? win[1]].")
 
@@ -374,7 +372,7 @@ dsb(".[' was'V, C ? win[1]] unable to come.")
 #         if length == 1: applies 's1|s2'A
 #         if length >  1: applies 's3|s4'A
 
-win <- dsb("/Barkis, Micawber, Murdstone")
+win = dsb("/Barkis, Micawber, Murdstone")
 dsb("The winner.[' is /s are '*A, C ? win].")
 dsb("The winner.[' is /s are '*A, C ? win[1]].")
 
@@ -398,7 +396,7 @@ dsb("The winner.[' is /s are '*A, C ? win[1]].")
 
 dsb("'char <= 2'if('(|)'a : '[|]'a), ' + 'c ? c(1, 12, 123)")
 
-sentence <- "This is a sentence with some longish words."
+sentence = "This is a sentence with some longish words."
 dsb("s, 'char<=4'if(D), c ? sentence")
 
 dsb("s, 'fixed == e'if(:D), c ! Only words with an e are selected.")
@@ -410,11 +408,13 @@ dsb("s, 'fixed == e'if(:D), c ! Only words with an e are selected.")
 # Arguments can be evaluated from the calling frame.
 # Simply use backticks instead of quotes.
 
-dollar <- 6
-reason <- "glory"
+dollar = 6
+reason = "glory"
 dsb("Why do you develop packages? For .[`dollar`*c!$]?",
-  "For money? No... for .[U,''s, c?reason]!",
-  sep = "\n"
-)
+    "For money? No... for .[U,''s, c?reason]!", sep = "\n")
+
+
+
+
 
 }

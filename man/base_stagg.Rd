@@ -5,7 +5,7 @@
 \alias{base_stagg}
 \title{Sample data for staggered difference in difference}
 \format{
-\code{base_stagg} is a data frame with 950 observations and 7 variables:
+`base_stagg` is a data frame with 950 observations and 7 variables:
 
 \itemize{
 \item{id: panel identifier.}

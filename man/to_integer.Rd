@@ -17,29 +17,29 @@ to_integer(
 \arguments{
 \item{...}{Vectors of any type, to be transformed in integer.}
 
-\item{sorted}{Logical, default is \code{FALSE}. Whether the integer vector should make reference to sorted values?}
+\item{sorted}{Logical, default is `FALSE`. Whether the integer vector should make reference to sorted values?}
 
-\item{add_items}{Logical, default is \code{FALSE}. Whether to add the unique values of the original vector(s). If requested, an attribute \code{items} is created containing the values (alternatively, they can appear in a list if \code{items.list=TRUE}).}
+\item{add_items}{Logical, default is `FALSE`. Whether to add the unique values of the original vector(s). If requested, an attribute `items` is created containing the values (alternatively, they can appear in a list if `items.list=TRUE`).}
 
-\item{items.list}{Logical, default is \code{FALSE}. Only used if \code{add_items=TRUE}. If \code{TRUE}, then a list of length 2 is returned with \code{x} the integer vector and \code{items} the vector of items.}
+\item{items.list}{Logical, default is `FALSE`. Only used if `add_items=TRUE`. If `TRUE`, then a list of length 2 is returned with `x` the integer vector and `items` the vector of items.}
 
-\item{multi.df}{Logical, default is \code{FALSE}. If \code{TRUE} then a data.frame listing the unique elements is returned in the form of a data.frame. Ignored if \code{add_items = FALSE}.}
+\item{multi.df}{Logical, default is `FALSE`. If `TRUE` then a data.frame listing the unique elements is returned in the form of a data.frame. Ignored if `add_items = FALSE`.}
 
-\item{multi.join}{Character scalar used to join the items of multiple vectors. The default is \code{"_"}. Ignored if \code{add_items = FALSE}.}
+\item{multi.join}{Character scalar used to join the items of multiple vectors. The default is `"_"`. Ignored if `add_items = FALSE`.}
 
-\item{internal}{Logical, default is \code{FALSE}. For programming only. If this function is used within another function, setting \code{internal = TRUE} is needed to make the evaluation of \code{...} valid. End users of \code{to_integer} should not care.}
+\item{internal}{Logical, default is `FALSE`. For programming only. If this function is used within another function, setting `internal = TRUE` is needed to make the evaluation of `...` valid. End users of `to_integer` should not care.}
 }
 \value{
 Reruns a vector of the same length as the input vectors.
-If \code{add_items=TRUE} and \code{items.list=TRUE}, a list of two elements is returned: \code{x} being the integer vector and \code{items} being the unique values to which the values in \code{x} make reference.
+If `add_items=TRUE` and `items.list=TRUE`, a list of two elements is returned: `x` being the integer vector and `items` being the unique values to which the values in `x` make reference.
 }
 \description{
 Tool to transform any type of vector, or even combination of vectors, into an integer vector ranging from 1 to the number of unique values. This actually creates an unique identifier vector.
 }
 \examples{
 
-x1 <- iris$Species
-x2 <- as.integer(iris$Sepal.Length)
+x1 = iris$Species
+x2 = as.integer(iris$Sepal.Length)
 
 # transforms the species vector into integers
 to_integer(x1)
@@ -56,7 +56,7 @@ to_integer(x2, add_items = TRUE)
 to_integer(x2, add_items = TRUE, sorted = TRUE)
 
 # The result can safely be used as an index
-res <- to_integer(x2, add_items = TRUE, sorted = TRUE, items.list = TRUE)
+res = to_integer(x2, add_items = TRUE, sorted = TRUE, items.list = TRUE)
 all(res$items[res$x] == x2)
 
 
@@ -69,4 +69,7 @@ to_integer(x1, x2, add_items = TRUE)
 # You can use multi.join to handle the join of the items:
 to_integer(x1, x2, add_items = TRUE, multi.join = "; ")
 
+}
+\author{
+Laurent Berge
 }

@@ -5,7 +5,7 @@
 \alias{dof}
 \alias{setFixest_ssc}
 \alias{getFixest_ssc}
-\title{Governs the small sample correction in \code{fixest} VCOVs}
+\title{Governs the small sample correction in `fixest` VCOVs}
 \usage{
 ssc(
   adj = TRUE,
@@ -30,32 +30,32 @@ setFixest_ssc(ssc.type = ssc())
 getFixest_ssc()
 }
 \arguments{
-\item{adj}{Logical scalar, defaults to \code{TRUE}. Whether to apply a small sample adjustment of the form \code{(n - 1) / (n - K)}, with \code{K} the number of estimated parameters. If \code{FALSE}, then no adjustment is made.}
+\item{adj}{Logical scalar, defaults to `TRUE`. Whether to apply a small sample adjustment of the form `(n - 1) / (n - K)`, with `K` the number of estimated parameters. If `FALSE`, then no adjustment is made.}
 
-\item{fixef.K}{Character scalar equal to \code{"nested"} (default), \code{"none"} or \code{"full"}. In the small sample adjustment, how to account for the fixed-effects parameters. If \code{"none"}, the fixed-effects parameters are discarded, meaning the number of parameters (\code{K}) is only equal to the number of variables. If \code{"full"}, then the number of parameters is equal to the number of variables plus the number of fixed-effects. Finally, if \code{"nested"}, then the number of parameters is equal to the number of variables plus the number of fixed-effects that *are not* nested in the clusters used to cluster the standard-errors.}
+\item{fixef.K}{Character scalar equal to `"nested"` (default), `"none"` or `"full"`. In the small sample adjustment, how to account for the fixed-effects parameters. If `"none"`, the fixed-effects parameters are discarded, meaning the number of parameters (`K`) is only equal to the number of variables. If `"full"`, then the number of parameters is equal to the number of variables plus the number of fixed-effects. Finally, if `"nested"`, then the number of parameters is equal to the number of variables plus the number of fixed-effects that *are not* nested in the clusters used to cluster the standard-errors.}
 
-\item{cluster.adj}{Logical scalar, default is \code{TRUE}. How to make the small sample correction when clustering the standard-errors? If \code{TRUE} a \code{G/(G-1)} correction is performed with \code{G} the number of cluster values.}
+\item{cluster.adj}{Logical scalar, default is `TRUE`. How to make the small sample correction when clustering the standard-errors? If `TRUE` a `G/(G-1)` correction is performed with `G` the number of cluster values.}
 
-\item{cluster.df}{Either "conventional" or "min" (default). Only relevant when the variance-covariance matrix is two-way clustered (or higher). It governs how the small sample adjustment for the clusters is to be performed. [Sorry for the jargon that follows.] By default a unique adjustment is made, of the form G_min/(G_min-1) with G_min the smallest G_i. If \code{cluster.df="conventional"} then the i-th "sandwich" matrix is adjusted with G_i/(G_i-1) with G_i the number of unique clusters.}
+\item{cluster.df}{Either "conventional" or "min" (default). Only relevant when the variance-covariance matrix is two-way clustered (or higher). It governs how the small sample adjustment for the clusters is to be performed. \[Sorry for the jargon that follows.\] By default a unique adjustment is made, of the form G_min/(G_min-1) with G_min the smallest G_i. If `cluster.df="conventional"` then the i-th "sandwich" matrix is adjusted with G_i/(G_i-1) with G_i the number of unique clusters.}
 
-\item{t.df}{Either "conventional", "min" (default) or an integer scalar. Only relevant when the variance-covariance matrix is clustered. It governs how the p-values should be computed. By default, the degrees of freedom of the Student t distribution is equal to the minimum size of the clusters with which the VCOV has been clustered. If \code{t.df="conventional"}, then the degrees of freedom of the Student t distribution is equal to the number of observations minus the number of estimated variables. You can also pass a number to manually specify the DoF of the t-distribution.}
+\item{t.df}{Either "conventional", "min" (default) or an integer scalar. Only relevant when the variance-covariance matrix is clustered. It governs how the p-values should be computed. By default, the degrees of freedom of the Student t distribution is equal to the minimum size of the clusters with which the VCOV has been clustered minus one. If `t.df="conventional"`, then the degrees of freedom of the Student t distribution is equal to the number of observations minus the number of estimated variables. You can also pass a number to manually specify the DoF of the t-distribution.}
 
-\item{fixef.force_exact}{Logical, default is \code{FALSE}. If there are 2 or more fixed-effects, these fixed-effects they can be irregular, meaning they can provide the same information. If so, the "real" number of parameters should be lower than the total number of fixed-effects. If \code{fixef.force_exact = TRUE}, then \code{\link[fixest2]{fixef.fixest}} is first run to determine the exact number of parameters among the fixed-effects. Mostly, panels of the type individual-firm require \code{fixef.force_exact = TRUE} (but it adds computational costs).}
+\item{fixef.force_exact}{Logical, default is `FALSE`. If there are 2 or more fixed-effects, these fixed-effects they can be irregular, meaning they can provide the same information. If so, the "real" number of parameters should be lower than the total number of fixed-effects. If `fixef.force_exact = TRUE`, then [`fixef.fixest`] is first run to determine the exact number of parameters among the fixed-effects. Mostly, panels of the type individual-firm require `fixef.force_exact = TRUE` (but it adds computational costs).}
 
-\item{ssc.type}{An object of class \code{ssc.type} obtained with the function \code{\link[fixest2]{ssc}}.}
+\item{ssc.type}{An object of class `ssc.type` obtained with the function [`ssc`].}
 }
 \value{
-It returns a \code{ssc.type} object.
+It returns a `ssc.type` object.
 }
 \description{
-Provides how the small sample correction should be calculated in \code{\link[fixest2]{vcov.fixest}}/\code{\link[fixest2]{summary.fixest}}.
+Provides how the small sample correction should be calculated in [`vcov.fixest`]/[`summary.fixest`].
 }
 \details{
-The following vignette: \href{https://lrberge.github.io/fixest/articles/standard_errors.html}{On standard-errors}, describes in details how the standard-errors are computed in \code{fixest} and how you can replicate standard-errors from other software.
+The following vignette: [On standard-errors](https://lrberge.github.io/fixest/articles/standard_errors.html), describes in details how the standard-errors are computed in `fixest` and how you can replicate standard-errors from other software.
 }
 \section{Functions}{
 \itemize{
-\item \code{dof()}: This function is deprecated and will be removed at some point (in 6 months from August 2021). Exactly the same as \code{ssc}.
+\item \code{dof()}: This function is deprecated and will be removed at some point (in 6 months from August 2021). Exactly the same as `ssc`.
 
 }}
 \examples{
@@ -68,21 +68,21 @@ The following vignette: \href{https://lrberge.github.io/fixest/articles/standard
 # In the absence of fixed-effects,
 # by default, the standard-errors are computed in the same way
 
-res <- feols(Petal.Length ~ Petal.Width + Species, iris)
-res_lm <- lm(Petal.Length ~ Petal.Width + Species, iris)
+res = feols(Petal.Length ~ Petal.Width + Species, iris)
+res_lm = lm(Petal.Length ~ Petal.Width + Species, iris)
 vcov(res) / vcov(res_lm)
 
 # GLM
 # By default, there is no small sample adjustment in glm, as opposed to feglm.
 # To get the same SEs, we need to use ssc(adj = FALSE)
 
-res_pois <- fepois(round(Petal.Length) ~ Petal.Width + Species, iris)
-res_glm <- glm(round(Petal.Length) ~ Petal.Width + Species, iris, family = poisson())
+res_pois = fepois(round(Petal.Length) ~ Petal.Width + Species, iris)
+res_glm = glm(round(Petal.Length) ~ Petal.Width + Species, iris, family = poisson())
 vcov(res_pois, ssc = ssc(adj = FALSE)) / vcov(res_glm)
 
 # Same example with the Gamma
-res_gamma <- feglm(round(Petal.Length) ~ Petal.Width + Species, iris, family = Gamma())
-res_glm_gamma <- glm(round(Petal.Length) ~ Petal.Width + Species, iris, family = Gamma())
+res_gamma = feglm(round(Petal.Length) ~ Petal.Width + Species, iris, family = Gamma())
+res_glm_gamma = glm(round(Petal.Length) ~ Petal.Width + Species, iris, family = Gamma())
 vcov(res_gamma, ssc = ssc(adj = FALSE)) / vcov(res_glm_gamma)
 
 #
@@ -90,12 +90,12 @@ vcov(res_gamma, ssc = ssc(adj = FALSE)) / vcov(res_glm_gamma)
 #
 
 # We create "irregular" FEs
-base <- data.frame(x = rnorm(10))
-base$y <- base$x + rnorm(10)
-base$fe1 <- rep(1:3, c(4, 3, 3))
-base$fe2 <- rep(1:5, each = 2)
+base = data.frame(x = rnorm(10))
+base$y = base$x + rnorm(10)
+base$fe1 = rep(1:3, c(4, 3, 3))
+base$fe2 = rep(1:5, each = 2)
 
-est <- feols(y ~ x | fe1 + fe2, base)
+est = feols(y ~ x | fe1 + fe2, base)
 
 # fe1: 3 FEs
 # fe2: 5 FEs
@@ -142,7 +142,7 @@ setFixest_ssc()
 
 }
 \seealso{
-\code{\link[fixest2]{summary.fixest}}, \code{\link[fixest2]{vcov.fixest}}
+[`summary.fixest`], [`vcov.fixest`]
 }
 \author{
 Laurent Berge

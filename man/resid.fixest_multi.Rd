@@ -3,7 +3,7 @@
 \name{resid.fixest_multi}
 \alias{resid.fixest_multi}
 \alias{residuals.fixest_multi}
-\title{Extracts the residuals from a \code{fixest_multi} object}
+\title{Extracts the residuals from a `fixest_multi` object}
 \usage{
 \method{resid}{fixest_multi}(
   object,
@@ -20,27 +20,27 @@
 )
 }
 \arguments{
-\item{object}{A \code{fixes_multi} object.}
+\item{object}{A `fixes_multi` object.}
 
-\item{type}{A character scalar, either \code{"response"} (default), \code{"deviance"}, \code{"pearson"}, or \code{"working"}. Note that the \code{"working"} corresponds to the residuals from the weighted least square and only applies to \code{\link[fixest2]{feglm}} models.}
+\item{type}{A character scalar, either `"response"` (default), `"deviance"`, `"pearson"`, or `"working"`. Note that the `"working"` corresponds to the residuals from the weighted least square and only applies to [`feglm`] models.}
 
-\item{na.rm}{Logical, default is \code{FALSE}. Should the NAs be kept? If \code{TRUE}, they are removed.}
+\item{na.rm}{Logical, default is `FALSE`. Should the NAs be kept? If `TRUE`, they are removed.}
 
 \item{...}{Not currently used.}
 }
 \value{
-If all the models return residuals of the same length, a matrix is returned. Otherwise, a \code{data.frame} is returned.
+If all the models return residuals of the same length, a matrix is returned. Otherwise, a `list` is returned.
 }
 \description{
-Utility to extract the residuals from multiple \code{fixest} estimations. If possible, all the residuals are coerced into
+Utility to extract the residuals from multiple `fixest` estimations. If possible, all the residuals are coerced into a matrix.
 }
 \examples{
 
-base <- iris
-names(base) <- c("y", "x1", "x2", "x3", "species")
+base = iris
+names(base) = c("y", "x1", "x2", "x3", "species")
 
 # A multiple estimation
-est <- feols(y ~ x1 + csw0(x2, x3), base)
+est = feols(y ~ x1 + csw0(x2, x3), base)
 
 # We can get all the residuals at once,
 # each column is a model

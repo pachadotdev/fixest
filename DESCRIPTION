@@ -1,7 +1,7 @@
 Package: fixest2
 Type: Package
 Title: Fast Fixed-Effects Estimations
-Version: 2022.01.30
+Version: 2022.02.03
 Authors@R: c(
     person("Laurent", "Berge", role = "aut"),
     person("Sebastian", "Krantz", role = "ctb"),
@@ -16,22 +16,8 @@ Authors@R: c(
         email = "m.sepulveda@mail.utoronto.ca",
         c(ORCID = "0000-0003-1017-7574"))
     )
-Imports:
-    stats,
-    graphics,
-    grDevices,
-    tools,
-    utils,
-    methods,
-    numDeriv,
-    nlme,
-    sandwich,
-    dreamerr (>= 1.2.3)
-Suggests:
-    tinytex,
-    pdftools,
-    knitr,
-    data.table
+Imports: stats, graphics, grDevices, tools, utils, methods, numDeriv, nlme, sandwich, dreamerr(>= 1.2.3)
+Suggests: knitr, rmarkdown, data.table, plm, MASS, pander, ggplot2, lfe, tinytex, pdftools
 Depends: R(>= 3.5.0)
 Description: Fast and user-friendly estimation of generalized linear models with
     multiple fixed effects and cluster the standard errors. The method to obtain
@@ -40,14 +26,13 @@ Description: Fast and user-friendly estimation of generalized linear models with
     Correia(2016)
     <http://scorreia.com/research/hdfe.pdf>, and
     Gaure (2013)
-    <https://dx.doi.org/10.1016/j.csda.2013.03.024>. The codebase uses
-    vendoring, therefore the dependency code is fixed and stable until it is 
-    updated.
-License: Apache License (>= 2)
+    <https://dx.doi.org/10.1016/j.csda.2013.03.024>.
+License: MIT + file LICENSE
 BugReports: https://github.com/pachadotdev/fixest2/issues
 URL: https://pacha.dev/fixest2/, https://github.com/pachadotdev/fixest2
 LazyData: true
+VignetteBuilder: knitr
 RoxygenNote: 7.2.3
 Encoding: UTF-8
-LinkingTo: cpp11
 SystemRequirements: C++11
+LinkingTo: cpp11

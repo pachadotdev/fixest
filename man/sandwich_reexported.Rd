@@ -6,11 +6,11 @@
 \alias{bread}
 \title{Functions exported from \pkg{sandwich} to implement \pkg{fixest} methods}
 \description{
-The package \pkg{fixest} does not use \code{estfun} or \code{bread} from \pkg{sandwich}, but these methods have been implemented to allow users to leverage the variances from \pkg{sandwich}.
+The package \pkg{fixest} does not use `estfun` or `bread` from \pkg{sandwich}, but these methods have been implemented to allow users to leverage the variances from \pkg{sandwich}.
 }
 \details{
 \itemize{
-\item Here is the help from package \pkg{sandwich}: \code{\link[sandwich:estfun]{estfun}} and \code{\link[sandwich:bread]{bread}}. The help from package \pkg{fixest} is here: \code{\link[fixest2]{estfun.fixest}} and \code{\link[fixest2]{bread.fixest}}.
+\item Here is the help from package \pkg{sandwich}: [`estfun`][sandwich::estfun] and [`bread`][sandwich::bread]. The help from package \pkg{fixest} is here: [`estfun.fixest`] and [`bread.fixest`].
 }
 }
 \keyword{internal}

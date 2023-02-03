@@ -27,49 +27,49 @@ sunab_att(cohort, period, ref.c = NULL, ref.p = -1)
 
 \item{ref.c}{A vector of references for the cohort. By default the never treated cohorts are taken as reference and the always treated are excluded from the estimation. You can add more references with this argument, which means that dummies will not be created for them (but they will remain in the estimation).}
 
-\item{ref.p}{A vector of references for the (relative!) period. By default the first relative period (RP) before the treatment, i.e. -1, is taken as reference. You can instead use your own references (i.e. RPs for which dummies will not be created -- but these observations remain in the sample). Please note that you will need at least two references. You can use the special variables \code{.F} and \code{.L} to access the first and the last relative periods.}
+\item{ref.p}{A vector of references for the (relative!) period. By default the first relative period (RP) before the treatment, i.e. -1, is taken as reference. You can instead use your own references (i.e. RPs for which dummies will not be created -- but these observations remain in the sample). Please note that you will need at least two references. You can use the special variables `.F` and `.L` to access the first and the last relative periods.}
 
-\item{bin}{A list of values to be grouped, a vector, or the special value \code{"bin::digit"}. The binning will be applied to both the cohort and the period (to bin them separately, see \code{bin.c} and \code{bin.p}). To create a new value from old values, use \code{bin = list("new_value"=old_values)} with \code{old_values} a vector of existing values. It accepts regular expressions, but they must start with an \code{"@"}, like in \code{bin="@Aug|Dec"}. The names of the list are the new names. If the new name is missing, the first value matched becomes the new name. Feeding in a vector is like using a list without name and only a single element. If the vector is numeric, you can use the special value \code{"bin::digit"} to group every \code{digit} element. For example if \code{x} represent years, using \code{bin="bin::2"} create bins of two years. Using \code{"!bin::digit"} groups every digit consecutive values starting from the first value. Using \code{"!!bin::digit"} is the same bu starting from the last value. In both cases, \code{x} is not required to be numeric.}
+\item{bin}{A list of values to be grouped, a vector, or the special value `"bin::digit"`. The binning will be applied to both the cohort and the period (to bin them separately, see `bin.c` and `bin.p`). To create a new value from old values, use `bin = list("new_value"=old_values)` with `old_values` a vector of existing values. It accepts regular expressions, but they must start with an `"@"`, like in `bin="@Aug|Dec"`. The names of the list are the new names. If the new name is missing, the first value matched becomes the new name. Feeding in a vector is like using a list without name and only a single element. If the vector is numeric, you can use the special value `"bin::digit"` to group every `digit` element. For example if `x` represent years, using `bin="bin::2"` create bins of two years. Using `"!bin::digit"` groups every digit consecutive values starting from the first value. Using `"!!bin::digit"` is the same bu starting from the last value. In both cases, `x` is not required to be numeric.}
 
-\item{bin.rel}{A list or a vector defining which values to bin. Only applies to the relative periods and \emph{not} the cohorts. Please refer to the help of the argument \code{bin} to understand the different ways to do the binning (or look at the help of \code{\link[fixest2]{bin}}).}
+\item{bin.rel}{A list or a vector defining which values to bin. Only applies to the relative periods and *not* the cohorts. Please refer to the help of the argument `bin` to understand the different ways to do the binning (or look at the help of [`bin`]).}
 
-\item{bin.c}{A list or a vector defining which values to bin. Only applies to the cohort. Please refer to the help of the argument \code{bin} to understand the different ways to do the binning (or look at the help of \code{\link[fixest2]{bin}}).}
+\item{bin.c}{A list or a vector defining which values to bin. Only applies to the cohort. Please refer to the help of the argument `bin` to understand the different ways to do the binning (or look at the help of [`bin`]).}
 
-\item{bin.p}{A list or a vector defining which values to bin. Only applies to the period. Please refer to the help of the argument \code{bin} to understand the different ways to do the binning (or look at the help of \code{\link[fixest2]{bin}}).}
+\item{bin.p}{A list or a vector defining which values to bin. Only applies to the period. Please refer to the help of the argument `bin` to understand the different ways to do the binning (or look at the help of [`bin`]).}
 
-\item{att}{Logical, default is \code{FALSE}. If \code{TRUE}: then the total average treatment effect for the treated is computed (instead of the ATT for each relative period).}
+\item{att}{Logical, default is `FALSE`. If `TRUE`: then the total average treatment effect for the treated is computed (instead of the ATT for each relative period).}
 
-\item{no_agg}{Logical, default is \code{FALSE}. If \code{TRUE}: then there is no aggregation, leading to the estimation of all \code{cohort x time to treatment} coefficients.}
+\item{no_agg}{Logical, default is `FALSE`. If `TRUE`: then there is no aggregation, leading to the estimation of all `cohort x time to treatment` coefficients.}
 }
 \value{
-If not used within a \code{fixest} estimation, this function will return a matrix of interacted coefficients.
+If not used within a `fixest` estimation, this function will return a matrix of interacted coefficients.
 }
 \description{
 User-level method to implement staggered difference-in-difference estimations a la Sun and Abraham (Journal of Econometrics, forthcoming).
 }
 \details{
-This function creates a matrix of \code{cohort x relative_period} interactions, and if used within a \code{fixest} estimation, the coefficients will automatically be aggregated to obtain the ATT for each relative period. In practice, the coefficients are aggregated with the \code{\link[fixest2]{aggregate.fixest}} function whose argument \code{agg} is automatically set to the appropriate value.
+This function creates a matrix of `cohort x relative_period` interactions, and if used within a `fixest` estimation, the coefficients will automatically be aggregated to obtain the ATT for each relative period. In practice, the coefficients are aggregated with the [`aggregate.fixest`] function whose argument `agg` is automatically set to the appropriate value.
 
 The SA method requires relative periods (negative/positive for before/after the treatment). Either the user can compute the RP (relative periods) by his/her own, either the RPs are computed on the fly from the periods and the cohorts (which then should represent the treatment period).
 
 The never treated, which are the cohorts displaying only negative RPs are used as references (i.e. no dummy will be constructed for them). On the other hand, the always treated are removed from the estimation, by means of adding NAs for each of their observations.
 
-If the RPs have to be constructed on the fly, any cohort that is not present in the period is considered as never treated. This means that if the period ranges from 1995 to 2005, \code{cohort = 1994} will be considered as never treated, although it should be considered as always treated: so be careful.
+If the RPs have to be constructed on the fly, any cohort that is not present in the period is considered as never treated. This means that if the period ranges from 1995 to 2005, `cohort = 1994` will be considered as never treated, although it should be considered as always treated: so be careful.
 
 If you construct your own relative periods, the controls cohorts should have only negative RPs.
 }
 \section{Binning}{
 
 
-You can bin periods with the arguments \code{bin}, \code{bin.c}, \code{bin.p} and/or \code{bin.rel}.
+You can bin periods with the arguments `bin`, `bin.c`, `bin.p` and/or `bin.rel`.
 
-The argument \code{bin} applies both to the original periods and cohorts (the cohorts will also be binned!). This argument only works when the \code{period} represent "calendar" periods (not relative ones!).
+The argument `bin` applies both to the original periods and cohorts (the cohorts will also be binned!). This argument only works when the `period` represent "calendar" periods (not relative ones!).
 
-Alternatively you can bin the periods with \code{bin.p} (either "calendar" or relative); or the cohorts with \code{bin.c}.
+Alternatively you can bin the periods with `bin.p` (either "calendar" or relative); or the cohorts with `bin.c`.
 
-The argument \code{bin.rel} applies only to the relative periods (hence not to the cohorts) once they have been created.
+The argument `bin.rel` applies only to the relative periods (hence not to the cohorts) once they have been created.
 
-To understand how binning works, please have a look at the help and examples of the function \code{\link[fixest2]{bin}}.
+To understand how binning works, please have a look at the help and examples of the function [`bin`].
 
 Binning can be done in many different ways: just remember that it is not because it is possible that it does makes sense!
 }
@@ -85,15 +85,15 @@ table(base_stagg$year_treated)
 table(base_stagg$time_to_treatment)
 
 # The DiD estimation
-res_sunab <- feols(y ~ x1 + sunab(year_treated, year) | id + year, base_stagg)
+res_sunab = feols(y ~ x1 + sunab(year_treated, year) | id + year, base_stagg)
 etable(res_sunab)
 
 # By default the reference periods are the first year and the year before the treatment
 # i.e. ref.p = c(-1, .F); where .F is a shortcut for the first period.
 # Say you want to set as references the first three periods on top of -1
 
-res_sunab_3ref <- feols(y ~ x1 + sunab(year_treated, year,
- ref.p = c(.F + 0:2, -1)) | id + year, base_stagg)
+res_sunab_3ref = feols(y ~ x1 + sunab(year_treated, year, ref.p = c(.F + 0:2, -1)) |
+                         id + year, base_stagg)
 
 # Display the two results
 iplot(list(res_sunab, res_sunab_3ref))
@@ -120,18 +120,19 @@ summary(res_sunab, agg = "cohort")
 # Binning can be done in many different ways
 
 # binning the cohort
-est_bin.c <- feols(y ~ x1 + sunab(year_treated, year, bin.c = 3:2) | id + year, base_stagg)
+est_bin.c   = feols(y ~ x1 + sunab(year_treated, year, bin.c = 3:2) | id + year, base_stagg)
 
 # binning the period
-est_bin.p <- feols(y ~ x1 + sunab(year_treated, year, bin.p = 3:1) | id + year, base_stagg)
+est_bin.p   = feols(y ~ x1 + sunab(year_treated, year, bin.p = 3:1) | id + year, base_stagg)
 
 # binning both the cohort and the period
-est_bin <- feols(y ~ x1 + sunab(year_treated, year, bin = 3:1) | id + year, base_stagg)
+est_bin     = feols(y ~ x1 + sunab(year_treated, year, bin = 3:1) | id + year, base_stagg)
 
 # binning the relative period, grouping every two years
-est_bin.rel <- feols(y ~ x1 + sunab(year_treated, year, bin.rel = "bin::2") | id + year, base_stagg)
+est_bin.rel = feols(y ~ x1 + sunab(year_treated, year, bin.rel = "bin::2") | id + year, base_stagg)
 
 etable(est_bin.c, est_bin.p, est_bin, est_bin.rel, keep = "year")
+
 
 }
 \author{

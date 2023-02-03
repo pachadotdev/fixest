@@ -2,22 +2,22 @@
 % Please edit documentation in R/fitstats.R
 \name{r2}
 \alias{r2}
-\title{R2s of \code{fixest} models}
+\title{R2s of `fixest` models}
 \usage{
 r2(x, type = "all", full_names = FALSE)
 }
 \arguments{
-\item{x}{A \code{fixest} object, e.g. obtained with function \code{\link[fixest2]{feglm}} or \code{\link[fixest2]{feols}}.}
+\item{x}{A `fixest` object, e.g. obtained with function [`feglm`] or [`feols`].}
 
-\item{type}{A character vector representing the R2 to compute. The R2 codes are of the form: "wapr2" with letters "w" (within), "a" (adjusted) and "p" (pseudo) possibly missing. E.g. to get the regular R2: use \code{type = "r2"}, the within adjusted R2: use \code{type = "war2"}, the pseudo R2: use \code{type = "pr2"}, etc. Use \code{"cor2"} for the squared correlation. By default, all R2s are computed.}
+\item{type}{A character vector representing the R2 to compute. The R2 codes are of the form: "wapr2" with letters "w" (within), "a" (adjusted) and "p" (pseudo) possibly missing. E.g. to get the regular R2: use `type = "r2"`, the within adjusted R2: use `type = "war2"`, the pseudo R2: use `type = "pr2"`, etc. Use `"cor2"` for the squared correlation. By default, all R2s are computed.}
 
-\item{full_names}{Logical scalar, default is \code{FALSE}. If \code{TRUE} then names of the vector in output will have full names instead of keywords (e.g. \code{Squared Correlation} instead of \code{cor2}, etc).}
+\item{full_names}{Logical scalar, default is `FALSE`. If `TRUE` then names of the vector in output will have full names instead of keywords (e.g. `Squared Correlation` instead of `cor2`, etc).}
 }
 \value{
 Returns a named vector.
 }
 \description{
-Reports different R2s for \code{fixest} estimations (e.g. \code{\link[fixest2]{feglm}} or \code{\link[fixest2]{feols}}).
+Reports different R2s for `fixest` estimations (e.g. [`feglm`] or [`feols`]).
 }
 \details{
 The pseudo R2s are the McFaddens R2s, that is the ratio of log-likelihoods.
@@ -26,7 +26,7 @@ For R2s with no theoretical justification, like e.g. regular R2s for maximum lik
 
 The pseudo-R2 is also returned in the OLS case, it corresponds to the pseudo-R2 of the equivalent GLM model with a Gaussian family.
 
-For the adjusted within-R2s, the adjustment factor is \code{(n - nb_fe) / (n - nb_fe - K)} with \code{n} the number of observations, \code{nb_fe} the number of fixed-effects and \code{K} the number of variables.
+For the adjusted within-R2s, the adjustment factor is `(n - nb_fe) / (n - nb_fe - K)` with `n` the number of observations, `nb_fe` the number of fixed-effects and `K` the number of variables.
 }
 \examples{
 
@@ -34,7 +34,7 @@ For the adjusted within-R2s, the adjustment factor is \code{(n - nb_fe) / (n - n
 data(trade)
 
 # We estimate the effect of distance on trade (with 3 fixed-effects)
-est <- feols(log(Euros) ~ log(dist_km) | Origin + Destination + Product, trade)
+est = feols(log(Euros) ~ log(dist_km)|Origin+Destination+Product, trade)
 
 # Squared correlation:
 r2(est, "cor2")

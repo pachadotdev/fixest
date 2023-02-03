@@ -5,18 +5,42 @@
 \alias{coefficients.fixest_multi}
 \title{Extracts the coefficients of fixest_multi objects}
 \usage{
-\method{coef}{fixest_multi}(object, keep, drop, order, ...)
+\method{coef}{fixest_multi}(
+  object,
+  keep,
+  drop,
+  order,
+  collin = FALSE,
+  long = FALSE,
+  na.rm = TRUE,
+  ...
+)
 
-\method{coefficients}{fixest_multi}(object, keep, drop, order, ...)
+\method{coefficients}{fixest_multi}(
+  object,
+  keep,
+  drop,
+  order,
+  collin = FALSE,
+  long = FALSE,
+  na.rm = TRUE,
+  ...
+)
 }
 \arguments{
-\item{object}{A \code{fixest_multi} object. Obtained from a multiple estimation.}
+\item{object}{A `fixest_multi` object. Obtained from a multiple estimation.}
 
-\item{keep}{Character vector. This element is used to display only a subset of variables. This should be a vector of regular expressions (see \code{\link[base]{regex}} help for more info). Each variable satisfying any of the regular expressions will be kept. This argument is applied post aliasing (see argument \code{dict}). Example: you have the variable \code{x1} to \code{x55} and want to display only \code{x1} to \code{x9}, then you could use \code{keep = "x[[:digit:]]$"}. If the first character is an exclamation mark, the effect is reversed (e.g. keep = "!Intercept" means: every variable that does not contain \dQuote{Intercept} is kept). See details.}
+\item{keep}{Character vector. This element is used to display only a subset of variables. This should be a vector of regular expressions (see [`base::regex`] help for more info). Each variable satisfying any of the regular expressions will be kept. This argument is applied post aliasing (see argument `dict`). Example: you have the variable `x1` to `x55` and want to display only `x1` to `x9`, then you could use `keep = "x[[:digit:]]$"`. If the first character is an exclamation mark, the effect is reversed (e.g. keep = "!Intercept" means: every variable that does not contain \dQuote{Intercept} is kept). See details.}
 
-\item{drop}{Character vector. This element is used if some variables are not to be displayed. This should be a vector of regular expressions (see \code{\link[base]{regex}} help for more info). Each variable satisfying any of the regular expressions will be discarded. This argument is applied post aliasing (see argument \code{dict}). Example: you have the variable \code{x1} to \code{x55} and want to display only \code{x1} to \code{x9}, then you could use \code{drop = "x[[:digit:]]{2}"}. If the first character is an exclamation mark, the effect is reversed (e.g. drop = "!Intercept" means: every variable that does not contain \dQuote{Intercept} is dropped). See details.}
+\item{drop}{Character vector. This element is used if some variables are not to be displayed. This should be a vector of regular expressions (see [`base::regex`] help for more info). Each variable satisfying any of the regular expressions will be discarded. This argument is applied post aliasing (see argument `dict`). Example: you have the variable `x1` to `x55` and want to display only `x1` to `x9`, then you could use `drop = "x[[:digit:]]{2}`". If the first character is an exclamation mark, the effect is reversed (e.g. drop = "!Intercept" means: every variable that does not contain \dQuote{Intercept} is dropped). See details.}
 
-\item{order}{Character vector. This element is used if the user wants the variables to be ordered in a certain way. This should be a vector of regular expressions (see \code{\link[base]{regex}} help for more info). The variables satisfying the first regular expression will be placed first, then the order follows the sequence of regular expressions. This argument is applied post aliasing (see argument \code{dict}). Example: you have the following variables: \code{month1} to \code{month6}, then \code{x1} to \code{x5}, then \code{year1} to \code{year6}. If you want to display first the x's, then the years, then the months you could use: \code{order = c("x", "year")}. If the first character is an exclamation mark, the effect is reversed (e.g. order = "!Intercept" means: every variable that does not contain \dQuote{Intercept} goes first).  See details.}
+\item{order}{Character vector. This element is used if the user wants the variables to be ordered in a certain way. This should be a vector of regular expressions (see [`base::regex`] help for more info). The variables satisfying the first regular expression will be placed first, then the order follows the sequence of regular expressions. This argument is applied post aliasing (see argument `dict`). Example: you have the following variables: `month1` to `month6`, then `x1` to `x5`, then `year1` to `year6`. If you want to display first the x's, then the years, then the months you could use: `order = c("x", "year")`. If the first character is an exclamation mark, the effect is reversed (e.g. order = "!Intercept" means: every variable that does not contain \dQuote{Intercept} goes first).  See details.}
+
+\item{collin}{Logical, default is `FALSE`. Whether the coefficients removed because of collinearity should be also returned as `NA`. It cannot be used when coefficients aggregation is also used.}
+
+\item{long}{Logical, default is `FALSE`. Whether the results should be displayed in a long format.}
+
+\item{na.rm}{Logical, default is `TRUE`. Only applies when `long = TRUE`: whether to remove the coefficients with `NA` values.}
 
 \item{...}{Not currently used.}
 }
@@ -25,11 +49,11 @@ Utility to extract the coefficients of multiple estimations and rearrange them i
 }
 \examples{
 
-base <- iris
-names(base) <- c("y", "x1", "x2", "x3", "species")
+base = iris
+names(base) = c("y", "x1", "x2", "x3", "species")
 
 # A multiple estimation
-est <- feols(y ~ x1 + csw0(x2, x3), base)
+est = feols(y ~ x1 + csw0(x2, x3), base)
 
 # Getting all the coefficients at once,
 # each row is a model
@@ -42,5 +66,21 @@ coef(est, keep = "Int|x1", order = "x1")
 # To change the order of the model, use fixest_multi
 # extraction tools:
 coef(est[rhs = .N:1])
+
+# collin + long + na.rm
+base$x1_bis = base$x1 # => collinear
+est = feols(y ~ x1_bis + csw0(x1, x2, x3), base, split = ~species)
+
+# does not display x1 since it is always collinear
+coef(est)
+# now it does
+coef(est, collin = TRUE)
+
+# long
+coef(est, long = TRUE)
+
+# long but balanced (with NAs then)
+coef(est, long = TRUE, na.rm = FALSE)
+
 
 }

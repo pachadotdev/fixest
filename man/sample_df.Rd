@@ -14,7 +14,7 @@ sample_df(x, n = 10, previous = FALSE)
 \item{previous}{Logical scalar. Whether the results of the previous draw should be returned.}
 }
 \value{
-A data base (resp vector) with \code{n} rows (resp elements).
+A data base (resp vector) with `n` rows (resp elements).
 }
 \description{
 This function is useful to check a data set. It gives a random number of rows of the input data set.
@@ -25,4 +25,7 @@ sample_df(iris)
 
 sample_df(iris, previous = TRUE)
 
+}
+\author{
+Laurent Berge
 }

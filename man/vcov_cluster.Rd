@@ -7,36 +7,36 @@
 vcov_cluster(x, cluster = NULL, ssc = NULL)
 }
 \arguments{
-\item{x}{A \code{fixest} object.}
+\item{x}{A `fixest` object.}
 
 \item{cluster}{Either i) a character vector giving the names of the variables onto which to cluster, or ii) a formula giving those names, or iii) a vector/list/data.frame giving the hard values of the clusters. Note that in cases i) and ii) the variables are fetched directly in the data set used for the estimation.}
 
-\item{ssc}{An object returned by the function \code{\link[fixest2]{ssc}}. It specifies how to perform the small sample correction.}
+\item{ssc}{An object returned by the function [`ssc`]. It specifies how to perform the small sample correction.}
 }
 \value{
-If the first argument is a \code{fixest} object, then a VCOV is returned (i.e. a symmetric matrix).
+If the first argument is a `fixest` object, then a VCOV is returned (i.e. a symmetric matrix).
 
-If the first argument is not a \code{fixest} object, then a) implicitly the arguments are shifted to the left (i.e. \code{vcov_cluster(~var1 + var2)} is equivalent to \code{vcov_cluster(cluster = ~var1 + var2)}) and b) a VCOV-\emph{request} is returned and NOT a VCOV. That VCOV-request can then be used in the argument \code{vcov} of various \code{fixest} functions (e.g. \code{\link[fixest2]{vcov.fixest}} or even in the estimation calls).
+If the first argument is not a `fixest` object, then a) implicitly the arguments are shifted to the left (i.e. `vcov_cluster(~var1 + var2)` is equivalent to `vcov_cluster(cluster = ~var1 + var2)`) and b) a VCOV-*request* is returned and NOT a VCOV. That VCOV-request can then be used in the argument `vcov` of various `fixest` functions (e.g. [`vcov.fixest`] or even in the estimation calls).
 }
 \description{
-Computes the clustered VCOV of \code{fixest} objects.
+Computes the clustered VCOV of `fixest` objects.
 }
 \examples{
 
-base <- iris
-names(base) <- c("y", "x1", "x2", "x3", "species")
-base$clu <- rep(1:5, 30)
+base = iris
+names(base) = c("y", "x1", "x2", "x3", "species")
+base$clu = rep(1:5, 30)
 
-est <- feols(y ~ x1, base)
+est = feols(y ~ x1, base)
 
 # VCOV: using a formula giving the name of the clusters
-vcov_cluster(est, ~ species + clu)
+vcov_cluster(est, ~species + clu)
 
 # works as well with a character vector
 vcov_cluster(est, c("species", "clu"))
 
 # you can also combine the two with '^'
-vcov_cluster(est, ~ species^clu)
+vcov_cluster(est, ~species^clu)
 
 #
 # Using VCOV requests
@@ -56,9 +56,10 @@ feols(y ~ x1, base, vcov = ~species)
 # so you can feed them with a VCOV-request:
 feols(y ~ x1, base, vcov = vcov_cluster(rep(1:5, 30)))
 
+
 }
 \references{
-Cameron AC, Gelbach JB, Miller DL (2011). "Robust Inference with Multiway Clustering." \emph{Journal of Business & Economic Statistics}, 29(2), 238-249. doi:10.1198/jbes.2010.07136.
+Cameron AC, Gelbach JB, Miller DL (2011). "Robust Inference with Multiway Clustering." *Journal of Business & Economic Statistics*, 29(2), 238-249. doi:10.1198/jbes.2010.07136.
 }
 \author{
 Laurent Berge

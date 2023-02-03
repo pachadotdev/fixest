@@ -2,12 +2,12 @@
 % Please edit documentation in R/Methods.R
 \name{sigma.fixest}
 \alias{sigma.fixest}
-\title{Residual standard deviation of \code{fixest} estimations}
+\title{Residual standard deviation of `fixest` estimations}
 \usage{
 \method{sigma}{fixest}(object, ...)
 }
 \arguments{
-\item{object}{A \code{fixest} object.}
+\item{object}{A `fixest` object.}
 
 \item{...}{Not currently used.}
 }
@@ -15,14 +15,16 @@
 Returns a numeric scalar.
 }
 \description{
-Extract the estimated standard deviation of the errors from \code{fixest} estimations.
+Extract the estimated standard deviation of the errors from `fixest` estimations.
 }
 \examples{
 
-est <- feols(Petal.Length ~ Petal.Width, iris)
+est = feols(Petal.Length ~ Petal.Width, iris)
 sigma(est)
+
+
 
 }
 \seealso{
-\code{\link[fixest2]{feols}}, \code{\link[fixest2:feglm]{fepois}}, \code{\link[fixest2]{feglm}}, \code{\link[fixest2:femlm]{fenegbin}}, \code{\link[fixest2]{feNmlm}}.
+[`feols`], [`fepois`][fixest2::feglm], [`feglm`], [`fenegbin`][fixest2::femlm], [`feNmlm`].
 }

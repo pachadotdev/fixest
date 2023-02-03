@@ -2,48 +2,48 @@
 % Please edit documentation in R/Lagging.R
 \name{[.fixest_panel}
 \alias{[.fixest_panel}
-\title{Method to subselect from a \code{fixest_panel}}
+\title{Method to subselect from a `fixest_panel`}
 \usage{
 \method{[}{fixest_panel}(x, i, j, ...)
 }
 \arguments{
-\item{x}{A \code{fixest_panel} object, created with the function \code{\link[fixest2]{panel}}.}
+\item{x}{A `fixest_panel` object, created with the function [`panel`].}
 
-\item{i}{Row subselection. Allows \code{\link[data.table]{data.table}} style selection (provided the data is also a data.table).}
+\item{i}{Row subselection. Allows [`data.table::data.table`] style selection (provided the data is also a data.table).}
 
-\item{j}{Variable selection. Allows \code{\link[data.table]{data.table}} style selection/variable creation (provided the data is also a data.table).}
+\item{j}{Variable selection. Allows [`data.table::data.table`] style selection/variable creation (provided the data is also a data.table).}
 
-\item{...}{Other arguments to be passed to \code{[.data.frame} or \code{\link[data.table]{data.table}} (or whatever the class of the initial data).}
+\item{...}{Other arguments to be passed to `[.data.frame` or [`data.table::data.table`] (or whatever the class of the initial data).}
 }
 \value{
-It returns a \code{fixest_panel} data base, with the attributes allowing to create lags/leads properly bookkeeped.
+It returns a `fixest_panel` data base, with the attributes allowing to create lags/leads properly bookkeeped.
 }
 \description{
-Subselection from a \code{fixest_panel} which has been created with the function \code{\link[fixest2]{panel}}. Also allows to create lag/lead variables with functions \code{\link[fixest2]{l}}()/\code{\link[fixest2:l]{f}}() if the \code{fixest_panel} is also a \code{\link[data.table]{data.table}}.
+Subselection from a `fixest_panel` which has been created with the function [`panel`]. Also allows to create lag/lead variables with functions [`l`]/[`f`][fixest2::l] if the `fixest_panel` is also a [`data.table::data.table`].
 }
 \details{
-If the original data was also a data.table, some calls to \code{[.fixest_panel} may dissolve the \code{fixest_panel} object and return a regular data.table. This is the case for subselections with additional arguments. If so, a note is displayed on the console.
+If the original data was also a data.table, some calls to `[.fixest_panel` may dissolve the `fixest_panel` object and return a regular data.table. This is the case for subselections with additional arguments. If so, a note is displayed on the console.
 }
 \examples{
 
 data(base_did)
 
 # Creating a fixest_panel object
-pdat <- panel(base_did, ~ id + period)
+pdat = panel(base_did, ~id+period)
 
 # Subselections of fixest_panel objects bookkeeps the leads/lags engine
-pdat_small <- pdat[!pdat$period \%in\% c(2, 4), ]
-a <- feols(y ~ l(x1, 0:1), pdat_small)
+pdat_small = pdat[!pdat$period \%in\% c(2, 4), ]
+a = feols(y~l(x1, 0:1), pdat_small)
 
 # we obtain the same results, had we created the lags "on the fly"
-base_small <- base_did[!base_did$period \%in\% c(2, 4), ]
-b <- feols(y ~ l(x1, 0:1), base_small, panel.id = ~ id + period)
+base_small = base_did[!base_did$period \%in\% c(2, 4), ]
+b = feols(y~l(x1, 0:1), base_small, panel.id = ~id+period)
 etable(a, b)
 
 
 # Using data.table to create new lead/lag variables
-if (require("data.table")) {
-  pdat_dt <- panel(as.data.table(base_did), ~ id + period)
+if(require("data.table")){
+  pdat_dt = panel(as.data.table(base_did), ~id+period)
 
   # Variable creation
   pdat_dt[, x_l1 := l(x1)]
@@ -51,12 +51,13 @@ if (require("data.table")) {
 
   # Estimation on a subset of the data
   #  (the lead/lags work appropriately)
-  feols(y ~ l(x1, 0:1), pdat_dt[!period \%in\% c(2, 4)])
+  feols(y~l(x1, 0:1), pdat_dt[!period \%in\% c(2, 4)])
 }
+
 
 }
 \seealso{
-Alternatively, the function \code{\link[fixest2]{panel}} changes a \code{data.frame} into a panel from which the functions \code{l} and \code{f} (creating leads and lags) can be called. Otherwise you can set the panel 'live' during the estimation using the argument \code{panel.id} (see for example in the function \code{\link[fixest2]{feols}}).
+Alternatively, the function [`panel`] changes a `data.frame` into a panel from which the functions `l` and `f` (creating leads and lags) can be called. Otherwise you can set the panel 'live' during the estimation using the argument `panel.id` (see for example in the function [`feols`]).
 }
 \author{
 Laurent Berge

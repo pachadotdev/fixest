@@ -7,40 +7,40 @@
 i(factor_var, var, ref, keep, bin, ref2, keep2, bin2, ...)
 }
 \arguments{
-\item{factor_var}{A vector (of any type) that will be treated as a factor. You can set references (i.e. exclude values for which to create dummies) with the \code{ref} argument.}
+\item{factor_var}{A vector (of any type) that will be treated as a factor. You can set references (i.e. exclude values for which to create dummies) with the `ref` argument.}
 
-\item{var}{A variable of the same length as \code{factor_var}. This variable will be interacted with the factor in \code{factor_var}. It can be numeric or factor-like. To force a numeric variable to be treated as a factor, you can add the \code{i.} prefix to a variable name. For instance take a numeric variable \code{x_num}: \code{i(x_fact, x_num)} will treat \code{x_num} as numeric while \code{i(x_fact, i.x_num)} will treat \code{x_num} as a factor (it's a shortcut to \code{as.factor(x_num)}).}
+\item{var}{A variable of the same length as `factor_var`. This variable will be interacted with the factor in `factor_var`. It can be numeric or factor-like. To force a numeric variable to be treated as a factor, you can add the `i.` prefix to a variable name. For instance take a numeric variable `x_num`: `i(x_fact, x_num)` will treat `x_num` as numeric while `i(x_fact, i.x_num)` will treat `x_num` as a factor (it's a shortcut to `as.factor(x_num)`).}
 
-\item{ref}{A vector of values to be taken as references from \code{factor_var}. Can also be a logical: if \code{TRUE}, then the first value of \code{factor_var} will be removed. If \code{ref} is a character vector, partial matching is applied to values; use "@" as the first character to enable regular expression matching. See examples.}
+\item{ref}{A vector of values to be taken as references from `factor_var`. Can also be a logical: if `TRUE`, then the first value of `factor_var` will be removed. If `ref` is a character vector, partial matching is applied to values; use "@" as the first character to enable regular expression matching. See examples.}
 
-\item{keep}{A vector of values to be kept from \code{factor_var} (all others are dropped). By default they should be values from \code{factor_var} and if \code{keep} is a character vector partial matching is applied. Use "@" as the first character to enable regular expression matching instead.}
+\item{keep}{A vector of values to be kept from `factor_var` (all others are dropped). By default they should be values from `factor_var` and if `keep` is a character vector partial matching is applied. Use "@" as the first character to enable regular expression matching instead.}
 
-\item{bin}{A list of values to be grouped, a vector, a formula, or the special values \code{"bin::digit"} or \code{"cut::values"}. To create a new value from old values, use \code{bin = list("new_value"=old_values)} with \code{old_values} a vector of existing values. You can use \code{.()} for \code{list()}.
-It accepts regular expressions, but they must start with an \code{"@"}, like in \code{bin="@Aug|Dec"}. It accepts one-sided formulas which must contain the variable \code{x}, e.g. \code{bin=list("<2" = ~x < 2)}.
-The names of the list are the new names. If the new name is missing, the first value matched becomes the new name. In the name, adding \code{"@d"}, with \code{d} a digit, will relocate the value in position \code{d}: useful to change the position of factors. Use \code{"@"} as first item to make subsequent items be located first in the factor.
-Feeding in a vector is like using a list without name and only a single element. If the vector is numeric, you can use the special value \code{"bin::digit"} to group every \code{digit} element.
-For example if \code{x} represents years, using \code{bin="bin::2"} creates bins of two years.
-With any data, using \code{"!bin::digit"} groups every digit consecutive values starting from the first value.
-Using \code{"!!bin::digit"} is the same but starting from the last value.
-With numeric vectors you can: a) use \code{"cut::n"} to cut the vector into \code{n} equal parts, b) use \code{"cut::a]b["} to create the following bins: \code{[min, a]}, \code{]a, b[}, \code{[b, max]}.
-The latter syntax is a sequence of number/quartile (q0 to q4)/percentile (p0 to p100) followed by an open or closed square bracket. You can add custom bin names by adding them in the character vector after \code{'cut::values'}. See details and examples. Dot square bracket expansion (see \code{\link[fixest2]{dsb}}) is enabled.}
+\item{bin}{A list of values to be grouped, a vector, a formula, or the special values `"bin::digit"` or `"cut::values"`. To create a new value from old values, use `bin = list("new_value"=old_values)` with `old_values` a vector of existing values. You can use `.()` for `list()`.
+It accepts regular expressions, but they must start with an `"@"`, like in `bin="@Aug|Dec"`. It accepts one-sided formulas which must contain the variable `x`, e.g. `bin=list("<2" = ~x < 2)`.
+The names of the list are the new names. If the new name is missing, the first value matched becomes the new name. In the name, adding `"@d"`, with `d` a digit, will relocate the value in position `d`: useful to change the position of factors. Use `"@"` as first item to make subsequent items be located first in the factor.
+Feeding in a vector is like using a list without name and only a single element. If the vector is numeric, you can use the special value `"bin::digit"` to group every `digit` element.
+For example if `x` represents years, using `bin="bin::2"` creates bins of two years.
+With any data, using `"!bin::digit"` groups every digit consecutive values starting from the first value.
+Using `"!!bin::digit"` is the same but starting from the last value.
+With numeric vectors you can: a) use `"cut::n"` to cut the vector into `n` equal parts, b) use `"cut::a]b["` to create the following bins: `[min, a]`, `]a, b[`, `[b, max]`.
+The latter syntax is a sequence of number/quartile (q0 to q4)/percentile (p0 to p100) followed by an open or closed square bracket. You can add custom bin names by adding them in the character vector after `'cut::values'`. See details and examples. Dot square bracket expansion (see [`dsb`]) is enabled.}
 
-\item{ref2}{A vector of values to be dropped from \code{var}. By default they should be values from \code{var} and if \code{ref2} is a character vector partial matching is applied. Use "@" as the first character to enable regular expression matching instead.}
+\item{ref2}{A vector of values to be dropped from `var`. By default they should be values from `var` and if `ref2` is a character vector partial matching is applied. Use "@" as the first character to enable regular expression matching instead.}
 
-\item{keep2}{A vector of values to be kept from \code{var} (all others are dropped). By default they should be values from \code{var} and if \code{keep2} is a character vector partial matching is applied. Use "@" as the first character to enable regular expression matching instead.}
+\item{keep2}{A vector of values to be kept from `var` (all others are dropped). By default they should be values from `var` and if `keep2` is a character vector partial matching is applied. Use "@" as the first character to enable regular expression matching instead.}
 
-\item{bin2}{A list or vector defining the binning of the second variable. See help for the argument \code{bin} for details (or look at the help of the function \code{\link[fixest2]{bin}}). You can use \code{.()} for \code{list()}.}
+\item{bin2}{A list or vector defining the binning of the second variable. See help for the argument `bin` for details (or look at the help of the function [`bin`]). You can use `.()` for `list()`.}
 
 \item{...}{Not currently used.}
 }
 \value{
-It returns a matrix with number of rows the length of \code{factor_var}. If there is no interacted variable or it is interacted with a numeric variable, the number of columns is equal to the number of cases contained in \code{factor_var} minus the reference(s). If the interacted variable is a factor, the number of columns is the number of combined cases between \code{factor_var} and \code{var}.
+It returns a matrix with number of rows the length of `factor_var`. If there is no interacted variable or it is interacted with a numeric variable, the number of columns is equal to the number of cases contained in `factor_var` minus the reference(s). If the interacted variable is a factor, the number of columns is the number of combined cases between `factor_var` and `var`.
 }
 \description{
-Treat a variable as a factor, or interacts a variable with a factor. Values to be dropped/kept from the factor can be easily set. Note that to interact fixed-effects, this function should not be used: instead use directly the syntax \code{fe1^fe2}.
+Treat a variable as a factor, or interacts a variable with a factor. Values to be dropped/kept from the factor can be easily set. Note that to interact fixed-effects, this function should not be used: instead use directly the syntax `fe1^fe2`.
 }
 \details{
-To interact fixed-effects, this function should not be used: instead use directly the syntax \code{fe1^fe2} in the fixed-effects part of the formula. Please see the details and examples in the help page of \code{\link[fixest2]{feols}}.
+To interact fixed-effects, this function should not be used: instead use directly the syntax `fe1^fe2` in the fixed-effects part of the formula. Please see the details and examples in the help page of [`feols`].
 }
 \examples{
 
@@ -48,8 +48,8 @@ To interact fixed-effects, this function should not be used: instead use directl
 # Simple illustration
 #
 
-x <- rep(letters[1:4], 3)[1:10]
-y <- rep(1:4, c(1, 2, 3, 4))
+x = rep(letters[1:4], 3)[1:10]
+y = rep(1:4, c(1, 2, 3, 4))
 
 # interaction
 data.frame(x, y, i(x, y, ref = TRUE))
@@ -58,7 +58,7 @@ data.frame(x, y, i(x, y, ref = TRUE))
 data.frame(x, i(x, "b"))
 
 # you can interact factors too
-z <- rep(c("e", "f", "g"), c(5, 3, 2))
+z = rep(c("e", "f", "g"), c(5, 3, 2))
 data.frame(x, z, i(x, z))
 
 # to force a numeric variable to be treated as a factor: use i.
@@ -77,13 +77,13 @@ data.frame(x, i(x, bin = .(ab = "@a|b")))
 
 data(base_did)
 # We interact the variable 'period' with the variable 'treat'
-est_did <- feols(y ~ x1 + i(period, treat, 5) | id + period, base_did)
+est_did = feols(y ~ x1 + i(period, treat, 5) | id + period, base_did)
 
 # => plot only interactions with iplot
 iplot(est_did)
 
 # Using i() for factors
-est_bis <- feols(y ~ x1 + i(period, keep = 3:6) + i(period, treat, 5) | id, base_did)
+est_bis = feols(y ~ x1 + i(period, keep = 3:6) + i(period, treat, 5) | id, base_did)
 
 # we plot the second set of variables created with i()
 # => we need to use keep (otherwise only the first one is represented)
@@ -98,14 +98,14 @@ etable(est_bis, dict = c("6" = "six"))
 
 # We use the i. prefix to consider week as a factor
 data(airquality)
-aq <- airquality
-aq$week <- aq$Day \%/\% 7 + 1
+aq = airquality
+aq$week = aq$Day \%/\% 7 + 1
 
 # Interacting Month and week:
-res_2F <- feols(Ozone ~ Solar.R + i(Month, i.week), aq)
+res_2F = feols(Ozone ~ Solar.R + i(Month, i.week), aq)
 
 # Same but dropping the 5th Month and 1st week
-res_2F_bis <- feols(Ozone ~ Solar.R + i(Month, i.week, ref = 5, ref2 = 1), aq)
+res_2F_bis = feols(Ozone ~ Solar.R + i(Month, i.week, ref = 5, ref2 = 1), aq)
 
 etable(res_2F, res_2F_bis)
 
@@ -119,11 +119,13 @@ feols(Ozone ~ i(Month, bin = "bin::2"), airquality)
 
 feols(Ozone ~ i(Month, bin = list(summer = 7:9)), airquality)
 
+
+
 }
 \seealso{
-\code{\link[fixest2:coefplot]{iplot}} to plot interactions or factors created with \code{i()}, \code{\link[fixest2]{feols}} for OLS estimation with multiple fixed-effects.
+[`iplot`][fixest2::coefplot] to plot interactions or factors created with `i()`, [`feols`] for OLS estimation with multiple fixed-effects.
 
-See the function \code{\link[fixest2]{bin}} for binning variables.
+See the function [`bin`] for binning variables.
 }
 \author{
 Laurent Berge
