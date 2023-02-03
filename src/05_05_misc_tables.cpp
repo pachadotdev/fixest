@@ -72,7 +72,7 @@
 
 // simple fun to compute the sum of the square of the elt of a vector
 // 30% faster than pure r (twice faster with weights)
-[[cpp11::register]] double cpp_ssq(doubles x, doubles w = doubles(0))
+[[cpp11::register]] double cpp_ssq_(doubles x, doubles w = doubles(0))
 {
     bool is_weight = w.size() > 1;
 

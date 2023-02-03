@@ -185,7 +185,7 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y, 
     }
 }
 
-[[cpp11::register]] list cpp_sparse_products(doubles_matrix<> X, doubles w, SEXP y, bool correct_0w = false, int nthreads = 1)
+[[cpp11::register]] list cpp_sparse_products_(doubles_matrix<> X, doubles w, SEXP y, bool correct_0w = false, int nthreads = 1)
 {
 
     int N = X.nrow();

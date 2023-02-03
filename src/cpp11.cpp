@@ -118,10 +118,10 @@ extern "C" SEXP _fixest2_cpp_which_na_inf(SEXP x, SEXP nthreads) {
   END_CPP11
 }
 // 02_04_demeaning.cpp
-list cpp_demean(SEXP y, SEXP X_raw, SEXP r_weights, int iterMax, double diffMax, SEXP r_nb_id_Q, SEXP fe_id_list, SEXP table_id_I, SEXP slope_flag_Q, SEXP slope_vars_list, SEXP r_init, int nthreads, bool save_fixef);
-extern "C" SEXP _fixest2_cpp_demean(SEXP y, SEXP X_raw, SEXP r_weights, SEXP iterMax, SEXP diffMax, SEXP r_nb_id_Q, SEXP fe_id_list, SEXP table_id_I, SEXP slope_flag_Q, SEXP slope_vars_list, SEXP r_init, SEXP nthreads, SEXP save_fixef) {
+list cpp_demean_(SEXP y, SEXP X_raw, SEXP r_weights, int iterMax, double diffMax, SEXP r_nb_id_Q, SEXP fe_id_list, SEXP table_id_I, SEXP slope_flag_Q, SEXP slope_vars_list, SEXP r_init, int nthreads, bool save_fixef);
+extern "C" SEXP _fixest2_cpp_demean_(SEXP y, SEXP X_raw, SEXP r_weights, SEXP iterMax, SEXP diffMax, SEXP r_nb_id_Q, SEXP fe_id_list, SEXP table_id_I, SEXP slope_flag_Q, SEXP slope_vars_list, SEXP r_init, SEXP nthreads, SEXP save_fixef) {
   BEGIN_CPP11
-    return cpp11::as_sexp(cpp_demean(cpp11::as_cpp<cpp11::decay_t<SEXP>>(y), cpp11::as_cpp<cpp11::decay_t<SEXP>>(X_raw), cpp11::as_cpp<cpp11::decay_t<SEXP>>(r_weights), cpp11::as_cpp<cpp11::decay_t<int>>(iterMax), cpp11::as_cpp<cpp11::decay_t<double>>(diffMax), cpp11::as_cpp<cpp11::decay_t<SEXP>>(r_nb_id_Q), cpp11::as_cpp<cpp11::decay_t<SEXP>>(fe_id_list), cpp11::as_cpp<cpp11::decay_t<SEXP>>(table_id_I), cpp11::as_cpp<cpp11::decay_t<SEXP>>(slope_flag_Q), cpp11::as_cpp<cpp11::decay_t<SEXP>>(slope_vars_list), cpp11::as_cpp<cpp11::decay_t<SEXP>>(r_init), cpp11::as_cpp<cpp11::decay_t<int>>(nthreads), cpp11::as_cpp<cpp11::decay_t<bool>>(save_fixef)));
+    return cpp11::as_sexp(cpp_demean_(cpp11::as_cpp<cpp11::decay_t<SEXP>>(y), cpp11::as_cpp<cpp11::decay_t<SEXP>>(X_raw), cpp11::as_cpp<cpp11::decay_t<SEXP>>(r_weights), cpp11::as_cpp<cpp11::decay_t<int>>(iterMax), cpp11::as_cpp<cpp11::decay_t<double>>(diffMax), cpp11::as_cpp<cpp11::decay_t<SEXP>>(r_nb_id_Q), cpp11::as_cpp<cpp11::decay_t<SEXP>>(fe_id_list), cpp11::as_cpp<cpp11::decay_t<SEXP>>(table_id_I), cpp11::as_cpp<cpp11::decay_t<SEXP>>(slope_flag_Q), cpp11::as_cpp<cpp11::decay_t<SEXP>>(slope_vars_list), cpp11::as_cpp<cpp11::decay_t<SEXP>>(r_init), cpp11::as_cpp<cpp11::decay_t<int>>(nthreads), cpp11::as_cpp<cpp11::decay_t<bool>>(save_fixef)));
   END_CPP11
 }
 // 03_01_dot_square_bracket.cpp
@@ -160,10 +160,10 @@ extern "C" SEXP _fixest2_cpp_cholesky(SEXP X, SEXP tol, SEXP nthreads) {
   END_CPP11
 }
 // 04_03_linear_model_mmult.cpp
-list cpp_sparse_products(doubles_matrix<> X, doubles w, SEXP y, bool correct_0w, int nthreads);
-extern "C" SEXP _fixest2_cpp_sparse_products(SEXP X, SEXP w, SEXP y, SEXP correct_0w, SEXP nthreads) {
+list cpp_sparse_products_(doubles_matrix<> X, doubles w, SEXP y, bool correct_0w, int nthreads);
+extern "C" SEXP _fixest2_cpp_sparse_products_(SEXP X, SEXP w, SEXP y, SEXP correct_0w, SEXP nthreads) {
   BEGIN_CPP11
-    return cpp11::as_sexp(cpp_sparse_products(cpp11::as_cpp<cpp11::decay_t<doubles_matrix<>>>(X), cpp11::as_cpp<cpp11::decay_t<doubles>>(w), cpp11::as_cpp<cpp11::decay_t<SEXP>>(y), cpp11::as_cpp<cpp11::decay_t<bool>>(correct_0w), cpp11::as_cpp<cpp11::decay_t<int>>(nthreads)));
+    return cpp11::as_sexp(cpp_sparse_products_(cpp11::as_cpp<cpp11::decay_t<doubles_matrix<>>>(X), cpp11::as_cpp<cpp11::decay_t<doubles>>(w), cpp11::as_cpp<cpp11::decay_t<SEXP>>(y), cpp11::as_cpp<cpp11::decay_t<bool>>(correct_0w), cpp11::as_cpp<cpp11::decay_t<int>>(nthreads)));
   END_CPP11
 }
 // 04_03_linear_model_mmult.cpp
@@ -202,10 +202,10 @@ extern "C" SEXP _fixest2_cpp_iv_resid(SEXP resid_2nd, SEXP coef, SEXP resid_1st,
   END_CPP11
 }
 // 05_01_misc_helpers.cpp
-std::string cpp_add_commas(double x, int r, bool whole);
-extern "C" SEXP _fixest2_cpp_add_commas(SEXP x, SEXP r, SEXP whole) {
+std::string cpp_add_commas_(double x, int r, bool whole);
+extern "C" SEXP _fixest2_cpp_add_commas_(SEXP x, SEXP r, SEXP whole) {
   BEGIN_CPP11
-    return cpp11::as_sexp(cpp_add_commas(cpp11::as_cpp<cpp11::decay_t<double>>(x), cpp11::as_cpp<cpp11::decay_t<int>>(r), cpp11::as_cpp<cpp11::decay_t<bool>>(whole)));
+    return cpp11::as_sexp(cpp_add_commas_(cpp11::as_cpp<cpp11::decay_t<double>>(x), cpp11::as_cpp<cpp11::decay_t<int>>(r), cpp11::as_cpp<cpp11::decay_t<bool>>(whole)));
   END_CPP11
 }
 // 05_01_misc_helpers.cpp
@@ -285,6 +285,13 @@ extern "C" SEXP _fixest2_cpp_pgcd(SEXP x) {
     return cpp11::as_sexp(cpp_pgcd(cpp11::as_cpp<cpp11::decay_t<integers>>(x)));
   END_CPP11
 }
+// 05_01_misc_helpers.cpp
+list cpp_get_fe_gnl(int Q, int N, writable::doubles sumFE, writable::integers_matrix<> dumMat, writable::integers cluster_sizes, writable::integers_matrix<> obsCluster);
+extern "C" SEXP _fixest2_cpp_get_fe_gnl(SEXP Q, SEXP N, SEXP sumFE, SEXP dumMat, SEXP cluster_sizes, SEXP obsCluster) {
+  BEGIN_CPP11
+    return cpp11::as_sexp(cpp_get_fe_gnl(cpp11::as_cpp<cpp11::decay_t<int>>(Q), cpp11::as_cpp<cpp11::decay_t<int>>(N), cpp11::as_cpp<cpp11::decay_t<writable::doubles>>(sumFE), cpp11::as_cpp<cpp11::decay_t<writable::integers_matrix<>>>(dumMat), cpp11::as_cpp<cpp11::decay_t<writable::integers>>(cluster_sizes), cpp11::as_cpp<cpp11::decay_t<writable::integers_matrix<>>>(obsCluster)));
+  END_CPP11
+}
 // 05_02_misc_linalg.cpp
 doubles_matrix<> cpp_factor_matrix(integers fact, logicals is_na_all, integers who_is_dropped, SEXP var, strings col_names);
 extern "C" SEXP _fixest2_cpp_factor_matrix(SEXP fact, SEXP is_na_all, SEXP who_is_dropped, SEXP var, SEXP col_names) {
@@ -335,10 +342,10 @@ extern "C" SEXP _fixest2_cpp_ssr_null(SEXP y, SEXP w) {
   END_CPP11
 }
 // 05_05_misc_tables.cpp
-double cpp_ssq(doubles x, doubles w);
-extern "C" SEXP _fixest2_cpp_ssq(SEXP x, SEXP w) {
+double cpp_ssq_(doubles x, doubles w);
+extern "C" SEXP _fixest2_cpp_ssq_(SEXP x, SEXP w) {
   BEGIN_CPP11
-    return cpp11::as_sexp(cpp_ssq(cpp11::as_cpp<cpp11::decay_t<doubles>>(x), cpp11::as_cpp<cpp11::decay_t<doubles>>(w)));
+    return cpp11::as_sexp(cpp_ssq_(cpp11::as_cpp<cpp11::decay_t<doubles>>(x), cpp11::as_cpp<cpp11::decay_t<doubles>>(w)));
   END_CPP11
 }
 // 05_05_misc_tables.cpp
@@ -569,7 +576,7 @@ extern "C" SEXP _fixest2_cpp_vcov_conley(SEXP S, SEXP lon_rad, SEXP lat_rad, SEX
 extern "C" {
 static const R_CallMethodDef CallEntries[] = {
     {"_fixest2_compute_cluster_coef_r",        (DL_FUNC) &_fixest2_compute_cluster_coef_r,        12},
-    {"_fixest2_cpp_add_commas",                (DL_FUNC) &_fixest2_cpp_add_commas,                 3},
+    {"_fixest2_cpp_add_commas_",               (DL_FUNC) &_fixest2_cpp_add_commas_,                3},
     {"_fixest2_cpp_any_na_null",               (DL_FUNC) &_fixest2_cpp_any_na_null,                1},
     {"_fixest2_cpp_check_nested",              (DL_FUNC) &_fixest2_cpp_check_nested,               4},
     {"_fixest2_cpp_cholesky",                  (DL_FUNC) &_fixest2_cpp_cholesky,                   3},
@@ -583,7 +590,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_fixest2_cpp_conv_seq_gnl",              (DL_FUNC) &_fixest2_cpp_conv_seq_gnl,              14},
     {"_fixest2_cpp_conv_seq_poi_2",            (DL_FUNC) &_fixest2_cpp_conv_seq_poi_2,            11},
     {"_fixest2_cpp_cut",                       (DL_FUNC) &_fixest2_cpp_cut,                        3},
-    {"_fixest2_cpp_demean",                    (DL_FUNC) &_fixest2_cpp_demean,                    13},
+    {"_fixest2_cpp_demean_",                   (DL_FUNC) &_fixest2_cpp_demean_,                   13},
     {"_fixest2_cpp_derivconv_acc_2",           (DL_FUNC) &_fixest2_cpp_derivconv_acc_2,           12},
     {"_fixest2_cpp_derivconv_acc_gnl",         (DL_FUNC) &_fixest2_cpp_derivconv_acc_gnl,          8},
     {"_fixest2_cpp_derivconv_seq_2",           (DL_FUNC) &_fixest2_cpp_derivconv_seq_2,           12},
@@ -597,6 +604,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_fixest2_cpp_find_duplicates",           (DL_FUNC) &_fixest2_cpp_find_duplicates,            2},
     {"_fixest2_cpp_find_never_always_treated", (DL_FUNC) &_fixest2_cpp_find_never_always_treated,  2},
     {"_fixest2_cpp_fixed_cost_gaussian",       (DL_FUNC) &_fixest2_cpp_fixed_cost_gaussian,        7},
+    {"_fixest2_cpp_get_fe_gnl",                (DL_FUNC) &_fixest2_cpp_get_fe_gnl,                 6},
     {"_fixest2_cpp_get_first_item",            (DL_FUNC) &_fixest2_cpp_get_first_item,             2},
     {"_fixest2_cpp_get_nb_threads",            (DL_FUNC) &_fixest2_cpp_get_nb_threads,             0},
     {"_fixest2_cpp_hash_string",               (DL_FUNC) &_fixest2_cpp_hash_string,                1},
@@ -615,8 +623,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_fixest2_cpp_paste_conditional",         (DL_FUNC) &_fixest2_cpp_paste_conditional,          3},
     {"_fixest2_cpp_pgcd",                      (DL_FUNC) &_fixest2_cpp_pgcd,                       1},
     {"_fixest2_cpp_quf_gnl",                   (DL_FUNC) &_fixest2_cpp_quf_gnl,                    1},
-    {"_fixest2_cpp_sparse_products",           (DL_FUNC) &_fixest2_cpp_sparse_products,            5},
-    {"_fixest2_cpp_ssq",                       (DL_FUNC) &_fixest2_cpp_ssq,                        2},
+    {"_fixest2_cpp_sparse_products_",          (DL_FUNC) &_fixest2_cpp_sparse_products_,           5},
+    {"_fixest2_cpp_ssq_",                      (DL_FUNC) &_fixest2_cpp_ssq_,                       2},
     {"_fixest2_cpp_ssr_null",                  (DL_FUNC) &_fixest2_cpp_ssr_null,                   2},
     {"_fixest2_cpp_table",                     (DL_FUNC) &_fixest2_cpp_table,                      2},
     {"_fixest2_cpp_tapply_sum",                (DL_FUNC) &_fixest2_cpp_tapply_sum,                 3},
