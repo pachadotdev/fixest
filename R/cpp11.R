@@ -64,8 +64,8 @@ cpp_which_na_inf <- function(x, nthreads) {
   .Call(`_fixest2_cpp_which_na_inf`, x, nthreads)
 }
 
-cpp_demean <- function(y, X_raw, r_weights, iterMax, diffMax, r_nb_id_Q, fe_id_list, table_id_I, slope_flag_Q, slope_vars_list, r_init, nthreads, save_fixef) {
-  .Call(`_fixest2_cpp_demean`, y, X_raw, r_weights, iterMax, diffMax, r_nb_id_Q, fe_id_list, table_id_I, slope_flag_Q, slope_vars_list, r_init, nthreads, save_fixef)
+cpp_demean_ <- function(y, X_raw, r_weights, iterMax, diffMax, r_nb_id_Q, fe_id_list, table_id_I, slope_flag_Q, slope_vars_list, r_init, nthreads, save_fixef) {
+  .Call(`_fixest2_cpp_demean_`, y, X_raw, r_weights, iterMax, diffMax, r_nb_id_Q, fe_id_list, table_id_I, slope_flag_Q, slope_vars_list, r_init, nthreads, save_fixef)
 }
 
 cpp_dsb <- function(Rstr) {
@@ -88,8 +88,8 @@ cpp_cholesky <- function(X, tol, nthreads) {
   .Call(`_fixest2_cpp_cholesky`, X, tol, nthreads)
 }
 
-cpp_sparse_products <- function(X, w, y, correct_0w, nthreads) {
-  .Call(`_fixest2_cpp_sparse_products`, X, w, y, correct_0w, nthreads)
+cpp_sparse_products_ <- function(X, w, y, correct_0w, nthreads) {
+  .Call(`_fixest2_cpp_sparse_products_`, X, w, y, correct_0w, nthreads)
 }
 
 cpppar_crossprod <- function(X, w, nthreads) {
@@ -112,8 +112,8 @@ cpp_iv_resid <- function(resid_2nd, coef, resid_1st, is_int, nthreads) {
   .Call(`_fixest2_cpp_iv_resid`, resid_2nd, coef, resid_1st, is_int, nthreads)
 }
 
-cpp_add_commas <- function(x, r, whole) {
-  .Call(`_fixest2_cpp_add_commas`, x, r, whole)
+cpp_add_commas_ <- function(x, r, whole) {
+  .Call(`_fixest2_cpp_add_commas_`, x, r, whole)
 }
 
 cpp_find_never_always_treated <- function(cohort, period) {
@@ -160,6 +160,10 @@ cpp_pgcd <- function(x) {
   .Call(`_fixest2_cpp_pgcd`, x)
 }
 
+cpp_get_fe_gnl <- function(Q, N, sumFE, dumMat, cluster_sizes, obsCluster) {
+  .Call(`_fixest2_cpp_get_fe_gnl`, Q, N, sumFE, dumMat, cluster_sizes, obsCluster)
+}
+
 cpp_factor_matrix <- function(fact, is_na_all, who_is_dropped, var, col_names) {
   .Call(`_fixest2_cpp_factor_matrix`, fact, is_na_all, who_is_dropped, var, col_names)
 }
@@ -188,8 +192,8 @@ cpp_ssr_null <- function(y, w) {
   .Call(`_fixest2_cpp_ssr_null`, y, w)
 }
 
-cpp_ssq <- function(x, w) {
-  .Call(`_fixest2_cpp_ssq`, x, w)
+cpp_ssq_ <- function(x, w) {
+  .Call(`_fixest2_cpp_ssq_`, x, w)
 }
 
 cpp_constant_dum <- function(k, x, dum, only_0) {
