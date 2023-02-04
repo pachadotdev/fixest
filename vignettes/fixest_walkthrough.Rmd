@@ -150,8 +150,8 @@ Of course you can use different families in `feglm`, exactly as in `glm`.
 To get the estimation for the fixed-effects Negative Binomial:
 
 ```{r}
+devtools::load_all()
 gravity_negbin = fenegbin(Euros ~ log(dist_km) | Origin + Destination + Product + Year, trade)
-
 ```
 
 

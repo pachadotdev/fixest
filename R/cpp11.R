@@ -180,8 +180,8 @@ cpp_log_a_exp <- function(a, mu, exp_mu) {
   .Call(`_fixest2_cpp_log_a_exp`, a, mu, exp_mu)
 }
 
-cpp_partialDerivative_other <- function(iterMax, Q, N, epsDeriv, ll_d2, dx_dother, init, dumMat, nbCluster) {
-  .Call(`_fixest2_cpp_partialDerivative_other`, iterMax, Q, N, epsDeriv, ll_d2, dx_dother, init, dumMat, nbCluster)
+cpp_partialDerivative_other_ <- function(iterMax, Q, N, epsDeriv, ll_d2, dx_dother, init, dumMat, nbCluster) {
+  .Call(`_fixest2_cpp_partialDerivative_other_`, iterMax, Q, N, epsDeriv, ll_d2, dx_dother, init, dumMat, nbCluster)
 }
 
 cpp_table <- function(Q, dum) {
