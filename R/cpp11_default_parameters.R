@@ -18,6 +18,8 @@ cpp_ssq <- function(x, w = 0) {
 
 cpp_partialDerivative_other <- function(iterMax, Q, N, epsDeriv, ll_d2,
                                          dx_dother, init, dumMat, nbCluster) {
+    dumMat_ <- dumMat
+    mode(dumMat_) <- "integer"
     cpp_partialDerivative_other_(iterMax, Q, N, epsDeriv, ll_d2,
-                                dx_dother, init, dumMat, nbCluster)
+                                dx_dother, init, dumMat_, nbCluster)
 }
