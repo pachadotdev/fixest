@@ -225,11 +225,13 @@ panel_setup = function(data, panel.id, time.step = NULL, duplicate.method = "non
 
 
 #' @describeIn l Forwards a variable (inverse of lagging) in a `fixest` estimation
+#' @export
 f = function(x, lead = 1, fill = NA){
     l(x, -lead, fill)
 }
 
 #' @describeIn l Creates differences (i.e. x - lag(x)) in a `fixest` estimation
+#' @export
 d = function(x, lag = 1, fill = NA){
     x - l(x, lag, fill)
 }
@@ -277,8 +279,7 @@ d = function(x, lag = 1, fill = NA){
 #'   pdat_dt[, c("x1_l1_fill0", "y_f2") := .(l(x1, fill = 0), f(y, 2))]
 #' }
 #'
-#'
-#'
+#' @export
 l = function(x, lag = 1, fill = NA){
 
     value = x
@@ -566,8 +567,7 @@ d__expand = function(x, k = 1, fill){
 #'   base[, x.l1 := lag(x~id+year, 1)]
 #' }
 #'
-#'
-#'
+#' @export
 lag.formula = function(x, k = 1, data, time.step = NULL, fill = NA,
                        duplicate.method = c("none", "first"), ...){
     # Arguments:
@@ -662,11 +662,6 @@ lag.formula = function(x, k = 1, data, time.step = NULL, fill = NA,
     res
 }
 
-#' @describeIn lag.formula Lags a variable using a formula syntax
-lag_fml = lag.formula
-
-
-
 #' Constructs a `fixest` panel data base
 #'
 #' Constructs a `fixest` panel data base out of a data.frame which allows to use leads and lags in `fixest` estimations and to create new variables from leads and lags if the data.frame was also a [`data.table::data.table`].
@@ -727,7 +722,7 @@ lag_fml = lag.formula
 #'   pdat_dt[, c("x1_l1_fill0", "y_f2") := .(l(x1, fill = 0), f(y, 2))]
 #' }
 #'
-#'
+#' @export
 panel = function(data, panel.id, time.step = NULL, duplicate.method = c("none", "first")){
 
     if(missing(data)){
@@ -790,8 +785,7 @@ panel = function(data, panel.id, time.step = NULL, duplicate.method = c("none", 
 #' new_base = unpanel(pdat)
 #' class(new_base) ; dim(new_base)
 #'
-#'
-#'
+#' @export
 unpanel = function(x){
 
     if("data.table" %in% class(x) && requireNamespace("data.table", quietly=TRUE)){
