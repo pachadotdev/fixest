@@ -233,7 +233,7 @@
 #' # now we group + clean the beginning of the names using the special character ^^
 #' coefplot(est, group = list(Sepal = "^^Sepal.", Species = "^^Species"))
 #'
-#'
+#' @export
 coefplot = function(object, ..., style = NULL, sd, ci_low, ci_high, x, x.shift = 0, horiz = FALSE,
                     dict = getFixest_dict(), keep, drop, order, ci.width = "1%",
                     ci_level = 0.95, add = FALSE, pt.pch = c(20, 17, 15, 21, 24, 22), pt.bg = NULL, cex = 1,
@@ -2235,17 +2235,16 @@ gen_iplot = function(){
 
     coefplot_call = paste0(arg_name[qui_keep], " = ", arg_name[qui_keep], collapse = ", ")
 
-    iplot_fun = paste0("iplot = function(object, ..., i.select = 1, ", iplot_args, "){\n\n",
+    iplot_fun = paste0("iplot = function(object, ..., i.select = 1, ", iplot_args, "){\n",
                         "\tcoefplot(object = object, ..., i.select = i.select, ",
                        coefplot_call, ", internal.only.i = TRUE)\n}")
 
-    iplot_rox = "#' @describeIn coefplot Plots the coefficients generated with i()"
+    iplot_rox = "#' @describeIn coefplot Plots the coefficients generated with i()\n#' @export"
 
     # Writing the functions
-    intro = c("# Do not edit by hand\n# => iplot calls coefplot internally\n\n\n")
+    intro = c("# Do not edit by hand\n# => iplot calls coefplot internally\n")
 
-    s = "\n\n\n\n"
-    text = c(intro, s, iplot_rox, iplot_fun, s)
+    text = c(intro, iplot_rox, iplot_fun)
 
     update_file("R/iplot.R", text)
 }

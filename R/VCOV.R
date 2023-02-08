@@ -191,7 +191,7 @@
 #' se(vcov(est, DK ~ period + ssc(adj = FALSE)))
 #'
 #'
-#'
+#' @exportS3Method
 vcov.fixest = function(object, vcov = NULL, se = NULL, cluster, ssc = NULL, attr = FALSE, forceCovariance = FALSE,
                        keepBounded = FALSE, nthreads = getFixest_nthreads(), ...){
     # computes the clustered vcov
@@ -1129,6 +1129,7 @@ vcov.fixest = function(object, vcov = NULL, se = NULL, cluster, ssc = NULL, attr
 #' # Factory default
 #' setFixest_ssc()
 #'
+#' @export
 ssc = function(adj = TRUE, fixef.K = "nested", cluster.adj = TRUE, cluster.df = "min",
                t.df = "min", fixef.force_exact = FALSE){
 
@@ -1218,7 +1219,7 @@ dof = function(adj = TRUE, fixef.K = "nested", cluster.adj = TRUE, cluster.df = 
 #' # so you can feed them with a VCOV-request:
 #' feols(y ~ x1, base, vcov = vcov_cluster(rep(1:5, 30)))
 #'
-#'
+#' @export
 vcov_cluster = function(x, cluster = NULL, ssc = NULL){
     # User-level function to compute clustered SEs
     # typically we only do checking and reshaping here
@@ -1383,6 +1384,7 @@ vcov_cluster = function(x, cluster = NULL, ssc = NULL){
 NULL
 
 #' @rdname vcov_hac
+#' @export
 vcov_DK = function(x, time = NULL, lag = NULL, ssc = NULL){
     # unit and time MUST be variables of the data set
     # otherwise: too error prone + extremely complex to set up + very edge case, so not worth it
@@ -1427,6 +1429,7 @@ vcov_DK = function(x, time = NULL, lag = NULL, ssc = NULL){
 }
 
 #' @rdname vcov_hac
+#' @export
 vcov_NW = function(x, unit = NULL, time = NULL, lag = NULL, ssc = NULL){
     # unit and time MUST be variables of the data set
     # otherwise: too error prone + extremely complex to set up + very edge case, so not worth it
@@ -1518,8 +1521,7 @@ vcov_NW = function(x, unit = NULL, time = NULL, lag = NULL, ssc = NULL){
 #' est = feols(depth ~ mag, quakes)
 #' vcov_conley(est, cutoff = 100)
 #'
-#'
-#'
+#' @export
 vcov_conley = function(x, lat = NULL, lon = NULL, cutoff = NULL, pixel = 0,
                        distance = "triangular", ssc = NULL){
 
@@ -2305,6 +2307,7 @@ gen_vcov_aliases = function(){
 
     fun_core = '
     #\' @rdname __RDNAME__
+    #\' @export
     __FUN__ = function(__ARGS__){
         extra_args = list(__EXTRA__)
         vcov_request = list(vcov = "__VCOV__", extra_args = extra_args)
@@ -2341,30 +2344,11 @@ gen_vcov_aliases = function(){
     }
 
     # Writing the functions
-    intro = c("# Do not edit by hand\n# => aliases some VCOV functions\n\n\n")
+    intro = c("# Do not edit by hand\n# => aliases some VCOV functions\n")
 
     text = c(intro, text)
 
     update_file("R/VCOV_aliases.R", text)
-
-    # We also add the exports to the name space
-    header = "# Auto-exports::vcov_aliases"
-    fun_line = paste0("export(", paste0(all_fun_names, collapse = ", "), ")")
-
-    NAMESPACE = readLines("NAMESPACE")
-
-    if(header %in% NAMESPACE){
-        # update
-        qui = which(NAMESPACE == header)
-        NAMESPACE[qui + 1] = fun_line
-    } else {
-        # creation
-        NAMESPACE = c(NAMESPACE, "\n\n", header, fun_line, "\n\n")
-    }
-
-    update_file("NAMESPACE", NAMESPACE)
-
-
 }
 
 
