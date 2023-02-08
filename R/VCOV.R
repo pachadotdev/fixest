@@ -1146,20 +1146,6 @@ ssc = function(adj = TRUE, fixef.K = "nested", cluster.adj = TRUE, cluster.df = 
     res
 }
 
-#' @describeIn ssc This function is deprecated and will be removed at some point (in 6 months from August 2021). Exactly the same as `ssc`.
-dof = function(adj = TRUE, fixef.K = "nested", cluster.adj = TRUE, cluster.df = "min",
-               t.df = "min", fixef.force_exact = FALSE){
-
-    if(is.null(getOption("fixest_warn_dof"))){
-        warning("The function 'dof' is deprecated. Please use function 'ssc' instead.")
-        options(fixest_warn_dof = TRUE)
-    }
-
-    ssc(adj = adj, fixef.K = fixef.K, cluster.adj = cluster.adj, cluster.df = cluster.df,
-        t.df = t.df, fixef.force_exact = fixef.force_exact)
-}
-
-
 ####
 #### User-level ####
 ####
