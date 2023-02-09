@@ -39,7 +39,6 @@ There are two components defining the standard-errors in `fixest`. The main type
 
 Here's an example, the explanations follow in the next two sections:
 ```{r}
-library(fixest2)
 data(trade)
 # OLS estimation
 gravity = feols(log(Euros) ~ log(dist_km) | Destination + Origin + Product + Year, trade)

@@ -3,7 +3,7 @@ NULL
 
 #' @importFrom dreamerr check_arg check_arg_plus check_value check_value_plus
 #'  set_up stop_up validate_dots sfill plural plural_len ifunit warn_up n_th
-#'  check_arg fit_screen
+#'  check_arg fit_screen ifsingle enumerate_items
 NULL
 
 #' @importFrom stats .getXlevels AIC BIC aggregate as.formula binomial cancor
