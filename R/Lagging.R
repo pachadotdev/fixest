@@ -567,7 +567,7 @@ d__expand = function(x, k = 1, fill){
 #'   base[, x.l1 := lag(x~id+year, 1)]
 #' }
 #'
-#' @export
+#' @exportS3Method
 lag.formula = function(x, k = 1, data, time.step = NULL, fill = NA,
                        duplicate.method = c("none", "first"), ...){
     # Arguments:
@@ -853,7 +853,8 @@ unpanel = function(x){
 #'   feols(y~l(x1, 0:1), pdat_dt[!period %in% c(2, 4)])
 #' }
 #'
-"[.fixest_panel" = function(x, i, j, ...){
+#' @export
+`[.fixest_panel` = function(x, i, j, ...){
     # we need to perform proper bookkeeping
 
     info = attr(x, "panel_info")

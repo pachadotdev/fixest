@@ -877,6 +877,7 @@ summary.fixest.fixef = function(object, n = 5, ...){
 #' # Plotting them:
 #' plot(fe_trade)
 #'
+#' @exportS3Method
 fixef.fixest = function(object, notes = getFixest_notes(), sorted = TRUE, nthreads = getFixest_nthreads(),
                         fixef.tol = 1e-5, fixef.iter = 10000, ...){
 
@@ -1914,8 +1915,8 @@ logLik.fixest = function(object, ...){
 #' # the fixed-effects coefficients:
 #' fixef(res)
 #'
-#'
-coef.fixest = coefficients.fixest = function(object, keep, drop, order,
+#' @exportS3Method
+coef.fixest = function(object, keep, drop, order,
                                              collin = FALSE, agg = TRUE, ...){
 
     check_arg(keep, drop, order, "NULL character vector no na")
@@ -1972,6 +1973,7 @@ coef.fixest = coefficients.fixest = function(object, keep, drop, order,
 }
 
 #' @rdname coef.fixest
+#' @exportS3Method
 coefficients.fixest <- coef.fixest
 
 
@@ -2019,8 +2021,8 @@ coefficients.fixest <- coef.fixest
 #' plot(iris$Sepal.Length, y_fitted_poisson)
 #' points(iris$Sepal.Length, y_fitted_gaussian, col = 2, pch = 2)
 #'
-#'
-fitted.fixest = fitted.values.fixest = function(object, type = c("response", "link"), na.rm = TRUE, ...){
+#' @exportS3Method
+fitted.fixest = function(object, type = c("response", "link"), na.rm = TRUE, ...){
 
     # Checking the arguments
     if(is_user_level_call()){
@@ -2059,6 +2061,7 @@ fitted.fixest = fitted.values.fixest = function(object, type = c("response", "li
 
 #' @rdname fitted.fixest
 #' @method fitted.values fixest
+#' @exportS3Method
 fitted.values.fixest <- fitted.fixest
 
 #' Extracts residuals from a `fixest` object
@@ -2304,8 +2307,7 @@ residuals.fixest <- resid.fixest
 #' # You can change the type of SE on the fly
 #' head(predict(est, interval = "conf", vcov = ~species))
 #'
-#'
-#'
+#' @exportS3Method
 predict.fixest = function(object, newdata, type = c("response", "link"), se.fit = FALSE,
                           interval = "none", level = 0.95, fixef = FALSE,
                           vs.coef = FALSE, sample = c("estimation", "original"),
@@ -2788,7 +2790,7 @@ predict.fixest = function(object, newdata, type = c("response", "link"), se.fit 
 #' # confidence interval with "clustered" VCOV (w.r.t. the Origin factor)
 #' confint(est_pois, se = "cluster")
 #'
-#'
+#' @exportS3Method
 confint.fixest = function(object, parm, level = 0.95, vcov, se, cluster,
                           ssc = NULL, coef.col = FALSE, ...){
 
@@ -2918,6 +2920,7 @@ confint.fixest = function(object, parm, level = 0.95, vcov, se, cluster,
 #' # Quick look at the 4 estimations
 #' etable(est_pois, est_2, est_3, est_4)
 #'
+#' @exportS3Method
 update.fixest = function(object, fml.update, nframes = 1, evaluate = TRUE, ...){
     # Update method
     # fml.update: update the formula
@@ -3120,7 +3123,7 @@ update.fixest = function(object, fml.update, nframes = 1, evaluate = TRUE, ...){
 #' # linear part without the fixed-effects
 #' formula(res, "linear")
 #'
-#'
+#' @exportS3Method
 formula.fixest = function(x, type = c("full", "linear", "iv", "NL"), ...){
     # Extract the formula from the object
     # we add the clusters in the formula if needed
@@ -3208,8 +3211,7 @@ formula.fixest = function(x, type = c("full", "linear", "iv", "NL"), ...){
 #' # subset => TRUE, only works with data argument!!
 #' head(model.matrix(est, data = base[, "x1", drop = FALSE], subset = TRUE))
 #'
-#'
-#'
+#' @exportS3Method
 model.matrix.fixest = function(object, data, type = "rhs", na.rm = TRUE, subset = FALSE,
                                as.matrix = FALSE, as.df = FALSE, collin.rm = TRUE, ...){
     # We evaluate the formula with the past call
@@ -3604,7 +3606,7 @@ model.matrix.fixest = function(object, data, type = "rhs", na.rm = TRUE, subset 
 #' # Terms of the linear part
 #' terms(res)
 #'
-#'
+#' @exportS3Method
 terms.fixest = function(x, ...){
     terms(formula(x, type = "linear"))
 }
@@ -3628,6 +3630,7 @@ terms.fixest = function(x, ...){
 #' est = feols(Petal.Length ~ Petal.Width, iris, weights = ~as.integer(Sepal.Length) - 3.99)
 #' weights(est)
 #'
+#' @exportS3Method
 weights.fixest = function(object, ...){
     w = object[["weights"]]
 
@@ -3659,8 +3662,7 @@ weights.fixest = function(object, ...){
 #' est = feols(Petal.Length ~ Petal.Width, iris)
 #' sigma(est)
 #'
-#'
-#'
+#' @exportS3Method
 sigma.fixest = function(object, ...){
     sqrt(deviance(object) / (object$nobs - object$nparams))
 }
@@ -3686,6 +3688,7 @@ sigma.fixest = function(object, ...){
 #' est_pois = fepois(Petal.Length ~ Petal.Width, iris)
 #' deviance(est_pois)
 #'
+#' @exportS3Method
 deviance.fixest = function(object, ...){
 
     if(isTRUE(object$lean)){
@@ -3755,7 +3758,7 @@ deviance.fixest = function(object, ...){
 #' est = feols(Petal.Length ~ Petal.Width + Sepal.Width, iris)
 #' head(hatvalues(est))
 #'
-#'
+#' @exportS3Method
 hatvalues.fixest = function(model, ...){
     # Only works for feglm/feols objects + no fixed-effects
     # When there are fixed-effects the hatvalues of the reduced form is different from
@@ -3819,6 +3822,7 @@ hatvalues.fixest = function(model, ...){
 #' est = feols(Petal.Length ~ Petal.Width + Sepal.Width, iris)
 #' head(estfun(est))
 #'
+#' @exportS3Method
 estfun.fixest = function(x, ...){
     # 'scores' is an object always contained in fixest estimations
 
@@ -3868,6 +3872,7 @@ NULL
 #' est = feols(Petal.Length ~ Petal.Width + Sepal.Width, iris)
 #' bread(est)
 #'
+#' @exportS3Method
 bread.fixest = function(x, ...){
 
     if(is_user_level_call()){

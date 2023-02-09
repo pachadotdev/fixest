@@ -616,8 +616,8 @@ print.fixest_multi = function(x, ...){
 #' # The second one, etc
 #' res[[2]]
 #'
-#' @exportS3Method
-"[[.fixest_multi" = function(x, i){
+#' @export
+`[[.fixest_multi` = function(x, i){
 
     n = length(x)
     check_arg_plus(i, "evalset integer scalar mbt", .data = list(.N = n))
@@ -677,8 +677,8 @@ print.fixest_multi = function(x, ...){
 #' # The first and last estimations
 #' etable(est_split[i = c(1, .N)])
 #'
-#' @exportS3Method
-"[.fixest_multi" = function(x, i, sample, lhs, rhs, fixef, iv, I, reorder = TRUE, drop = FALSE){
+#' @export
+`[.fixest_multi` = function(x, i, sample, lhs, rhs, fixef, iv, I, reorder = TRUE, drop = FALSE){
 
     core_args = c("sample", "lhs", "rhs", "fixef", "iv")
     check_arg(reorder, drop, "logical scalar")
@@ -946,7 +946,7 @@ as.list.fixest_multi = function(x, ...){
 #' # long but balanced (with NAs then)
 #' coef(est, long = TRUE, na.rm = FALSE)
 #'
-#' @export
+#' @exportS3Method
 coef.fixest_multi = function(object, keep, drop, order, collin = FALSE,
                              long = FALSE, na.rm = TRUE, ...){
     # row: model
@@ -997,6 +997,7 @@ coef.fixest_multi = function(object, keep, drop, order, collin = FALSE,
 }
 
 #' @rdname coef.fixest_multi
+#' @exportS3Method
 coefficients.fixest_multi <- coef.fixest_multi
 
 #' Extracts the coefficients tables from `fixest_multi` estimations
@@ -1289,6 +1290,7 @@ residuals.fixest_multi <- resid.fixest_multi
 #' # the 'id' provides the index of the estimation
 #' est[c(3, 6)]
 #'
+#' @exportS3Method
 confint.fixest_multi = function(object, parm, level = 0.95, vcov = NULL, se = NULL,
                                 cluster = NULL, ssc = NULL, ...){
 
