@@ -1,6 +1,4 @@
-
-
-
+#' @exportS3Method
 print.dsb = function(x, ...){
     cat(x, sep = "\n")
 }
@@ -405,10 +403,7 @@ print.dsb = function(x, ...){
 #' dsb("Why do you develop packages? For .[`dollar`*c!$]?",
 #'     "For money? No... for .[U,''s, c?reason]!", sep = "\n")
 #'
-#'
-#'
-#'
-#'
+#' @export
 dsb = function(..., frame = parent.frame(), sep = "", vectorize = FALSE, nest = TRUE,
                collapse = NULL){
     check_arg(vectorize, nest, "logical scalar")
@@ -616,10 +611,14 @@ dsb = function(..., frame = parent.frame(), sep = "", vectorize = FALSE, nest = 
     res
 }
 
+#' @rdname etable
+#' @export
 .dsb0 = function(..., frame = parent.frame(), sep = "", vectorize = FALSE, check = FALSE){
     .dsb(..., frame = frame, nest = FALSE, sep = sep, vectorize = vectorize, check = check)
 }
 
+#' @rdname etable
+#' @export
 .dsb = function(..., frame = parent.frame(), sep = "", vectorize = FALSE,
                 nest = TRUE, collapse = NULL, check = FALSE){
 

@@ -853,7 +853,6 @@ unpanel = function(x){
 #'   feols(y~l(x1, 0:1), pdat_dt[!period %in% c(2, 4)])
 #' }
 #'
-#'
 "[.fixest_panel" = function(x, i, j, ...){
     # we need to perform proper bookkeeping
 

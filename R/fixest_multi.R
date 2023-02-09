@@ -293,8 +293,7 @@ rep_df = function(x, times = 1, each = 1, ...){
 #' models(est_sub)
 #' models(est_sub, simplify = TRUE)
 #'
-#'
-#'
+#' @export
 models = function(x, simplify = FALSE){
     check_arg(x, "class(fixest_multi)")
 
@@ -359,7 +358,7 @@ models = function(x, simplify = FALSE){
 #'
 #' summary(res, type = "se_long")
 #'
-#'
+#' @exportS3Method
 summary.fixest_multi = function(object, type = "short", vcov = NULL, se = NULL, cluster = NULL, ssc = NULL,
                                 .vcov = NULL, stage = 2, lean = FALSE, n = 1000, ...){
     dots = list(...)
@@ -506,6 +505,7 @@ summary.fixest_multi = function(object, type = "short", vcov = NULL, se = NULL, 
 #' # Let's print all that
 #' res
 #'
+#' @exportS3Method
 print.fixest_multi = function(x, ...){
 
     if(is_user_level_call()){
@@ -616,6 +616,7 @@ print.fixest_multi = function(x, ...){
 #' # The second one, etc
 #' res[[2]]
 #'
+#' @exportS3Method
 "[[.fixest_multi" = function(x, i){
 
     n = length(x)
@@ -676,6 +677,7 @@ print.fixest_multi = function(x, ...){
 #' # The first and last estimations
 #' etable(est_split[i = c(1, .N)])
 #'
+#' @exportS3Method
 "[.fixest_multi" = function(x, i, sample, lhs, rhs, fixef, iv, I, reorder = TRUE, drop = FALSE){
 
     core_args = c("sample", "lhs", "rhs", "fixef", "iv")
@@ -888,7 +890,7 @@ print.fixest_multi = function(x, ...){
 #' # All the results at once
 #' as.list(res)
 #'
-#'
+#' @exportS3Method
 as.list.fixest_multi = function(x, ...){
     nm = names(x)
     attributes(x) = NULL
@@ -944,7 +946,7 @@ as.list.fixest_multi = function(x, ...){
 #' # long but balanced (with NAs then)
 #' coef(est, long = TRUE, na.rm = FALSE)
 #'
-#'
+#' @export
 coef.fixest_multi = function(object, keep, drop, order, collin = FALSE,
                              long = FALSE, na.rm = TRUE, ...){
     # row: model
@@ -1124,6 +1126,7 @@ coeftable.fixest_multi = function(object, vcov = NULL, keep = NULL, drop = NULL,
 
 
 #' @describeIn coeftable.fixest_multi Extracts the standard-errors from `fixest_multi` estimations
+#' @exportS3Method
 se.fixest_multi = function(object, vcov = NULL, keep = NULL, drop = NULL, order = NULL,
                            long = FALSE, ...){
     # Default is wide format => same as with coef
@@ -1176,6 +1179,7 @@ tstat.fixest_multi = function(object, vcov = NULL, keep = NULL, drop = NULL, ord
 }
 
 #' @describeIn coeftable.fixest_multi Extracts the p-values from `fixest_multi` estimations
+#' @exportS3Method
 pvalue.fixest_multi = function(object, vcov = NULL, keep = NULL, drop = NULL, order = NULL,
                               long = FALSE, ...){
     # Default is wide format => same as with coef
@@ -1229,6 +1233,7 @@ pvalue.fixest_multi = function(object, vcov = NULL, keep = NULL, drop = NULL, or
 #' # We can select/order the model using fixest_multi extraction
 #' head(resid(est[rhs = .N:1]))
 #'
+#' @exportS3Method
 resid.fixest_multi = function(object, type = c("response", "deviance", "pearson", "working"), na.rm = FALSE, ...){
 
     # Je fais un prototype pour le moment, je l'ameliorerai apres (07-04-2021)
@@ -1254,6 +1259,7 @@ resid.fixest_multi = function(object, type = c("response", "deviance", "pearson"
 
 
 #' @rdname resid.fixest_multi
+#' @exportS3Method
 residuals.fixest_multi <- resid.fixest_multi
 
 

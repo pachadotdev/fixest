@@ -21,7 +21,7 @@
 #' @param na.rm Logical, default is `FALSE`. If `TRUE`, the statistics that are missing are not displayed.
 #' @param ... Not currently used.
 #'
-#'
+#' @exportS3Method
 print.fixest_fitstat = function(x, na.rm = FALSE, ...){
 
     dots = list(...)
@@ -268,6 +268,7 @@ print.fixest_fitstat = function(x, na.rm = FALSE, ...){
 #' # But you can also access the sub elements
 #' fitstat(est, "hc_wald.p")
 #'
+#' @export
 fitstat_register = function(type, fun, alias = NULL, subtypes = NULL){
 
     check_arg(type, "character scalar mbt")
@@ -482,7 +483,7 @@ fitstat_register = function(type, fun, alias = NULL, subtypes = NULL){
 #' # Note that the custom stats we created are can easily lead
 #' # to errors, but that's another story!
 #'
-#'
+#' @export
 fitstat = function(x, type, simplify = FALSE, verbose = TRUE, show_types = FALSE,
                    frame = parent.frame(), ...){
 
@@ -1036,7 +1037,7 @@ fitstat = function(x, type, simplify = FALSE, verbose = TRUE, show_types = FALSE
 #' # regular expressions: e.g. see ?regex.
 #' # Learn it, you won't regret it!
 #'
-#'
+#' @export
 wald = function(x, keep = NULL, drop = NULL, print = TRUE, vcov, se, cluster, ...){
     # LATER:
     # - keep can be a list
@@ -1175,6 +1176,7 @@ fitstat_validate = function(x, vector = FALSE){
 #' # same with full names instead of codes
 #' r2(est, c("cor2", "r2", "pr2", "war2"), full_names = TRUE)
 #'
+#' @export
 r2 = function(x, type = "all", full_names = FALSE){
     # p: pseudo
     # w: within
@@ -1345,8 +1347,7 @@ r2 = function(x, type = "all", full_names = FALSE){
 #' degrees_freedom(est_standard, type = "resid") # => equivalent to the df.residual from lm
 #' degrees_freedom(est_clustered, type = "resid")
 #'
-#'
-#'
+#' @export
 degrees_freedom = function(x, type, vars = NULL, vcov = NULL, se = NULL, cluster = NULL, ssc = NULL, stage = 2){
     check_arg(x, "class(fixest) mbt")
     check_arg_plus(type, "match(k, resid, t)")

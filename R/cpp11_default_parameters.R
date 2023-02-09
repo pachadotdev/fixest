@@ -15,11 +15,3 @@ cpp_demean <- function(y, X_raw, r_weights, iterMax, diffMax, r_nb_id_Q, fe_id_l
 cpp_ssq <- function(x, w = 0) {
     cpp_ssq_(x, w)
 }
-
-cpp_partialDerivative_other <- function(iterMax, Q, N, epsDeriv, ll_d2,
-                                         dx_dother, init, dumMat, nbCluster) {
-    dumMat_ <- dumMat
-    mode(dumMat_) <- "integer"
-    cpp_partialDerivative_other_(iterMax, Q, N, epsDeriv, ll_d2,
-                                dx_dother, init, dumMat_, nbCluster)
-}

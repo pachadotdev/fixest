@@ -17,6 +17,7 @@
 #'
 #' This function works only with R >= 4.0.0. There are no startup messages for R < 4.0.0.
 #'
+#' @export
 fixest_startup_msg = function(x){
 
     check_arg(x, "logical scalar mbt")

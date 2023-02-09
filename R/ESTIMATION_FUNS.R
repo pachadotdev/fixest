@@ -374,7 +374,7 @@
 #' feols(y ~ csw(..(,"x")), base)
 #'
 #'
-#'
+#' @export
 feols = function(fml, data, vcov, weights, offset, subset, split, fsplit, split.keep, split.drop,
                  cluster, se,
                  ssc, panel.id, fixef, fixef.rm = "none", fixef.tol = 1e-6,
@@ -2005,6 +2005,7 @@ check_conv = function(y, X, fixef_id_list, slope_flag, slope_vars, weights, full
 
 
 #' @rdname feols
+#' @export
 feols.fit = function(y, X, fixef_df, vcov, offset, split, fsplit, split.keep, split.drop,
                      cluster, se, ssc, weights,
                      subset, fixef.rm = "perfect", fixef.tol = 1e-6, fixef.iter = 10000,
@@ -2193,7 +2194,7 @@ feols.fit = function(y, X, fixef_df, vcov, offset, split, fsplit, split.keep, sp
 #' # You can still select which sample/LHS/RHS to display
 #' est_split[sample = 1:2, lhs = 1, rhs = 1]
 #'
-#'
+#' @export
 feglm = function(fml, data, family = "gaussian", vcov, offset, weights, subset, split,
                  fsplit, split.keep, split.drop, cluster, se, ssc, panel.id, start = NULL,
                  etastart = NULL, mustart = NULL, fixef, fixef.rm = "perfect",
@@ -2254,6 +2255,7 @@ feglm = function(fml, data, family = "gaussian", vcov, offset, weights, subset, 
 
 
 #' @rdname feglm
+#' @export
 feglm.fit = function(y, X, fixef_df, family = "gaussian", vcov, offset, split,
                      fsplit, split.keep, split.drop, cluster, se, ssc, weights, subset, start = NULL,
                      etastart = NULL, mustart = NULL, fixef.rm = "perfect",
@@ -3157,9 +3159,7 @@ feglm.fit = function(y, X, fixef_df, family = "gaussian", vcov, offset, split,
 #' # You can still select which sample/LHS/RHS to display
 #' est_split[sample = 1:2, lhs = 1, rhs = 1]
 #'
-#'
-#'
-#'
+#' @export
 femlm = function(fml, data, family = c("poisson", "negbin", "logit", "gaussian"), vcov,
                  start = 0, fixef, fixef.rm = "perfect", offset, subset,
                  split, fsplit, split.keep, split.drop,
@@ -3194,6 +3194,7 @@ femlm = function(fml, data, family = c("poisson", "negbin", "logit", "gaussian")
 }
 
 #' @rdname femlm
+#' @export
 fenegbin = function(fml, data, vcov, theta.init, start = 0, fixef, fixef.rm = "perfect",
                     offset, subset, split, fsplit, split.keep, split.drop,
                     cluster, se, ssc, panel.id,
@@ -3230,6 +3231,7 @@ fenegbin = function(fml, data, vcov, theta.init, start = 0, fixef, fixef.rm = "p
 }
 
 #' @rdname feglm
+#' @export
 fepois = function(fml, data, vcov, offset, weights, subset, split, fsplit, split.keep, split.drop,
                   cluster, se, ssc, panel.id, start = NULL, etastart = NULL,
                   mustart = NULL, fixef, fixef.rm = "perfect", fixef.tol = 1e-6,
@@ -3438,7 +3440,7 @@ fepois = function(fml, data, vcov, offset, weights, subset, split, fsplit, split
 #' points(x, fitted(est2_L), col = 2, pch = 1)
 #' points(x, fitted(est2_NL), col = 4, pch = 2)
 #'
-#'
+#' @export
 feNmlm = function(fml, data, family=c("poisson", "negbin", "logit", "gaussian"), NL.fml, vcov,
                   fixef, fixef.rm = "perfect", NL.start, lower, upper, NL.start.init,
                   offset, subset, split, fsplit, split.keep, split.drop,
@@ -4004,10 +4006,7 @@ feNmlm = function(fml, data, family=c("poisson", "negbin", "logit", "gaussian"),
 #' coeftable(est)
 #' cbind(coef, std_err)
 #'
-#'
-#'
-#'
-#'
+#' @export
 est_env = function(env, y, X, weights, endo, inst){
     # No check whatsoever: for advanced users
 

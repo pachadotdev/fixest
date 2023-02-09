@@ -460,7 +460,7 @@
 #' etable(est, dict = dict, tex = TRUE, notes = c("note 1", "source 1"))
 #'
 #'
-#'
+#' @export
 etable = function(..., vcov = NULL, stage = 2, agg = NULL,
                   se = NULL, ssc = NULL, cluster = NULL,
                   .vcov = NULL, .vcov_args = NULL, digits = 4, digits.stats = 5, tex,
@@ -923,7 +923,7 @@ gen_etable_aliases = function(){
 
     etable_call = paste0(arg_name[qui_df][-1], " = ", arg_name[qui_df][-1], collapse = ", ")
 
-    esttable_fun = paste0("esttable = function(", esttable_args, "){\n\n",
+    esttable_fun = paste0("esttable = function(", esttable_args, "){\n",
                           "\tetable(..., ", etable_call, ", tex = FALSE, .up = 2)\n}")
 
     esttable_rox = "#' @describeIn etable Exports the results of multiple `fixest` estimations in a Latex table."
@@ -939,7 +939,7 @@ gen_etable_aliases = function(){
 
     etable_call = paste0(arg_name[qui_tex][-1], " = ", arg_name[qui_tex][-1], collapse = ", ")
 
-    esttex_fun = paste0("esttex = function(", esttex_args, "){\n\n",
+    esttex_fun = paste0("esttex = function(", esttex_args, "){\n",
                         "\tetable(..., ", etable_call, ", tex = TRUE, .up = 2)\n}")
 
     esttex_rox = "#' @describeIn etable Exports the results of multiple `fixest` estimations in a Latex table."
@@ -947,10 +947,9 @@ gen_etable_aliases = function(){
 
 
     # Writing the functions
-    intro = c("# Do not edit by hand\n# => aliases to the function etable\n\n\n")
+    intro = c("# Do not edit by hand\n# => aliases to the function etable\n")
 
-    s = "\n\n\n\n"
-    text = c(intro, s, esttable_rox, esttable_fun, s, esttex_rox, esttex_fun, s)
+    text = c(intro, esttable_rox, esttable_fun, esttex_rox, esttex_fun)
 
     update_file("R/etable_aliases.R", text)
 }
@@ -4185,6 +4184,7 @@ etable_internal_df = function(info){
 
 
 #' @rdname etable
+#' @export
 setFixest_etable = function(digits = 4, digits.stats = 5, fitstat,
                             coefstat = c("se", "tstat", "confint"),
                             ci = 0.95, se.below = TRUE, keep, drop, order, dict,
@@ -4416,7 +4416,7 @@ getFixest_etable = function(){
 #'                                       model.format = "[i]",
 #'                                       yesNo = "x",
 #'                                       tabular = "*"))
-#'
+#' @export
 style.tex = function(main = "base", depvar.title, model.title, model.format, line.top,
                      line.bottom, var.title, fixef.title, fixef.prefix, fixef.suffix,
                      fixef.where, slopes.title, slopes.format, fixef_sizes.prefix,
@@ -4584,7 +4584,7 @@ style.tex = function(main = "base", depvar.title, model.title, model.format, lin
 #' etable(est, style.df = style.df(fixef.title = "", fixef.suffix = " FE",
 #'                                  stats.line = " ", yesNo = "yes"))
 #'
-#'
+#' @export
 style.df = function(depvar.title = "Dependent Var.:", fixef.title = "Fixed-Effects:",
                     fixef.line = "-", fixef.prefix = "", fixef.suffix = "",
                     slopes.title = "Varying Slopes:", slopes.line = "-",
@@ -4664,9 +4664,7 @@ style.df = function(depvar.title = "Dependent Var.:", fixef.title = "Fixed-Effec
 #' # We can change the alias on the fly:
 #' etable(est, extralines = list("_Standard deviation of the dep. var." = ~ sdy))
 #'
-#'
-#'
-#'
+#' @export
 extralines_register = function(type, fun, alias){
     check_arg(type, "character scalar mbt")
     check_arg(fun, "function mbt")
@@ -4707,11 +4705,13 @@ extralines_register = function(type, fun, alias){
 
 
 #' @rdname etable
+#' @exportS3Method
 print.etable_tex = function(x, ...){
     cat(x, sep = "\n")
 }
 
 #' @rdname etable
+#' @exportS3Method
 print.etable_df = function(x, ...){
     # Almost equivalent to print.data.frame
 
@@ -5246,6 +5246,7 @@ img {
 }
 
 #' @rdname etable
+#' @export
 log_etable = function(type = "pdflatex"){
     check_arg_plus(type, "match(pdflatex, magick, tex, dir)")
 

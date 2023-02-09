@@ -153,7 +153,7 @@
 #' # We need to use "x"
 #' table(bin(plen, list("< 2" = ~x < 2, ">= 2" = ~x >= 2)))
 #'
-#'
+#' @export
 bin = function(x, bin){
     check_arg(x, "vector mbt")
 
@@ -255,7 +255,7 @@ bin = function(x, bin){
 #' # Same with renaming
 #' table(ref(month_num, .("@5 five"=5)))
 #'
-#'
+#' @export
 ref = function(x, ref){
     check_arg(x, "vector mbt")
 
@@ -410,8 +410,7 @@ ref = function(x, ref){
 #' # You can show unique values for any variable, as before
 #' n_unik(tmp + base_main + base_extra ~ id[!!NA(z)] + id^period)
 #'
-#'
-#'
+#' @export
 n_unik = function(x){
     # returns a vector with the nber of unique values
     # attr("na.info") => nber of NA values, vector
@@ -940,6 +939,7 @@ n_unik = function(x){
 }
 
 #' @rdname n_unik
+#' @exportS3Method
 print.vec_n_unik = function(x, ...){
 
     hash = "## "
@@ -958,6 +958,7 @@ print.vec_n_unik = function(x, ...){
 }
 
 #' @rdname n_unik
+#' @exportS3Method
 print.list_n_unik = function(x, ...){
 
 
@@ -1161,7 +1162,7 @@ print.list_n_unik = function(x, ...){
 #' data(trade)
 #' osize(trade)
 #'
-#'
+#' @export
 osize = function(x){
 
     size = as.numeric(utils::object.size(x))
@@ -1180,6 +1181,7 @@ osize = function(x){
 }
 
 #' @rdname osize
+#' @exportS3Method
 print.osize = function(x, ...){
     cat(x, "\n")
 }
@@ -1205,6 +1207,7 @@ print.osize = function(x, ...){
 #'
 #' sample_df(iris, previous = TRUE)
 #'
+#' @export
 sample_df = function(x, n = 10, previous = FALSE){
 
     check_arg(n, "integer scalar")
@@ -1298,8 +1301,7 @@ len_unique = function(x, nthreads = getFixest_nthreads()){
 #'
 #' fdim(iris$Species)
 #'
-#'
-#'
+#' @export
 fdim = function(x){
     if(!missing(x)){
         if(!is.null(dim(x))) {
@@ -1365,6 +1367,7 @@ fdim = function(x){
 #' # You can use multi.join to handle the join of the items:
 #' to_integer(x1, x2, add_items = TRUE, multi.join = "; ")
 #'
+#' @export
 to_integer = function(..., sorted = FALSE, add_items = FALSE, items.list = FALSE,
                       multi.df = FALSE, multi.join = "_", internal = FALSE){
 

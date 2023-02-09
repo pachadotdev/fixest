@@ -88,7 +88,7 @@
 #' # Back to default (NULL == default)
 #' setFixest_print(fitstat = NULL)
 #'
-#'
+#' @exportS3Method
 print.fixest = function(x, n, type = "table", fitstat = NULL, ...){
 
     # checking the arguments
@@ -450,7 +450,7 @@ print.fixest = function(x, n, type = "table", fitstat = NULL, ...){
 #' library(sandwich)
 #' summary(est_pois, .vcov = vcovCL, cluster = trade[, c("Destination", "Product")])
 #'
-#'
+#' @exportS3Method
 summary.fixest = function(object, vcov = NULL, cluster = NULL, ssc = NULL, .vcov = NULL,
                           stage = NULL, lean = FALSE, agg = NULL, forceCovariance = FALSE,
                           se = NULL, keepBounded = FALSE, n = 1000,
@@ -689,6 +689,7 @@ summary.fixest = function(object, vcov = NULL, cluster = NULL, ssc = NULL, .vcov
 
 
 #' @rdname summary.fixest
+#' @exportS3Method
 summary.fixest_list = function(object, se, cluster, ssc = getFixest_ssc(), .vcov, stage = 2, lean = FALSE, n, ...){
 
     dots = list(...)
@@ -746,7 +747,7 @@ summary.fixest_list = function(object, se, cluster, ssc = getFixest_ssc(), .vcov
 #' # printing some summary information on the fixed-effects coefficients:
 #' summary(fe_trade)
 #'
-#'
+#' @exportS3Method
 summary.fixest.fixef = function(object, n = 5, ...){
     # This function shows some generic information on the fixed-effect coefficients
 
@@ -1237,7 +1238,7 @@ NULL
 #' # plotting them
 #' plot(fe_trade)
 #'
-#'
+#' @exportS3Method
 plot.fixest.fixef = function(x, n = 5, ...){
 
     # Checking the arguments
@@ -1293,21 +1294,25 @@ plot.fixest.fixef = function(x, n = 5, ...){
 #' est = lm(mpg ~ cyl, mtcars)
 #' coeftable(est)
 #'
+#' @export
 coeftable = function(object, ...){
     UseMethod("coeftable")
 }
 
 #' @rdname coeftable
+#' @export
 se = function(object, ...){
     UseMethod("se")
 }
 
 #' @rdname coeftable
+#' @export
 pvalue = function(object, ...){
     UseMethod("pvalue")
 }
 
 #' @rdname coeftable
+#' @export
 tstat = function(object, ...){
     UseMethod("tstat")
 }
@@ -1342,10 +1347,7 @@ tstat = function(object, ...){
 #'
 #' se(est)
 #'
-#'
-#'
-#'
-#'
+#' @export
 coeftable.default = function(object, keep, drop, order, ...){
     # This function is EXTREMELY naive and I don't intend to improve it
     # => there is tidy for that which is much better
@@ -1393,6 +1395,7 @@ coeftable.default = function(object, keep, drop, order, ...){
 
 
 #' @describeIn coeftable.default Extracts the standard-errors from an estimation
+#' @exportS3Method
 se.default = function(object, keep, drop, order, ...){
     # There is NO GARANTEE that it works
 
@@ -1434,6 +1437,7 @@ tstat.default = function(object, keep, drop, order, ...){
 }
 
 #' @describeIn coeftable.default Extracts the p-values from an estimation
+#' @exportS3Method
 pvalue.default = function(object, keep, drop, order, ...){
     # There is NO GARANTEE that it works
 
@@ -1456,6 +1460,7 @@ pvalue.default = function(object, keep, drop, order, ...){
 }
 
 #' @describeIn coeftable.default Extracts the standard-errors from a VCOV matrix
+#' @exportS3Method
 se.matrix = function(object, keep, drop, order, ...){
     # There is NO GARANTEE that it works
 
@@ -1572,8 +1577,7 @@ se.matrix = function(object, keep, drop, order, ...){
 #' # pvalue of x1
 #' res$x1$pvalue
 #'
-#'
-#'
+#' @export
 coeftable.fixest = function(object, vcov = NULL, ssc = NULL, cluster = NULL,
                             keep = NULL, drop = NULL, order = NULL, list = FALSE, ...){
     # We don't explicitly refer to the other arguments
@@ -1618,6 +1622,7 @@ coeftable.fixest = function(object, vcov = NULL, ssc = NULL, cluster = NULL,
 }
 
 #' @describeIn coeftable.fixest Extracts the standard-error of an estimation
+#' @exportS3Method
 se.fixest = function(object, vcov = NULL, ssc = NULL, cluster = NULL,
                      keep = NULL, drop = NULL, order = NULL, ...){
 
@@ -1656,6 +1661,7 @@ tstat.fixest = function(object, vcov = NULL, ssc = NULL, cluster = NULL,
 }
 
 #' @describeIn coeftable.fixest Extracts the p-value of an estimation
+#' @exportS3Method
 pvalue.fixest = function(object, vcov = NULL, ssc = NULL, cluster = NULL,
                          keep = NULL, drop = NULL, order = NULL, ...){
 
@@ -1705,7 +1711,7 @@ pvalue.fixest = function(object, vcov = NULL, ssc = NULL, cluster = NULL,
 #' nobs(res)
 #' logLik(res)
 #'
-#'
+#' @exportS3Method
 nobs.fixest = function(object, ...){
     object$nobs
 }
@@ -1745,7 +1751,7 @@ nobs.fixest = function(object, ...){
 #' AIC(res1, res2)
 #' BIC(res1, res2)
 #'
-#'
+#' @exportS3Method
 AIC.fixest = function(object, ..., k = 2){
 
     dots = list(...)
@@ -1802,6 +1808,7 @@ AIC.fixest = function(object, ..., k = 2){
 #' AIC(res1, res2)
 #' BIC(res1, res2)
 #'
+#' @exportS3Method
 BIC.fixest = function(object, ...){
 
     dots = list(...)
@@ -1852,7 +1859,7 @@ BIC.fixest = function(object, ...){
 #' nobs(res)
 #' logLik(res)
 #'
-#'
+#' @exportS3Method
 logLik.fixest = function(object, ...){
 
     if(object$method_type == "feols"){
@@ -2083,7 +2090,8 @@ fitted.values.fixest <- fitted.fixest
 #' # we plot the residuals
 #' plot(resid(res_poisson))
 #'
-resid.fixest = residuals.fixest = function(object, type = c("response", "deviance", "pearson", "working"),
+#' @exportS3Method
+resid.fixest = function(object, type = c("response", "deviance", "pearson", "working"),
                                            na.rm = TRUE, ...){
 
     check_arg_plus(type, "match")
@@ -2199,6 +2207,7 @@ resid.fixest = residuals.fixest = function(object, type = c("response", "devianc
 }
 
 #' @rdname resid.fixest
+#' @exportS3Method
 residuals.fixest <- resid.fixest
 
 #' Predict method for `fixest` fits

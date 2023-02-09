@@ -56,7 +56,7 @@
 #' res_2 =  femlm(dep ~ log(x) + v1 + v2 + v3 + v4, base)
 #' collinearity(res_2)
 #'
-#'
+#' @export
 collinearity = function(x, verbose){
 	# x: fixest estimation
 
@@ -580,7 +580,7 @@ collinearity = function(x, verbose){
 #' # Selecting all the variables with "."
 #' did_means(.~treat|post, base_did, indiv = "id")
 #'
-#'
+#' @export
 did_means = function(fml, base, treat_var, post_var, tex = FALSE, treat_dict,
                      dict = getFixest_dict(), file, replace = FALSE, title,
                      label, raw = FALSE, indiv, treat_first, prepostnames = c("Before", "After"),
@@ -1166,8 +1166,7 @@ did_means = function(fml, base, treat_var, post_var, tex = FALSE, treat_dict,
 #'
 #' feols(Ozone ~ i(Month, bin = list(summer = 7:9)), airquality)
 #'
-#'
-#'
+#' @export
 i = function(factor_var, var, ref, keep, bin, ref2, keep2, bin2, ...){
     # Used to create interactions
 
@@ -1767,7 +1766,7 @@ i_noref = function(factor_var, var, ref, bin, keep, ref2, keep2, bin2){
 #' # same for the auto completion with '..'
 #' lm(xpd(Armed.Forces ~ Population + GN..), longley)
 #'
-#'
+#' @export
 xpd = function(fml, ..., add = NULL, lhs, rhs, data = NULL, frame = parent.frame()){
 
     if(MISSNULL(data)){
@@ -2136,9 +2135,7 @@ xpd = function(fml, ..., add = NULL, lhs, rhs, data = NULL, frame = parent.frame
 #' # only the small sample adj. differ in the SEs
 #' etable(res_vs_1, res_vs_2, res_vs_3, keep = "x1")
 #'
-#'
-#'
-#'
+#' @export
 demean = function(X, f, slope.vars, slope.flag, data, weights,
                   nthreads = getFixest_nthreads(), notes = getFixest_notes(),
                   iter = 2000, tol = 1e-6, fixef.reorder = TRUE, na.rm = TRUE,
@@ -2630,9 +2627,7 @@ demean = function(X, f, slope.vars, slope.flag, data, weights,
 #'
 #' etable(est_split, est_versi)
 #'
-#'
-#'
-#'
+#' @export
 obs = function(x){
     check_arg(x, "class(fixest)")
 
@@ -2682,8 +2677,7 @@ obs = function(x){
 #'
 #' summary(conv, "detail")
 #'
-#'
-#'
+#' @export
 check_conv_feols = function(x){
 
     check_arg(x, "class(fixest) mbt")
@@ -2736,6 +2730,7 @@ check_conv_feols = function(x){
 }
 
 #' @rdname check_conv_feols
+#' @exportS3Method
 summary.fixest_check_conv = function(object, type = "short", ...){
 
     check_arg_plus(type, "match(short, detail)")
@@ -2850,7 +2845,7 @@ summary.fixest_check_conv = function(object, type = "short", ...){
 #' # using each
 #' etable(rep(.l(est, est_bis), each = 3, vcov = my_vcov))
 #'
-#'
+#' @exportS3Method
 rep.fixest = function(x, times = 1, each = 1, vcov, ...){
     # each is applied first, then times
     # x can be either a list of fixest objects, either a fixest object
@@ -2951,11 +2946,13 @@ rep.fixest = function(x, times = 1, each = 1, vcov, ...){
 }
 
 #' @rdname rep.fixest
+#' @exportS3Method
 rep.fixest_list = function(x, times = 1, each = 1, vcov, ...){
     rep.fixest(x, times = times, each = each, vcov = vcov, ...)
 }
 
 #' @rdname rep.fixest
+#' @export
 .l = function(...){
 
     check_arg(..., "mbt class(fixest) | list")
@@ -6757,6 +6754,7 @@ char_to_vars = function(x){
 #' setFixest_notes(TRUE)
 #' feols(Ozone ~ Solar.R, airquality)
 #'
+#' @export
 setFixest_notes = function(x){
     check_arg(x, "mbt logical scalar")
 
@@ -6764,6 +6762,7 @@ setFixest_notes = function(x){
 }
 
 #' @rdname setFixest_notes
+#' @export
 getFixest_notes = function(){
 
     x = getOption("fixest_notes")
@@ -6798,7 +6797,7 @@ getFixest_notes = function(){
 #' # To set it back to default:
 #' setFixest_nthreads()
 #'
-#'
+#' @export
 setFixest_nthreads = function(nthreads, save = FALSE){
 	# By default, we use only 50% of threads (never use all)
 
@@ -6848,6 +6847,7 @@ setFixest_nthreads = function(nthreads, save = FALSE){
 }
 
 #' @rdname setFixest_nthreads
+#' @export
 getFixest_nthreads = function(){
 
     x = getOption("fixest_nthreads")
@@ -6889,8 +6889,7 @@ getFixest_nthreads = function(){
 #'
 #' as.dict(x)
 #'
-#'
-#'
+#' @export
 as.dict = function(x){
     check_arg(x, "character scalar")
 
@@ -6960,6 +6959,7 @@ as.dict = function(x){
 #' setFixest_dict(reset = TRUE)
 #' etable(est)
 #'
+#' @export
 setFixest_dict = function(dict = NULL, ..., reset = FALSE){
 
     check_arg(dict, "NULL named character vector no na | character scalar")
@@ -6990,6 +6990,7 @@ setFixest_dict = function(dict = NULL, ..., reset = FALSE){
 }
 
 #' @rdname setFixest_dict
+#' @export
 getFixest_dict = function(){
 
     x = getOption("fixest_dict")
@@ -7004,6 +7005,7 @@ getFixest_dict = function(){
 
 
 #' @rdname print.fixest
+#' @export
 setFixest_print = function(type = "table", fitstat = NULL){
 
     check_arg_plus(type, "match(coef, table)")
@@ -7036,6 +7038,7 @@ setFixest_print = function(type = "table", fitstat = NULL){
 
 
 #' @rdname print.fixest
+#' @export
 getFixest_print = function(){
 
     x = getOption("fixest_print")
@@ -7069,7 +7072,7 @@ getFixest_print = function(){
 #' [`xpd`] to make use of formula macros.
 #'
 #'
-#'
+#' @export
 setFixest_fml = function(..., reset = FALSE){
 
     check_arg(reset, get, "logical scalar")
@@ -7081,6 +7084,7 @@ setFixest_fml = function(..., reset = FALSE){
 }
 
 #' @rdname setFixest_fml
+#' @export
 getFixest_fml = function(){
     fml_macro = getOption("fixest_fml_macro")
     if(is.null(fml_macro)){
@@ -7136,8 +7140,7 @@ getFixest_fml = function(){
 #' # Resetting the defaults
 #' setFixest_estimation(reset = TRUE)
 #'
-#'
-#'
+#' @export
 setFixest_estimation = function(data = NULL, panel.id = NULL, fixef.rm = "perfect",
                                 fixef.tol = 1e-6, fixef.iter = 10000, collin.tol = 1e-10,
                                 lean = FALSE, verbose = 0, warn = TRUE, combine.quick = NULL,
@@ -7184,6 +7187,7 @@ setFixest_estimation = function(data = NULL, panel.id = NULL, fixef.rm = "perfec
 }
 
 #' @rdname setFixest_estimation
+#' @export
 getFixest_estimation = function(){
     getOption("fixest_estimation")
 }
