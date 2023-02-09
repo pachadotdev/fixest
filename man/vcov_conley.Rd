@@ -60,8 +60,6 @@ feols(depth ~ mag, quakes, conley(100))
 est = feols(depth ~ mag, quakes)
 vcov_conley(est, cutoff = 100)
 
-
-
 }
 \references{
 Conley TG (1999). "GMM Estimation with Cross Sectional Dependence", *Journal of Econometrics*, 92, 1-45.

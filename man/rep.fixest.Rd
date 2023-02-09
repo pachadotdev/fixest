@@ -55,5 +55,4 @@ etable(rep(.l(est, est_bis), vcov = my_vcov))
 # using each
 etable(rep(.l(est, est_bis), each = 3, vcov = my_vcov))
 
-
 }

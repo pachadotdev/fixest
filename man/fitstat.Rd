@@ -98,5 +98,4 @@ etable(gravity, fitstat = ~ . + tstand + thc + t1w + t2w)
 # Note that the custom stats we created are can easily lead
 # to errors, but that's another story!
 
-
 }

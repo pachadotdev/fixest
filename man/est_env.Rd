@@ -88,10 +88,6 @@ std_err = apply(boot_res, 2, sd)
 coeftable(est)
 cbind(coef, std_err)
 
-
-
-
-
 }
 \author{
 Laurent Berge

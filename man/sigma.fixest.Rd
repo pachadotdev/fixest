@@ -22,8 +22,6 @@ Extract the estimated standard deviation of the errors from `fixest` estimations
 est = feols(Petal.Length ~ Petal.Width, iris)
 sigma(est)
 
-
-
 }
 \seealso{
 [`feols`], [`fepois`][fixest2::feglm], [`feglm`], [`fenegbin`][fixest2::femlm], [`feNmlm`].

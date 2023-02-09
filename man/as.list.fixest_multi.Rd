@@ -28,7 +28,6 @@ res = feols(y ~ csw(x1, x2, x3), base, split = ~species)
 # All the results at once
 as.list(res)
 
-
 }
 \seealso{
 The main fixest estimation functions: [`feols`], [`fepois`][fixest2::feglm], [`fenegbin`][fixest2::femlm], [`feglm`], [`feNmlm`]. Tools for mutliple fixest estimations: [`summary.fixest_multi`], [`print.fixest_multi`], [`as.list.fixest_multi`], \code{\link[fixest]{sub-sub-.fixest_multi}}, \code{\link[fixest]{sub-.fixest_multi}}.

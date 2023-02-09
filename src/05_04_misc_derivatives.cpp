@@ -1,6 +1,6 @@
 #include "05_0_misc.h"
 
-[[cpp11::register]] doubles cpp_partialDerivative_other_(int iterMax,
+[[cpp11::register]] doubles cpp_partialDerivative_other(int iterMax,
                                                         int Q,
                                                         int N,
                                                         double epsDeriv,

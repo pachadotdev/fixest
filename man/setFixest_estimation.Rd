@@ -88,6 +88,4 @@ etable(res, res_noSingle, res_newDefault)
 # Resetting the defaults
 setFixest_estimation(reset = TRUE)
 
-
-
 }

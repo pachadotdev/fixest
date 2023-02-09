@@ -49,7 +49,6 @@ y_fitted_gaussian = fitted(res_gaussian)
 plot(iris$Sepal.Length, y_fitted_poisson)
 points(iris$Sepal.Length, y_fitted_gaussian, col = 2, pch = 2)
 
-
 }
 \seealso{
 See also the main estimation functions [`femlm`], [`feols`] or [`feglm`]. [`resid.fixest`], [`predict.fixest`], [`summary.fixest`], [`vcov.fixest`], [`fixef.fixest`].

@@ -54,7 +54,6 @@ if(require("data.table")){
   feols(y~l(x1, 0:1), pdat_dt[!period \%in\% c(2, 4)])
 }
 
-
 }
 \seealso{
 Alternatively, the function [`panel`] changes a `data.frame` into a panel from which the functions `l` and `f` (creating leads and lags) can be called. Otherwise you can set the panel 'live' during the estimation using the argument `panel.id` (see for example in the function [`feols`]).

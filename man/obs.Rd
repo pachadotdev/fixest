@@ -30,7 +30,4 @@ est_versi = feols(y ~ x1, base, subset = obs_versi)
 
 etable(est_split, est_versi)
 
-
-
-
 }

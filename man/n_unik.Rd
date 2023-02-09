@@ -129,8 +129,6 @@ tmp = merge(base_main, base_extra, all.x = TRUE, by = c("id", "period"))
 # You can show unique values for any variable, as before
 n_unik(tmp + base_main + base_extra ~ id[!!NA(z)] + id^period)
 
-
-
 }
 \author{
 Laurent Berge

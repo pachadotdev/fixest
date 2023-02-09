@@ -58,7 +58,6 @@ This example deals with international trade, which is a setup that usually requi
 ```{r echo=TRUE}
 library(fixest2)
 data(trade)
-
 ```
 
 This data is a sample of bilateral importations between EU15 countries from 2007 and 2016. The data is further broken down according to 20 product categories. Here is a sample of the data:
@@ -150,7 +149,6 @@ Of course you can use different families in `feglm`, exactly as in `glm`.
 To get the estimation for the fixed-effects Negative Binomial:
 
 ```{r}
-devtools::load_all()
 gravity_negbin = fenegbin(Euros ~ log(dist_km) | Origin + Destination + Product + Year, trade)
 ```
 

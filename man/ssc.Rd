@@ -2,21 +2,11 @@
 % Please edit documentation in R/VCOV.R
 \name{ssc}
 \alias{ssc}
-\alias{dof}
 \alias{setFixest_ssc}
 \alias{getFixest_ssc}
 \title{Governs the small sample correction in `fixest` VCOVs}
 \usage{
 ssc(
-  adj = TRUE,
-  fixef.K = "nested",
-  cluster.adj = TRUE,
-  cluster.df = "min",
-  t.df = "min",
-  fixef.force_exact = FALSE
-)
-
-dof(
   adj = TRUE,
   fixef.K = "nested",
   cluster.adj = TRUE,
@@ -53,11 +43,6 @@ Provides how the small sample correction should be calculated in [`vcov.fixest`]
 \details{
 The following vignette: [On standard-errors](https://lrberge.github.io/fixest/articles/standard_errors.html), describes in details how the standard-errors are computed in `fixest` and how you can replicate standard-errors from other software.
 }
-\section{Functions}{
-\itemize{
-\item \code{dof()}: This function is deprecated and will be removed at some point (in 6 months from August 2021). Exactly the same as `ssc`.
-
-}}
 \examples{
 
 #

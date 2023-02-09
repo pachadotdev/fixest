@@ -27,7 +27,6 @@ osize(iris)
 data(trade)
 osize(trade)
 
-
 }
 \author{
 Laurent Berge

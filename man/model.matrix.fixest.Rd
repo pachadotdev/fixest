@@ -57,8 +57,6 @@ head(model.matrix(est, subset = "x1"))
 # subset => TRUE, only works with data argument!!
 head(model.matrix(est, data = base[, "x1", drop = FALSE], subset = TRUE))
 
-
-
 }
 \seealso{
 See also the main estimation functions [`femlm`], [`feols`] or [`feglm`]. [`formula.fixest`], [`update.fixest`], [`summary.fixest`], [`vcov.fixest`].

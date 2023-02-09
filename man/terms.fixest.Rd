@@ -26,5 +26,4 @@ res = feols(Sepal.Length ~ Sepal.Width*Petal.Length +
 # Terms of the linear part
 terms(res)
 
-
 }

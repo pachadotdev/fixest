@@ -69,6 +69,4 @@ degrees_freedom(est_clustered, type = "k") # fixed-effects are excluded
 degrees_freedom(est_standard, type = "resid") # => equivalent to the df.residual from lm
 degrees_freedom(est_clustered, type = "resid")
 
-
-
 }

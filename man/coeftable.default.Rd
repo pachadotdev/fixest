@@ -61,8 +61,4 @@ coeftable(est)
 
 se(est)
 
-
-
-
-
 }

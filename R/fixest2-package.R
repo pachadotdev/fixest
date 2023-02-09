@@ -16,6 +16,18 @@ NULL
 #'  packageVersion read.csv tail write.csv
 NULL
 
+# these need re-exporting
+
+#' @importFrom nlme fixef
+#' @export
+NULL
+
+#' @importFrom sandwich estfun bread
+#' @export
+NULL
+
+###
+
 #' Trade data sample
 #'
 #' This data reports trade information between countries of the European Union (EU15).

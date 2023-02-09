@@ -115,7 +115,6 @@ table(ref(month_num, .("@5"=5)))
 # Same with renaming
 table(ref(month_num, .("@5 five"=5)))
 
-
 }
 \seealso{
 To bin the values of a vector: [`bin`].

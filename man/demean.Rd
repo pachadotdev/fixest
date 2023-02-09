@@ -154,7 +154,4 @@ res_vs_3 = feols(y ~ x1, base_dm_bis)
 # only the small sample adj. differ in the SEs
 etable(res_vs_1, res_vs_2, res_vs_3, keep = "x1")
 
-
-
-
 }

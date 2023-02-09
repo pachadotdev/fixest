@@ -56,7 +56,6 @@ confint(est_pois)
 # confidence interval with "clustered" VCOV (w.r.t. the Origin factor)
 confint(est_pois, se = "cluster")
 
-
 }
 \author{
 Laurent Berge

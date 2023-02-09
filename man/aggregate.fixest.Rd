@@ -75,7 +75,6 @@ with(base_stagg, mean(treatment_effect_true[time_to_treatment >= 0]))
 # The total effect for each cohort
 aggregate(res_cohort, c("cohort" = "::[^-].*year_treated::([[:digit:]]+)"))
 
-
 }
 \references{
 Liyang Sun and Sarah Abraham, forthcoming, "Estimating Dynamic Treatment Effects in Event Studies with Heterogeneous Treatment Effects". Journal of Econometrics.

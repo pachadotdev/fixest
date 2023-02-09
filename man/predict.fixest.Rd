@@ -116,8 +116,6 @@ head(predict(est, interval = "predi"))
 # You can change the type of SE on the fly
 head(predict(est, interval = "conf", vcov = ~species))
 
-
-
 }
 \seealso{
 See also the main estimation functions [`femlm`], [`feols`] or [`feglm`]. [`update.fixest`], [`summary.fixest`], [`vcov.fixest`], [`fixef.fixest`].

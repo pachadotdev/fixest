@@ -119,8 +119,6 @@ feols(Ozone ~ i(Month, bin = "bin::2"), airquality)
 
 feols(Ozone ~ i(Month, bin = list(summer = 7:9)), airquality)
 
-
-
 }
 \seealso{
 [`iplot`][fixest2::coefplot] to plot interactions or factors created with `i()`, [`feols`] for OLS estimation with multiple fixed-effects.

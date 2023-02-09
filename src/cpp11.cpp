@@ -321,10 +321,10 @@ extern "C" SEXP _fixest2_cpp_log_a_exp(SEXP a, SEXP mu, SEXP exp_mu) {
   END_CPP11
 }
 // 05_04_misc_derivatives.cpp
-doubles cpp_partialDerivative_other_(int iterMax, int Q, int N, double epsDeriv, doubles ll_d2, doubles dx_dother, doubles init, integers_matrix<> dumMat, integers nbCluster);
-extern "C" SEXP _fixest2_cpp_partialDerivative_other_(SEXP iterMax, SEXP Q, SEXP N, SEXP epsDeriv, SEXP ll_d2, SEXP dx_dother, SEXP init, SEXP dumMat, SEXP nbCluster) {
+doubles cpp_partialDerivative_other(int iterMax, int Q, int N, double epsDeriv, doubles ll_d2, doubles dx_dother, doubles init, integers_matrix<> dumMat, integers nbCluster);
+extern "C" SEXP _fixest2_cpp_partialDerivative_other(SEXP iterMax, SEXP Q, SEXP N, SEXP epsDeriv, SEXP ll_d2, SEXP dx_dother, SEXP init, SEXP dumMat, SEXP nbCluster) {
   BEGIN_CPP11
-    return cpp11::as_sexp(cpp_partialDerivative_other_(cpp11::as_cpp<cpp11::decay_t<int>>(iterMax), cpp11::as_cpp<cpp11::decay_t<int>>(Q), cpp11::as_cpp<cpp11::decay_t<int>>(N), cpp11::as_cpp<cpp11::decay_t<double>>(epsDeriv), cpp11::as_cpp<cpp11::decay_t<doubles>>(ll_d2), cpp11::as_cpp<cpp11::decay_t<doubles>>(dx_dother), cpp11::as_cpp<cpp11::decay_t<doubles>>(init), cpp11::as_cpp<cpp11::decay_t<integers_matrix<>>>(dumMat), cpp11::as_cpp<cpp11::decay_t<integers>>(nbCluster)));
+    return cpp11::as_sexp(cpp_partialDerivative_other(cpp11::as_cpp<cpp11::decay_t<int>>(iterMax), cpp11::as_cpp<cpp11::decay_t<int>>(Q), cpp11::as_cpp<cpp11::decay_t<int>>(N), cpp11::as_cpp<cpp11::decay_t<double>>(epsDeriv), cpp11::as_cpp<cpp11::decay_t<doubles>>(ll_d2), cpp11::as_cpp<cpp11::decay_t<doubles>>(dx_dother), cpp11::as_cpp<cpp11::decay_t<doubles>>(init), cpp11::as_cpp<cpp11::decay_t<integers_matrix<>>>(dumMat), cpp11::as_cpp<cpp11::decay_t<integers>>(nbCluster)));
   END_CPP11
 }
 // 05_05_misc_tables.cpp
@@ -619,7 +619,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_fixest2_cpp_mat_reconstruct",           (DL_FUNC) &_fixest2_cpp_mat_reconstruct,            2},
     {"_fixest2_cpp_newey_west",                (DL_FUNC) &_fixest2_cpp_newey_west,                 3},
     {"_fixest2_cpp_newey_west_panel",          (DL_FUNC) &_fixest2_cpp_newey_west_panel,           7},
-    {"_fixest2_cpp_partialDerivative_other_",  (DL_FUNC) &_fixest2_cpp_partialDerivative_other_,   9},
+    {"_fixest2_cpp_partialDerivative_other",   (DL_FUNC) &_fixest2_cpp_partialDerivative_other,    9},
     {"_fixest2_cpp_paste_conditional",         (DL_FUNC) &_fixest2_cpp_paste_conditional,          3},
     {"_fixest2_cpp_pgcd",                      (DL_FUNC) &_fixest2_cpp_pgcd,                       1},
     {"_fixest2_cpp_quf_gnl",                   (DL_FUNC) &_fixest2_cpp_quf_gnl,                    1},

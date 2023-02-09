@@ -201,8 +201,6 @@ se(vcov(est, ssc = ssc(adj = FALSE)))
 se(vcov(est, iid ~ ssc(adj = FALSE)))
 se(vcov(est, DK ~ period + ssc(adj = FALSE)))
 
-
-
 }
 \seealso{
 You can also compute VCOVs with the following functions: [`vcov_cluster`], [`vcov_hac`], [`vcov_conley`].

@@ -153,7 +153,6 @@ plen = iris$Petal.Length
 # We need to use "x"
 table(bin(plen, list("< 2" = ~x < 2, ">= 2" = ~x >= 2)))
 
-
 }
 \seealso{
 To re-factor variables: [`ref`].

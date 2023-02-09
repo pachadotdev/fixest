@@ -85,7 +85,6 @@ est_pois
 # Back to default (NULL == default)
 setFixest_print(fitstat = NULL)
 
-
 }
 \seealso{
 See also the main estimation functions [`femlm`],

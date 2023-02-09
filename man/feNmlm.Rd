@@ -335,7 +335,6 @@ plot(x, z2, pch = 18)
 points(x, fitted(est2_L), col = 2, pch = 1)
 points(x, fitted(est2_NL), col = 4, pch = 2)
 
-
 }
 \references{
 Berge, Laurent, 2018, "Efficient estimation of maximum likelihood models with multiple fixed-effects: the R package FENmlm." CREA Discussion Papers, 13 ([](https://wwwen.uni.lu/content/download/110162/1299525/file/2018_13)).

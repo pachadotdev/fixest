@@ -37,7 +37,4 @@ etable(est, extralines = ~ sdy)
 # We can change the alias on the fly:
 etable(est, extralines = list("_Standard deviation of the dep. var." = ~ sdy))
 
-
-
-
 }

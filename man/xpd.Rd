@@ -265,7 +265,6 @@ lm(xpd(Armed.Forces ~ Population + ..("GNP|ployed")), longley)
 # same for the auto completion with '..'
 lm(xpd(Armed.Forces ~ Population + GN..), longley)
 
-
 }
 \seealso{
 [`setFixest_fml`] to set formula macros, and [`dsb`] to modify character strings with the DSB operator.

@@ -27,5 +27,4 @@ When there are fixed-effects, the hat values of the reduced form are different f
 est = feols(Petal.Length ~ Petal.Width + Sepal.Width, iris)
 head(hatvalues(est))
 
-
 }

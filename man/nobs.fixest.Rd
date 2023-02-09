@@ -26,7 +26,6 @@ res = femlm(Sepal.Length ~ Sepal.Width + Petal.Length +
 nobs(res)
 logLik(res)
 
-
 }
 \seealso{
 See also the main estimation functions [`femlm`], [`feols`] or [`feglm`]. Use [`summary.fixest`] to see the results with the appropriate standard-errors, [`fixef.fixest`] to extract the fixed-effects coefficients, and the function [`etable`] to visualize the results of multiple estimations.

@@ -90,5 +90,4 @@ did_means(y+x1+period~treat|post, base_did, indiv = ~id, treat_first = 0)
 # Selecting all the variables with "."
 did_means(.~treat|post, base_did, indiv = "id")
 
-
 }

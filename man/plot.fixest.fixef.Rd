@@ -34,7 +34,6 @@ fe_trade = fixef(est_pois)
 # plotting them
 plot(fe_trade)
 
-
 }
 \seealso{
 [`fixef.fixest`] to extract clouster coefficients. See also the main estimation function [`femlm`], [`feols`] or [`feglm`]. Use [`summary.fixest`] to see the results with the appropriate standard-errors, the function [`etable`] to visualize the results of multiple estimations.

@@ -82,5 +82,4 @@ coef(est, long = TRUE)
 # long but balanced (with NAs then)
 coef(est, long = TRUE, na.rm = FALSE)
 
-
 }

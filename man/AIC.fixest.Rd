@@ -36,7 +36,6 @@ res2 = femlm(Sepal.Length ~ Petal.Width | Species, iris)
 AIC(res1, res2)
 BIC(res1, res2)
 
-
 }
 \seealso{
 See also the main estimation functions [`femlm`], [`feols`] or [`feglm`]. Other statictics methods: [`BIC.fixest`], [`logLik.fixest`], [`nobs.fixest`].

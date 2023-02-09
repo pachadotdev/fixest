@@ -224,7 +224,6 @@ lm(xpd(Armed.Forces ~ Population + ..("GNP|ployed")), longley)
 # same for the auto completion with '..'
 lm(xpd(Armed.Forces ~ Population + GN..), longley)
 
-
 }
 \seealso{
 [`xpd`] to make use of formula macros.

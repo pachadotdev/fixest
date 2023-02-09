@@ -28,7 +28,6 @@ setFixest_nthreads(1)
 # To set it back to default:
 setFixest_nthreads()
 
-
 }
 \author{
 Laurent Berge

@@ -56,7 +56,6 @@ feols(y ~ x1, base, vcov = ~species)
 # so you can feed them with a VCOV-request:
 feols(y ~ x1, base, vcov = vcov_cluster(rep(1:5, 30)))
 
-
 }
 \references{
 Cameron AC, Gelbach JB, Miller DL (2011). "Robust Inference with Multiway Clustering." *Journal of Business & Economic Statistics*, 29(2), 238-249. doi:10.1198/jbes.2010.07136.

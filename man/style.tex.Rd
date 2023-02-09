@@ -137,7 +137,6 @@ etable(est, tex = TRUE, style.tex = style.tex("aer",
                                       model.format = "[i]",
                                       yesNo = "x",
                                       tabular = "*"))
-
 }
 \seealso{
 [`etable`]

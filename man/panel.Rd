@@ -60,7 +60,6 @@ if(require("data.table")){
   pdat_dt[, c("x1_l1_fill0", "y_f2") := .(l(x1, fill = 0), f(y, 2))]
 }
 
-
 }
 \seealso{
 The estimation methods [`feols`], [`fepois`][fixest2::feglm] and [`feglm`].

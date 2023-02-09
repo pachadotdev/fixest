@@ -2,20 +2,9 @@
 % Please edit documentation in R/Lagging.R
 \name{lag.formula}
 \alias{lag.formula}
-\alias{lag_fml}
 \title{Lags a variable using a formula}
 \usage{
 \method{lag}{formula}(
-  x,
-  k = 1,
-  data,
-  time.step = NULL,
-  fill = NA,
-  duplicate.method = c("none", "first"),
-  ...
-)
-
-lag_fml(
   x,
   k = 1,
   data,
@@ -46,11 +35,6 @@ It returns a vector of the same type and length as the variable to be lagged in 
 \description{
 Lags a variable using panel id + time identifiers in a formula.
 }
-\section{Functions}{
-\itemize{
-\item \code{lag_fml()}: Lags a variable using a formula syntax
-
-}}
 \examples{
 # simple example with an unbalanced panel
 base = data.frame(id = rep(1:2, each = 4),
@@ -108,8 +92,6 @@ if(require("data.table")){
   base = data.table(id = rep(1:2, each = 3), year = 1990 + rep(1:3, 2), x = 1:6)
   base[, x.l1 := lag(x~id+year, 1)]
 }
-
-
 
 }
 \seealso{

@@ -151,6 +151,4 @@ res$constant$coef
 # pvalue of x1
 res$x1$pvalue
 
-
-
 }

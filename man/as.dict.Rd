@@ -29,8 +29,6 @@ x = "# Main vars
 
 as.dict(x)
 
-
-
 }
 \seealso{
 [`etable`], [`setFixest_dict`]

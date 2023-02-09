@@ -65,7 +65,6 @@ summary(res, type = "se_compact")
 
 summary(res, type = "se_long")
 
-
 }
 \seealso{
 The main fixest estimation functions: [`feols`], [`fepois`][fixest2::feglm], [`fenegbin`][fixest2::femlm], [`feglm`], [`feNmlm`]. Tools for mutliple fixest estimations: [`summary.fixest_multi`], [`print.fixest_multi`], [`as.list.fixest_multi`], \code{\link[fixest]{sub-sub-.fixest_multi}}, \code{\link[fixest]{sub-.fixest_multi}}.

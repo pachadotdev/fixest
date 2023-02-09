@@ -31,6 +31,4 @@ est_sub = est[sample = 2]
 models(est_sub)
 models(est_sub, simplify = TRUE)
 
-
-
 }

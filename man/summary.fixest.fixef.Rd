@@ -33,7 +33,6 @@ fe_trade = fixef(est_pois)
 # printing some summary information on the fixed-effects coefficients:
 summary(fe_trade)
 
-
 }
 \seealso{
 [`femlm`], [`fixef.fixest`], [`plot.fixest.fixef`].

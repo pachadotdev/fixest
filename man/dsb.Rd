@@ -413,8 +413,4 @@ reason = "glory"
 dsb("Why do you develop packages? For .[`dollar`*c!$]?",
     "For money? No... for .[U,''s, c?reason]!", sep = "\n")
 
-
-
-
-
 }

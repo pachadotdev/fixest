@@ -30,8 +30,6 @@ class(pdat) ; dim(pdat)
 new_base = unpanel(pdat)
 class(new_base) ; dim(new_base)
 
-
-
 }
 \seealso{
 Alternatively, the function [`panel`] changes a `data.frame` into a panel from which the functions `l` and `f` (creating leads and lags) can be called. Otherwise you can set the panel 'live' during the estimation using the argument `panel.id` (see for example in the function [`feols`]).

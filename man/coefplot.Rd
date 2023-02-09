@@ -427,7 +427,6 @@ coefplot(est, group = list(Sepal = "Sepal", Species = "Species"))
 # now we group + clean the beginning of the names using the special character ^^
 coefplot(est, group = list(Sepal = "^^Sepal.", Species = "^^Species"))
 
-
 }
 \seealso{
 See [`setFixest_coefplot`] to set the default values of `coefplot`, and the estimation functions: e.g. [`feols`], [`fepois`][fixest2::feglm], [`feglm`], [`fenegbin`][fixest2::femlm].

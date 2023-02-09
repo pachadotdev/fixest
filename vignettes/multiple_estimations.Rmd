@@ -32,7 +32,6 @@ base = iris
 names(base) = c("y1", "y2", "x1", "x2", "species")
 
 res_multi = feols(c(y1, y2) ~ x1 + csw(x2, x2^2) | sw0(species), base, fsplit = ~species)
-
 ```
 
 With the previous line of code (90 characters long), we have just performed 32 estimations: eight different functional forms on four different samples. 

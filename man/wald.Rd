@@ -69,5 +69,4 @@ wald(est_did, "period::[1234]$")
 # regular expressions: e.g. see ?regex.
 # Learn it, you won't regret it!
 
-
 }

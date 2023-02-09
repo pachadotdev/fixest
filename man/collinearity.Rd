@@ -53,7 +53,6 @@ collinearity(res_1bis)
 res_2 =  femlm(dep ~ log(x) + v1 + v2 + v3 + v4, base)
 collinearity(res_2)
 
-
 }
 \author{
 Laurent Berge

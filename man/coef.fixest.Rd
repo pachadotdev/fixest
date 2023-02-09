@@ -47,7 +47,6 @@ coef(res)
 # the fixed-effects coefficients:
 fixef(res)
 
-
 }
 \seealso{
 See also the main estimation functions [`femlm`], [`feols`] or [`feglm`]. [`summary.fixest`], [`confint.fixest`], [`vcov.fixest`], [`etable`], [`fixef.fixest`].

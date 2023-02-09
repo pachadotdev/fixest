@@ -31,7 +31,6 @@ formula(res)
 # linear part without the fixed-effects
 formula(res, "linear")
 
-
 }
 \seealso{
 See also the main estimation functions [`femlm`], [`feols`] or [`feglm`]. [`model.matrix.fixest`], [`update.fixest`], [`summary.fixest`], [`vcov.fixest`].

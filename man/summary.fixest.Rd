@@ -172,7 +172,6 @@ summary(est_geo, "conley")
 library(sandwich)
 summary(est_pois, .vcov = vcovCL, cluster = trade[, c("Destination", "Product")])
 
-
 }
 \seealso{
 See also the main estimation functions [`femlm`], [`feols`] or [`feglm`]. Use [`fixef.fixest`] to extract the fixed-effects coefficients, and the function [`etable`] to visualize the results of multiple estimations.

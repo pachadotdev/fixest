@@ -84,5 +84,4 @@ etable(est)
 etable(est, style.df = style.df(fixef.title = "", fixef.suffix = " FE",
                                  stats.line = " ", yesNo = "yes"))
 
-
 }

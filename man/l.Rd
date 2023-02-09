@@ -61,8 +61,6 @@ if(require("data.table")){
   pdat_dt[, c("x1_l1_fill0", "y_f2") := .(l(x1, fill = 0), f(y, 2))]
 }
 
-
-
 }
 \seealso{
 The function [`panel`] changes `data.frames` into a panel from which the functions `l` and `f` can be called. Otherwise you can set the panel 'live' during the estimation using the argument `panel.id` (see for example in the function [`feols`]).
