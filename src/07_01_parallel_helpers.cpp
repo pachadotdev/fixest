@@ -6,7 +6,7 @@
    return omp_get_max_threads();
 }
 
-[[cpp11::register]] list cpppar_which_na_inf_vec(SEXP x, int nthreads)
+[[cpp11::register]] list cpppar_which_na_inf_vec(SEXP x, int nthreads = 1)
 {
     /*
         This function takes a vector and looks at whether it contains NA or infinite values
@@ -33,7 +33,6 @@
     // "trick" to make a break in a multi-threaded section
 
     vector<int> bounds = set_parallel_scheme(nobs, nthreads);
-    // TODO: OMP functions
     #pragma omp parallel for num_threads(nthreads)
     for (int t = 0; t < nthreads; ++t)
     {
@@ -52,22 +51,21 @@
     if (anyNAInf)
     {
     // again: no need to care about race conditions
-    // TODO: OMP functions
-    #pragma omp parallel for num_threads(nthreads)
-        for (int i = 0; i < nobs; ++i)
+#pragma omp parallel for num_threads(nthreads)
+    for (int i = 0; i < nobs; ++i)
+    {
+        double x_tmp = px[i];
+        if (isnan(x_tmp))
         {
-            double x_tmp = px[i];
-            if (isnan(x_tmp))
-            {
-                is_na_inf[i] = true;
-                any_na = true;
-            }
-            else if (isinf(x_tmp))
-            {
-                is_na_inf[i] = true;
-                any_inf = true;
-            }
+            is_na_inf[i] = true;
+            any_na = true;
         }
+        else if (isinf(x_tmp))
+        {
+            is_na_inf[i] = true;
+            any_inf = true;
+        }
+    }
     }
 
     return writable::list({"any_na"_nm = any_na,

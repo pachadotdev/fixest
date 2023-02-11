@@ -1177,12 +1177,13 @@ fixest_env = function(fml, data, family = c("poisson", "negbin", "logit", "gauss
 
             anyNA_y = TRUE
             isNA_y = info$is_na_inf
+            # THIS PRINT IS WROOOOOOONG !!!!!!!!!!!!!!!!!!! ----
+            # THE VALUES x[is.na(x)] change at random
+            print(info$is_na_inf)
             anyNA_sample = TRUE
             isNA_sample = isNA_sample | isNA_y
             msgNA_y = paste0("LHS: ", numberFormatNormal(sum(isNA_y)))
 
-            # THIS IS WROOOOOOONG !!!!!!!!!!!!!!!!!!! ----
-            # FIX T T T T CASES D:
             lhs_clean = lhs[!isNA_y]
             print(lhs_clean)
 
