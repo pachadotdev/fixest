@@ -47,7 +47,7 @@
     }
 
     // object to return: is_na_inf
-    writable::logicals is_na_inf(anyNAInf ? nobs : 1);
+    writable::logicals is_na_inf(anyNAInf ? nobs : 0);
 
     if (anyNAInf)
     {
