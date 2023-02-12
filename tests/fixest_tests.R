@@ -8,10 +8,10 @@
 
 # Some functions are not trivial to test properly though
 
-library(fixest)
+library(fixest2)
 
-test = fixest:::test ; chunk = fixest:::chunk
-vcovClust = fixest:::vcovClust
+test = fixest2:::test ; chunk = fixest2:::chunk
+vcovClust = fixest2:::vcovClust
 
 setFixest_notes(FALSE)
 
@@ -2201,7 +2201,7 @@ test(nrow(et2), 16)
 
 
 # Latex escaping
-cpp_escape_markup = fixest:::cpp_escape_markup
+cpp_escape_markup = fixest2:::cpp_escape_markup
 
 # MD markup
 test(cpp_escape_markup("**bonjour** *les* ***gens * \\***heureux***"),
