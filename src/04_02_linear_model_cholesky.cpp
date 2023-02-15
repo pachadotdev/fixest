@@ -28,7 +28,7 @@ void invert_tri(writable::doubles_matrix<> &R, int K, int nthreads = 1){
             R_CheckUserInterrupt();
         }
 
-#pragma omp parallel for num_threads(nthreads) schedule(static, 1)
+        #pragma omp parallel for num_threads(nthreads) schedule(static, 1)
         for(int i=0 ; i<K-b ; ++i){
             double numerator = 0;
             int col = i+b;
