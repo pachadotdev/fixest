@@ -41,6 +41,8 @@
             if (isnan(px[i]) || isinf(px[i]))
             {
                 anyNAInf = true;
+            } else {
+                anyNAInf = false;
             }
         }
     }
@@ -51,7 +53,7 @@
     if (anyNAInf)
     {
     // again: no need to care about race conditions
-#pragma omp parallel for num_threads(nthreads)
+    #pragma omp parallel for num_threads(nthreads)
     for (int i = 0; i < nobs; ++i)
     {
         double x_tmp = px[i];
@@ -64,6 +66,8 @@
         {
             is_na_inf[i] = true;
             any_inf = true;
+        } else {
+            is_na_inf[i] = false;
         }
     }
     }
@@ -115,6 +119,8 @@
                 if (isnan(mat(i, k)) || isinf(mat(i, k)))
                 {
                     anyNAInf = true;
+                } else {
+                    anyNAInf = false;
                 }
             }
         }
@@ -144,6 +150,8 @@
                     is_na_inf[i] = true;
                     any_inf = true;
                     break;
+                } else {
+                    is_na_inf[i] = false;
                 }
             }
         }
@@ -202,6 +210,8 @@
                 if (isnan(df_data[k][i]) || isinf(df_data[k][i]))
                 {
                     anyNAInf = true;
+                } else {
+                    anyNAInf = false;
                 }
             }
         }
@@ -231,6 +241,8 @@
                     is_na_inf[i] = true;
                     any_inf = true;
                     break;
+                } else {
+                    is_na_inf[i] = false;
                 }
             }
         }
@@ -244,7 +256,7 @@
 
 [[cpp11::register]] integers cpppar_check_only_0(doubles_matrix<> x_mat, int nthreads)
 {
-    // returns a 0/1 vectors => 1 means only 0
+    // returns a 0/1 vectors => 1 means only 0anyNAInf
 
     int n = x_mat.nrow();
     int K = x_mat.ncol();
