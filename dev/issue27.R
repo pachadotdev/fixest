@@ -33,18 +33,15 @@ d <- filter(ch1_application3, sum_trade > 0)
 
 out <- list()
 
-for (i in 1:100) {
-    print(i)
+for (i in 1:1000) {
     out[[i]] <- fixest2::feols(form, data = d)$coefficients
 }
 
-for (i in 2:100) {
-    x <- all.equal(
-        out[[1]],
-        out[[i]]
-    )
+x <- c()
 
-    print(paste(i, x))
+for (i in 2:1000) {
+    x[i] <- all.equal(out[[1]], out[[i]])
 }
 
-out[[84]]
+which(x == T)
+which(x == F)
