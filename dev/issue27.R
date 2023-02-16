@@ -1,6 +1,10 @@
 library(dplyr)
 library(tidyr)
 
+devtools::load_all()
+
+load("~/github/tradepolicy/data/agtpa_applications.rda")
+
 ch1_application3 <- agtpa_applications %>%
     filter(year %in% seq(1986, 2006, 4)) %>%
     mutate(

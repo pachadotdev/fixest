@@ -92,6 +92,13 @@ void tproduct_tri(writable::doubles_matrix<> &RRt, writable::doubles_matrix<> &R
 
     writable::doubles_matrix<> R(K, K);
 
+    // fill R with 0s
+    for (int i = 0; i < K; ++i) {
+        for (int j = 0; j < K; ++j) {
+            R(i, j) = 0;
+        }
+    }
+
     writable::logicals id_excl(K);
     for (int k = 0; k < K; ++k) {
         id_excl[k] = false;

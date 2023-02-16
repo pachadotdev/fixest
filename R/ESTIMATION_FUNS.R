@@ -1899,7 +1899,6 @@ ols_fit = function(y, X, w, correct_0w = FALSE, collin.tol, nthreads, xwx = NULL
         fitted.values = cpppar_xbeta(X, beta, nthreads)
     }
 
-
     residuals = y - fitted.values
 
     res = list(xwx = xwx, coefficients = beta, fitted.values = fitted.values,
