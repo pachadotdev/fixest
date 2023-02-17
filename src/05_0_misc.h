@@ -23,6 +23,8 @@ Three groups of non-parallel functions:
 
 #include <stdint.h>
 
+#include <cstring>
+
 #ifdef _OPENMP
 #include <omp.h>
 #else
