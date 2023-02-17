@@ -1,7 +1,6 @@
 #include "05_0_misc.h"
 
-[[cpp11::register]]
-std::string cpp_add_commas_(double x, int r = 1, bool whole = true)
+[[cpp11::register]] std::string cpp_add_commas_(double x, int r = 1, bool whole = true)
 {
     // a bit like (but not exactly equal to) format(x, nsmall = 1, big.mark = ",") but about 40-100 times faster
     // for whole numbers => no trailing digits
@@ -538,13 +537,12 @@ std::string cpp_add_commas_(double x, int r = 1, bool whole = true)
     return pgcd;
 }
 
-[[cpp11::register]]
-list cpp_get_fe_gnl(int Q,
-                    int N,
-                    writable::doubles sumFE,
-                    writable::integers_matrix<> dumMat,
-                    writable::integers cluster_sizes,
-                    writable::integers_matrix<> obsCluster)
+[[cpp11::register]] list cpp_get_fe_gnl(int Q,
+                                        int N,
+                                        writable::doubles sumFE,
+                                        writable::integers_matrix<> dumMat,
+                                        writable::integers cluster_sizes,
+                                        writable::integers_matrix<> obsCluster)
 {
     // This function returns a list of the cluster coefficients for each cluster
     // dumMat: the matrix of cluster ID for each observation, with cpp index style
@@ -612,10 +610,13 @@ list cpp_get_fe_gnl(int Q,
             int *pindex = pindex_cluster[q];
             index = pindex[k];
             // index = start(q) + k;
-            if (k == 0) {
+            if (k == 0)
+            {
                 start_cluster[index] = 0;
                 end_cluster[index] = tableCluster[k];
-            } else {
+            }
+            else
+            {
                 start_cluster[index] = end_cluster[index - 1];
                 end_cluster[index] = end_cluster[index - 1] + tableCluster[k];
             }
@@ -845,26 +846,36 @@ list cpp_get_fe_gnl(int Q,
     return res;
 }
 
-inline bool is_md_markup(const char * x, int i, int n) {
-    if(x[i] != '*') return false;
+inline bool is_md_markup(const char *x, int i, int n)
+{
+    if (x[i] != '*')
+        return false;
 
-    if(i + 1 >= n || x[i + 1] != '*') return true;
-    if(i + 2 >= n ||  x[i + 2] != '*') return true;
-    if(i + 3 < n && x[i + 3] == '*') return false;
+    if (i + 1 >= n || x[i + 1] != '*')
+        return true;
+    if (i + 2 >= n || x[i + 2] != '*')
+        return true;
+    if (i + 3 < n && x[i + 3] == '*')
+        return false;
     return true;
 }
 
-inline bool is_special_char(const char x) {
+inline bool is_special_char(const char x)
+{
     return x == '&' || x == '%' || x == '_' || x == '^' || x == '#';
 }
 
-inline int find_id_markup(const char * x, int i, int n) {
-    if(i + 1 >= n || x[i + 1] != '*') return 1;
-    if(i + 2 >= n ||  x[i + 2] != '*') return 2;
+inline int find_id_markup(const char *x, int i, int n)
+{
+    if (i + 1 >= n || x[i + 1] != '*')
+        return 1;
+    if (i + 2 >= n || x[i + 2] != '*')
+        return 2;
     return 3;
 }
 
-std::string apply_escape_markup(const char * x) {
+std::string apply_escape_markup(const char *x)
+{
     // element 0 is the main character vector: it is never closed
 
     int n = std::strlen(x);
@@ -882,64 +893,87 @@ std::string apply_escape_markup(const char * x) {
     int id_mkp = 0;
 
     int i = 0, i_save = 0;
-    while(i < n){
-        if(x[i] == '$'){
-            if(i > 0 && x[i - 1] == '\\'){
+    while (i < n)
+    {
+        if (x[i] == '$')
+        {
+            if (i > 0 && x[i - 1] == '\\')
+            {
                 tmp_all[id_mkp] += '$';
-            } else {
+            }
+            else
+            {
                 // This is an equation
                 i_save = i;
                 ++i;
                 tmp = "$";
-                while(i < n && (x[i] != '$' || x[i - 1] == '\\')){
+                while (i < n && (x[i] != '$' || x[i - 1] == '\\'))
+                {
                     tmp += x[i];
                     ++i;
                 }
 
-                if(i == n){
+                if (i == n)
+                {
                     // we went all the way without a closing $
                     // => we come back, escape it and continue
                     tmp_all[id_mkp] += "\\$";
                     i = i_save;
-
-                } else {
+                }
+                else
+                {
                     tmp_all[id_mkp] += tmp + "$";
                 }
             }
-        } else if(is_special_char(x[i])){
-            if(i > 0 && x[i - 1] == '\\'){
+        }
+        else if (is_special_char(x[i]))
+        {
+            if (i > 0 && x[i - 1] == '\\')
+            {
                 // we do nothing
                 tmp_all[id_mkp] += x[i];
-            } else {
+            }
+            else
+            {
                 // we escape
                 tmp_all[id_mkp] += "\\";
                 tmp_all[id_mkp] += x[i];
             }
-
-        } else if(x[i] == '\\'){
-            if(i + 1 < n && x[i + 1] == '*'){
+        }
+        else if (x[i] == '\\')
+        {
+            if (i + 1 < n && x[i + 1] == '*')
+            {
                 // escape of MD markup
                 ++i;
-                while(i < n && x[i] == '*'){
+                while (i < n && x[i] == '*')
+                {
                     tmp_all[id_mkp] += '*';
                     ++i;
                 }
                 --i; // compensated at the end of the main while
-            } else {
+            }
+            else
+            {
                 tmp_all[id_mkp] += '\\';
             }
-        } else if(is_md_markup(x, i, n)){
+        }
+        else if (is_md_markup(x, i, n))
+        {
             id_mkp = find_id_markup(x, i, n);
             i += id_mkp - 1;
 
-            if(is_open[id_mkp]){
+            if (is_open[id_mkp])
+            {
 
-                for(int j=id_open.size() - 1 ; j >= 1 ; --j){
+                for (int j = id_open.size() - 1; j >= 1; --j)
+                {
 
                     int id_j = id_open[j];
                     int id_prev = id_open[j - 1];
 
-                    if(id_j == id_mkp){
+                    if (id_j == id_mkp)
+                    {
                         // we apply the markup
                         tmp = open_tags[id_mkp] + tmp_all[id_mkp] + closing_tags[id_mkp];
 
@@ -950,8 +984,9 @@ std::string apply_escape_markup(const char * x) {
                         tmp_all[id_mkp] = "";
                         id_mkp = id_prev;
                         break;
-
-                    } else {
+                    }
+                    else
+                    {
                         // we flush: the markup is invalid
                         // example:  "** bonjour * les gens **"
 
@@ -963,20 +998,23 @@ std::string apply_escape_markup(const char * x) {
                         id_open.pop_back();
                     }
                 }
-
-            } else {
+            }
+            else
+            {
                 is_open[id_mkp] = true;
                 id_open.push_back(id_mkp);
             }
-
-        } else {
+        }
+        else
+        {
             tmp_all[id_mkp] += x[i];
         }
         ++i;
     }
 
     // we flush the rest if needed
-    for(int j=id_open.size() - 1 ; j >= 1 ; --j){
+    for (int j = id_open.size() - 1; j >= 1; --j)
+    {
         int id_j = id_open[j];
         int id_prev = id_open[j - 1];
 
@@ -988,18 +1026,21 @@ std::string apply_escape_markup(const char * x) {
     return tmp_all[0];
 }
 
-[[cpp11::register]] strings cpp_escape_markup(SEXP Rstr){
+[[cpp11::register]] strings cpp_escape_markup(SEXP Rstr)
+{
     // cpp_escape_markup("**bonjour** *les* ***gens * \\***heureux*** ")
     // cpp_escape_markup("stars: 10%: *, 5%: **, 1%: ***")
 
     int n = LENGTH(Rstr);
     writable::strings res(n);
 
-    if(n == 0){
+    if (n == 0)
+    {
         return res;
     }
 
-    for(int i=0 ; i<n ; ++i){
+    for (int i = 0; i < n; ++i)
+    {
         res[i] = apply_escape_markup(CHAR(STRING_ELT(Rstr, i)));
     }
 
