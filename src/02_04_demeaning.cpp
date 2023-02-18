@@ -795,6 +795,13 @@ void demean_single_gnl(int v, PARAM_DEMEAN *args)
     int ncol = useX ? n_vars_X : 1;
     writable::doubles_matrix<> X_demean(nrow, ncol);
 
+    // fill X_demean with 0s
+    for (int i = 0; i < nrow; ++i) {
+        for (int j = 0; j < ncol; ++j) {
+            X_demean(i, j) = 0;
+        }
+    }
+
     sVec p_input_tmp;
     double *p_output_tmp;
     for (int k = 0; k < n_vars_X; ++k)
