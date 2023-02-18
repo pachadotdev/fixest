@@ -93,6 +93,7 @@ void tproduct_tri(writable::doubles_matrix<> &RRt, writable::doubles_matrix<> &R
     writable::doubles_matrix<> R(K, K);
 
     // fill R with 0s
+    #pragma omp parallel for num_threads(nthreads)
     for (int i = 0; i < K; ++i) {
         for (int j = 0; j < K; ++j) {
             R(i, j) = 0;

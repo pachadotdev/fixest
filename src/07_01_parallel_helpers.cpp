@@ -3,7 +3,7 @@
 // TODO: OMP functions
 [[cpp11::register]] int cpp_get_nb_threads()
 {
-   return omp_get_max_threads();
+    return omp_get_max_threads();
 }
 
 [[cpp11::register]] list cpppar_which_na_inf_vec(SEXP x, int nthreads = 1)
@@ -33,7 +33,7 @@
     // "trick" to make a break in a multi-threaded section
 
     vector<int> bounds = set_parallel_scheme(nobs, nthreads);
-    #pragma omp parallel for num_threads(nthreads)
+#pragma omp parallel for num_threads(nthreads)
     for (int t = 0; t < nthreads; ++t)
     {
         for (int i = bounds[t]; i < bounds[t + 1] && !anyNAInf; ++i)
@@ -41,7 +41,9 @@
             if (isnan(px[i]) || isinf(px[i]))
             {
                 anyNAInf = true;
-            } else {
+            }
+            else
+            {
                 anyNAInf = false;
             }
         }
@@ -52,24 +54,26 @@
 
     if (anyNAInf)
     {
-    // again: no need to care about race conditions
-    #pragma omp parallel for num_threads(nthreads)
-    for (int i = 0; i < nobs; ++i)
-    {
-        double x_tmp = px[i];
-        if (isnan(x_tmp))
+// again: no need to care about race conditions
+#pragma omp parallel for num_threads(nthreads)
+        for (int i = 0; i < nobs; ++i)
         {
-            is_na_inf[i] = true;
-            any_na = true;
+            double x_tmp = px[i];
+            if (isnan(x_tmp))
+            {
+                is_na_inf[i] = true;
+                any_na = true;
+            }
+            else if (isinf(x_tmp))
+            {
+                is_na_inf[i] = true;
+                any_inf = true;
+            }
+            else
+            {
+                is_na_inf[i] = false;
+            }
         }
-        else if (isinf(x_tmp))
-        {
-            is_na_inf[i] = true;
-            any_inf = true;
-        } else {
-            is_na_inf[i] = false;
-        }
-    }
     }
 
     return writable::list({"any_na"_nm = any_na,
@@ -108,8 +112,8 @@
 
     vector<int> bounds = set_parallel_scheme(nobs, nthreads);
 
-    // TODO: OMP functions
-    #pragma omp parallel for num_threads(nthreads)
+// TODO: OMP functions
+#pragma omp parallel for num_threads(nthreads)
     for (int t = 0; t < nthreads; ++t)
     {
         for (int k = 0; k < K; ++k)
@@ -119,7 +123,9 @@
                 if (isnan(mat(i, k)) || isinf(mat(i, k)))
                 {
                     anyNAInf = true;
-                } else {
+                }
+                else
+                {
                     anyNAInf = false;
                 }
             }
@@ -131,8 +137,8 @@
 
     if (anyNAInf)
     {
-    // TODO: OMP functions
-    #pragma omp parallel for num_threads(nthreads)
+// TODO: OMP functions
+#pragma omp parallel for num_threads(nthreads)
         for (int i = 0; i < nobs; ++i)
         {
             double x_tmp = 0;
@@ -150,7 +156,9 @@
                     is_na_inf[i] = true;
                     any_inf = true;
                     break;
-                } else {
+                }
+                else
+                {
                     is_na_inf[i] = false;
                 }
             }
@@ -199,8 +207,8 @@
 
     vector<int> bounds = set_parallel_scheme(nobs, nthreads);
 
-    // TODO: OMP functions
-    #pragma omp parallel for num_threads(nthreads)
+// TODO: OMP functions
+#pragma omp parallel for num_threads(nthreads)
     for (int t = 0; t < nthreads; ++t)
     {
         for (int k = 0; k < K; ++k)
@@ -210,7 +218,9 @@
                 if (isnan(df_data[k][i]) || isinf(df_data[k][i]))
                 {
                     anyNAInf = true;
-                } else {
+                }
+                else
+                {
                     anyNAInf = false;
                 }
             }
@@ -222,8 +232,8 @@
 
     if (anyNAInf)
     {
-    // TODO: OMP functions
-    #pragma omp parallel for num_threads(nthreads)
+// TODO: OMP functions
+#pragma omp parallel for num_threads(nthreads)
         for (int i = 0; i < nobs; ++i)
         {
             double x_tmp = 0;
@@ -241,7 +251,9 @@
                     is_na_inf[i] = true;
                     any_inf = true;
                     break;
-                } else {
+                }
+                else
+                {
                     is_na_inf[i] = false;
                 }
             }
@@ -256,15 +268,15 @@
 
 [[cpp11::register]] integers cpppar_check_only_0(doubles_matrix<> x_mat, int nthreads)
 {
-    // returns a 0/1 vectors => 1 means only 0anyNAInf
+    // returns a 0/1 vectors => 1 means only 0
 
     int n = x_mat.nrow();
     int K = x_mat.ncol();
 
     writable::integers res(K);
 
-    // TODO: OMP functions
-    #pragma omp parallel for num_threads(nthreads)
+// TODO: OMP functions
+#pragma omp parallel for num_threads(nthreads)
     for (int k = 0; k < K; ++k)
     {
 
