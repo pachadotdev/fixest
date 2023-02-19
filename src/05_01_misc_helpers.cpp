@@ -840,8 +840,11 @@
         res[q] = quoi;
     }
 
-    // TODO: viable overload
-    // res[Q] = nb_ref; // DOESN'T WORK
+    // res[Q] = nb_ref; won't work because of "no viable overload" in RStudio
+
+    // res.push_back(nb_ref); doesn't work either, RStudio says "no matching member function for call to 'push_back'"
+
+    // TODO: find a way to push back nb_ref to res[Q]
 
     return res;
 }
