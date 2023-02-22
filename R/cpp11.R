@@ -164,6 +164,10 @@ cpp_get_fe_gnl <- function(Q, N, sumFE, dumMat, cluster_sizes, obsCluster) {
   .Call(`_fixest2_cpp_get_fe_gnl`, Q, N, sumFE, dumMat, cluster_sizes, obsCluster)
 }
 
+cpp_escape_markup <- function(Rstr) {
+  .Call(`_fixest2_cpp_escape_markup`, Rstr)
+}
+
 cpp_factor_matrix <- function(fact, is_na_all, who_is_dropped, var, col_names) {
   .Call(`_fixest2_cpp_factor_matrix`, fact, is_na_all, who_is_dropped, var, col_names)
 }

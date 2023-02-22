@@ -292,6 +292,13 @@ extern "C" SEXP _fixest2_cpp_get_fe_gnl(SEXP Q, SEXP N, SEXP sumFE, SEXP dumMat,
     return cpp11::as_sexp(cpp_get_fe_gnl(cpp11::as_cpp<cpp11::decay_t<int>>(Q), cpp11::as_cpp<cpp11::decay_t<int>>(N), cpp11::as_cpp<cpp11::decay_t<writable::doubles>>(sumFE), cpp11::as_cpp<cpp11::decay_t<writable::integers_matrix<>>>(dumMat), cpp11::as_cpp<cpp11::decay_t<writable::integers>>(cluster_sizes), cpp11::as_cpp<cpp11::decay_t<writable::integers_matrix<>>>(obsCluster)));
   END_CPP11
 }
+// 05_01_misc_helpers.cpp
+strings cpp_escape_markup(SEXP Rstr);
+extern "C" SEXP _fixest2_cpp_escape_markup(SEXP Rstr) {
+  BEGIN_CPP11
+    return cpp11::as_sexp(cpp_escape_markup(cpp11::as_cpp<cpp11::decay_t<SEXP>>(Rstr)));
+  END_CPP11
+}
 // 05_02_misc_linalg.cpp
 doubles_matrix<> cpp_factor_matrix(integers fact, logicals is_na_all, integers who_is_dropped, SEXP var, strings col_names);
 extern "C" SEXP _fixest2_cpp_factor_matrix(SEXP fact, SEXP is_na_all, SEXP who_is_dropped, SEXP var, SEXP col_names) {
@@ -600,6 +607,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_fixest2_cpp_dsb",                       (DL_FUNC) &_fixest2_cpp_dsb,                        1},
     {"_fixest2_cpp_dsb_full_string",           (DL_FUNC) &_fixest2_cpp_dsb_full_string,            1},
     {"_fixest2_cpp_dsb_if_extract",            (DL_FUNC) &_fixest2_cpp_dsb_if_extract,             1},
+    {"_fixest2_cpp_escape_markup",             (DL_FUNC) &_fixest2_cpp_escape_markup,              1},
     {"_fixest2_cpp_factor_matrix",             (DL_FUNC) &_fixest2_cpp_factor_matrix,              5},
     {"_fixest2_cpp_find_duplicates",           (DL_FUNC) &_fixest2_cpp_find_duplicates,            2},
     {"_fixest2_cpp_find_never_always_treated", (DL_FUNC) &_fixest2_cpp_find_never_always_treated,  2},
