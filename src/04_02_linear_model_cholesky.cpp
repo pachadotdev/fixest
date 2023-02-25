@@ -4,6 +4,7 @@ void invert_tri(writable::doubles_matrix<> &R, int K, int nthreads = 1){
 
     // Startegy: we invert by bands (b) => better for parallelization
 
+    // TODO: this is not the best way to do it
     // initialization of R prime
     for(int i=0 ; i<K ; ++i){
         for(int j=i+1 ; j<K ; ++j){

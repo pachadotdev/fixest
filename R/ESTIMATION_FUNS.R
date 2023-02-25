@@ -2626,10 +2626,10 @@ feglm.fit = function(y, X, fixef_df, family = "gaussian", vcov, offset, split,
         }
 
         wols = feols(y = z, X = X, weights = w, means = wols_means,
-                     correct_0w = any_0w, env = env, fixef.tol = fixef.tol * 10**(iter==1),
-                     fixef.iter = fixef.iter, collin.tol = collin.tol, nthreads = nthreads,
+                     correct_0w = any_0w, env = env, fixef.tol = fixef.tol,
+                     fixef.iter = fixef.iter, collin.tol = collin.tol, nthreads = 1,
                      mem.clean = mem.clean, warn = warn,
-                     verbose = verbose - 1, fromGLM = TRUE)
+                     verbose = FALSE, fromGLM = TRUE)
 
         if(isTRUE(wols$NA_model)){
             return(wols)
@@ -2650,7 +2650,9 @@ feglm.fit = function(y, X, fixef_df, family = "gaussian", vcov, offset, split,
             wols_means = wols$means
         }
 
+        print("THE PROBLEM IS HERE, IN THE ETA VALUE FOR ITERATION >= 2")
         eta = wols$fitted.values
+
         if(isOffset){
             eta = eta + offset
         }

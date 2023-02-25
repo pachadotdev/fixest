@@ -112,8 +112,8 @@
 
     vector<int> bounds = set_parallel_scheme(nobs, nthreads);
 
-// TODO: OMP functions
-#pragma omp parallel for num_threads(nthreads)
+    // TODO: OMP functions
+    #pragma omp parallel for num_threads(nthreads)
     for (int t = 0; t < nthreads; ++t)
     {
         for (int k = 0; k < K; ++k)

@@ -204,6 +204,7 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y, 
         writable::list res;
 
         writable::doubles_matrix<> wX(X);
+
         if (isWeight)
         {
             for (int k = 0; k < K; ++k)
