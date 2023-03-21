@@ -581,7 +581,6 @@ feglm.fit = function(y, X, fixef_df, family = "gaussian", vcov, offset, split,
             wols_means = wols$means
         }
 
-        print("THE PROBLEM IS HERE, ETA VALUE FOR ITERATION >= 2, ESTIMATION_FUNS.R L2657")
         eta = wols$fitted.values
 
         if(isOffset){
