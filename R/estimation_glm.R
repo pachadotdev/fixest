@@ -312,10 +312,7 @@ feglm.fit = function(y, X, fixef_df, family = "gaussian", vcov, offset, split,
         assign("is_multi_root", FALSE, env)
     }
 
-
-    #
-    # Split ####
-    #
+    # Split ----
 
     do_split = get("do_split", env)
     if(do_split){
@@ -325,9 +322,7 @@ feglm.fit = function(y, X, fixef_df, family = "gaussian", vcov, offset, split,
         return(res)
     }
 
-    #
-    # Multi fixef ####
-    #
+    # Multi fixef ----
 
     do_multi_fixef = get("do_multi_fixef", env)
     if(do_multi_fixef){
@@ -337,9 +332,7 @@ feglm.fit = function(y, X, fixef_df, family = "gaussian", vcov, offset, split,
         return(res)
     }
 
-    #
-    # Multi LHS and RHS ####
-    #
+    # Multi LHS and RHS ----
 
     do_multi_lhs = get("do_multi_lhs", env)
     do_multi_rhs = get("do_multi_rhs", env)
@@ -350,9 +343,7 @@ feglm.fit = function(y, X, fixef_df, family = "gaussian", vcov, offset, split,
         return(res)
     }
 
-    #
-    # Regular estimation ####
-    #
+    # Regular estimation -----
 
     # Setup:
     family = get("family_funs", env)
@@ -549,10 +540,6 @@ feglm.fit = function(y, X, fixef_df, family = "gaussian", vcov, offset, split,
         } else {
             z = eta + (y - mu)/mu.eta.val
         }
-
-        message("PRINT ETA VALUE ESTIMATION_FUNS.R L2613")
-        print(iter)
-        print(eta)
 
         w = as.vector(weights * mu.eta.val**2 / var_mu)
 
@@ -1442,10 +1429,7 @@ feNmlm = function(fml, data, family=c("poisson", "negbin", "logit", "gaussian"),
         assign("is_multi_root", FALSE, env)
     }
 
-
-    #
-    # Split ####
-    #
+    # Split ----
 
     do_split = get("do_split", env)
     if(do_split){
@@ -1455,9 +1439,7 @@ feNmlm = function(fml, data, family=c("poisson", "negbin", "logit", "gaussian"),
         return(res)
     }
 
-    #
-    # Multi fixef ####
-    #
+    # Multi fixef ----
 
     do_multi_fixef = get("do_multi_fixef", env)
     if(do_multi_fixef){
@@ -1467,9 +1449,7 @@ feNmlm = function(fml, data, family=c("poisson", "negbin", "logit", "gaussian"),
         return(res)
     }
 
-    #
-    # Multi LHS and RHS ####
-    #
+    # Multi LHS and RHS ----
 
     do_multi_lhs = get("do_multi_lhs", env)
     do_multi_rhs = get("do_multi_rhs", env)
@@ -1481,9 +1461,7 @@ feNmlm = function(fml, data, family=c("poisson", "negbin", "logit", "gaussian"),
 
     }
 
-    #
-    # Regular estimation ####
-    #
+    # Regular estimation ----
 
 
     # Objects needed for optimization + misc
@@ -1981,10 +1959,7 @@ est_env = function(env, y, X, weights, endo, inst){
            "feNmlm" = feNmlm(env = env))
 }
 
-
-####
-#### Delayed warnings and notes ####
-####
+#### Delayed warnings and notes ----
 
 setup_multi_notes = function(){
     # We reset all the notes
@@ -2106,12 +2081,7 @@ format_error_msg = function(x, origin){
     res
 }
 
-
-####
-#### Multiple estimation tools ####
-####
-
-
+#### Multiple estimation tools ----
 
 multi_split = function(env, fun){
     split = get("split", env)

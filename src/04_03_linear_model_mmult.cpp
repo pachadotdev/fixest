@@ -1,11 +1,14 @@
 #include "04_0_linear_model.h"
 
+// to print elements with cout << X(i,k); we use
+// #include <iostream>
+// using namespace std;
+
 void mp_sparse_XtX(writable::doubles_matrix<> &XtX, const vector<int> &n_j, const vector<int> &start_j, const vector<int> &all_i, const vector<double> &x, const doubles_matrix<> &X, int nthreads)
 {
 
     int K = X.ncol();
 
-    // TODO: OMP functions
     #pragma omp parallel for num_threads(nthreads) schedule(static, 1)
     for (int j1 = 0; j1 < K; ++j1)
     {
@@ -49,7 +52,6 @@ void mp_sparse_Xty(writable::doubles &Xty, const vector<int> &start_j, const vec
 
     int K = Xty.size();
 
-// TODO: OMP functions
 #pragma omp parallel for num_threads(nthreads)
     for (int j = 0; j < K; ++j)
     {
@@ -83,7 +85,6 @@ void mp_XtX(writable::doubles_matrix<> &XtX, const doubles_matrix<> &X, const do
         vector<double> all_values(nthreads, 0);
         vector<int> bounds = set_parallel_scheme(N, nthreads);
 
-// TODO: OMP functions
 #pragma omp parallel for num_threads(nthreads)
         for (int t = 0; t < nthreads; ++t)
         {
@@ -117,7 +118,6 @@ void mp_XtX(writable::doubles_matrix<> &XtX, const doubles_matrix<> &X, const do
             }
         }
 
-// TODO: OMP functions
 #pragma omp parallel for num_threads(nthreads) schedule(static, 1)
         for (int index = 0; index < nValues; ++index)
         {
@@ -148,7 +148,6 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y, 
         vector<double> all_values(nthreads, 0);
         vector<int> bounds = set_parallel_scheme(N, nthreads);
 
-        // TODO: OMP functions
         #pragma omp parallel for num_threads(nthreads)
         for (int t = 0; t < nthreads; ++t)
         {
@@ -170,8 +169,8 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y, 
     }
     else
     {
-// TODO: OMP functions
-#pragma omp parallel for num_threads(nthreads)
+
+    #pragma omp parallel for num_threads(nthreads)
         for (int j = 0; j < K; ++j)
         {
             double val = 0;
@@ -203,7 +202,9 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y, 
 
         writable::list res;
 
-        writable::doubles_matrix<> wX(X);
+        // TODO: probably there's a much better way to obtain wX
+
+        writable::doubles_matrix<> wX(N,K);
 
         if (isWeight)
         {
@@ -211,7 +212,15 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y, 
             {
                 for (int i = 0; i < N; ++i)
                 {
-                    wX(i, k) *= w[i];
+                    wX(i, k) = w[i] * X(i, k);
+                }
+            }
+        } else {
+            for (int k = 0; k < K; ++k)
+            {
+                for (int i = 0; i < N; ++i)
+                {
+                    wX(i, k) = X(i, k);
                 }
             }
         }

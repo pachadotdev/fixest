@@ -112,6 +112,12 @@ std::vector<int> set_parallel_scheme_ter(int N, int nthreads)
     // object to return: is_na_inf
     writable::logicals is_na_inf(anyNAInf ? nobs : 1);
 
+    // fill is_na_inf with false
+    if (anyNAInf)
+    {
+        std::fill(is_na_inf.begin(), is_na_inf.end(), false);
+    }
+
     if (anyNAInf)
     {
     // TODO: OMP functions
