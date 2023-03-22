@@ -1,7 +1,7 @@
 Package: fixest2
 Type: Package
 Title: Fast Fixed-Effects Estimations
-Version: 2022.02.03
+Version: 2022.03.21
 Authors@R: c(
     person("Laurent", "Berge", role = "aut"),
     person("Sebastian", "Krantz", role = "ctb"),

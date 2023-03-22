@@ -1,5 +1,9 @@
 #include "04_0_linear_model.h"
 
+// to print elements with cout << X(i,k); we use
+// #include <iostream>
+// using namespace std;
+
 void invert_tri(writable::doubles_matrix<> &R, int K, int nthreads = 1){
 
     // Startegy: we invert by bands (b) => better for parallelization

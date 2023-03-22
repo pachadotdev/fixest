@@ -208,6 +208,7 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y, 
 
         if (isWeight)
         {
+            #pragma omp parallel for num_threads(nthreads)
             for (int k = 0; k < K; ++k)
             {
                 for (int i = 0; i < N; ++i)
@@ -216,6 +217,7 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y, 
                 }
             }
         } else {
+            #pragma omp parallel for num_threads(nthreads)
             for (int k = 0; k < K; ++k)
             {
                 for (int i = 0; i < N; ++i)
@@ -317,12 +319,12 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y, 
         if (isWeight)
         {
             // I don't use the sqrt, because I use the function when weights are negative too (ll_d2 used as 'weight')
-            writable::doubles_matrix<> wX(X);
+            writable::doubles_matrix<> wX(N,K);
             for (int k = 0; k < K; ++k)
             {
                 for (int i = 0; i < N; ++i)
                 {
-                    wX(i, k) *= w[i];
+                    wX(i, k) = X(i, k) * w[i];
                 }
             }
 
