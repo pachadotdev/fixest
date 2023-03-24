@@ -1531,6 +1531,7 @@ feNmlm = function(fml, data, family=c("poisson", "negbin", "logit", "gaussian"),
     # Maximizing the likelihood
     #
 
+    # CHECK IN FOR femlm_ll
     opt = try(stats::nlminb(start=start, objective=femlm_ll, env=env, lower=lower, upper=upper, gradient=gradient, hessian=hessian, control=opt.control), silent = TRUE)
 
     if("try-error" %in% class(opt)){

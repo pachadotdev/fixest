@@ -298,7 +298,7 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y, 
     return res;
 }
 
-[[cpp11::register]] doubles_matrix<> cpppar_crossprod(doubles_matrix<> X, doubles w, int nthreads)
+[[cpp11::register]] doubles_matrix<> cpppar_crossprod_(doubles_matrix<> X, doubles w, int nthreads)
 {
 
     int N = X.nrow();

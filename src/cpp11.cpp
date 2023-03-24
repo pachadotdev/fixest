@@ -6,10 +6,10 @@
 #include <R_ext/Visibility.h>
 
 // 01_01_convergence_helpers.cpp
-list cpp_fixed_cost_gaussian(int n_i, int n_cells, SEXP index_i, SEXP index_j, SEXP order, SEXP invTableCluster_vector, SEXP dum_vector);
-extern "C" SEXP _fixest2_cpp_fixed_cost_gaussian(SEXP n_i, SEXP n_cells, SEXP index_i, SEXP index_j, SEXP order, SEXP invTableCluster_vector, SEXP dum_vector) {
+list cpp_fixed_cost_gaussian_(int n_i, int n_cells, SEXP index_i, SEXP index_j, SEXP order, SEXP invTableCluster_vector, SEXP dum_vector);
+extern "C" SEXP _fixest2_cpp_fixed_cost_gaussian_(SEXP n_i, SEXP n_cells, SEXP index_i, SEXP index_j, SEXP order, SEXP invTableCluster_vector, SEXP dum_vector) {
   BEGIN_CPP11
-    return cpp11::as_sexp(cpp_fixed_cost_gaussian(cpp11::as_cpp<cpp11::decay_t<int>>(n_i), cpp11::as_cpp<cpp11::decay_t<int>>(n_cells), cpp11::as_cpp<cpp11::decay_t<SEXP>>(index_i), cpp11::as_cpp<cpp11::decay_t<SEXP>>(index_j), cpp11::as_cpp<cpp11::decay_t<SEXP>>(order), cpp11::as_cpp<cpp11::decay_t<SEXP>>(invTableCluster_vector), cpp11::as_cpp<cpp11::decay_t<SEXP>>(dum_vector)));
+    return cpp11::as_sexp(cpp_fixed_cost_gaussian_(cpp11::as_cpp<cpp11::decay_t<int>>(n_i), cpp11::as_cpp<cpp11::decay_t<int>>(n_cells), cpp11::as_cpp<cpp11::decay_t<SEXP>>(index_i), cpp11::as_cpp<cpp11::decay_t<SEXP>>(index_j), cpp11::as_cpp<cpp11::decay_t<SEXP>>(order), cpp11::as_cpp<cpp11::decay_t<SEXP>>(invTableCluster_vector), cpp11::as_cpp<cpp11::decay_t<SEXP>>(dum_vector)));
   END_CPP11
 }
 // 01_03_convergence_clusters.cpp
@@ -34,10 +34,10 @@ extern "C" SEXP _fixest2_get_n_cells(SEXP index_i, SEXP index_j) {
   END_CPP11
 }
 // 01_04_convergence_derivatives.cpp
-list cpp_derivconv_seq_gnl(int iterMax, double diffMax, int n_vars, SEXP nb_cluster_all, SEXP ll_d2, SEXP jacob_vector, SEXP deriv_init_vector, SEXP dum_vector);
-extern "C" SEXP _fixest2_cpp_derivconv_seq_gnl(SEXP iterMax, SEXP diffMax, SEXP n_vars, SEXP nb_cluster_all, SEXP ll_d2, SEXP jacob_vector, SEXP deriv_init_vector, SEXP dum_vector) {
+list cpp_derivconv_seq_gnl_(int iterMax, double diffMax, int n_vars, SEXP nb_cluster_all, SEXP ll_d2, SEXP jacob_vector, SEXP deriv_init_vector, SEXP dum_vector);
+extern "C" SEXP _fixest2_cpp_derivconv_seq_gnl_(SEXP iterMax, SEXP diffMax, SEXP n_vars, SEXP nb_cluster_all, SEXP ll_d2, SEXP jacob_vector, SEXP deriv_init_vector, SEXP dum_vector) {
   BEGIN_CPP11
-    return cpp11::as_sexp(cpp_derivconv_seq_gnl(cpp11::as_cpp<cpp11::decay_t<int>>(iterMax), cpp11::as_cpp<cpp11::decay_t<double>>(diffMax), cpp11::as_cpp<cpp11::decay_t<int>>(n_vars), cpp11::as_cpp<cpp11::decay_t<SEXP>>(nb_cluster_all), cpp11::as_cpp<cpp11::decay_t<SEXP>>(ll_d2), cpp11::as_cpp<cpp11::decay_t<SEXP>>(jacob_vector), cpp11::as_cpp<cpp11::decay_t<SEXP>>(deriv_init_vector), cpp11::as_cpp<cpp11::decay_t<SEXP>>(dum_vector)));
+    return cpp11::as_sexp(cpp_derivconv_seq_gnl_(cpp11::as_cpp<cpp11::decay_t<int>>(iterMax), cpp11::as_cpp<cpp11::decay_t<double>>(diffMax), cpp11::as_cpp<cpp11::decay_t<int>>(n_vars), cpp11::as_cpp<cpp11::decay_t<SEXP>>(nb_cluster_all), cpp11::as_cpp<cpp11::decay_t<SEXP>>(ll_d2), cpp11::as_cpp<cpp11::decay_t<SEXP>>(jacob_vector), cpp11::as_cpp<cpp11::decay_t<SEXP>>(deriv_init_vector), cpp11::as_cpp<cpp11::decay_t<SEXP>>(dum_vector)));
   END_CPP11
 }
 // 01_04_convergence_derivatives.cpp
@@ -55,10 +55,10 @@ extern "C" SEXP _fixest2_cpp_derivconv_acc_2(SEXP iterMax, SEXP diffMax, SEXP n_
   END_CPP11
 }
 // 01_04_convergence_derivatives.cpp
-list cpp_derivconv_seq_2(int iterMax, double diffMax, int n_vars, SEXP nb_cluster_all, int n_cells, SEXP index_i, SEXP index_j, SEXP order, SEXP ll_d2, SEXP jacob_vector, SEXP deriv_init_vector, SEXP dum_vector);
-extern "C" SEXP _fixest2_cpp_derivconv_seq_2(SEXP iterMax, SEXP diffMax, SEXP n_vars, SEXP nb_cluster_all, SEXP n_cells, SEXP index_i, SEXP index_j, SEXP order, SEXP ll_d2, SEXP jacob_vector, SEXP deriv_init_vector, SEXP dum_vector) {
+list cpp_derivconv_seq_2_(int iterMax, double diffMax, int n_vars, SEXP nb_cluster_all, int n_cells, SEXP index_i, SEXP index_j, SEXP order, SEXP ll_d2, SEXP jacob_vector, SEXP deriv_init_vector, SEXP dum_vector);
+extern "C" SEXP _fixest2_cpp_derivconv_seq_2_(SEXP iterMax, SEXP diffMax, SEXP n_vars, SEXP nb_cluster_all, SEXP n_cells, SEXP index_i, SEXP index_j, SEXP order, SEXP ll_d2, SEXP jacob_vector, SEXP deriv_init_vector, SEXP dum_vector) {
   BEGIN_CPP11
-    return cpp11::as_sexp(cpp_derivconv_seq_2(cpp11::as_cpp<cpp11::decay_t<int>>(iterMax), cpp11::as_cpp<cpp11::decay_t<double>>(diffMax), cpp11::as_cpp<cpp11::decay_t<int>>(n_vars), cpp11::as_cpp<cpp11::decay_t<SEXP>>(nb_cluster_all), cpp11::as_cpp<cpp11::decay_t<int>>(n_cells), cpp11::as_cpp<cpp11::decay_t<SEXP>>(index_i), cpp11::as_cpp<cpp11::decay_t<SEXP>>(index_j), cpp11::as_cpp<cpp11::decay_t<SEXP>>(order), cpp11::as_cpp<cpp11::decay_t<SEXP>>(ll_d2), cpp11::as_cpp<cpp11::decay_t<SEXP>>(jacob_vector), cpp11::as_cpp<cpp11::decay_t<SEXP>>(deriv_init_vector), cpp11::as_cpp<cpp11::decay_t<SEXP>>(dum_vector)));
+    return cpp11::as_sexp(cpp_derivconv_seq_2_(cpp11::as_cpp<cpp11::decay_t<int>>(iterMax), cpp11::as_cpp<cpp11::decay_t<double>>(diffMax), cpp11::as_cpp<cpp11::decay_t<int>>(n_vars), cpp11::as_cpp<cpp11::decay_t<SEXP>>(nb_cluster_all), cpp11::as_cpp<cpp11::decay_t<int>>(n_cells), cpp11::as_cpp<cpp11::decay_t<SEXP>>(index_i), cpp11::as_cpp<cpp11::decay_t<SEXP>>(index_j), cpp11::as_cpp<cpp11::decay_t<SEXP>>(order), cpp11::as_cpp<cpp11::decay_t<SEXP>>(ll_d2), cpp11::as_cpp<cpp11::decay_t<SEXP>>(jacob_vector), cpp11::as_cpp<cpp11::decay_t<SEXP>>(deriv_init_vector), cpp11::as_cpp<cpp11::decay_t<SEXP>>(dum_vector)));
   END_CPP11
 }
 // 01_04_convergence_derivatives.cpp
@@ -69,17 +69,17 @@ extern "C" SEXP _fixest2_update_deriv_single(SEXP n_vars, SEXP nb_coef, SEXP r_l
   END_CPP11
 }
 // 01_05_convergence.cpp
-list cpp_conv_acc_gnl(int family, int iterMax, double diffMax, double diffMax_NR, double theta, SEXP nb_cluster_all, SEXP lhs, SEXP mu_init, SEXP dum_vector, SEXP tableCluster_vector, SEXP sum_y_vector, SEXP cumtable_vector, SEXP obsCluster_vector, int nthreads);
-extern "C" SEXP _fixest2_cpp_conv_acc_gnl(SEXP family, SEXP iterMax, SEXP diffMax, SEXP diffMax_NR, SEXP theta, SEXP nb_cluster_all, SEXP lhs, SEXP mu_init, SEXP dum_vector, SEXP tableCluster_vector, SEXP sum_y_vector, SEXP cumtable_vector, SEXP obsCluster_vector, SEXP nthreads) {
+list cpp_conv_acc_gnl_(int family, int iterMax, double diffMax, double diffMax_NR, double theta, SEXP nb_cluster_all, SEXP lhs, SEXP mu_init, SEXP dum_vector, SEXP tableCluster_vector, SEXP sum_y_vector, SEXP cumtable_vector, SEXP obsCluster_vector, int nthreads);
+extern "C" SEXP _fixest2_cpp_conv_acc_gnl_(SEXP family, SEXP iterMax, SEXP diffMax, SEXP diffMax_NR, SEXP theta, SEXP nb_cluster_all, SEXP lhs, SEXP mu_init, SEXP dum_vector, SEXP tableCluster_vector, SEXP sum_y_vector, SEXP cumtable_vector, SEXP obsCluster_vector, SEXP nthreads) {
   BEGIN_CPP11
-    return cpp11::as_sexp(cpp_conv_acc_gnl(cpp11::as_cpp<cpp11::decay_t<int>>(family), cpp11::as_cpp<cpp11::decay_t<int>>(iterMax), cpp11::as_cpp<cpp11::decay_t<double>>(diffMax), cpp11::as_cpp<cpp11::decay_t<double>>(diffMax_NR), cpp11::as_cpp<cpp11::decay_t<double>>(theta), cpp11::as_cpp<cpp11::decay_t<SEXP>>(nb_cluster_all), cpp11::as_cpp<cpp11::decay_t<SEXP>>(lhs), cpp11::as_cpp<cpp11::decay_t<SEXP>>(mu_init), cpp11::as_cpp<cpp11::decay_t<SEXP>>(dum_vector), cpp11::as_cpp<cpp11::decay_t<SEXP>>(tableCluster_vector), cpp11::as_cpp<cpp11::decay_t<SEXP>>(sum_y_vector), cpp11::as_cpp<cpp11::decay_t<SEXP>>(cumtable_vector), cpp11::as_cpp<cpp11::decay_t<SEXP>>(obsCluster_vector), cpp11::as_cpp<cpp11::decay_t<int>>(nthreads)));
+    return cpp11::as_sexp(cpp_conv_acc_gnl_(cpp11::as_cpp<cpp11::decay_t<int>>(family), cpp11::as_cpp<cpp11::decay_t<int>>(iterMax), cpp11::as_cpp<cpp11::decay_t<double>>(diffMax), cpp11::as_cpp<cpp11::decay_t<double>>(diffMax_NR), cpp11::as_cpp<cpp11::decay_t<double>>(theta), cpp11::as_cpp<cpp11::decay_t<SEXP>>(nb_cluster_all), cpp11::as_cpp<cpp11::decay_t<SEXP>>(lhs), cpp11::as_cpp<cpp11::decay_t<SEXP>>(mu_init), cpp11::as_cpp<cpp11::decay_t<SEXP>>(dum_vector), cpp11::as_cpp<cpp11::decay_t<SEXP>>(tableCluster_vector), cpp11::as_cpp<cpp11::decay_t<SEXP>>(sum_y_vector), cpp11::as_cpp<cpp11::decay_t<SEXP>>(cumtable_vector), cpp11::as_cpp<cpp11::decay_t<SEXP>>(obsCluster_vector), cpp11::as_cpp<cpp11::decay_t<int>>(nthreads)));
   END_CPP11
 }
 // 01_05_convergence.cpp
-list cpp_conv_seq_gnl(int family, int iterMax, double diffMax, double diffMax_NR, double theta, SEXP nb_cluster_all, SEXP lhs, SEXP mu_init, SEXP dum_vector, SEXP tableCluster_vector, SEXP sum_y_vector, SEXP cumtable_vector, SEXP obsCluster_vector, int nthreads);
-extern "C" SEXP _fixest2_cpp_conv_seq_gnl(SEXP family, SEXP iterMax, SEXP diffMax, SEXP diffMax_NR, SEXP theta, SEXP nb_cluster_all, SEXP lhs, SEXP mu_init, SEXP dum_vector, SEXP tableCluster_vector, SEXP sum_y_vector, SEXP cumtable_vector, SEXP obsCluster_vector, SEXP nthreads) {
+list cpp_conv_seq_gnl_(int family, int iterMax, double diffMax, double diffMax_NR, double theta, SEXP nb_cluster_all, SEXP lhs, SEXP mu_init, SEXP dum_vector, SEXP tableCluster_vector, SEXP sum_y_vector, SEXP cumtable_vector, SEXP obsCluster_vector, int nthreads);
+extern "C" SEXP _fixest2_cpp_conv_seq_gnl_(SEXP family, SEXP iterMax, SEXP diffMax, SEXP diffMax_NR, SEXP theta, SEXP nb_cluster_all, SEXP lhs, SEXP mu_init, SEXP dum_vector, SEXP tableCluster_vector, SEXP sum_y_vector, SEXP cumtable_vector, SEXP obsCluster_vector, SEXP nthreads) {
   BEGIN_CPP11
-    return cpp11::as_sexp(cpp_conv_seq_gnl(cpp11::as_cpp<cpp11::decay_t<int>>(family), cpp11::as_cpp<cpp11::decay_t<int>>(iterMax), cpp11::as_cpp<cpp11::decay_t<double>>(diffMax), cpp11::as_cpp<cpp11::decay_t<double>>(diffMax_NR), cpp11::as_cpp<cpp11::decay_t<double>>(theta), cpp11::as_cpp<cpp11::decay_t<SEXP>>(nb_cluster_all), cpp11::as_cpp<cpp11::decay_t<SEXP>>(lhs), cpp11::as_cpp<cpp11::decay_t<SEXP>>(mu_init), cpp11::as_cpp<cpp11::decay_t<SEXP>>(dum_vector), cpp11::as_cpp<cpp11::decay_t<SEXP>>(tableCluster_vector), cpp11::as_cpp<cpp11::decay_t<SEXP>>(sum_y_vector), cpp11::as_cpp<cpp11::decay_t<SEXP>>(cumtable_vector), cpp11::as_cpp<cpp11::decay_t<SEXP>>(obsCluster_vector), cpp11::as_cpp<cpp11::decay_t<int>>(nthreads)));
+    return cpp11::as_sexp(cpp_conv_seq_gnl_(cpp11::as_cpp<cpp11::decay_t<int>>(family), cpp11::as_cpp<cpp11::decay_t<int>>(iterMax), cpp11::as_cpp<cpp11::decay_t<double>>(diffMax), cpp11::as_cpp<cpp11::decay_t<double>>(diffMax_NR), cpp11::as_cpp<cpp11::decay_t<double>>(theta), cpp11::as_cpp<cpp11::decay_t<SEXP>>(nb_cluster_all), cpp11::as_cpp<cpp11::decay_t<SEXP>>(lhs), cpp11::as_cpp<cpp11::decay_t<SEXP>>(mu_init), cpp11::as_cpp<cpp11::decay_t<SEXP>>(dum_vector), cpp11::as_cpp<cpp11::decay_t<SEXP>>(tableCluster_vector), cpp11::as_cpp<cpp11::decay_t<SEXP>>(sum_y_vector), cpp11::as_cpp<cpp11::decay_t<SEXP>>(cumtable_vector), cpp11::as_cpp<cpp11::decay_t<SEXP>>(obsCluster_vector), cpp11::as_cpp<cpp11::decay_t<int>>(nthreads)));
   END_CPP11
 }
 // 01_05_convergence.cpp
@@ -90,10 +90,10 @@ extern "C" SEXP _fixest2_cpp_conv_acc_poi_2(SEXP n_i, SEXP n_j, SEXP n_cells, SE
   END_CPP11
 }
 // 01_05_convergence.cpp
-list cpp_conv_seq_poi_2(int n_i, int n_j, int n_cells, SEXP index_i, SEXP index_j, SEXP dum_vector, SEXP sum_y_vector, int iterMax, double diffMax, SEXP exp_mu_in, SEXP order);
-extern "C" SEXP _fixest2_cpp_conv_seq_poi_2(SEXP n_i, SEXP n_j, SEXP n_cells, SEXP index_i, SEXP index_j, SEXP dum_vector, SEXP sum_y_vector, SEXP iterMax, SEXP diffMax, SEXP exp_mu_in, SEXP order) {
+list cpp_conv_seq_poi_2_(int n_i, int n_j, int n_cells, SEXP index_i, SEXP index_j, SEXP dum_vector, SEXP sum_y_vector, int iterMax, double diffMax, SEXP exp_mu_in, SEXP order);
+extern "C" SEXP _fixest2_cpp_conv_seq_poi_2_(SEXP n_i, SEXP n_j, SEXP n_cells, SEXP index_i, SEXP index_j, SEXP dum_vector, SEXP sum_y_vector, SEXP iterMax, SEXP diffMax, SEXP exp_mu_in, SEXP order) {
   BEGIN_CPP11
-    return cpp11::as_sexp(cpp_conv_seq_poi_2(cpp11::as_cpp<cpp11::decay_t<int>>(n_i), cpp11::as_cpp<cpp11::decay_t<int>>(n_j), cpp11::as_cpp<cpp11::decay_t<int>>(n_cells), cpp11::as_cpp<cpp11::decay_t<SEXP>>(index_i), cpp11::as_cpp<cpp11::decay_t<SEXP>>(index_j), cpp11::as_cpp<cpp11::decay_t<SEXP>>(dum_vector), cpp11::as_cpp<cpp11::decay_t<SEXP>>(sum_y_vector), cpp11::as_cpp<cpp11::decay_t<int>>(iterMax), cpp11::as_cpp<cpp11::decay_t<double>>(diffMax), cpp11::as_cpp<cpp11::decay_t<SEXP>>(exp_mu_in), cpp11::as_cpp<cpp11::decay_t<SEXP>>(order)));
+    return cpp11::as_sexp(cpp_conv_seq_poi_2_(cpp11::as_cpp<cpp11::decay_t<int>>(n_i), cpp11::as_cpp<cpp11::decay_t<int>>(n_j), cpp11::as_cpp<cpp11::decay_t<int>>(n_cells), cpp11::as_cpp<cpp11::decay_t<SEXP>>(index_i), cpp11::as_cpp<cpp11::decay_t<SEXP>>(index_j), cpp11::as_cpp<cpp11::decay_t<SEXP>>(dum_vector), cpp11::as_cpp<cpp11::decay_t<SEXP>>(sum_y_vector), cpp11::as_cpp<cpp11::decay_t<int>>(iterMax), cpp11::as_cpp<cpp11::decay_t<double>>(diffMax), cpp11::as_cpp<cpp11::decay_t<SEXP>>(exp_mu_in), cpp11::as_cpp<cpp11::decay_t<SEXP>>(order)));
   END_CPP11
 }
 // 01_05_convergence.cpp
@@ -104,10 +104,10 @@ extern "C" SEXP _fixest2_cpp_conv_acc_gau_2(SEXP n_i, SEXP n_j, SEXP n_cells, SE
   END_CPP11
 }
 // 01_05_convergence.cpp
-list cpp_conv_seq_gau_2(int n_i, int n_j, int n_cells, SEXP r_mat_row, SEXP r_mat_col, SEXP r_mat_value_Ab, SEXP r_mat_value_Ba, SEXP dum_vector, SEXP lhs, SEXP invTableCluster_vector, int iterMax, double diffMax, SEXP mu_in);
-extern "C" SEXP _fixest2_cpp_conv_seq_gau_2(SEXP n_i, SEXP n_j, SEXP n_cells, SEXP r_mat_row, SEXP r_mat_col, SEXP r_mat_value_Ab, SEXP r_mat_value_Ba, SEXP dum_vector, SEXP lhs, SEXP invTableCluster_vector, SEXP iterMax, SEXP diffMax, SEXP mu_in) {
+list cpp_conv_seq_gau_2_(int n_i, int n_j, int n_cells, SEXP r_mat_row, SEXP r_mat_col, SEXP r_mat_value_Ab, SEXP r_mat_value_Ba, SEXP dum_vector, SEXP lhs, SEXP invTableCluster_vector, int iterMax, double diffMax, SEXP mu_in);
+extern "C" SEXP _fixest2_cpp_conv_seq_gau_2_(SEXP n_i, SEXP n_j, SEXP n_cells, SEXP r_mat_row, SEXP r_mat_col, SEXP r_mat_value_Ab, SEXP r_mat_value_Ba, SEXP dum_vector, SEXP lhs, SEXP invTableCluster_vector, SEXP iterMax, SEXP diffMax, SEXP mu_in) {
   BEGIN_CPP11
-    return cpp11::as_sexp(cpp_conv_seq_gau_2(cpp11::as_cpp<cpp11::decay_t<int>>(n_i), cpp11::as_cpp<cpp11::decay_t<int>>(n_j), cpp11::as_cpp<cpp11::decay_t<int>>(n_cells), cpp11::as_cpp<cpp11::decay_t<SEXP>>(r_mat_row), cpp11::as_cpp<cpp11::decay_t<SEXP>>(r_mat_col), cpp11::as_cpp<cpp11::decay_t<SEXP>>(r_mat_value_Ab), cpp11::as_cpp<cpp11::decay_t<SEXP>>(r_mat_value_Ba), cpp11::as_cpp<cpp11::decay_t<SEXP>>(dum_vector), cpp11::as_cpp<cpp11::decay_t<SEXP>>(lhs), cpp11::as_cpp<cpp11::decay_t<SEXP>>(invTableCluster_vector), cpp11::as_cpp<cpp11::decay_t<int>>(iterMax), cpp11::as_cpp<cpp11::decay_t<double>>(diffMax), cpp11::as_cpp<cpp11::decay_t<SEXP>>(mu_in)));
+    return cpp11::as_sexp(cpp_conv_seq_gau_2_(cpp11::as_cpp<cpp11::decay_t<int>>(n_i), cpp11::as_cpp<cpp11::decay_t<int>>(n_j), cpp11::as_cpp<cpp11::decay_t<int>>(n_cells), cpp11::as_cpp<cpp11::decay_t<SEXP>>(r_mat_row), cpp11::as_cpp<cpp11::decay_t<SEXP>>(r_mat_col), cpp11::as_cpp<cpp11::decay_t<SEXP>>(r_mat_value_Ab), cpp11::as_cpp<cpp11::decay_t<SEXP>>(r_mat_value_Ba), cpp11::as_cpp<cpp11::decay_t<SEXP>>(dum_vector), cpp11::as_cpp<cpp11::decay_t<SEXP>>(lhs), cpp11::as_cpp<cpp11::decay_t<SEXP>>(invTableCluster_vector), cpp11::as_cpp<cpp11::decay_t<int>>(iterMax), cpp11::as_cpp<cpp11::decay_t<double>>(diffMax), cpp11::as_cpp<cpp11::decay_t<SEXP>>(mu_in)));
   END_CPP11
 }
 // 02_01_demeaning_helpers.cpp
@@ -167,10 +167,10 @@ extern "C" SEXP _fixest2_cpp_sparse_products_(SEXP X, SEXP w, SEXP y, SEXP corre
   END_CPP11
 }
 // 04_03_linear_model_mmult.cpp
-doubles_matrix<> cpppar_crossprod(doubles_matrix<> X, doubles w, int nthreads);
-extern "C" SEXP _fixest2_cpppar_crossprod(SEXP X, SEXP w, SEXP nthreads) {
+doubles_matrix<> cpppar_crossprod_(doubles_matrix<> X, doubles w, int nthreads);
+extern "C" SEXP _fixest2_cpppar_crossprod_(SEXP X, SEXP w, SEXP nthreads) {
   BEGIN_CPP11
-    return cpp11::as_sexp(cpppar_crossprod(cpp11::as_cpp<cpp11::decay_t<doubles_matrix<>>>(X), cpp11::as_cpp<cpp11::decay_t<doubles>>(w), cpp11::as_cpp<cpp11::decay_t<int>>(nthreads)));
+    return cpp11::as_sexp(cpppar_crossprod_(cpp11::as_cpp<cpp11::decay_t<doubles_matrix<>>>(X), cpp11::as_cpp<cpp11::decay_t<doubles>>(w), cpp11::as_cpp<cpp11::decay_t<int>>(nthreads)));
   END_CPP11
 }
 // 04_03_linear_model_mmult.cpp
@@ -328,10 +328,10 @@ extern "C" SEXP _fixest2_cpp_log_a_exp(SEXP a, SEXP mu, SEXP exp_mu) {
   END_CPP11
 }
 // 05_04_misc_derivatives.cpp
-doubles cpp_partialDerivative_other(int iterMax, int Q, int N, double epsDeriv, doubles ll_d2, doubles dx_dother, doubles init, integers_matrix<> dumMat, integers nbCluster);
-extern "C" SEXP _fixest2_cpp_partialDerivative_other(SEXP iterMax, SEXP Q, SEXP N, SEXP epsDeriv, SEXP ll_d2, SEXP dx_dother, SEXP init, SEXP dumMat, SEXP nbCluster) {
+doubles cpp_partialDerivative_other_(int iterMax, int Q, int N, double epsDeriv, doubles ll_d2, doubles dx_dother, doubles init, integers_matrix<> dumMat, integers nbCluster);
+extern "C" SEXP _fixest2_cpp_partialDerivative_other_(SEXP iterMax, SEXP Q, SEXP N, SEXP epsDeriv, SEXP ll_d2, SEXP dx_dother, SEXP init, SEXP dumMat, SEXP nbCluster) {
   BEGIN_CPP11
-    return cpp11::as_sexp(cpp_partialDerivative_other(cpp11::as_cpp<cpp11::decay_t<int>>(iterMax), cpp11::as_cpp<cpp11::decay_t<int>>(Q), cpp11::as_cpp<cpp11::decay_t<int>>(N), cpp11::as_cpp<cpp11::decay_t<double>>(epsDeriv), cpp11::as_cpp<cpp11::decay_t<doubles>>(ll_d2), cpp11::as_cpp<cpp11::decay_t<doubles>>(dx_dother), cpp11::as_cpp<cpp11::decay_t<doubles>>(init), cpp11::as_cpp<cpp11::decay_t<integers_matrix<>>>(dumMat), cpp11::as_cpp<cpp11::decay_t<integers>>(nbCluster)));
+    return cpp11::as_sexp(cpp_partialDerivative_other_(cpp11::as_cpp<cpp11::decay_t<int>>(iterMax), cpp11::as_cpp<cpp11::decay_t<int>>(Q), cpp11::as_cpp<cpp11::decay_t<int>>(N), cpp11::as_cpp<cpp11::decay_t<double>>(epsDeriv), cpp11::as_cpp<cpp11::decay_t<doubles>>(ll_d2), cpp11::as_cpp<cpp11::decay_t<doubles>>(dx_dother), cpp11::as_cpp<cpp11::decay_t<doubles>>(init), cpp11::as_cpp<cpp11::decay_t<integers_matrix<>>>(dumMat), cpp11::as_cpp<cpp11::decay_t<integers>>(nbCluster)));
   END_CPP11
 }
 // 05_05_misc_tables.cpp
@@ -370,10 +370,10 @@ extern "C" SEXP _fixest2_cpp_tapply_sum(SEXP Q, SEXP x, SEXP dum) {
   END_CPP11
 }
 // 05_06_misc_tapplies.cpp
-doubles cpp_tapply_vsum(int Q, doubles x, integers dum);
-extern "C" SEXP _fixest2_cpp_tapply_vsum(SEXP Q, SEXP x, SEXP dum) {
+doubles cpp_tapply_vsum_(int Q, doubles x, integers dum);
+extern "C" SEXP _fixest2_cpp_tapply_vsum_(SEXP Q, SEXP x, SEXP dum) {
   BEGIN_CPP11
-    return cpp11::as_sexp(cpp_tapply_vsum(cpp11::as_cpp<cpp11::decay_t<int>>(Q), cpp11::as_cpp<cpp11::decay_t<doubles>>(x), cpp11::as_cpp<cpp11::decay_t<integers>>(dum)));
+    return cpp11::as_sexp(cpp_tapply_vsum_(cpp11::as_cpp<cpp11::decay_t<int>>(Q), cpp11::as_cpp<cpp11::decay_t<doubles>>(x), cpp11::as_cpp<cpp11::decay_t<integers>>(dum)));
   END_CPP11
 }
 // 05_07_misc_lag.cpp
@@ -433,24 +433,24 @@ extern "C" SEXP _fixest2_cpppar_check_only_0(SEXP x_mat, SEXP nthreads) {
   END_CPP11
 }
 // 07_02_parallel_math.cpp
-doubles cpppar_exp(doubles x, int nthreads);
-extern "C" SEXP _fixest2_cpppar_exp(SEXP x, SEXP nthreads) {
+doubles cpppar_exp_(doubles x, int nthreads);
+extern "C" SEXP _fixest2_cpppar_exp_(SEXP x, SEXP nthreads) {
   BEGIN_CPP11
-    return cpp11::as_sexp(cpppar_exp(cpp11::as_cpp<cpp11::decay_t<doubles>>(x), cpp11::as_cpp<cpp11::decay_t<int>>(nthreads)));
+    return cpp11::as_sexp(cpppar_exp_(cpp11::as_cpp<cpp11::decay_t<doubles>>(x), cpp11::as_cpp<cpp11::decay_t<int>>(nthreads)));
   END_CPP11
 }
 // 07_02_parallel_math.cpp
-doubles cpppar_log(doubles x, int nthreads);
-extern "C" SEXP _fixest2_cpppar_log(SEXP x, SEXP nthreads) {
+doubles cpppar_log_(doubles x, int nthreads);
+extern "C" SEXP _fixest2_cpppar_log_(SEXP x, SEXP nthreads) {
   BEGIN_CPP11
-    return cpp11::as_sexp(cpppar_log(cpp11::as_cpp<cpp11::decay_t<doubles>>(x), cpp11::as_cpp<cpp11::decay_t<int>>(nthreads)));
+    return cpp11::as_sexp(cpppar_log_(cpp11::as_cpp<cpp11::decay_t<doubles>>(x), cpp11::as_cpp<cpp11::decay_t<int>>(nthreads)));
   END_CPP11
 }
 // 07_02_parallel_math.cpp
-doubles cpppar_log_a_exp(int nthreads, double a, doubles mu, doubles exp_mu);
-extern "C" SEXP _fixest2_cpppar_log_a_exp(SEXP nthreads, SEXP a, SEXP mu, SEXP exp_mu) {
+doubles cpppar_log_a_exp_(int nthreads, double a, doubles mu, doubles exp_mu);
+extern "C" SEXP _fixest2_cpppar_log_a_exp_(SEXP nthreads, SEXP a, SEXP mu, SEXP exp_mu) {
   BEGIN_CPP11
-    return cpp11::as_sexp(cpppar_log_a_exp(cpp11::as_cpp<cpp11::decay_t<int>>(nthreads), cpp11::as_cpp<cpp11::decay_t<double>>(a), cpp11::as_cpp<cpp11::decay_t<doubles>>(mu), cpp11::as_cpp<cpp11::decay_t<doubles>>(exp_mu)));
+    return cpp11::as_sexp(cpppar_log_a_exp_(cpp11::as_cpp<cpp11::decay_t<int>>(nthreads), cpp11::as_cpp<cpp11::decay_t<double>>(a), cpp11::as_cpp<cpp11::decay_t<doubles>>(mu), cpp11::as_cpp<cpp11::decay_t<doubles>>(exp_mu)));
   END_CPP11
 }
 // 07_02_parallel_math.cpp
@@ -461,24 +461,24 @@ extern "C" SEXP _fixest2_cpppar_cond_means(SEXP mat_vars, SEXP treat, SEXP nthre
   END_CPP11
 }
 // 07_03_parallel_exp_family.cpp
-doubles cpppar_lgamma(doubles x, int nthreads);
-extern "C" SEXP _fixest2_cpppar_lgamma(SEXP x, SEXP nthreads) {
+doubles cpppar_lgamma_(doubles x, int nthreads);
+extern "C" SEXP _fixest2_cpppar_lgamma_(SEXP x, SEXP nthreads) {
   BEGIN_CPP11
-    return cpp11::as_sexp(cpppar_lgamma(cpp11::as_cpp<cpp11::decay_t<doubles>>(x), cpp11::as_cpp<cpp11::decay_t<int>>(nthreads)));
+    return cpp11::as_sexp(cpppar_lgamma_(cpp11::as_cpp<cpp11::decay_t<doubles>>(x), cpp11::as_cpp<cpp11::decay_t<int>>(nthreads)));
   END_CPP11
 }
 // 07_03_parallel_exp_family.cpp
-doubles cpppar_digamma(doubles x, int nthreads);
-extern "C" SEXP _fixest2_cpppar_digamma(SEXP x, SEXP nthreads) {
+doubles cpppar_digamma_(doubles x, int nthreads);
+extern "C" SEXP _fixest2_cpppar_digamma_(SEXP x, SEXP nthreads) {
   BEGIN_CPP11
-    return cpp11::as_sexp(cpppar_digamma(cpp11::as_cpp<cpp11::decay_t<doubles>>(x), cpp11::as_cpp<cpp11::decay_t<int>>(nthreads)));
+    return cpp11::as_sexp(cpppar_digamma_(cpp11::as_cpp<cpp11::decay_t<doubles>>(x), cpp11::as_cpp<cpp11::decay_t<int>>(nthreads)));
   END_CPP11
 }
 // 07_03_parallel_exp_family.cpp
-doubles cpppar_trigamma(doubles x, int nthreads);
-extern "C" SEXP _fixest2_cpppar_trigamma(SEXP x, SEXP nthreads) {
+doubles cpppar_trigamma_(doubles x, int nthreads);
+extern "C" SEXP _fixest2_cpppar_trigamma_(SEXP x, SEXP nthreads) {
   BEGIN_CPP11
-    return cpp11::as_sexp(cpppar_trigamma(cpp11::as_cpp<cpp11::decay_t<doubles>>(x), cpp11::as_cpp<cpp11::decay_t<int>>(nthreads)));
+    return cpp11::as_sexp(cpppar_trigamma_(cpp11::as_cpp<cpp11::decay_t<doubles>>(x), cpp11::as_cpp<cpp11::decay_t<int>>(nthreads)));
   END_CPP11
 }
 // 07_03_parallel_exp_family.cpp
@@ -524,17 +524,17 @@ extern "C" SEXP _fixest2_cpppar_logit_devresids(SEXP y, SEXP mu, SEXP wt, SEXP n
   END_CPP11
 }
 // 07_04_parallel_linalg.cpp
-doubles cpppar_xwy(doubles_matrix<> X, doubles y, doubles w, int nthreads);
-extern "C" SEXP _fixest2_cpppar_xwy(SEXP X, SEXP y, SEXP w, SEXP nthreads) {
+doubles cpppar_xwy_(doubles_matrix<> X, doubles y, doubles w, int nthreads);
+extern "C" SEXP _fixest2_cpppar_xwy_(SEXP X, SEXP y, SEXP w, SEXP nthreads) {
   BEGIN_CPP11
-    return cpp11::as_sexp(cpppar_xwy(cpp11::as_cpp<cpp11::decay_t<doubles_matrix<>>>(X), cpp11::as_cpp<cpp11::decay_t<doubles>>(y), cpp11::as_cpp<cpp11::decay_t<doubles>>(w), cpp11::as_cpp<cpp11::decay_t<int>>(nthreads)));
+    return cpp11::as_sexp(cpppar_xwy_(cpp11::as_cpp<cpp11::decay_t<doubles_matrix<>>>(X), cpp11::as_cpp<cpp11::decay_t<doubles>>(y), cpp11::as_cpp<cpp11::decay_t<doubles>>(w), cpp11::as_cpp<cpp11::decay_t<int>>(nthreads)));
   END_CPP11
 }
 // 07_04_parallel_linalg.cpp
-doubles cpppar_xbeta(doubles_matrix<> X, doubles beta, int nthreads);
-extern "C" SEXP _fixest2_cpppar_xbeta(SEXP X, SEXP beta, SEXP nthreads) {
+doubles cpppar_xbeta_(doubles_matrix<> X, doubles beta, int nthreads);
+extern "C" SEXP _fixest2_cpppar_xbeta_(SEXP X, SEXP beta, SEXP nthreads) {
   BEGIN_CPP11
-    return cpp11::as_sexp(cpppar_xbeta(cpp11::as_cpp<cpp11::decay_t<doubles_matrix<>>>(X), cpp11::as_cpp<cpp11::decay_t<doubles>>(beta), cpp11::as_cpp<cpp11::decay_t<int>>(nthreads)));
+    return cpp11::as_sexp(cpppar_xbeta_(cpp11::as_cpp<cpp11::decay_t<doubles_matrix<>>>(X), cpp11::as_cpp<cpp11::decay_t<doubles>>(beta), cpp11::as_cpp<cpp11::decay_t<int>>(nthreads)));
   END_CPP11
 }
 // 07_04_parallel_linalg.cpp
@@ -591,17 +591,17 @@ static const R_CallMethodDef CallEntries[] = {
     {"_fixest2_cpp_combine_clusters",          (DL_FUNC) &_fixest2_cpp_combine_clusters,           2},
     {"_fixest2_cpp_constant_dum",              (DL_FUNC) &_fixest2_cpp_constant_dum,               4},
     {"_fixest2_cpp_conv_acc_gau_2",            (DL_FUNC) &_fixest2_cpp_conv_acc_gau_2,            13},
-    {"_fixest2_cpp_conv_acc_gnl",              (DL_FUNC) &_fixest2_cpp_conv_acc_gnl,              14},
+    {"_fixest2_cpp_conv_acc_gnl_",             (DL_FUNC) &_fixest2_cpp_conv_acc_gnl_,             14},
     {"_fixest2_cpp_conv_acc_poi_2",            (DL_FUNC) &_fixest2_cpp_conv_acc_poi_2,            11},
-    {"_fixest2_cpp_conv_seq_gau_2",            (DL_FUNC) &_fixest2_cpp_conv_seq_gau_2,            13},
-    {"_fixest2_cpp_conv_seq_gnl",              (DL_FUNC) &_fixest2_cpp_conv_seq_gnl,              14},
-    {"_fixest2_cpp_conv_seq_poi_2",            (DL_FUNC) &_fixest2_cpp_conv_seq_poi_2,            11},
+    {"_fixest2_cpp_conv_seq_gau_2_",           (DL_FUNC) &_fixest2_cpp_conv_seq_gau_2_,           13},
+    {"_fixest2_cpp_conv_seq_gnl_",             (DL_FUNC) &_fixest2_cpp_conv_seq_gnl_,             14},
+    {"_fixest2_cpp_conv_seq_poi_2_",           (DL_FUNC) &_fixest2_cpp_conv_seq_poi_2_,           11},
     {"_fixest2_cpp_cut",                       (DL_FUNC) &_fixest2_cpp_cut,                        3},
     {"_fixest2_cpp_demean_",                   (DL_FUNC) &_fixest2_cpp_demean_,                   13},
     {"_fixest2_cpp_derivconv_acc_2",           (DL_FUNC) &_fixest2_cpp_derivconv_acc_2,           12},
     {"_fixest2_cpp_derivconv_acc_gnl",         (DL_FUNC) &_fixest2_cpp_derivconv_acc_gnl,          8},
-    {"_fixest2_cpp_derivconv_seq_2",           (DL_FUNC) &_fixest2_cpp_derivconv_seq_2,           12},
-    {"_fixest2_cpp_derivconv_seq_gnl",         (DL_FUNC) &_fixest2_cpp_derivconv_seq_gnl,          8},
+    {"_fixest2_cpp_derivconv_seq_2_",          (DL_FUNC) &_fixest2_cpp_derivconv_seq_2_,          12},
+    {"_fixest2_cpp_derivconv_seq_gnl_",        (DL_FUNC) &_fixest2_cpp_derivconv_seq_gnl_,         8},
     {"_fixest2_cpp_diag_XUtX",                 (DL_FUNC) &_fixest2_cpp_diag_XUtX,                  2},
     {"_fixest2_cpp_driscoll_kraay",            (DL_FUNC) &_fixest2_cpp_driscoll_kraay,             5},
     {"_fixest2_cpp_dsb",                       (DL_FUNC) &_fixest2_cpp_dsb,                        1},
@@ -611,7 +611,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_fixest2_cpp_factor_matrix",             (DL_FUNC) &_fixest2_cpp_factor_matrix,              5},
     {"_fixest2_cpp_find_duplicates",           (DL_FUNC) &_fixest2_cpp_find_duplicates,            2},
     {"_fixest2_cpp_find_never_always_treated", (DL_FUNC) &_fixest2_cpp_find_never_always_treated,  2},
-    {"_fixest2_cpp_fixed_cost_gaussian",       (DL_FUNC) &_fixest2_cpp_fixed_cost_gaussian,        7},
+    {"_fixest2_cpp_fixed_cost_gaussian_",      (DL_FUNC) &_fixest2_cpp_fixed_cost_gaussian_,       7},
     {"_fixest2_cpp_get_fe_gnl",                (DL_FUNC) &_fixest2_cpp_get_fe_gnl,                 6},
     {"_fixest2_cpp_get_first_item",            (DL_FUNC) &_fixest2_cpp_get_first_item,             2},
     {"_fixest2_cpp_get_nb_threads",            (DL_FUNC) &_fixest2_cpp_get_nb_threads,             0},
@@ -627,7 +627,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_fixest2_cpp_mat_reconstruct",           (DL_FUNC) &_fixest2_cpp_mat_reconstruct,            2},
     {"_fixest2_cpp_newey_west",                (DL_FUNC) &_fixest2_cpp_newey_west,                 3},
     {"_fixest2_cpp_newey_west_panel",          (DL_FUNC) &_fixest2_cpp_newey_west_panel,           7},
-    {"_fixest2_cpp_partialDerivative_other",   (DL_FUNC) &_fixest2_cpp_partialDerivative_other,    9},
+    {"_fixest2_cpp_partialDerivative_other_",  (DL_FUNC) &_fixest2_cpp_partialDerivative_other_,   9},
     {"_fixest2_cpp_paste_conditional",         (DL_FUNC) &_fixest2_cpp_paste_conditional,          3},
     {"_fixest2_cpp_pgcd",                      (DL_FUNC) &_fixest2_cpp_pgcd,                       1},
     {"_fixest2_cpp_quf_gnl",                   (DL_FUNC) &_fixest2_cpp_quf_gnl,                    1},
@@ -636,17 +636,17 @@ static const R_CallMethodDef CallEntries[] = {
     {"_fixest2_cpp_ssr_null",                  (DL_FUNC) &_fixest2_cpp_ssr_null,                   2},
     {"_fixest2_cpp_table",                     (DL_FUNC) &_fixest2_cpp_table,                      2},
     {"_fixest2_cpp_tapply_sum",                (DL_FUNC) &_fixest2_cpp_tapply_sum,                 3},
-    {"_fixest2_cpp_tapply_vsum",               (DL_FUNC) &_fixest2_cpp_tapply_vsum,                3},
+    {"_fixest2_cpp_tapply_vsum_",              (DL_FUNC) &_fixest2_cpp_tapply_vsum_,               3},
     {"_fixest2_cpp_vcov_conley",               (DL_FUNC) &_fixest2_cpp_vcov_conley,                6},
     {"_fixest2_cpp_which_na_inf",              (DL_FUNC) &_fixest2_cpp_which_na_inf,               2},
     {"_fixest2_cpppar_check_only_0",           (DL_FUNC) &_fixest2_cpppar_check_only_0,            2},
     {"_fixest2_cpppar_cond_means",             (DL_FUNC) &_fixest2_cpppar_cond_means,              3},
-    {"_fixest2_cpppar_crossprod",              (DL_FUNC) &_fixest2_cpppar_crossprod,               3},
-    {"_fixest2_cpppar_digamma",                (DL_FUNC) &_fixest2_cpppar_digamma,                 2},
-    {"_fixest2_cpppar_exp",                    (DL_FUNC) &_fixest2_cpppar_exp,                     2},
-    {"_fixest2_cpppar_lgamma",                 (DL_FUNC) &_fixest2_cpppar_lgamma,                  2},
-    {"_fixest2_cpppar_log",                    (DL_FUNC) &_fixest2_cpppar_log,                     2},
-    {"_fixest2_cpppar_log_a_exp",              (DL_FUNC) &_fixest2_cpppar_log_a_exp,               4},
+    {"_fixest2_cpppar_crossprod_",             (DL_FUNC) &_fixest2_cpppar_crossprod_,              3},
+    {"_fixest2_cpppar_digamma_",               (DL_FUNC) &_fixest2_cpppar_digamma_,                2},
+    {"_fixest2_cpppar_exp_",                   (DL_FUNC) &_fixest2_cpppar_exp_,                    2},
+    {"_fixest2_cpppar_lgamma_",                (DL_FUNC) &_fixest2_cpppar_lgamma_,                 2},
+    {"_fixest2_cpppar_log_",                   (DL_FUNC) &_fixest2_cpppar_log_,                    2},
+    {"_fixest2_cpppar_log_a_exp_",             (DL_FUNC) &_fixest2_cpppar_log_a_exp_,              4},
     {"_fixest2_cpppar_logit_devresids",        (DL_FUNC) &_fixest2_cpppar_logit_devresids,         4},
     {"_fixest2_cpppar_logit_linkfun",          (DL_FUNC) &_fixest2_cpppar_logit_linkfun,           2},
     {"_fixest2_cpppar_logit_linkinv",          (DL_FUNC) &_fixest2_cpppar_logit_linkinv,           2},
@@ -655,12 +655,12 @@ static const R_CallMethodDef CallEntries[] = {
     {"_fixest2_cpppar_poisson_linkinv",        (DL_FUNC) &_fixest2_cpppar_poisson_linkinv,         2},
     {"_fixest2_cpppar_poisson_validmu",        (DL_FUNC) &_fixest2_cpppar_poisson_validmu,         2},
     {"_fixest2_cpppar_quf_table_sum",          (DL_FUNC) &_fixest2_cpppar_quf_table_sum,          11},
-    {"_fixest2_cpppar_trigamma",               (DL_FUNC) &_fixest2_cpppar_trigamma,                2},
+    {"_fixest2_cpppar_trigamma_",              (DL_FUNC) &_fixest2_cpppar_trigamma_,               2},
     {"_fixest2_cpppar_which_na_inf_df",        (DL_FUNC) &_fixest2_cpppar_which_na_inf_df,         2},
     {"_fixest2_cpppar_which_na_inf_mat",       (DL_FUNC) &_fixest2_cpppar_which_na_inf_mat,        2},
     {"_fixest2_cpppar_which_na_inf_vec",       (DL_FUNC) &_fixest2_cpppar_which_na_inf_vec,        2},
-    {"_fixest2_cpppar_xbeta",                  (DL_FUNC) &_fixest2_cpppar_xbeta,                   3},
-    {"_fixest2_cpppar_xwy",                    (DL_FUNC) &_fixest2_cpppar_xwy,                     4},
+    {"_fixest2_cpppar_xbeta_",                 (DL_FUNC) &_fixest2_cpppar_xbeta_,                  3},
+    {"_fixest2_cpppar_xwy_",                   (DL_FUNC) &_fixest2_cpppar_xwy_,                    4},
     {"_fixest2_get_n_cells",                   (DL_FUNC) &_fixest2_get_n_cells,                    2},
     {"_fixest2_update_deriv_single",           (DL_FUNC) &_fixest2_update_deriv_single,            5},
     {"_fixest2_update_mu_single_cluster",      (DL_FUNC) &_fixest2_update_mu_single_cluster,      12},

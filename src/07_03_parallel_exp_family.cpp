@@ -1,6 +1,6 @@
 #include "07_0_parallel.h"
 
-[[cpp11::register]] doubles cpppar_lgamma(doubles x, int nthreads)
+[[cpp11::register]] doubles cpppar_lgamma_(doubles x, int nthreads)
 {
     // parallel lgamma using omp
 
@@ -17,7 +17,7 @@
     return (res);
 }
 
-[[cpp11::register]] doubles cpppar_digamma(doubles x, int nthreads)
+[[cpp11::register]] doubles cpppar_digamma_(doubles x, int nthreads)
 {
     // parallel digamma using omp
 
@@ -34,7 +34,7 @@
     return (res);
 }
 
-[[cpp11::register]] doubles cpppar_trigamma(doubles x, int nthreads)
+[[cpp11::register]] doubles cpppar_trigamma_(doubles x, int nthreads)
 {
     // parallel trigamma using omp
 

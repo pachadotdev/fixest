@@ -28,7 +28,7 @@
 }
 
 // Function to get the conditional sum of a vector
-[[cpp11::register]] doubles cpp_tapply_vsum(int Q, doubles x, integers dum)
+[[cpp11::register]] doubles cpp_tapply_vsum_(int Q, doubles x, integers dum)
 {
     // Q: nber of classes
     // x: a matrix

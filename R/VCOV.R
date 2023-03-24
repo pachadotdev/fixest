@@ -2411,7 +2411,6 @@ is_function_in_it = function(x){
 
 
 #' @rdname ssc
-#'
 #' @param ssc.type An object of class `ssc.type` obtained with the function [`ssc`].
 setFixest_ssc = function(ssc.type = ssc()){
 
