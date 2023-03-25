@@ -54,7 +54,7 @@ std::vector<int> set_parallel_scheme_ter(int N, int nthreads)
     return res;
 }
 
-[[cpp11::register]] list cpp_which_na_inf(SEXP x, int nthreads)
+[[cpp11::register]] list cpp_which_na_inf_(SEXP x, int nthreads)
 {
     // x: vector, matrix, data.frame // double or integer
 

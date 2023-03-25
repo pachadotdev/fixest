@@ -253,7 +253,7 @@ void extract_operator(const char *str, int &i, int n,
     }
 }
 
-[[cpp11::register]] list cpp_dsb(SEXP Rstr)
+[[cpp11::register]] list cpp_dsb_(SEXP Rstr)
 {
     // Rstr: string from R of length 1
 
@@ -367,7 +367,7 @@ void extract_operator(const char *str, int &i, int n,
     return res;
 }
 
-[[cpp11::register]] list cpp_dsb_full_string(SEXP Rstr)
+[[cpp11::register]] list cpp_dsb_full_string_(SEXP Rstr)
 {
     // When we consider the full string a verbatim within dsb
 
@@ -413,7 +413,7 @@ inline bool is_if_separator(const char *str, int i, int n, bool semicolon = fals
     }
 }
 
-[[cpp11::register]] list cpp_dsb_if_extract(SEXP Rstr)
+[[cpp11::register]] list cpp_dsb_if_extract_(SEXP Rstr)
 {
 
     const char *str = CHAR(STRING_ELT(Rstr, 0));
@@ -524,7 +524,7 @@ inline bool is_if_separator(const char *str, int i, int n, bool semicolon = fals
     return if_elements;
 }
 
-[[cpp11::register]] strings cpp_paste_conditional(strings x, integers id, int n)
+[[cpp11::register]] strings cpp_paste_conditional_(strings x, integers id, int n)
 {
 
     writable::strings res(n);

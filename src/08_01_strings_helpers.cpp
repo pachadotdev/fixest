@@ -63,7 +63,7 @@ string colon_to_star_single(const char *str)
     return res;
 }
 
-[[cpp11::register]] strings cpp_colon_to_star(SEXP Rstr)
+[[cpp11::register]] strings cpp_colon_to_star_(SEXP Rstr)
 {
 
     int n = LENGTH(Rstr);

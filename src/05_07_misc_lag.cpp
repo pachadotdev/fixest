@@ -2,7 +2,7 @@
 
 #include "05_0_misc.h"
 
-[[cpp11::register]] integers cpp_lag_obs(integers id, integers time, int nlag)
+[[cpp11::register]] integers cpp_lag_obs_(integers id, integers time, int nlag)
 {
     // in case of ties, we sum
     // must be two consecutive years

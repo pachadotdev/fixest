@@ -305,7 +305,7 @@ void quf_int(int n, int *x_uf, void *px, vector<double> &x_unik, int x_min, int 
     }
 }
 
-[[cpp11::register]] list cpp_quf_gnl(SEXP x)
+[[cpp11::register]] list cpp_quf_gnl_(SEXP x)
 {
 
     // INT: we try as possible to send the data to quf_int, the most efficient function

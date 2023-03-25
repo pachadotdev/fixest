@@ -1,7 +1,7 @@
 #include "05_0_misc.h"
 
 // Function to get the conditional sum of a matrix
-[[cpp11::register]] doubles_matrix<> cpp_tapply_sum(int Q, doubles_matrix<> x, integers dum)
+[[cpp11::register]] doubles_matrix<> cpp_tapply_sum_(int Q, doubles_matrix<> x, integers dum)
 {
     // Q: nber of classes
     // N: nber of observations

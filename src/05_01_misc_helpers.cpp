@@ -62,7 +62,7 @@
     return res;
 }
 
-[[cpp11::register]] list cpp_find_never_always_treated(integers cohort, doubles period)
+[[cpp11::register]] list cpp_find_never_always_treated_(integers cohort, doubles period)
 {
     // Note that both cohort and period are sorted according to cohort
 
@@ -141,7 +141,7 @@
     return res;
 }
 
-[[cpp11::register]] integers cpp_get_first_item(integers x, int n_items)
+[[cpp11::register]] integers cpp_get_first_item_(integers x, int n_items)
 {
     // observation id of the first occurrence
     // x ranges from 1 to n_items
@@ -161,7 +161,7 @@
     return res;
 }
 
-[[cpp11::register]] integers cpp_combine_clusters(SEXP cluster_list, integers index)
+[[cpp11::register]] integers cpp_combine_clusters_(SEXP cluster_list, integers index)
 {
     // cluster: list of integer vectors, each ranging from 1 to the number of cases
     // index: result of order() on the clusters
@@ -230,7 +230,7 @@
     return res;
 }
 
-[[cpp11::register]] list cpp_cut(doubles x_sorted, doubles cut_points, integers is_included)
+[[cpp11::register]] list cpp_cut_(doubles x_sorted, doubles cut_points, integers is_included)
 {
     // x_sorted: no NA, sorted
     // cut_points: bounds
@@ -323,7 +323,7 @@
     return res;
 }
 
-[[cpp11::register]] bool cpp_is_int(SEXP x)
+[[cpp11::register]] bool cpp_is_int_(SEXP x)
 {
 
     if (TYPEOF(x) == INTSXP)
@@ -352,7 +352,7 @@
     return is_int;
 }
 
-[[cpp11::register]] double cpp_hash_string(std::string x)
+[[cpp11::register]] double cpp_hash_string_(std::string x)
 {
     // simple function hashing a string
     // used to identify tables in etable
@@ -362,7 +362,7 @@
     return res;
 }
 
-[[cpp11::register]] bool cpp_isConstant(doubles x)
+[[cpp11::register]] bool cpp_isConstant_(doubles x)
 {
     // simple fun to see whether a variable is constant
     // it is unexpensive -- not the most useful function however:
@@ -383,7 +383,7 @@
     return (res);
 }
 
-[[cpp11::register]] bool cpp_any_na_null(SEXP x)
+[[cpp11::register]] bool cpp_any_na_null_(SEXP x)
 {
     // > twice faster than testing the two separately
     // x is a vector
@@ -403,7 +403,7 @@
     return false;
 }
 
-[[cpp11::register]] list cpp_find_duplicates(integers id, integers time)
+[[cpp11::register]] list cpp_find_duplicates_(integers id, integers time)
 {
     // we check whether there are duplicated rows
     // if so, we provide information
@@ -445,7 +445,7 @@
     return (res);
 }
 
-[[cpp11::register]] integers cpp_check_nested(SEXP fe_list, SEXP cluster_list, integers fe_sizes, int n)
+[[cpp11::register]] integers cpp_check_nested_(SEXP fe_list, SEXP cluster_list, integers fe_sizes, int n)
 {
     // Returns boolean vector of whether each FE is nested in the clusters
 
@@ -496,7 +496,7 @@
     return res;
 }
 
-[[cpp11::register]] int cpp_pgcd(integers x)
+[[cpp11::register]] int cpp_pgcd_(integers x)
 {
     // quick and dirty, but does not matter
 
@@ -537,7 +537,7 @@
     return pgcd;
 }
 
-[[cpp11::register]] list cpp_get_fe_gnl(int Q,
+[[cpp11::register]] list cpp_get_fe_gnl_(int Q,
                                         int N,
                                         writable::doubles sumFE,
                                         writable::integers_matrix<> dumMat,
@@ -1025,7 +1025,7 @@ std::string apply_escape_markup(const char *x)
     return tmp_all[0];
 }
 
-[[cpp11::register]] strings cpp_escape_markup(SEXP Rstr)
+[[cpp11::register]] strings cpp_escape_markup_(SEXP Rstr)
 {
     // cpp_escape_markup("**bonjour** *les* ***gens * \\***heureux*** ")
     // cpp_escape_markup("stars: 10%: *, 5%: **, 1%: ***")

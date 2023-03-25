@@ -66,7 +66,7 @@
     return (res);
 }
 
-[[cpp11::register]] doubles_matrix<> cpppar_matprod(doubles_matrix<> x, doubles_matrix<> y, int nthreads)
+[[cpp11::register]] doubles_matrix<> cpppar_matprod_(doubles_matrix<> x, doubles_matrix<> y, int nthreads)
 {
     // => simply x %*% y
 

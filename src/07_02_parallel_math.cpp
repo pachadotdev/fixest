@@ -59,7 +59,7 @@
     return (res);
 }
 
-[[cpp11::register]] list cpppar_cond_means(doubles_matrix<> mat_vars, integers treat, int nthreads = 1)
+[[cpp11::register]] list cpppar_cond_means_(doubles_matrix<> mat_vars, integers treat, int nthreads = 1)
 {
     // conditional means: function did_means
 

@@ -1,6 +1,6 @@
 #include "04_0_linear_model.h"
 
-[[cpp11::register]] list cpp_iv_products(doubles_matrix<> X, SEXP y, doubles_matrix<> Z, SEXP u, doubles w, int nthreads)
+[[cpp11::register]] list cpp_iv_products_(doubles_matrix<> X, SEXP y, doubles_matrix<> Z, SEXP u, doubles w, int nthreads)
 {
     // We compute the following:
     // - X'X
@@ -170,7 +170,7 @@
     return res;
 }
 
-[[cpp11::register]] list cpp_iv_product_completion(doubles_matrix<> XtX, doubles Xty, doubles_matrix<> X, doubles y, doubles_matrix<> U, doubles w, int nthreads)
+[[cpp11::register]] list cpp_iv_product_completion_(doubles_matrix<> XtX, doubles Xty, doubles_matrix<> X, doubles y, doubles_matrix<> U, doubles w, int nthreads)
 {
     // We compute the following
     // - (UX)'(UX)
@@ -245,7 +245,7 @@
     return res;
 }
 
-[[cpp11::register]] doubles cpp_iv_resid(doubles resid_2nd, doubles coef, SEXP resid_1st, bool is_int, int nthreads)
+[[cpp11::register]] doubles cpp_iv_resid_(doubles resid_2nd, doubles coef, SEXP resid_1st, bool is_int, int nthreads)
 {
 
     int N = resid_2nd.size();

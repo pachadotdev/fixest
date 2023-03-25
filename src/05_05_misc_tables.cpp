@@ -1,7 +1,7 @@
 #include "05_0_misc.h"
 
 // similar to table but faster
-[[cpp11::register]] doubles cpp_table(int Q, integers dum)
+[[cpp11::register]] doubles cpp_table_(int Q, integers dum)
 {
     // Q: nber of classes
     // dum: the N vector of clusters
@@ -22,7 +22,7 @@
 
 // simple fun to compute the ssr of the null ols model
 // 2/3 times faster than pure r
-[[cpp11::register]] double cpp_ssr_null(doubles y, doubles w = doubles(0))
+[[cpp11::register]] double cpp_ssr_null_(doubles y, doubles w = doubles(0))
 {
     bool is_weight = w.size() > 1;
 
@@ -96,7 +96,7 @@
 }
 
 // number of values of dum for which x is constant
-[[cpp11::register]] int cpp_constant_dum(int k, doubles x, integers dum, bool only_0 = false)
+[[cpp11::register]] int cpp_constant_dum_(int k, doubles x, integers dum, bool only_0 = false)
 {
     int n_obs = dum.size();
 

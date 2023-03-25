@@ -86,7 +86,7 @@ void tproduct_tri(writable::doubles_matrix<> &RRt, writable::doubles_matrix<> &R
 
 }
 
-[[cpp11::register]] list cpp_cholesky(doubles_matrix<> X, double tol = 1.0 / 100000.0 / 100000.0, int nthreads = 1)
+[[cpp11::register]] list cpp_cholesky_(doubles_matrix<> X, double tol = 1.0 / 100000.0 / 100000.0, int nthreads = 1)
 {
     // X eis symmetric, positive semi-definite
     // rank-revealing on-the-fly

@@ -56,7 +56,7 @@ inline double poisson_linkinv(double x)
     return x < -36 ? DBL_EPSILON : exp(x);
 }
 
-[[cpp11::register]] doubles cpppar_poisson_linkinv(doubles x, int nthreads)
+[[cpp11::register]] doubles cpppar_poisson_linkinv_(doubles x, int nthreads)
 {
 
     int n = x.size();
@@ -72,7 +72,7 @@ inline double poisson_linkinv(double x)
     return (res);
 }
 
-[[cpp11::register]] bool cpppar_poisson_validmu(SEXP x, int nthreads)
+[[cpp11::register]] bool cpppar_poisson_validmu_(SEXP x, int nthreads)
 {
 
     int n = Rf_length(x);
@@ -93,7 +93,7 @@ inline double poisson_linkinv(double x)
     return res;
 }
 
-[[cpp11::register]] doubles cpppar_logit_linkfun(doubles x, int nthreads)
+[[cpp11::register]] doubles cpppar_logit_linkfun_(doubles x, int nthreads)
 {
     // parallel trigamma using omp
 
@@ -117,7 +117,7 @@ inline double logit_linkinv(double x)
                                             : 1 / (1 + 1 / exp(x));
 }
 
-[[cpp11::register]] doubles cpppar_logit_linkinv(doubles x, int nthreads)
+[[cpp11::register]] doubles cpppar_logit_linkinv_(doubles x, int nthreads)
 {
     // parallel trigamma using omp
 
@@ -148,7 +148,7 @@ inline double logit_mueta(double x)
     }
 }
 
-[[cpp11::register]] doubles cpppar_logit_mueta(doubles x, int nthreads)
+[[cpp11::register]] doubles cpppar_logit_mueta_(doubles x, int nthreads)
 {
     // parallel trigamma using omp
 
@@ -167,7 +167,7 @@ inline double logit_mueta(double x)
     return (res);
 }
 
-[[cpp11::register]] doubles cpppar_logit_devresids(doubles y, doubles mu, doubles wt, int nthreads)
+[[cpp11::register]] doubles cpppar_logit_devresids_(doubles y, doubles mu, doubles wt, int nthreads)
 {
 
     int n = mu.size();

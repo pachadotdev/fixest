@@ -37,7 +37,7 @@ double simple_vec_double::operator[](int i)
     }
 }
 
-[[cpp11::register]] doubles_matrix<> cpp_factor_matrix(integers fact, logicals is_na_all, integers who_is_dropped, SEXP var, strings col_names)
+[[cpp11::register]] doubles_matrix<> cpp_factor_matrix_(integers fact, logicals is_na_all, integers who_is_dropped, SEXP var, strings col_names)
 {
     // fact: integer vector from 1 (!) to K, can contain NAs
     // Checking Na is cheap as opposed to populating the matrix, but having an argument avoids creating a new object
@@ -123,7 +123,7 @@ double simple_vec_double::operator[](int i)
     return res;
 }
 
-[[cpp11::register]] doubles cpp_diag_XUtX(doubles_matrix<> X, doubles_matrix<> U)
+[[cpp11::register]] doubles cpp_diag_XUtX_(doubles_matrix<> X, doubles_matrix<> U)
 {
     // computes the diagonal of X %*% U %*% t(X)
 

@@ -1,6 +1,6 @@
 #include "05_0_misc.h"
 
-[[cpp11::register]] doubles cpp_lgamma(doubles x)
+[[cpp11::register]] doubles cpp_lgamma_(doubles x)
 {
     // simple function to compute lgamma of a vector
 
@@ -15,7 +15,7 @@
     return (res);
 }
 
-[[cpp11::register]] doubles cpp_log_a_exp(double a, doubles mu, doubles exp_mu)
+[[cpp11::register]] doubles cpp_log_a_exp_(double a, doubles mu, doubles exp_mu)
 {
     // faster this way
 

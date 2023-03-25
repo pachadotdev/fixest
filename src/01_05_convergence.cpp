@@ -502,7 +502,7 @@
 	return (res);
 }
 
-[[cpp11::register]] list cpp_conv_acc_poi_2(int n_i, int n_j, int n_cells, SEXP index_i, SEXP index_j,
+[[cpp11::register]] list cpp_conv_acc_poi_2_(int n_i, int n_j, int n_cells, SEXP index_i, SEXP index_j,
 											SEXP dum_vector, SEXP sum_y_vector,
 											int iterMax, double diffMax, SEXP exp_mu_in, SEXP order)
 {
@@ -862,7 +862,7 @@
 	return (res);
 }
 
-[[cpp11::register]] list cpp_conv_acc_gau_2(int n_i, int n_j, int n_cells,
+[[cpp11::register]] list cpp_conv_acc_gau_2_(int n_i, int n_j, int n_cells,
 											SEXP r_mat_row, SEXP r_mat_col, SEXP r_mat_value_Ab, SEXP r_mat_value_Ba,
 											SEXP dum_vector, SEXP lhs, SEXP invTableCluster_vector,
 											int iterMax, double diffMax, SEXP mu_in)

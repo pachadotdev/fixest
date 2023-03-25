@@ -226,7 +226,7 @@ void computeClusterCoef(vector<double *> &pcluster_origin, vector<double *> &pcl
 }
 
 // Function to delete => only for debugging
-[[cpp11::register]] SEXP compute_cluster_coef_r(int family, int nb_coef, double theta, double diffMax_NR,
+[[cpp11::register]] SEXP compute_cluster_coef_r_(int family, int nb_coef, double theta, double diffMax_NR,
 												SEXP r_mu, SEXP r_lhs, SEXP r_sum_y, SEXP r_dum,
 												SEXP r_obsCluster, SEXP r_table, SEXP r_cumtable, int nthreads)
 {
@@ -253,7 +253,7 @@ void computeClusterCoef(vector<double *> &pcluster_origin, vector<double *> &pcl
 	return (res);
 }
 
-[[cpp11::register]] SEXP update_mu_single_cluster(int family, int nb_cluster, double theta, double diffMax_NR, SEXP mu_in,
+[[cpp11::register]] SEXP update_mu_single_cluster_(int family, int nb_cluster, double theta, double diffMax_NR, SEXP mu_in,
 												  SEXP lhs, SEXP sum_y, SEXP dum, SEXP obsCluster, SEXP table,
 												  SEXP cumtable, int nthreads)
 {
@@ -302,7 +302,7 @@ void computeClusterCoef(vector<double *> &pcluster_origin, vector<double *> &pcl
 	return (mu);
 }
 
-[[cpp11::register]] int get_n_cells(integers index_i, integers index_j)
+[[cpp11::register]] int get_n_cells_(integers index_i, integers index_j)
 {
 
 	int n = index_i.size();

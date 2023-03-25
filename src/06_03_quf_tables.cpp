@@ -110,7 +110,7 @@ void quf_table_sum_single(void *px_in, string &x_type, int n, int q, int *x_quf,
     // Rcout << "\n";
 }
 
-[[cpp11::register]] writable::list cpppar_quf_table_sum(SEXP x, SEXP y, bool do_sum_y, bool rm_0, bool rm_1,
+[[cpp11::register]] writable::list cpppar_quf_table_sum_(SEXP x, SEXP y, bool do_sum_y, bool rm_0, bool rm_1,
                           bool rm_single, writable::logicals only_slope, int nthreads,
                           bool do_refactor, SEXP r_x_sizes, writable::integers obs2keep){
 

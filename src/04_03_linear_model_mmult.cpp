@@ -359,7 +359,7 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y, 
     return XtX;
 }
 
-[[cpp11::register]] doubles_matrix<> cpp_mat_reconstruct(writable::doubles_matrix<> X, logicals id_excl)
+[[cpp11::register]] doubles_matrix<> cpp_mat_reconstruct_(writable::doubles_matrix<> X, logicals id_excl)
 {
 
     int K = id_excl.size();
