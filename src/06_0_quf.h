@@ -52,7 +52,6 @@ vector ranging from 1 to the number of unique values (i.e:
  on which we sort, we obtain what we want.
 */
 
-// TODO: OMP functions
 #pragma once
 
 #include <cpp11.hpp>

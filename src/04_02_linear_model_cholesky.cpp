@@ -163,7 +163,6 @@ void tproduct_tri(writable::doubles_matrix<> &RRt, writable::doubles_matrix<> &R
 
         R(j, j) = R_jj;
 
-        // TODO: OMP functions
         #pragma omp parallel for num_threads(nthreads) schedule(static, 1)
         for (int i = j + 1; i < K; ++i)
         {

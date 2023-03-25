@@ -13,7 +13,6 @@ Three groups of non-parallel functions:
 3) functions to lag variables
 */
 
-// TODO: OMP functions
 #pragma once
 
 #include <cpp11.hpp>

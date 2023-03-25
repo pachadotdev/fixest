@@ -85,7 +85,6 @@ std::vector<int> set_parallel_scheme_ter(int N, int nthreads)
 
     std::vector<int> bounds = set_parallel_scheme_ter(nobs, nthreads);
 
-    // TODO: OMP functions
     #pragma omp parallel for num_threads(nthreads)
     for (int t = 0; t < nthreads; ++t)
     {
@@ -120,7 +119,6 @@ std::vector<int> set_parallel_scheme_ter(int N, int nthreads)
 
     if (anyNAInf)
     {
-    // TODO: OMP functions
     #pragma omp parallel for num_threads(nthreads)
         for (int i = 0; i < nobs; ++i)
         {

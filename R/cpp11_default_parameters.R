@@ -222,7 +222,7 @@ cpp_quf_gnl <- function(x) {
 }
 
 cpppar_quf_table_sum <- function(x, y, do_sum_y, rm_0, rm_1, rm_single, only_slope, nthreads = 1L, do_refactor, r_x_sizes, obs2keep) {
-  .Call(`_fixest2_cpppar_quf_table_sum_`, x, y, do_sum_y, rm_0, rm_1, rm_single, only_slope, as.integer(nthreads), do_refactor, r_x_sizes, as.integers(obs2keep))
+  .Call(`_fixest2_cpppar_quf_table_sum_`, x, y, do_sum_y, rm_0, rm_1, rm_single, only_slope, as.integer(nthreads), do_refactor, r_x_sizes, as.integer(obs2keep))
 }
 
 cpp_get_nb_threads <- function() {

@@ -749,8 +749,7 @@ void demean_single_gnl(int v, PARAM_DEMEAN *args)
 
     int nthreads_current = nthreads > n_vars ? n_vars : nthreads;
 
-    // enlever les rprintf dans les nthreads jobs
-    // TODO: OMP functions
+    // remove rprintf in nthreads jobs
     #pragma omp parallel for num_threads(nthreads_current) schedule(static, 1)
     for (int v = 0; v < (n_vars + nthreads_current); ++v)
     {

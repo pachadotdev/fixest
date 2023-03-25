@@ -207,7 +207,6 @@
         UXty[k + K1] = Xty[k];
     }
 
-    // TODO: OMP functions
     #pragma omp parallel for num_threads(nthreads)
     for (int k = 0; k < K1; ++k)
     {
@@ -258,7 +257,6 @@
     {
         double *p_r = REAL(VECTOR_ELT(resid_1st, 0));
 
-        // TODO: OMP functions
         #pragma omp parallel for num_threads(nthreads)
         for (int t = 0; t < nthreads; ++t)
         {
@@ -277,7 +275,6 @@
             p_p_r[k] = REAL(VECTOR_ELT(resid_1st, k));
         }
 
-        // TODO: OMP functions
         #pragma omp parallel for num_threads(nthreads)
         for (int t = 0; t < nthreads; ++t)
         {

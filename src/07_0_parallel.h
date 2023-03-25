@@ -30,7 +30,6 @@ Safer not to include it for now.
 // }
 */
 
-// TODO: OMP functions
 #pragma once
 
 #include <cpp11.hpp>

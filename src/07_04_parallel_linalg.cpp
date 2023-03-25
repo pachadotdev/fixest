@@ -15,7 +15,6 @@
     writable::doubles res(K);
 
     // computation
-    // TODO: OMP functions
     #pragma omp parallel for num_threads(nthreads)
     for (int k = 0; k < K; ++k)
     {
@@ -50,7 +49,6 @@
     writable::doubles res(N);
 
     // computation
-    // TODO: OMP functions
     #pragma omp parallel for num_threads(nthreads)
     for (int i = 0; i < N; ++i)
     {
@@ -76,7 +74,6 @@
     writable::doubles_matrix<> xy(N, K);
 
     // computing xy
-    // TODO: OMP functions
     #pragma omp parallel for num_threads(nthreads)
     for (int i = 0; i < N; ++i)
     {

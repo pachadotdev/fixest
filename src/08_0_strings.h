@@ -9,7 +9,6 @@
                            |___/
 */
 
-// TODO: OMP functions
 #pragma once
 
 #include <cpp11.hpp>

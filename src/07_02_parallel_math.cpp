@@ -8,7 +8,6 @@
     int n = x.size();
     writable::doubles res(n);
 
-    // TODO: OMP functions
     #pragma omp parallel for num_threads(nthreads)
     for (int i = 0; i < n; ++i)
     {
@@ -25,7 +24,6 @@
     int n = x.size();
     writable::doubles res(n);
 
-    // TODO: OMP functions
     #pragma omp parallel for num_threads(nthreads)
     for (int i = 0; i < n; ++i)
     {
@@ -42,7 +40,6 @@
     int n = mu.size();
     writable::doubles res(n);
 
-    // TODO: OMP functions
     #pragma omp parallel for num_threads(nthreads)
     for (int i = 0; i < n; ++i)
     {
@@ -74,7 +71,6 @@
     writable::integers n_01(2);
 
     // computation
-    // TODO: OMP functions
     #pragma omp parallel for num_threads(nthreads)
     for (int k = 0; k < K; ++k)
     {

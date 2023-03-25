@@ -249,7 +249,6 @@ void CCC_negbin(int nthreads, int nb_cluster, double theta, double diffMax_NR,
 
 	// Rprintf("inf: %f -- sup: %f -- middle: %f\n", borne_inf[0], borne_sup[0], (borne_inf[0] + borne_sup[0])/2);
 
-    // TODO: OMP functions
     #pragma omp parallel for num_threads(nthreads)
 	for (int m = 0; m < nb_cluster; ++m)
 	{
@@ -401,7 +400,6 @@ void CCC_logit(int nthreads, int nb_cluster, double diffMax_NR,
 	// Parallel loop
 	//
 
-    // TODO: OMP functions
     #pragma omp parallel for num_threads(nthreads)
 	for (int m = 0; m < nb_cluster; ++m)
 	{

@@ -8,7 +8,6 @@ Original Author: Laurent R. Berge
 Refactored by Mauricio "Pacha" Vargas Sepulveda starting in Jun 2022
 */
 
-// TODO: OMP functions
 #pragma once
 
 #include <cpp11.hpp>

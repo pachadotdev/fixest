@@ -7,7 +7,6 @@
     int n = x.size();
     writable::doubles res(n);
 
-    // TODO: OMP functions
     #pragma omp parallel for num_threads(nthreads)
     for (int i = 0; i < n; ++i)
     {
@@ -24,7 +23,6 @@
     int n = x.size();
     writable::doubles res(n);
 
-    // TODO: OMP functions
     #pragma omp parallel for num_threads(nthreads)
     for (int i = 0; i < n; ++i)
     {
@@ -41,7 +39,6 @@
     int n = x.size();
     writable::doubles res(n);
 
-    // TODO: OMP functions
     #pragma omp parallel for num_threads(nthreads)
     for (int i = 0; i < n; ++i)
     {
@@ -62,7 +59,6 @@ inline double poisson_linkinv(double x)
     int n = x.size();
     writable::doubles res(n);
 
-    // TODO: OMP functions
     #pragma omp parallel for num_threads(nthreads)
     for (int i = 0; i < n; ++i)
     {
@@ -79,7 +75,6 @@ inline double poisson_linkinv(double x)
     double *px = REAL(x);
     bool res = true;
 
-    // TODO: OMP functions
     #pragma omp parallel for num_threads(nthreads)
     for (int i = 0; i < n; ++i)
     {
@@ -100,7 +95,6 @@ inline double poisson_linkinv(double x)
     int n = x.size();
     writable::doubles res(n);
 
-    // TODO: OMP functions
     #pragma omp parallel for num_threads(nthreads)
     for (int i = 0; i < n; ++i)
     {
@@ -124,7 +118,6 @@ inline double logit_linkinv(double x)
     int n = x.size();
     writable::doubles res(n);
 
-    // TODO: OMP functions
     #pragma omp parallel for num_threads(nthreads)
     for (int i = 0; i < n; ++i)
     {
@@ -155,7 +148,6 @@ inline double logit_mueta(double x)
     int n = x.size();
     writable::doubles res(n);
 
-    // TODO: OMP functions
     #pragma omp parallel for num_threads(nthreads)
     for (int i = 0; i < n; ++i)
     {
@@ -174,7 +166,6 @@ inline double logit_mueta(double x)
     writable::doubles res(n);
     bool isWeight = wt.size() != 1;
 
-    // TODO: OMP functions
     #pragma omp parallel for num_threads(nthreads)
     for (int i = 0; i < n; ++i)
     {
@@ -192,7 +183,9 @@ inline double logit_mueta(double x)
         }
 
         if (isWeight)
+        {
             res[i] *= wt[i];
+        }
     }
 
     return (res);
