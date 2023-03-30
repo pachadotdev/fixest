@@ -1182,7 +1182,7 @@ fixest_env = function(fml, data, family = c("poisson", "negbin", "logit", "gauss
             msgNA_y = paste0("LHS: ", numberFormatNormal(sum(isNA_y)))
 
             lhs_clean = lhs[!isNA_y]
-            print(lhs_clean)
+            # print(lhs_clean)
 
             if(mem.clean){
                 rm(isNA_y)
