@@ -568,7 +568,10 @@
     }
 
     double cluster_values[nb_coef];
-    int cluster_visited[nb_coef]; // whether a value has been already assigned
+
+    // this was in the original fixest
+    // I removed this otherwise Fedora says: 05_01_misc_helpers.cpp:571:9: warning: unused variable ‘cluster_visited’ [-Wunused-variable]
+    // int cluster_visited[nb_coef]; // whether a value has been already assigned
 
     // index of the cluster
     std::vector<int*> pindex_cluster(Q);
