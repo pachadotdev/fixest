@@ -1,4 +1,3 @@
-
 # fixest: Fast and user-friendly fixed-effects estimation
 
 <a href="https://cran.r-project.org/web/checks/check_results_fixest.html"><img src="https://cranchecks.info/badges/worst/fixest" alt="CRAN status"></a>
@@ -62,5 +61,16 @@ The code and data for the benchmarking can be found [in this folder](https://dri
 
 Of course the development of `fixest` has been inspired and pushed forward by (almost all) these (great) packages used in the benchmarking and I am deeply indebted to their authors. Although `fixest` contains many features, some are still uncovered and you should definitely have a look at these packages. 
 
+## Debugging
 
+On Fedora
 
+```bash
+sudo dnf install valgrind
+cd ~/github/fixest2
+clear && R -d "valgrind --track-origins=yes --leak-check=full --log-file=valgrind_check.txt -s" -e "fixest2::fepois(trade ~ log_dist + cntg + lang + clny | exp_year + imp_year, data = ch1_application1)"
+```
+
+```bash
+R -d "valgrind --tool=memcheck --leak-check=full" --vanilla < dev/debug.R
+```
