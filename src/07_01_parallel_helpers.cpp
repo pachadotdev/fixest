@@ -32,7 +32,7 @@
     // "trick" to make a break in a multi-threaded section
 
     vector<int> bounds = set_parallel_scheme(nobs, nthreads);
-#pragma omp parallel for num_threads(nthreads)
+    #pragma omp parallel for num_threads(nthreads)
     for (int t = 0; t < nthreads; ++t)
     {
         for (int i = bounds[t]; i < bounds[t + 1] && !anyNAInf; ++i)
@@ -51,10 +51,17 @@
     // object to return: is_na_inf
     writable::logicals is_na_inf(anyNAInf ? nobs : 0);
 
+    // fill is_na_inf with false
+    #pragma omp parallel for num_threads(nthreads)
+    for (int i = 0; i < nobs; ++i)
+    {
+        is_na_inf[i] = false;
+    }
+
     if (anyNAInf)
     {
-// again: no need to care about race conditions
-#pragma omp parallel for num_threads(nthreads)
+        // again: no need to care about race conditions
+        #pragma omp parallel for num_threads(nthreads)
         for (int i = 0; i < nobs; ++i)
         {
             double x_tmp = px[i];
@@ -67,9 +74,7 @@
             {
                 is_na_inf[i] = true;
                 any_inf = true;
-            }
-            else
-            {
+            } else{
                 is_na_inf[i] = false;
             }
         }
