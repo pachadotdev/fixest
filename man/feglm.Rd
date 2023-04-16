@@ -367,13 +367,13 @@ When the element to be expanded i) is equal to the empty string or, ii) is of le
 \examples{
 
 # Poisson estimation
-res = feglm(Sepal.Length ~ Sepal.Width + Petal.Length | Species, iris, "poisson")
+res <- feglm(Sepal.Length ~ Sepal.Width + Petal.Length | Species, iris, "poisson")
 
 # You could also use fepois
-res_pois = fepois(Sepal.Length ~ Sepal.Width + Petal.Length | Species, iris)
+res_pois <- fepois(Sepal.Length ~ Sepal.Width + Petal.Length | Species, iris)
 
 # With the fit method:
-res_fit = feglm.fit(iris$Sepal.Length, iris[, 2:3], iris$Species, "poisson")
+res_fit <- feglm.fit(iris$Sepal.Length, iris[, 2:3], iris$Species, "poisson")
 
 # All results are identical:
 etable(res, res_pois, res_fit)
@@ -385,7 +385,7 @@ etable(res, res_pois, res_fit)
 #
 
 # 6 estimations
-est_mult = fepois(c(Ozone, Solar.R) ~ Wind + Temp + csw0(Wind:Temp, Day), airquality)
+est_mult <- fepois(c(Ozone, Solar.R) ~ Wind + Temp + csw0(Wind:Temp, Day), airquality)
 
 # We can display the results for the first lhs:
 etable(est_mult[lhs = 1])
@@ -398,8 +398,10 @@ etable(est_mult[lhs = "Solar.R"])
 etable(est_mult[rhs = 2:.N])
 
 # Combining with split
-est_split = fepois(c(Ozone, Solar.R) ~ sw(poly(Wind, 2), poly(Temp, 2)),
-                  airquality, split = ~ Month)
+est_split <- fepois(c(Ozone, Solar.R) ~ sw(poly(Wind, 2), poly(Temp, 2)),
+  airquality,
+  split = ~Month
+)
 
 # You can display everything at once with the print method
 est_split

@@ -323,7 +323,7 @@ When the element to be expanded i) is equal to the empty string or, ii) is of le
 # Basic estimation
 #
 
-res = feols(Sepal.Length ~ Sepal.Width + Petal.Length, iris)
+res <- feols(Sepal.Length ~ Sepal.Width + Petal.Length, iris)
 # You can specify clustered standard-errors in summary:
 summary(res, cluster = ~Species)
 
@@ -331,7 +331,7 @@ summary(res, cluster = ~Species)
 # Just one set of fixed-effects:
 #
 
-res = feols(Sepal.Length ~ Sepal.Width + Petal.Length | Species, iris)
+res <- feols(Sepal.Length ~ Sepal.Width + Petal.Length | Species, iris)
 # By default, the SEs are clustered according to the first fixed-effect
 summary(res)
 
@@ -339,16 +339,16 @@ summary(res)
 # Varying slopes:
 #
 
-res = feols(Sepal.Length ~ Petal.Length | Species[Sepal.Width], iris)
+res <- feols(Sepal.Length ~ Petal.Length | Species[Sepal.Width], iris)
 summary(res)
 
 #
 # Combining the FEs:
 #
 
-base = iris
-base$fe_2 = rep(1:10, 15)
-res_comb = feols(Sepal.Length ~ Petal.Length | Species^fe_2, base)
+base <- iris
+base$fe_2 <- rep(1:10, 15)
+res_comb <- feols(Sepal.Length ~ Petal.Length | Species^fe_2, base)
 summary(res_comb)
 fixef(res_comb)[[1]]
 
@@ -358,9 +358,9 @@ fixef(res_comb)[[1]]
 
 data(base_did)
 # We need to set up the panel with the arg. panel.id
-est1 = feols(y ~ l(x1, 0:1), base_did, panel.id = ~id+period)
-est2 = feols(f(y) ~ l(x1, -1:1), base_did, panel.id = ~id+period)
-etable(est1, est2, order = "f", drop="Int")
+est1 <- feols(y ~ l(x1, 0:1), base_did, panel.id = ~ id + period)
+est2 <- feols(f(y) ~ l(x1, -1:1), base_did, panel.id = ~ id + period)
+etable(est1, est2, order = "f", drop = "Int")
 
 #
 # Using interactions:
@@ -368,7 +368,7 @@ etable(est1, est2, order = "f", drop="Int")
 
 data(base_did)
 # We interact the variable 'period' with the variable 'treat'
-est_did = feols(y ~ x1 + i(period, treat, 5) | id+period, base_did)
+est_did <- feols(y ~ x1 + i(period, treat, 5) | id + period, base_did)
 
 # Now we can plot the result of the interaction with coefplot
 coefplot(est_did)
@@ -381,15 +381,15 @@ coefplot(est_did)
 # To estimate Two stage least squares,
 # insert a formula describing the endo. vars./instr. relation after a pipe:
 
-base = iris
-names(base) = c("y", "x1", "x2", "x3", "fe1")
-base$x_inst1 = 0.2 * base$x1 + 0.7 * base$x2 + rpois(150, 2)
-base$x_inst2 = 0.2 * base$x2 + 0.7 * base$x3 + rpois(150, 3)
-base$x_endo1 = 0.5 * base$y + 0.5 * base$x3 + rnorm(150, sd = 2)
-base$x_endo2 = 1.5 * base$y + 0.5 * base$x3 + 3 * base$x_inst1 + rnorm(150, sd = 5)
+base <- iris
+names(base) <- c("y", "x1", "x2", "x3", "fe1")
+base$x_inst1 <- 0.2 * base$x1 + 0.7 * base$x2 + rpois(150, 2)
+base$x_inst2 <- 0.2 * base$x2 + 0.7 * base$x3 + rpois(150, 3)
+base$x_endo1 <- 0.5 * base$y + 0.5 * base$x3 + rnorm(150, sd = 2)
+base$x_endo2 <- 1.5 * base$y + 0.5 * base$x3 + 3 * base$x_inst1 + rnorm(150, sd = 5)
 
 # Using 2 controls, 1 endogenous var. and 1 instrument
-res_iv = feols(y ~ x1 + x2 | x_endo1 ~ x_inst1, base)
+res_iv <- feols(y ~ x1 + x2 | x_endo1 ~ x_inst1, base)
 
 # The second stage is the default
 summary(res_iv)
@@ -401,13 +401,13 @@ summary(res_iv, stage = 1)
 summary(res_iv, stage = 1:2)
 
 # Adding a fixed-effect => IV formula always last!
-res_iv_fe = feols(y ~ x1 + x2 | fe1 | x_endo1 ~ x_inst1, base)
+res_iv_fe <- feols(y ~ x1 + x2 | fe1 | x_endo1 ~ x_inst1, base)
 
 # With two endogenous regressors
-res_iv2 = feols(y ~ x1 + x2 | x_endo1 + x_endo2 ~ x_inst1 + x_inst2, base)
+res_iv2 <- feols(y ~ x1 + x2 | x_endo1 + x_endo2 ~ x_inst1 + x_inst2, base)
 
 # Now there's two first stages => a fixest_multi object is returned
-sum_res_iv2 = summary(res_iv2, stage = 1)
+sum_res_iv2 <- summary(res_iv2, stage = 1)
 
 # You can navigate through it by subsetting:
 sum_res_iv2[iv = 1]
@@ -415,15 +415,17 @@ sum_res_iv2[iv = 1]
 # The stage argument also works in etable:
 etable(res_iv, res_iv_fe, res_iv2, order = "endo")
 
-etable(res_iv, res_iv_fe, res_iv2, stage = 1:2, order = c("endo", "inst"),
-       group = list(control = "!endo|inst"))
+etable(res_iv, res_iv_fe, res_iv2,
+  stage = 1:2, order = c("endo", "inst"),
+  group = list(control = "!endo|inst")
+)
 
 #
 # Multiple estimations:
 #
 
 # 6 estimations
-est_mult = feols(c(Ozone, Solar.R) ~ Wind + Temp + csw0(Wind:Temp, Day), airquality)
+est_mult <- feols(c(Ozone, Solar.R) ~ Wind + Temp + csw0(Wind:Temp, Day), airquality)
 
 # We can display the results for the first lhs:
 etable(est_mult[lhs = 1])
@@ -436,8 +438,10 @@ etable(est_mult[lhs = "Solar.R"])
 etable(est_mult[rhs = 2:.N])
 
 # Combining with split
-est_split = feols(c(Ozone, Solar.R) ~ sw(poly(Wind, 2), poly(Temp, 2)),
-                  airquality, split = ~ Month)
+est_split <- feols(c(Ozone, Solar.R) ~ sw(poly(Wind, 2), poly(Temp, 2)),
+  airquality,
+  split = ~Month
+)
 
 # You can display everything at once with the print method
 est_split
@@ -452,19 +456,19 @@ est_split[sample = 1:2, lhs = 1, rhs = 1]
 # Split sample estimations
 #
 
-base = setNames(iris, c("y", "x1", "x2", "x3", "species"))
+base <- setNames(iris, c("y", "x1", "x2", "x3", "species"))
 
-est  = feols(y ~ x.[1:3], base, split = ~species)
+est <- feols(y ~ x.[1:3], base, split = ~species)
 etable(est)
 
 # You can select specific values with the \%keep\% and \%drop\% operators
 # By default, partial matching is enabled. It should refer to a single variable.
-est  = feols(y ~ x.[1:3], base, split = ~species \%keep\% c("set", "vers"))
+est <- feols(y ~ x.[1:3], base, split = ~ species \%keep\% c("set", "vers"))
 etable(est)
 
 # You can supply regular expression by using an @ first.
 # regex can match several values.
-est  = feols(y ~ x.[1:3], base, split = ~species \%keep\% c("@set|vers"))
+est <- feols(y ~ x.[1:3], base, split = ~ species \%keep\% c("@set|vers"))
 etable(est)
 
 #
@@ -473,15 +477,15 @@ etable(est)
 
 # When the data set is set up globally, you can use the vcov argument implicitly
 
-base = setNames(iris, c("y", "x1", "x2", "x3", "species"))
+base <- setNames(iris, c("y", "x1", "x2", "x3", "species"))
 
-no_sliding = feols(y ~ x1 + x2, base, ~species)
+no_sliding <- feols(y ~ x1 + x2, base, ~species)
 
 # With sliding
 setFixest_estimation(data = base)
 
 # ~species is implicitly deduced to be equal to 'vcov'
-sliding = feols(y ~ x1 + x2, ~species)
+sliding <- feols(y ~ x1 + x2, ~species)
 
 etable(no_sliding, sliding)
 
@@ -497,7 +501,7 @@ setFixest_estimation(data = NULL)
 # all fixest estimations
 # Here's a few examples
 
-base = setNames(iris, c("y", "x1", "x2", "x3", "species"))
+base <- setNames(iris, c("y", "x1", "x2", "x3", "species"))
 
 # dot square bracket operator
 feols(y ~ x.[1:3], base)
@@ -506,8 +510,8 @@ feols(y ~ x.[1:3], base)
 feols(y ~ ..("1|2"), base)
 
 # NOTA: it also works for multiple LHS
-mult1 = feols(x.[1:2] ~ y + species, base)
-mult2 = feols(..("y|3") ~ x.[1:2] + species, base)
+mult1 <- feols(x.[1:2] ~ y + species, base)
+mult2 <- feols(..("y|3") ~ x.[1:2] + species, base)
 etable(mult1, mult2)
 
 
@@ -515,8 +519,7 @@ etable(mult1, mult2)
 feols(y ~ csw(x.[, 1:3]), base)
 
 # Same for ..(, "regex")
-feols(y ~ csw(..(,"x")), base)
-
+feols(y ~ csw(..(, "x")), base)
 
 }
 \references{

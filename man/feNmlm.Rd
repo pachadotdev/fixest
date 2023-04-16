@@ -303,29 +303,31 @@ When the element to be expanded i) is equal to the empty string or, ii) is of le
 
 # Generating data for a simple example
 set.seed(1)
-n = 100
-x = rnorm(n, 1, 5)**2
-y = rnorm(n, -1, 5)**2
-z1 = rpois(n, x*y) + rpois(n, 2)
-base = data.frame(x, y, z1)
+n <- 100
+x <- rnorm(n, 1, 5)**2
+y <- rnorm(n, -1, 5)**2
+z1 <- rpois(n, x * y) + rpois(n, 2)
+base <- data.frame(x, y, z1)
 
 # Estimating a 'linear' relation:
-est1_L = femlm(z1 ~ log(x) + log(y), base)
+est1_L <- femlm(z1 ~ log(x) + log(y), base)
 # Estimating the same 'linear' relation using a 'non-linear' call
-est1_NL = feNmlm(z1 ~ 1, base, NL.fml = ~a*log(x)+b*log(y), NL.start = list(a=0, b=0))
+est1_NL <- feNmlm(z1 ~ 1, base, NL.fml = ~ a * log(x) + b * log(y), NL.start = list(a = 0, b = 0))
 # we compare the estimates with the function esttable (they are identical)
 etable(est1_L, est1_NL)
 
 # Now generating a non-linear relation (E(z2) = x + y + 1):
-z2 = rpois(n, x + y) + rpois(n, 1)
-base$z2 = z2
+z2 <- rpois(n, x + y) + rpois(n, 1)
+base$z2 <- z2
 
 # Estimation using this non-linear form
-est2_NL = feNmlm(z2 ~ 0, base, NL.fml = ~log(a*x + b*y),
-               NL.start = 2, lower = list(a=0, b=0))
+est2_NL <- feNmlm(z2 ~ 0, base,
+  NL.fml = ~ log(a * x + b * y),
+  NL.start = 2, lower = list(a = 0, b = 0)
+)
 # we can't estimate this relation linearily
 # => closest we can do:
-est2_L = femlm(z2 ~ log(x) + log(y), base)
+est2_L <- femlm(z2 ~ log(x) + log(y), base)
 
 # Difference between the two models:
 etable(est2_L, est2_NL)

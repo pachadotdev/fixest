@@ -288,10 +288,10 @@ data(trade)
 
 # We estimate the effect of distance on trade => we account for 3 fixed-effects
 # 1) Poisson estimation
-est_pois = femlm(Euros ~ log(dist_km) | Origin + Destination + Product, trade)
+est_pois <- femlm(Euros ~ log(dist_km) | Origin + Destination + Product, trade)
 
 # 2) Log-Log Gaussian estimation (with same FEs)
-est_gaus = update(est_pois, log(Euros+1) ~ ., family = "gaussian")
+est_gaus <- update(est_pois, log(Euros + 1) ~ ., family = "gaussian")
 
 # Comparison of the results using the function etable
 etable(est_pois, est_gaus)
@@ -299,10 +299,10 @@ etable(est_pois, est_gaus)
 etable(est_pois, est_gaus, se = "twoway")
 
 # Comparing different types of standard errors
-sum_hetero   = summary(est_pois, se = "hetero")
-sum_oneway   = summary(est_pois, se = "cluster")
-sum_twoway   = summary(est_pois, se = "twoway")
-sum_threeway = summary(est_pois, se = "threeway")
+sum_hetero <- summary(est_pois, se = "hetero")
+sum_oneway <- summary(est_pois, se = "cluster")
+sum_twoway <- summary(est_pois, se = "twoway")
+sum_threeway <- summary(est_pois, se = "threeway")
 
 etable(sum_hetero, sum_oneway, sum_twoway, sum_threeway)
 
@@ -312,7 +312,7 @@ etable(sum_hetero, sum_oneway, sum_twoway, sum_threeway)
 #
 
 # 6 estimations
-est_mult = femlm(c(Ozone, Solar.R) ~ Wind + Temp + csw0(Wind:Temp, Day), airquality)
+est_mult <- femlm(c(Ozone, Solar.R) ~ Wind + Temp + csw0(Wind:Temp, Day), airquality)
 
 # We can display the results for the first lhs:
 etable(est_mult[lhs = 1])
@@ -325,8 +325,10 @@ etable(est_mult[lhs = "Solar.R"])
 etable(est_mult[rhs = 2:.N])
 
 # Combining with split
-est_split = fepois(c(Ozone, Solar.R) ~ sw(poly(Wind, 2), poly(Temp, 2)),
-                  airquality, split = ~ Month)
+est_split <- fepois(c(Ozone, Solar.R) ~ sw(poly(Wind, 2), poly(Temp, 2)),
+  airquality,
+  split = ~Month
+)
 
 # You can display everything at once with the print method
 est_split
