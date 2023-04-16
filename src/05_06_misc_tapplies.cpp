@@ -12,6 +12,16 @@
     int K = x.ncol();
 
     writable::doubles_matrix<> res(Q, K);
+
+    // fill with 0
+    for (int q = 0; q < Q; q++)
+    {
+        for (int k = 0; k < K; k++)
+        {
+            res(q, k) = 0;
+        }
+    }
+
     int i, q, k;
 
     for (i = 0; i < N; i++)

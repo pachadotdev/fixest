@@ -1,5 +1,5 @@
 //
-// Maintenant la convergence des derivees
+// Convergence of derivatives
 //
 
 #include "01_0_convergence.h"

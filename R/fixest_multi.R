@@ -582,7 +582,7 @@ print.fixest_multi = function(x, ...){
             }
             if(tree_index[i, depth] != max(tree_index[, depth])) cat("---\n")
         } else {
-            print(x[[i]])
+            # print(x[[i]])
             if(tree_index[i, depth] != max(tree_index[, depth])) cat("\n")
         }
 
