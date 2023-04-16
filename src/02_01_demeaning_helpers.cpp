@@ -35,7 +35,7 @@ void stayIdleCheckingInterrupt(bool *stopnow, vector<int> &jobdone, int n_vars, 
     }
 }
 
-std::vector<int> set_parallel_scheme_ter(int N, int nthreads)
+std::vector<int> set_parallel_scheme_ter(int N, int nthreads = 1)
 {
     // => this concerns only the parallel application on a 1-Dimensional matrix
     // takes in the nber of observations of the vector and the nber of threads
@@ -54,7 +54,7 @@ std::vector<int> set_parallel_scheme_ter(int N, int nthreads)
     return res;
 }
 
-[[cpp11::register]] list cpp_which_na_inf_(SEXP x, int nthreads)
+[[cpp11::register]] list cpp_which_na_inf_(SEXP x, int nthreads = 1)
 {
     // x: vector, matrix, data.frame // double or integer
 

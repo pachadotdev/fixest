@@ -1,6 +1,6 @@
 #include "07_0_parallel.h"
 
-[[cpp11::register]] doubles cpppar_exp_(doubles x, int nthreads)
+[[cpp11::register]] doubles cpppar_exp_(doubles x, int nthreads = 1)
 {
     // parallel exponentiation using omp
 
@@ -17,7 +17,7 @@
     return (res);
 }
 
-[[cpp11::register]] doubles cpppar_log_(doubles x, int nthreads)
+[[cpp11::register]] doubles cpppar_log_(doubles x, int nthreads = 1)
 {
     // parallel exponentiation using omp
 

@@ -4,7 +4,7 @@
 // #include <iostream>
 // using namespace std;
 
-void mp_sparse_XtX(writable::doubles_matrix<> &XtX, const vector<int> &n_j, const vector<int> &start_j, const vector<int> &all_i, const vector<double> &x, const doubles_matrix<> &X, int nthreads)
+void mp_sparse_XtX(writable::doubles_matrix<> &XtX, const vector<int> &n_j, const vector<int> &start_j, const vector<int> &all_i, const vector<double> &x, const doubles_matrix<> &X, int nthreads = 1)
 {
 
     int K = X.ncol();
@@ -47,7 +47,7 @@ void mp_sparse_XtX(writable::doubles_matrix<> &XtX, const vector<int> &n_j, cons
     }
 }
 
-void mp_sparse_Xty(writable::doubles &Xty, const vector<int> &start_j, const vector<int> &all_i, const vector<double> &x, const double *y, int nthreads)
+void mp_sparse_Xty(writable::doubles &Xty, const vector<int> &start_j, const vector<int> &all_i, const vector<double> &x, const double *y, int nthreads = 1)
 {
 
     int K = Xty.size();
@@ -72,7 +72,7 @@ void mp_sparse_Xty(writable::doubles &Xty, const vector<int> &start_j, const vec
     }
 }
 
-void mp_XtX(writable::doubles_matrix<> &XtX, const doubles_matrix<> &X, const doubles_matrix<> &wX, int nthreads)
+void mp_XtX(writable::doubles_matrix<> &XtX, const doubles_matrix<> &X, const doubles_matrix<> &wX, int nthreads = 1)
 {
 
     int N = X.nrow();
@@ -136,7 +136,7 @@ void mp_XtX(writable::doubles_matrix<> &XtX, const doubles_matrix<> &X, const do
     }
 }
 
-void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y, int nthreads)
+void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y, int nthreads = 1)
 {
 
     int N = X.nrow();
@@ -298,7 +298,7 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y, 
     return res;
 }
 
-[[cpp11::register]] doubles_matrix<> cpppar_crossprod_(doubles_matrix<> X, doubles w, int nthreads)
+[[cpp11::register]] doubles_matrix<> cpppar_crossprod_(doubles_matrix<> X, doubles w, int nthreads = 1)
 {
 
     int N = X.nrow();
@@ -387,7 +387,7 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y, 
     return res;
 }
 
-void mp_ZXtZX(writable::doubles_matrix<> &ZXtZX, const doubles_matrix<> &XtX, const doubles_matrix<> &X, const doubles_matrix<> &Z, const doubles_matrix<> &wZ, int nthreads)
+void mp_ZXtZX(writable::doubles_matrix<> &ZXtZX, const doubles_matrix<> &XtX, const doubles_matrix<> &X, const doubles_matrix<> &Z, const doubles_matrix<> &wZ, int nthreads = 1)
 {
 
     int N = Z.nrow();
@@ -473,7 +473,7 @@ void mp_ZXtZX(writable::doubles_matrix<> &ZXtZX, const doubles_matrix<> &XtX, co
     }
 }
 
-void mp_ZXtu(writable::doubles &ZXtu, const doubles_matrix<> &X, const doubles_matrix<> &Z, const double *u, int nthreads)
+void mp_ZXtu(writable::doubles &ZXtu, const doubles_matrix<> &X, const doubles_matrix<> &Z, const double *u, int nthreads = 1)
 {
 
     int N = Z.nrow();
@@ -502,7 +502,7 @@ void mp_ZXtu(writable::doubles &ZXtu, const doubles_matrix<> &X, const doubles_m
     }
 }
 
-void mp_sparse_ZXtZX(writable::doubles_matrix<> &ZXtZX, const doubles_matrix<> &XtX, const vector<int> &n_j, const vector<int> &start_j, const vector<int> &all_i, const vector<double> &x, const doubles_matrix<> &X, const doubles_matrix<> &Z, const doubles_matrix<> &wZ, int nthreads)
+void mp_sparse_ZXtZX(writable::doubles_matrix<> &ZXtZX, const doubles_matrix<> &XtX, const vector<int> &n_j, const vector<int> &start_j, const vector<int> &all_i, const vector<double> &x, const doubles_matrix<> &X, const doubles_matrix<> &Z, const doubles_matrix<> &wZ, int nthreads = 1)
 {
 
     int N = Z.nrow();
@@ -574,7 +574,7 @@ void mp_sparse_ZXtZX(writable::doubles_matrix<> &ZXtZX, const doubles_matrix<> &
     }
 }
 
-void mp_sparse_ZXtu(writable::doubles &ZXtu, const vector<int> &start_j, const vector<int> &all_i, const vector<double> &x, const double *u, const doubles_matrix<> &X, const doubles_matrix<> &wZ, int nthreads)
+void mp_sparse_ZXtu(writable::doubles &ZXtu, const vector<int> &start_j, const vector<int> &all_i, const vector<double> &x, const double *u, const doubles_matrix<> &X, const doubles_matrix<> &wZ, int nthreads = 1)
 {
 
     int N = wZ.nrow();

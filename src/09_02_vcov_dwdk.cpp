@@ -5,7 +5,7 @@
 // S: scores
 // w: weights
 // Note that the first weight needs to be halved
-[[cpp11::register]] doubles_matrix<> cpp_newey_west_(doubles_matrix<> S, doubles w, int nthreads)
+[[cpp11::register]] doubles_matrix<> cpp_newey_west_(doubles_matrix<> S, doubles w, int nthreads = 1)
 {
     int N = S.nrow();
     int K = S.ncol();
@@ -144,7 +144,7 @@
 // the data MUST be sorted by unit and time (in that order)
 // Note that the first weight needs to be halved
 [[cpp11::register]] doubles_matrix<> cpp_newey_west_panel_(doubles_matrix<> S, doubles w, integers unit,
-                                                          int G, integers time, int T, int nthreads)
+                                                          int G, integers time, int T, int nthreads = 1)
 {
     int N = S.nrow();
     int K = S.ncol();
@@ -351,7 +351,7 @@
 // the data MUST be sorted by time
 // Note that the first weight needs to be halved
 [[cpp11::register]] doubles_matrix<> cpp_driscoll_kraay_(doubles_matrix<> S, doubles w,
-                                                        integers time, int T, int nthreads)
+                                                        integers time, int T, int nthreads = 1)
 {
     int N = S.nrow();
     int K = S.ncol();

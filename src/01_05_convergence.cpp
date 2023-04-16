@@ -2,7 +2,7 @@
 
 [[cpp11::register]] list cpp_conv_acc_gnl_(int family, int iterMax, double diffMax, double diffMax_NR, double theta, SEXP nb_cluster_all,
 										  SEXP lhs, SEXP mu_init, SEXP dum_vector, SEXP tableCluster_vector,
-										  SEXP sum_y_vector, SEXP cumtable_vector, SEXP obsCluster_vector, int nthreads)
+										  SEXP sum_y_vector, SEXP cumtable_vector, SEXP obsCluster_vector, int nthreads = 1)
 {
 
 	// initial variables
@@ -294,7 +294,7 @@
 
 [[cpp11::register]] list cpp_conv_seq_gnl_(int family, int iterMax, double diffMax, double diffMax_NR, double theta, SEXP nb_cluster_all,
 										  SEXP lhs, SEXP mu_init, SEXP dum_vector, SEXP tableCluster_vector,
-										  SEXP sum_y_vector, SEXP cumtable_vector, SEXP obsCluster_vector, int nthreads)
+										  SEXP sum_y_vector, SEXP cumtable_vector, SEXP obsCluster_vector, int nthreads = 1)
 {
 
 	// initial variables

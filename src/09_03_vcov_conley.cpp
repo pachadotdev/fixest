@@ -82,7 +82,7 @@ mat_row_scheme::mat_row_scheme(int N_in, int K_in)
 // - Laurent, remember you first started with longitude in main and although you can't mention here
 // all the problems that you encountered, you did encounter them. So don't.
 [[cpp11::register]] doubles_matrix<> cpp_vcov_conley_(doubles_matrix<> S, doubles lon_rad, doubles lat_rad,
-                                                     const int distance, const double cutoff, int nthreads)
+                                                     const int distance, const double cutoff, int nthreads = 1)
 {
     if (distance <= 0 || distance > 2)
     {

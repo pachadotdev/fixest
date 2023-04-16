@@ -1,6 +1,6 @@
 #include "07_0_parallel.h"
 
-[[cpp11::register]] doubles cpppar_xwy_(doubles_matrix<> X, doubles y, doubles w, int nthreads)
+[[cpp11::register]] doubles cpppar_xwy_(doubles_matrix<> X, doubles y, doubles w, int nthreads = 1)
 {
 
     int N = X.nrow();
@@ -40,7 +40,7 @@
     return (res);
 }
 
-[[cpp11::register]] doubles cpppar_xbeta_(doubles_matrix<> X, doubles beta, int nthreads)
+[[cpp11::register]] doubles cpppar_xbeta_(doubles_matrix<> X, doubles beta, int nthreads = 1)
 {
 
     int N = X.nrow();
@@ -64,7 +64,7 @@
     return (res);
 }
 
-[[cpp11::register]] doubles_matrix<> cpppar_matprod_(doubles_matrix<> x, doubles_matrix<> y, int nthreads)
+[[cpp11::register]] doubles_matrix<> cpppar_matprod_(doubles_matrix<> x, doubles_matrix<> y, int nthreads = 1)
 {
     // => simply x %*% y
 

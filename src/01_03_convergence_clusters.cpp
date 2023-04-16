@@ -3,7 +3,7 @@
 void computeClusterCoef_single(int family, int n_obs, int nb_cluster, double theta, double diffMax_NR,
 							   double *cluster_coef, double *mu,
 							   double *lhs, double *sum_y,
-							   int *dum, int *obsCluster, int *table, int *cumtable, int nthreads)
+							   int *dum, int *obsCluster, int *table, int *cumtable, int nthreads = 1)
 {
 
 	// Leads to the appropriate function
@@ -228,7 +228,7 @@ void computeClusterCoef(vector<double *> &pcluster_origin, vector<double *> &pcl
 // Function to delete => only for debugging
 [[cpp11::register]] SEXP compute_cluster_coef_r_(int family, int nb_coef, double theta, double diffMax_NR,
 												SEXP r_mu, SEXP r_lhs, SEXP r_sum_y, SEXP r_dum,
-												SEXP r_obsCluster, SEXP r_table, SEXP r_cumtable, int nthreads)
+												SEXP r_obsCluster, SEXP r_table, SEXP r_cumtable, int nthreads = 1)
 {
 
 	int n_obs = Rf_length(r_mu);
@@ -255,7 +255,7 @@ void computeClusterCoef(vector<double *> &pcluster_origin, vector<double *> &pcl
 
 [[cpp11::register]] SEXP update_mu_single_cluster_(int family, int nb_cluster, double theta, double diffMax_NR, SEXP mu_in,
 												  SEXP lhs, SEXP sum_y, SEXP dum, SEXP obsCluster, SEXP table,
-												  SEXP cumtable, int nthreads)
+												  SEXP cumtable, int nthreads = 1)
 {
 	// Function used to compute the cluster coefficient for ONE fixed-effect only
 	// and then add it to the existing mu

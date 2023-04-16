@@ -79,7 +79,7 @@
                            "is_na_inf"_nm = is_na_inf});
 }
 
-[[cpp11::register]] list cpppar_which_na_inf_mat_(doubles_matrix<> mat, int nthreads)
+[[cpp11::register]] list cpppar_which_na_inf_mat_(doubles_matrix<> mat, int nthreads = 1)
 {
     // almost identical to cpppar_which_na_inf_vec but for R matrices. Changes:
     // - main argument becomes doubles_matrix
@@ -166,7 +166,7 @@
                            "is_na_inf"_nm = is_na_inf});
 }
 
-[[cpp11::register]] list cpppar_which_na_inf_df_(SEXP df, int nthreads)
+[[cpp11::register]] list cpppar_which_na_inf_df_(SEXP df, int nthreads = 1)
 {
     // almost identical to cpppar_which_na_inf_vec but for R **numeric** data frames. Changes:
     // - main argument becomes SEXP
@@ -259,7 +259,7 @@
                            "is_na_inf"_nm = is_na_inf});
 }
 
-[[cpp11::register]] integers cpppar_check_only_0_(doubles_matrix<> x_mat, int nthreads)
+[[cpp11::register]] integers cpppar_check_only_0_(doubles_matrix<> x_mat, int nthreads = 1)
 {
     // returns a 0/1 vectors => 1 means only 0
 
