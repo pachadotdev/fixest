@@ -6,13 +6,13 @@
 
 void invert_tri(writable::doubles_matrix<> &R, int K, int nthreads = 1){
 
-    // Startegy: we invert by bands (b) => better for parallelization
+    // Strategy: we invert by bands (b) => better for parallelization
 
-    // TODO: this is not the best way to do it
+    // https://stackoverflow.com/a/76020237/3720258
     // initialization of R prime
     for(int i=0 ; i<K ; ++i){
         for(int j=i+1 ; j<K ; ++j){
-            R(j, i) += (-1.0 * R(j, i)) + R(i, j);
+            R(j, i) = (double)R(i, j);
         }
     }
 
@@ -53,7 +53,7 @@ void tproduct_tri(writable::doubles_matrix<> &RRt, writable::doubles_matrix<> &R
     // initialization of R prime
     for(int i=0 ; i<K ; ++i){
         for(int j=i+1 ; j<K ; ++j){
-            R(j, i) += (-1.0 * R(j, i)) + R(i, j);
+            R(j, i) = (double)R(i, j);
         }
     }
 
