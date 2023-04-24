@@ -16,6 +16,7 @@
 ^CONTRIBUTORS\.md$
 ^.vscode
 ^dev$
+^vscode-debug.sh$
 ^vscode-install.r$
 ^vscode-test.r$
 ^tests$
