@@ -878,7 +878,7 @@ summary.fixest.fixef = function(object, n = 5, ...){
 #' # Plotting them:
 #' plot(fe_trade)
 #'
-#' @exportS3Method
+#' @export
 fixef.fixest = function(object, notes = getFixest_notes(), sorted = TRUE, nthreads = getFixest_nthreads(),
                         fixef.tol = 1e-5, fixef.iter = 10000, ...){
 
@@ -1182,6 +1182,11 @@ fixef.fixest = function(object, notes = getFixest_notes(), sorted = TRUE, nthrea
     }
 
     return(all_clust)
+}
+
+#' @export
+fixef <- function(object, ...) {
+    UseMethod("fixef")
 }
 
 #' Functions exported from \pkg{nlme} to implement \pkg{fixest} methods
