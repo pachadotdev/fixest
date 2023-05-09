@@ -124,7 +124,7 @@ etable(est, est_slopes, tex = TRUE)
 
 ```{r, include = FALSE}
 # etable(est, est_slopes, file = "../_VIGNETTES/vignette_etable.tex", replace = TRUE)
-# etable(est, est_slopes, file = "../_VIGNETTES/vignette_etable.tex", style.tex = style.tex("aer"), fitstat = ~ r2 + n, signifCode = NA)
+# etable(est, est_slopes, file = "../_VIGNETTES/vignette_etable.tex", style.tex = style.tex("aer"), fitstat = ~ r2 + n, signif.code = NA)
 ```
 
 The previous code produces the following table:
@@ -145,7 +145,7 @@ The function `style.tex` has two starting points (in the argument `main`), eithe
 
 ```{r, results = 'hide'}
 etable(est, est_slopes, style.tex = style.tex("aer"), 
-       signifCode = NA, fitstat = ~ r2 + n, tex = TRUE)
+       signif.code = NA, fitstat = ~ r2 + n, tex = TRUE)
 ```
 
 Which yields the following table:
