@@ -567,6 +567,7 @@
         nb_coef += cluster_sizes[q];
     }
 
+    // TODO: ISO C++ forbids variable length array ‘start_cluster’ [-Wvla]
     double cluster_values[nb_coef];
 
     // this was in the original fixest
@@ -590,6 +591,8 @@
 
     // Now we create the vector of observations for each cluster
     // we need a starting and an end vector as well
+
+    // TODO: ISO C++ forbids variable length array ‘start_cluster’ [-Wvla]
     int start_cluster[nb_coef];
     int end_cluster[nb_coef];
 
