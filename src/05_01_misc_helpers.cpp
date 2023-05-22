@@ -567,12 +567,7 @@
         nb_coef += cluster_sizes[q];
     }
 
-    // TODO: ISO C++ forbids variable length array ‘start_cluster’ [-Wvla]
-    double cluster_values[nb_coef];
-
-    // this was in the original fixest
-    // I removed this otherwise Fedora says: 05_01_misc_helpers.cpp:571:9: warning: unused variable ‘cluster_visited’ [-Wunused-variable]
-    // int cluster_visited[nb_coef]; // whether a value has been already assigned
+    std::vector<double> cluster_values(nb_coef);
 
     // index of the cluster
     std::vector<int*> pindex_cluster(Q);
@@ -592,9 +587,8 @@
     // Now we create the vector of observations for each cluster
     // we need a starting and an end vector as well
 
-    // TODO: ISO C++ forbids variable length array ‘start_cluster’ [-Wvla]
-    int start_cluster[nb_coef];
-    int end_cluster[nb_coef];
+    std::vector<int> start_cluster(nb_coef);
+    std::vector<int> end_cluster(nb_coef);
 
     int index;
     int k;
