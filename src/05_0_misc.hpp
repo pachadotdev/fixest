@@ -13,25 +13,15 @@ Three groups of non-parallel functions:
 3) functions to lag variables
 */
 
+#include "00_common.hpp"
+
 #pragma once
-
-#include <cpp11.hpp>
-#include <cpp11/doubles.hpp>
-#include <vector>
-#include <functional>
-
-#include <stdint.h>
-
-#include <cstring>
 
 #ifdef _OPENMP
 #include <omp.h>
 #else
 #define omp_get_thread_num() 0
 #endif
-
-using namespace cpp11;
-using std::vector;
 
 class simple_vec_double
 {

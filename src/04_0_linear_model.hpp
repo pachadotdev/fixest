@@ -15,22 +15,15 @@ In general, the functions are slower than BLAS ones
 but they have the merit of doing exacly what I want.
 */
 
+#include "00_common.hpp"
+
 #pragma once
-
-#include <cpp11.hpp>
-#include <cpp11/doubles.hpp>
-#include <vector>
-
-#include <stdint.h>
 
 #ifdef _OPENMP
 #include <omp.h>
 #else
 #define omp_get_thread_num() 0
 #endif
-
-using namespace cpp11;
-using std::vector;
 
 vector<int> set_parallel_scheme(int N, int nthreads);
 

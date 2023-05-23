@@ -1,4 +1,4 @@
-#include "07_0_parallel.h"
+#include "07_0_parallel.hpp"
 
 [[cpp11::register]] doubles cpppar_exp_(doubles x, int nthreads = 1)
 {

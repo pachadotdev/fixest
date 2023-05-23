@@ -1,7 +1,7 @@
 // Now we start a big chunk => computing the varying slopes coefficients
 // That's a big job. To simplify it, I created the class FEClass that takes care of it.
 
-#include "02_0_demeaning.h"
+#include "02_0_demeaning.hpp"
 
 FEClass::FEClass(int n_obs, int Q, SEXP r_weights, SEXP fe_id_list, SEXP r_nb_id_Q, SEXP table_id_I, SEXP slope_flag_Q, SEXP slope_vars_list)
 {

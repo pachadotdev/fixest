@@ -1,4 +1,4 @@
-#include "09_0_vcov.h"
+#include "09_0_vcov.hpp"
 
 // Basic NeweyWest for time series
 // note that the data MUST be sorted by period beforehand

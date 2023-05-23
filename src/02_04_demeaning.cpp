@@ -12,7 +12,7 @@
 // List of objects, used to
 // lighten the writting of the functions
 
-#include "02_0_demeaning.h"
+#include "02_0_demeaning.hpp"
 
 void FEClass::add_2_fe_coef_to_mu(double *fe_coef_a, double *fe_coef_b, double *in_out_C, double *out_N, bool update_beta = true)
 {

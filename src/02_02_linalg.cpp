@@ -3,7 +3,7 @@
 // Later I may use the number of observations
 // I don't at the moment because everything is strongly checked beforehand
 
-#include "02_0_demeaning.h"
+#include "02_0_demeaning.hpp"
 
 sVec::sVec(SEXP x)
 {

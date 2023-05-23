@@ -1,4 +1,4 @@
-#include "04_0_linear_model.h"
+#include "04_0_linear_model.hpp"
 
 [[cpp11::register]] list cpp_iv_products_(doubles_matrix<> X, SEXP y, doubles_matrix<> Z, SEXP u, doubles w, int nthreads = 1)
 {

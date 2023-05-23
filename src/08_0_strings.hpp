@@ -9,15 +9,6 @@
                            |___/
 */
 
+#include "00_common.hpp"
+
 #pragma once
-
-#include <cpp11.hpp>
-#include <cpp11/strings.hpp>
-#include <vector>
-#include <cstring>
-
-using namespace cpp11;
-
-using std::string;
-using std::vector;
-using std::strlen;

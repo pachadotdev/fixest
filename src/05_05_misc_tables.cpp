@@ -1,4 +1,4 @@
-#include "05_0_misc.h"
+#include "05_0_misc.hpp"
 
 // similar to table but faster
 [[cpp11::register]] doubles cpp_table_(int Q, integers dum)

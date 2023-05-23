@@ -33,21 +33,15 @@ The big drawback of the ML methods is that, as opposed to GLM methods,
 parallel computing cannot be leveraged.
 */
 
-#pragma once
+#include "00_common.hpp"
 
-#include <cpp11.hpp>
-#include <cpp11/doubles.hpp>
-#include <vector>
+#pragma once
 
 #ifdef _OPENMP
 #include <omp.h>
 #else
 #define omp_get_thread_num() 0
 #endif
-
-using namespace cpp11;
-using std::vector;
-using std::fabs;
 
 // COMMON FUNS
 

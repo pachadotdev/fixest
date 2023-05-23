@@ -55,23 +55,15 @@ vs: means varying slopes
 
 // TODO: Next version => clean c++ code, use only sMat
 
+#include "00_common.hpp"
+
 #pragma once
-
-#include <cpp11.hpp>
-#include <cpp11/doubles.hpp>
-#include <vector>
-
-#include <stdint.h>
 
 #ifdef _OPENMP
 #include <omp.h>
 #else
 #define omp_get_thread_num() 0
 #endif
-
-using namespace cpp11;
-using std::vector;
-using std::fabs;
 
 // COMMON FUNS
 

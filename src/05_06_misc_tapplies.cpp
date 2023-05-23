@@ -1,4 +1,4 @@
-#include "05_0_misc.h"
+#include "05_0_misc.hpp"
 
 // Function to get the conditional sum of a matrix
 [[cpp11::register]] doubles_matrix<> cpp_tapply_sum_(int Q, doubles_matrix<> x, integers dum)

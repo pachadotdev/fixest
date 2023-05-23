@@ -1,4 +1,4 @@
-#include "05_0_misc.h"
+#include "05_0_misc.hpp"
 
 [[cpp11::register]] doubles cpp_partialDerivative_other_(int iterMax,
                                                         int Q,

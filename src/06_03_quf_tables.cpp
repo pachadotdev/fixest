@@ -1,5 +1,4 @@
-#include "06_0_quf.h"
-using namespace cpp11::literals;
+#include "06_0_quf.hpp"
 
 void quf_table_sum_single(void *px_in, string &x_type, int n, int q, int *x_quf,
                           vector<double> &x_unik, vector<int> &x_table, double *py,

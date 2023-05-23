@@ -1,10 +1,12 @@
-#include "01_0_convergence.h"
-#include "02_0_demeaning.h"
-#include "03_0_dot_square_bracket.h"
-#include "04_0_linear_model.h"
-#include "07_0_parallel.h"
-#include "08_0_strings.h"
-#include "09_0_vcov.h"
+#include "00_common.hpp"
+
+#include "01_0_convergence.hpp"
+#include "02_0_demeaning.hpp"
+#include "03_0_dot_square_bracket.hpp"
+#include "04_0_linear_model.hpp"
+#include "07_0_parallel.hpp"
+#include "08_0_strings.hpp"
+#include "09_0_vcov.hpp"
 
 bool continue_criterion(double a, double b, double diffMax)
 {

@@ -30,26 +30,14 @@ Safer not to include it for now.
 // }
 */
 
+#include "00_common.hpp"
+
 #pragma once
-
-#include <cpp11.hpp>
-#include <cpp11/doubles.hpp>
-#include <vector>
-#include <numeric>
-
-#include <stdint.h>
-#include <float.h>
-#include <Rmath.h>
 
 #ifdef _OPENMP
 #include <omp.h>
 #else
 #define omp_get_thread_num() 0
 #endif
-
-using namespace cpp11;
-using std::vector;
-using std::isnan;
-using std::isinf;
 
 vector<int> set_parallel_scheme(int N, int nthreads);

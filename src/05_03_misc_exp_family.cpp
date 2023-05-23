@@ -1,4 +1,4 @@
-#include "05_0_misc.h"
+#include "05_0_misc.hpp"
 
 [[cpp11::register]] doubles cpp_lgamma_(doubles x)
 {

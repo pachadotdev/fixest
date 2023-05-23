@@ -52,27 +52,15 @@ vector ranging from 1 to the number of unique values (i.e:
  on which we sort, we obtain what we want.
 */
 
+#include "00_common.hpp"
+
 #pragma once
-
-#include <cpp11.hpp>
-#include <cpp11/doubles.hpp>
-#include <vector>
-#include <numeric>
-
-#include <stdint.h>
 
 #ifdef _OPENMP
 #include <omp.h>
 #else
 #define omp_get_thread_num() 0
 #endif
-
-using namespace cpp11;
-using std::vector;
-using std::string;
-using std::uintptr_t;
-using std::fill;
-using std::accumulate;
 
 void quf_refactor(int *px_in, int x_size, integers &obs2keep, int n, int *x_uf, vector<double> &x_unik, vector<int> &x_table);
 

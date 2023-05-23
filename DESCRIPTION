@@ -35,4 +35,4 @@ VignetteBuilder: knitr
 RoxygenNote: 7.2.3
 Encoding: UTF-8
 SystemRequirements: C++11
-LinkingTo: cpp11
+NeedsCompilation: yes

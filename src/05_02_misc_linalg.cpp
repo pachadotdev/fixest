@@ -1,4 +1,4 @@
-#include "05_0_misc.h"
+#include "05_0_misc.hpp"
 
 simple_vec_double::simple_vec_double(SEXP x)
 {

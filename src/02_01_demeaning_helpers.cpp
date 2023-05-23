@@ -1,4 +1,4 @@
-#include "02_0_demeaning.h"
+#include "02_0_demeaning.hpp"
 
 void stayIdleCheckingInterrupt(bool *stopnow, vector<int> &jobdone, int n_vars, int *counterInside)
 {

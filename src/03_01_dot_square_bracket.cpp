@@ -1,4 +1,4 @@
-#include "03_0_dot_square_bracket.h"
+#include "03_0_dot_square_bracket.hpp"
 
 inline bool is_dsb_open(const char *str, int i, int n)
 {

@@ -1,8 +1,4 @@
-#include "04_0_linear_model.h"
-
-// to print elements with cout << X(i,k); we use
-// #include <iostream>
-// using namespace std;
+#include "04_0_linear_model.hpp"
 
 void mp_sparse_XtX(writable::doubles_matrix<> &XtX, const vector<int> &n_j, const vector<int> &start_j, const vector<int> &all_i, const vector<double> &x, const doubles_matrix<> &X, int nthreads = 1)
 {

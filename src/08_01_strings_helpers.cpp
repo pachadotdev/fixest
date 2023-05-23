@@ -1,4 +1,4 @@
-#include "08_0_strings.h"
+#include "08_0_strings.hpp"
 
 // we change a:b into a*b
 // we don't touch what's in paren: I(a:b) stays I(a:b)

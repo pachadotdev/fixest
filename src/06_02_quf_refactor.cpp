@@ -1,4 +1,4 @@
-#include "06_0_quf.h"
+#include "06_0_quf.hpp"
 
 void quf_refactor(int *px_in, int x_size, integers &obs2keep, int n, int *x_uf, vector<double> &x_unik, vector<int> &x_table)
 {

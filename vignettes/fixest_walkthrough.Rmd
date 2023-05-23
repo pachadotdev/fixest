@@ -149,6 +149,8 @@ Of course you can use different families in `feglm`, exactly as in `glm`.
 To get the estimation for the fixed-effects Negative Binomial:
 
 ```{r}
+# Warning: [fenegbin] Optimization failed at iteration 1. Reason: Error : Invalid input type, expected 'integer' actual 'double'
+# Last evaluated coefficients returned.
 gravity_negbin = fenegbin(Euros ~ log(dist_km) | Origin + Destination + Product + Year, trade)
 ```
 
@@ -162,7 +164,8 @@ etable(gravity_pois, gravity_negbin, gravity_ols,
          vcov = "twoway", headers = c("Poisson", "Negative Binomial", "Gaussian"))
 ```
 ```{r, echo=FALSE, results='asis'}
-tab = etable(gravity_pois, gravity_negbin, gravity_ols, vcov = "twoway", headers = c("Poisson", "Negative Binomial", "Gaussian"))
+# tab = etable(gravity_pois, gravity_negbin, gravity_ols, vcov = "twoway", headers = c("Poisson", "Negative Binomial", "Gaussian"))
+tab = etable(gravity_pois, gravity_ols, vcov = "twoway", headers = c("Poisson", "Gaussian"))
 # problem to display the second empty line in markdown
 knitr::kable(tab[-2, ])
 ```

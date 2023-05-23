@@ -1,4 +1,4 @@
-#include "01_0_convergence.h"
+#include "01_0_convergence.hpp"
 
 [[cpp11::register]] list cpp_conv_acc_gnl_(int family, int iterMax, double diffMax, double diffMax_NR, double theta, SEXP nb_cluster_all,
 										  SEXP lhs, SEXP mu_init, SEXP dum_vector, SEXP tableCluster_vector,

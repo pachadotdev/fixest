@@ -1,6 +1,6 @@
 // Lag related functions
 
-#include "05_0_misc.h"
+#include "05_0_misc.hpp"
 
 [[cpp11::register]] integers cpp_lag_obs_(integers id, integers time, int nlag)
 {

@@ -1,4 +1,4 @@
-#include "04_0_linear_model.h"
+#include "04_0_linear_model.hpp"
 
 bool sparse_check(const doubles_matrix<> &X)
 {
