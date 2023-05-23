@@ -567,6 +567,8 @@
         nb_coef += cluster_sizes[q];
     }
 
+    cout << "OK L570";
+
     std::vector<double> cluster_values(nb_coef);
 
     // index of the cluster
@@ -590,19 +592,29 @@
     std::vector<int> start_cluster(nb_coef);
     std::vector<int> end_cluster(nb_coef);
 
+    cout << "OK L595";
+
     int index;
     int k;
 
+    cout << Q;
+    cout << "\n";
+
     for (int q = 0; q < Q; q++)
     {
+        cout << q;
+        cout << "\n";
         // table cluster: nber of elements for each cluster class
         writable::integers tableCluster;
         tableCluster.push_back(cluster_sizes[q]);
         for (int i = 0; i < N; i++)
         {
+            // cout << cluster_sizes[q];
             k = dumMat(i, q);
             tableCluster[k] += 1; // the number of obs per case
         }
+
+        cout << "OK L612";
 
         // now creation of the start/end vectors
         for (int k = 0; k < cluster_sizes[q]; k++)
@@ -621,11 +633,17 @@
                 end_cluster[index] = end_cluster[index - 1] + tableCluster[k];
             }
         }
+
+        cout << "OK L632";
     }
 
+    cout << "OK L635";
+    
     // matrix of the clusters that have been computed
     writable::integers_matrix<> mat_done(N, Q);
     writable::integers rowsums(N);
+
+    cout << "OK L639";
 
     // vector of elements to loop over
     writable::integers id2do(N);
@@ -637,12 +655,16 @@
         id2do_next[i] = i;
     }
 
+    cout << "OK L658";
+
     // Other indices and variables
     int qui_max, obs;
     int rs, rs_max; // rs: row sum
     int id_cluster;
     double other_value;
     bool first;
+
+    cout << "OK L667";
 
     //
     // THE MAIN LOOP
@@ -690,6 +712,8 @@
                 }
             }
         }
+
+        cout << "OK L716";
 
         // Putting the 0s, ie setting the references
 
@@ -817,6 +841,8 @@
         if (nb2do_next == 0)
             break;
     }
+    
+    cout << "OK L843";
 
     if (iter == iterMax)
     {
