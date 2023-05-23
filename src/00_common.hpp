@@ -1,10 +1,5 @@
-#include <cpp11.hpp>
-
-// #include <cpp11/doubles.hpp>
-// #include <cpp11/strings.hpp>
-
-#include <cstring>
-#include <functional>
+// #include <cstring>
+// #include <functional>
 #include <numeric>
 #include <vector>
 
@@ -13,7 +8,7 @@
 #include <Rmath.h>
 #include <stdint.h>
 
-using namespace cpp11;
+#include <cpp11.hpp>
 
 // replace
 // using std::accumulate;
@@ -28,6 +23,7 @@ using namespace cpp11;
 // with
 using namespace std;
 
+using namespace cpp11;
+
 // to print elements with cout << X(i,k); we use
 // #include <iostream>
-// using namespace std;

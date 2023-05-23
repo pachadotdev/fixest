@@ -336,7 +336,7 @@ void quf_table_sum_single(void *px_in, string &x_type, int n, int q, int *x_quf,
             p_x_new_quf_all[q] = INTEGER(res_x_new_quf_all[q]);
         }
 
-        vector< vector<double> > x_new_unik_all(Q);
+        vector<vector<double>> x_new_unik_all(Q);
         bool stop_now = false;
         bool *pstop_now = &stop_now;
 
@@ -400,14 +400,25 @@ void quf_table_sum_single(void *px_in, string &x_type, int n, int q, int *x_quf,
     // IF PROBLEM ONLY
     if (is_pblm)
     {
-        // The removed observations
-        res.push_back({"obs_removed"_nm = logicals(obs_removed)});
+        // Removed observations
 
-        // The removed clusters
+        // TODO: is there a better way? no push_back for an r_vector?
+        // convert obs_removed to a bool vector
+        // this works with gcc but not with clang: res.push_back({"obs_removed"_nm = logicals(obs_removed)});
+        vector<bool> obs_removed_tmp;
+        for(int i = 0; i < n; i++){
+            obs_removed_tmp.push_back(obs_removed[i]);
+        }
+
+        res.push_back({"obs_removed"_nm = obs_removed_tmp});
+
+        // Removed clusters
+
         writable::list res_tmp4;
         for(int i = 0; i < Q; i++){
             res_tmp4.push_back(doubles(x_removed_all[i]));
         }
+        
         res.push_back({"fe_removed"_nm = res_tmp4});
     }
 
