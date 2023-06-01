@@ -27,7 +27,7 @@ function debugr () {
 
     # run R in debug mode, but before that we compiled with debug symbols
     # see https://reside-ic.github.io/blog/debugging-memory-errors-with-valgrind-and-gdb/
-    Rscript -e "mpmisc::debug (); pkgbuild::compile_dll()"
+    Rscript -e "mpmisc::debug(); pkgbuild::compile_dll()"
     # R -d 'valgrind --leak-check=full --show-leak-kinds=all' -f $script
     R -d 'valgrind --leak-check=full' -f $script
 }
