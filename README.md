@@ -63,11 +63,13 @@ Of course the development of `fixest` has been inspired and pushed forward by (a
 
 ## Debugging
 
+Be sure to have run `install_github("mpadge/mpmisc")` and `apt install valgrind gdb`.
+
 On Ubuntu
 
 ```bash
 sudo apt install valgrind gdb
 cd ~/github/fixest2
 # see vscode-debug.sh
-clear && debugr dev/gdb-debug-2.R
+clear && debugr dev/gdb-debug-4.R
 ```
