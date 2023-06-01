@@ -903,7 +903,8 @@ std::string apply_escape_markup(const char *x)
 {
     // element 0 is the main character vector: it is never closed
 
-    int n = std::strlen(x);
+    // int n = std::strlen(x); doesn't work with g++ but works with clang :S
+    int n = strlen(x);
     std::vector<std::string> tmp_all(4, "");
     std::string tmp = "", res = "";
 
