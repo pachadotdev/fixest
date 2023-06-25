@@ -1077,7 +1077,7 @@ fixef.fixest = function(object, notes = getFixest_notes(), sorted = TRUE, nthrea
 
         # There are no references => no need to set nb_ref
     } else {
-        # We apply a Rcpp script to handle complicated cases (and we don't know beforehand if the input is one)
+        # We apply a cpp script to handle complicated cases (and we don't know beforehand if the input is one)
 
         dumMat = matrix(unlist(id_dummies_vect), N, Q) - 1
         orderCluster = matrix(unlist(lapply(id_dummies_vect, order)), N, Q) - 1
@@ -1094,8 +1094,9 @@ fixef.fixest = function(object, notes = getFixest_notes(), sorted = TRUE, nthrea
         # print(dumMat)
         # print(orderCluster)
 
-        storage.mode(dumMat) <- "integer"
-        storage.mode(orderCluster) <- "integer"
+        # THIS WON'T WORK
+        # storage.mode(dumMat) <- "integer"
+        # storage.mode(orderCluster) <- "integer"
 
         fixef_values = cpp_get_fe_gnl(Q, N, S, dumMat, nbCluster, orderCluster)
 
