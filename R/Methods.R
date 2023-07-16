@@ -1084,20 +1084,6 @@ fixef.fixest = function(object, notes = getFixest_notes(), sorted = TRUE, nthrea
 
         nbCluster = sapply(fixef_id, max)
 
-        # print(paste("Q", class(Q)))
-        # print(paste("N", class(N)))
-        # print(paste("S", class(S)))
-        # print(paste("dumMat", class(dumMat)))
-        # print(paste("nbCluster", class(nbCluster)))
-        # print(paste("orderCluster", class(orderCluster)))
-
-        # print(dumMat)
-        # print(orderCluster)
-
-        # THIS WON'T WORK
-        # storage.mode(dumMat) <- "integer"
-        # storage.mode(orderCluster) <- "integer"
-
         fixef_values = cpp_get_fe_gnl(Q, N, S, dumMat, nbCluster, orderCluster)
 
         # The algorithm is fast but may fail on some instance. We need to check

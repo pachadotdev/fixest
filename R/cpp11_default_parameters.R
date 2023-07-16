@@ -162,7 +162,7 @@ cpp_pgcd <- function(x) {
 }
 
 cpp_get_fe_gnl <- function(Q, N, sumFE, dumMat, cluster_sizes, obsCluster) {
-  .Call(`_fixest2_cpp_get_fe_gnl_`, as.integer(Q), as.integer(N), sumFE, dumMat, as.integer(cluster_sizes), obsCluster)
+  .Call(`_fixest2_cpp_get_fe_gnl_`, as.integer(Q), as.integer(N), sumFE, as.integer(dumMat), as.integer(cluster_sizes), as.integer(obsCluster))
 }
 
 cpp_escape_markup <- function(Rstr) {
