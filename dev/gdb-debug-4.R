@@ -63,29 +63,46 @@ print(paste("orderCluster", class(orderCluster)))
 print(head(dumMat))
 print(head(orderCluster))
 
-fixef_values <- cpp_get_fe_gnl(Q, N, S, dumMat, nbCluster, orderCluster)
-# Error: Invalid input type, expected 'integer' actual 'double'
-# cpp_get_fe_gnl is in cpp11_default_parameters.R L164 and
-# 05_01_misc_helpers.cpp L540
+# ERROR 1 ----
 
-# THIS WON'T WORK
-# storage.mode(dumMat) <- "integer"
-# storage.mode(orderCluster) <- "integer"
-
-# THIS WON'T WORK
-# convert the matrix to integer
-dumMat <- as.integer(dumMat)
 fixef_values <- cpp_get_fe_gnl(Q, N, S, dumMat, nbCluster, orderCluster)
-# Error: Invalid input type, expected 'integer' actual 'double'
 
-# THIS WON'T WORK
-storage.mode(dumMat) <- "integer"
-fixef_values <- cpp_get_fe_gnl(Q, N, S, dumMat, nbCluster, orderCluster)
-# Error: Invalid input type, expected 'integer' actual 'double'
-
-# THIS WON'T WORK BECAUSE THIS CRASHES R
-orderCluster <- as.integer(orderCluster)
-fixef_values <- cpp_get_fe_gnl(Q, N, S, dumMat, nbCluster, orderCluster)
+# OK L570OK L5954
+# 0
 # OK L612OK L6321
+
 #  *** caught segfault ***
-# address 0x55b575238478, cause 'memory not mapped'
+# address 0x5623b3cd0df0, cause 'memory not mapped'
+
+# Traceback:
+#  1: .Call(`_fixest2_cpp_get_fe_gnl_`, as.integer(Q), as.integer(N),     sumFE, as.integer(dumMat), as.integer(cluster_sizes), as.integer(obsCluster))
+#  2: cpp_get_fe_gnl(Q, N, S, dumMat, nbCluster, orderCluster)
+
+# Possible actions:
+# 1: abort (with core dump, if enabled)
+# 2: normal R exit
+# 3: exit R without saving workspace
+# 4: exit R saving workspace
+
+# ERROR 2 ----
+
+storage.mode(dumMat) <- "integer"
+storage.mode(orderCluster) <- "integer"
+fixef_values <- cpp_get_fe_gnl(Q, N, S, dumMat, nbCluster, orderCluster)
+
+# OK L570OK L5954
+# 0
+# OK L612OK L6321
+
+#  *** caught segfault ***
+# address 0x56144c29706c, cause 'memory not mapped'
+
+# Traceback:
+#  1: .Call(`_fixest2_cpp_get_fe_gnl_`, as.integer(Q), as.integer(N),     sumFE, as.integer(dumMat), as.integer(cluster_sizes), as.integer(obsCluster))
+#  2: cpp_get_fe_gnl(Q, N, S, dumMat, nbCluster, orderCluster)
+
+# Possible actions:
+# 1: abort (with core dump, if enabled)
+# 2: normal R exit
+# 3: exit R without saving workspace
+# 4: exit R saving workspace
