@@ -47,7 +47,7 @@ print(paste("orderCluster", class(orderCluster)))
 # ERROR 1 ----
 
 # THIS IS THE LINE THAT BREAKS FIXEF()
-# fixef_values <- cpp_get_fe_gnl(Q, N, S, dumMat, nbCluster, orderCluster)
+fixef_values <- cpp_get_fe_gnl(Q, N, S, dumMat, nbCluster, orderCluster)
 
 # ERROR MESSAGE:
 #
@@ -85,7 +85,7 @@ storage.mode(orderCluster) <- "integer"
 # address 0x56144c29706c, cause 'memory not mapped'
 #
 # Traceback:
-#  1: .Call(`_fixest2_cpp_get_fe_gnl_`, as.integer(Q), as.integer(N),     sumFE, as.integer(dumMat), as.integer(cluster_sizes), as.integer(obsCluster))
+#  1: .Call(`_fixest2_cpp_get_fe_gnl_`, as.integer(Q), as.integer(N), sumFE, as.integer(dumMat), as.integer(cluster_sizes), as.integer(obsCluster))
 #  2: cpp_get_fe_gnl(Q, N, S, dumMat, nbCluster, orderCluster)
 #
 # Possible actions:

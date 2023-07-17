@@ -63,9 +63,7 @@ Of course the development of `fixest` has been inspired and pushed forward by (a
 
 ## Debugging
 
-Be sure to have run `install_github("mpadge/mpmisc")` and `apt install valgrind gdb`.
-
-On Ubuntu
+Be sure to have run `install_github("mpadge/mpmisc")`, `apt install valgrind gdb`, and to put https://github.com/pachadotdev/fixest2/blob/cpp11_wip/vscode-debug.sh in your profile.
 
 ```bash
 sudo apt install valgrind gdb
