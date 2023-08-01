@@ -11,6 +11,7 @@ devtools::load_all()
 
 # the problem is in fixef.fixest function L882 Methods.R
 # https://github.com/pachadotdev/fixest2/blob/cpp11_wip/R/Methods.R#L882
+# that function calls https://github.com/pachadotdev/fixest2/blob/cpp11_wip/src/05_01_misc_helpers.cpp#L540
 
 # this is the same as to run fixef.fixest line by line
 # lines 924-1079 that do not apply for this case
