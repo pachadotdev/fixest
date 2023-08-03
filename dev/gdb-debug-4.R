@@ -5,7 +5,20 @@ devtools::load_all()
 
 # gravity_pois = fepois(Euros ~ log(dist_km) | Origin + Destination + Product + Year, trade)
 # fixedEffects = fixef(gravity_pois)
-# Error: Invalid input type, expected 'integer' actual 'double'
+#  *** caught segfault ***
+# address 0x55cf901cb924, cause 'memory not mapped'
+
+# Traceback:
+#  1: .Call(`_fixest2_cpp_get_fe_gnl_`, as.integer(Q), as.integer(N),     sumFE, dumMat, as.integer(cluster_sizes), obsCluster)
+#  2: cpp_get_fe_gnl(Q, N, S, dumMat, nbCluster, orderCluster)
+#  3: fixef.fixest(gravity_pois)
+#  4: fixef(gravity_pois)
+
+# Possible actions:
+# 1: abort (with core dump, if enabled)
+# 2: normal R exit
+# 3: exit R without saving workspace
+# 4: exit R saving workspace
 
 # NOW WE SEE IT LINE BY LINE ----
 
