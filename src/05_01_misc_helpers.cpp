@@ -596,8 +596,8 @@
     for (int q = 0; q < Q; q++)
     {
         // table cluster: nber of elements for each cluster class
-        writable::integers tableCluster;
-        tableCluster.push_back(cluster_sizes[q]);
+        writable::integers tableCluster(cluster_sizes.at(q));
+        
         for (int i = 0; i < N; i++)
         {
             k = dumMat(i, q);
