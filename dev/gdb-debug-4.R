@@ -65,10 +65,6 @@ print(paste("orderCluster", class(orderCluster)))
 fixef_values <- cpp_get_fe_gnl(Q, N, S, dumMat, nbCluster, orderCluster)
 
 # ERROR MESSAGE:
-#
-# OK L570OK L5954
-# 0
-# OK L612OK L6321
 # 
 #  *** caught segfault ***
 # address 0x5623b3cd0df0, cause 'memory not mapped'
@@ -91,10 +87,6 @@ storage.mode(orderCluster) <- "integer"
 # fixef_values <- cpp_get_fe_gnl(Q, N, S, dumMat, nbCluster, orderCluster)
 
 # ERROR MESSAGE:
-#
-# OK L570OK L5954
-# 0
-# OK L612OK L6321
 #
 #  *** caught segfault ***
 # address 0x56144c29706c, cause 'memory not mapped'
