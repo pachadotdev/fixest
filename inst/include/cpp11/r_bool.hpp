@@ -1,5 +1,5 @@
-// cpp11 version: 0.4.3
-// vendored on: 2023-05-22
+// cpp11 version: 0.4.6
+// vendored on: 2023-11-03
 #pragma once
 
 #include <limits>  // for numeric_limits
@@ -72,5 +72,12 @@ template <>
 inline r_bool na() {
   return NA_LOGICAL;
 }
+
+namespace traits {
+template <>
+struct get_underlying_type<r_bool> {
+  using type = int;
+};
+}  // namespace traits
 
 }  // namespace cpp11

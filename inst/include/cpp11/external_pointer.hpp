@@ -1,5 +1,5 @@
-// cpp11 version: 0.4.3
-// vendored on: 2023-05-22
+// cpp11 version: 0.4.6
+// vendored on: 2023-11-03
 #pragma once
 
 #include <cstddef>      // for nullptr_t, NULL
