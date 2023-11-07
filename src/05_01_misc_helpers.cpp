@@ -719,6 +719,7 @@
   }
 
   writable::doubles cluster_values(nb_coef);
+  // vector<double> cluster_values(nb_coef);
 
   // rcpp: integers cluster_visited(nb_coef);
   // cpp11: we cannot use () for vectors, we use []
@@ -800,6 +801,10 @@
 
   writable::integers id2do(N);
   writable::integers id2do_next(N);
+
+  // vector<int> id2do(N);
+  // vector<int> id2do_next(N);
+
   int nb2do = N, nb2do_next = N;
   for (int i = 0; i < nb2do; i++) {
     id2do[i] = i;  // [] vs ()
@@ -884,8 +889,13 @@
           // error: call of overloaded
           // ‘operator=(cpp11::writable::r_vector<int>::proxy)’ is ambiguous
 
-          int temp = id2do_next[i];
-          id2do[i] = temp;
+          // not either
+          // int temp = id2do_next[i];
+          // id2do[i] = temp;
+
+          // ok, I gave up and used vector<int> instead of writable::integers
+
+          id2do[i] = id2do_next[i];
         }
       }
       nb2do_next = 0;
@@ -930,10 +940,15 @@
   if (iter == iterMax) {
     Rprintf("Problem getting FE, maximum iterations reached (1st order loop).");
   }
+
   writable::list res(Q + 1);
+  // maybe create a list and push back to it instead
+  // writable::list res;
+
   int *pindex;
   for (int q = 0; q < Q; q++) {
     writable::doubles quoi(cluster_sizes[q]);
+    // vector<double> quoi(cluster_sizes[q]);
     pindex = pindex_cluster[q];
     // rcpp: for (k = 0; k < cluster_sizes(q); k++) {
     // cpp11: we cannot use () for vectors, we use []
@@ -945,16 +960,30 @@
       // ‘cpp11::writable::r_vector<double>::proxy’)
       // quoi[k] = cluster_values[index];
       // not quoi.operator[](k).operator=(cluster_values.operator[](index));
-      // either LOL
+      // either
+      // error as well
+      // double temp = cluster_values[index];
+      // quoi[k] = temp;
 
-      double temp = cluster_values[index];
-      quoi[k] = temp;
+      // ok, I gave up and used vector<double> instead of writable::doubles
+      // nope, we need doubles to push to list
+      quoi[k] = cluster_values[index];
     }
+
     // rcpp:: res(q) = quoi;
+    // after using vector<int/double> instead of writable::integers/doubles
+    // now it doesnt't like this
     res[q] = quoi;
+    // error: no match for ‘operator=’ (operand types are ‘cpp11::list’ and
+    // ‘std::vector<double>’)
+    // push back maybe?
+    // res.push_back({quoi});
   }
   // rcpp: res(Q) = nb_ref;
+  //  this fails
   res[Q] = nb_ref;
+  // push back maybe?
+  // res.push_back({nb_ref});
   return res;
 }
 
