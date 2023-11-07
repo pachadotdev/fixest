@@ -721,9 +721,9 @@
   writable::doubles cluster_values(nb_coef);
   // vector<double> cluster_values(nb_coef);
 
-  // rcpp: integers cluster_visited(nb_coef);
-  // cpp11: we cannot use () for vectors, we use []
-  integers cluster_visited[nb_coef];
+  // IntegerVector cluster_visited(nb_coef);
+  // integers cluster_visited(nb_coef);
+  // this is not used! PROBLEM???
 
   std::vector<int *> pindex_cluster(Q);
   std::vector<int> index_cluster(nb_coef);
@@ -894,8 +894,9 @@
           // id2do[i] = temp;
 
           // ok, I gave up and used vector<int> instead of writable::integers
+          // nope, it didn't work
 
-          id2do[i] = id2do_next[i];
+          id2do[i] = 0 + id2do_next[i];
         }
       }
       nb2do_next = 0;
@@ -967,7 +968,7 @@
 
       // ok, I gave up and used vector<double> instead of writable::doubles
       // nope, we need doubles to push to list
-      quoi[k] = cluster_values[index];
+      quoi[k] = 0 + cluster_values[index];
     }
 
     // rcpp:: res(q) = quoi;
