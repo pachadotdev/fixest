@@ -31,3 +31,5 @@ print(paste("nbCluster", length(nbCluster)))
 print(paste("orderCluster", paste("rows", dim(orderCluster)[1], "cols", dim(orderCluster)[2])))
 
 cpp11::cpp_source("dev/cpp_get_fe_gnl_.cpp")
+
+cpp_get_fe_gnl_(Q, N, S, dumMat, nbCluster, orderCluster)
