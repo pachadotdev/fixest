@@ -1,6 +1,6 @@
 # cpp_vendor() # run only when updating C++ headers
-clean_dll()
-cpp_register()
-document()
+devtools::clean_dll()
+cpp11::cpp_register()
+devtools::document()
 # install()
 load_all()
