@@ -160,18 +160,22 @@ You can set the default values of most arguments of [`coefplot`] with this funct
 # setFixest_coefplot()
 
 # Estimation
-est = feols(Petal.Length ~ Petal.Width + Sepal.Length +
-                Sepal.Width | Species, iris)
+est <- feols(Petal.Length ~ Petal.Width + Sepal.Length +
+  Sepal.Width | Species, iris)
 
 # Plot with default style
 coefplot(est)
 
 # Now we permanently change some arguments
-dict = c("Petal.Length"="Length (Petal)", "Petal.Width"="Width (Petal)",
-         "Sepal.Length"="Length (Sepal)", "Sepal.Width"="Width (Sepal)")
+dict <- c(
+  "Petal.Length" = "Length (Petal)", "Petal.Width" = "Width (Petal)",
+  "Sepal.Length" = "Length (Sepal)", "Sepal.Width" = "Width (Sepal)"
+)
 
-setFixest_coefplot(ci.col = 2, pt.col = "darkblue", ci.lwd = 3,
-                   pt.cex = 2, pt.pch = 15, ci.width = 0, dict = dict)
+setFixest_coefplot(
+  ci.col = 2, pt.col = "darkblue", ci.lwd = 3,
+  pt.cex = 2, pt.pch = 15, ci.width = 0, dict = dict
+)
 
 # Tadaaa!
 coefplot(est)

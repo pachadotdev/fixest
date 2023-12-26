@@ -58,9 +58,9 @@ The functions [`bin`] and [`ref`] are able to do the same thing, then why use on
 data(airquality)
 
 # A vector of months
-month_num = airquality$Month
-month_lab = c("may", "june", "july", "august", "september")
-month_fact = factor(month_num, labels = month_lab)
+month_num <- airquality$Month
+month_lab <- c("may", "june", "july", "august", "september")
+month_fact <- factor(month_num, labels = month_lab)
 table(month_num)
 table(month_fact)
 
@@ -77,15 +77,17 @@ table(ref(month_fact, "aug"))
 
 # You can rename the level on-the-fly
 # (Northern hemisphere specific!)
-table(ref(month_fact, .("Hot month"="aug",
-                        "Late summer" = "sept")))
+table(ref(month_fact, .(
+  "Hot month" = "aug",
+  "Late summer" = "sept"
+)))
 
 
 # Main use is in estimations:
-a = feols(Petal.Width ~ Petal.Length + Species, iris)
+a <- feols(Petal.Width ~ Petal.Length + Species, iris)
 
 # We change the reference
-b = feols(Petal.Width ~ Petal.Length + ref(Species, "vers"), iris)
+b <- feols(Petal.Width ~ Petal.Length + ref(Species, "vers"), iris)
 
 etable(a, b)
 
@@ -110,10 +112,10 @@ table(ref(month_fact, .(summer = "@jul|aug|sep")))
 
 # You can place a factor at the location you want
 #  by adding "@digit" in the name first:
-table(ref(month_num, .("@5"=5)))
+table(ref(month_num, .("@5" = 5)))
 
 # Same with renaming
-table(ref(month_num, .("@5 five"=5)))
+table(ref(month_num, .("@5 five" = 5)))
 
 }
 \seealso{

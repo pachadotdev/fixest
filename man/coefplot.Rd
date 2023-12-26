@@ -288,14 +288,14 @@ The argument `order` takes in a vector of regular expressions, the order will fo
 #
 
 # Estimation on Iris data with one fixed-effect (Species)
-est = feols(Petal.Length ~ Petal.Width + Sepal.Length +
-            Sepal.Width | Species, iris)
+est <- feols(Petal.Length ~ Petal.Width + Sepal.Length +
+  Sepal.Width | Species, iris)
 
 # Estimation results with clustered standard-errors
 # (the default when fixed-effects are present)
-est_clu = summary(est)
+est_clu <- summary(est)
 # Now with "regular" standard-errors
-est_std = summary(est, se = "iid")
+est_std <- summary(est, se = "iid")
 
 # You can plot the two results at once
 coefplot(list(est_clu, est_std))
@@ -311,14 +311,18 @@ coefplot(est, x.shift = -.2)
 
 # Second set of results: this time with
 #  standard-errors that are not clustered.
-coefplot(est, se = "iid", x.shift = .2,
-         add = TRUE, col = 2, ci.lty = 2, pch=15)
+coefplot(est,
+  se = "iid", x.shift = .2,
+  add = TRUE, col = 2, ci.lty = 2, pch = 15
+)
 
- # Note that we used 'se', an argument that will
- #  be passed to summary.fixest
+# Note that we used 'se', an argument that will
+#  be passed to summary.fixest
 
-legend("topright", col = 1:2, pch = 20, lwd = 1, lty = 1:2,
-       legend = c("Clustered", "IID"), title = "Standard-Errors")
+legend("topright",
+  col = 1:2, pch = 20, lwd = 1, lty = 1:2,
+  legend = c("Clustered", "IID"), title = "Standard-Errors"
+)
 
 
 #
@@ -329,10 +333,10 @@ legend("topright", col = 1:2, pch = 20, lwd = 1, lty = 1:2,
 # Now we estimate and plot the "yearly" treatment effects
 
 data(base_did)
-base_inter = base_did
+base_inter <- base_did
 
 # We interact the variable 'period' with the variable 'treat'
-est_did = feols(y ~ x1 + i(period, treat, 5) | id+period, base_inter)
+est_did <- feols(y ~ x1 + i(period, treat, 5) | id + period, base_inter)
 
 # In the estimation, the variable treat is interacted
 #  with each value of period but 5, set as a reference
@@ -363,18 +367,20 @@ iplot(est_did, ref.line = FALSE, pt.join = TRUE)
 # What if the interacted variable is not numeric?
 
 # Let's create a "month" variable
-all_months = c("aug", "sept", "oct", "nov", "dec", "jan",
-               "feb", "mar", "apr", "may", "jun", "jul")
-base_inter$period_month = all_months[base_inter$period]
+all_months <- c(
+  "aug", "sept", "oct", "nov", "dec", "jan",
+  "feb", "mar", "apr", "may", "jun", "jul"
+)
+base_inter$period_month <- all_months[base_inter$period]
 
 # The new estimation
-est = feols(y ~ x1 + i(period_month, treat, "oct") | id+period, base_inter)
+est <- feols(y ~ x1 + i(period_month, treat, "oct") | id + period, base_inter)
 # Since 'period_month' of type character, coefplot sorts it
 iplot(est)
 
 # To respect a plotting order, use a factor
-base_inter$month_factor = factor(base_inter$period_month, levels = all_months)
-est = feols(y ~ x1 + i(month_factor, treat, "oct") | id+period, base_inter)
+base_inter$month_factor <- factor(base_inter$period_month, levels = all_months)
+est <- feols(y ~ x1 + i(month_factor, treat, "oct") | id + period, base_inter)
 iplot(est)
 
 
@@ -387,14 +393,18 @@ iplot(est)
 # you can set *your* default by using the function
 # setFixest_coefplot()
 
-dict = c("Petal.Length"="Length (Petal)", "Petal.Width"="Width (Petal)",
-         "Sepal.Length"="Length (Sepal)", "Sepal.Width"="Width (Sepal)")
+dict <- c(
+  "Petal.Length" = "Length (Petal)", "Petal.Width" = "Width (Petal)",
+  "Sepal.Length" = "Length (Sepal)", "Sepal.Width" = "Width (Sepal)"
+)
 
-setFixest_coefplot(ci.col = 2, pt.col = "darkblue", ci.lwd = 3,
-                   pt.cex = 2, pt.pch = 15, ci.width = 0, dict = dict)
+setFixest_coefplot(
+  ci.col = 2, pt.col = "darkblue", ci.lwd = 3,
+  pt.cex = 2, pt.pch = 15, ci.width = 0, dict = dict
+)
 
-est = feols(Petal.Length ~ Petal.Width + Sepal.Length +
-                Sepal.Width + i(Species), iris)
+est <- feols(Petal.Length ~ Petal.Width + Sepal.Length +
+  Sepal.Width + i(Species), iris)
 
 # And that's it
 coefplot(est)
@@ -415,8 +425,8 @@ coefplot(est)
 # You can further use the special character "^^" to clean
 #  the beginning of the coef. name: particularly useful for factors
 
-est = feols(Petal.Length ~ Petal.Width + Sepal.Length +
-                Sepal.Width + Species, iris)
+est <- feols(Petal.Length ~ Petal.Width + Sepal.Length +
+  Sepal.Width + Species, iris)
 
 # No grouping:
 coefplot(est)

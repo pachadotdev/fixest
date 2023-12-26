@@ -1587,7 +1587,7 @@ feNmlm <- function(fml, data, family = c("poisson", "negbin", "logit", "gaussian
     # 1: are the estimated parameters at their bounds?
     coef_NL <- coef[nonlinear.params]
     isBounded <- rep(FALSE, length(params))
-    isBounded[1:length(coef_NL)] <- (coef_NL == lower_bound) | (coef_NL == upper_bound)
+    isBounded[seq_along(coef_NL)] <- (coef_NL == lower_bound) | (coef_NL == upper_bound)
 
     # 2: we save the bounds
     upper_bound_small <- upper_bound[is.finite(upper_bound)]

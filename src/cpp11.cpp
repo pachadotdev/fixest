@@ -286,10 +286,10 @@ extern "C" SEXP _fixest2_cpp_pgcd_(SEXP x) {
   END_CPP11
 }
 // 05_01_misc_helpers.cpp
-list cpp_get_fe_gnl_(int Q, int N, writable::doubles sumFE, writable::integers_matrix<> dumMat, writable::integers cluster_sizes, writable::integers_matrix<> obsCluster);
+list cpp_get_fe_gnl_(int Q, int N, doubles sumFE, integers_matrix<> dumMat, integers cluster_sizes, integers_matrix<> obsCluster);
 extern "C" SEXP _fixest2_cpp_get_fe_gnl_(SEXP Q, SEXP N, SEXP sumFE, SEXP dumMat, SEXP cluster_sizes, SEXP obsCluster) {
   BEGIN_CPP11
-    return cpp11::as_sexp(cpp_get_fe_gnl_(cpp11::as_cpp<cpp11::decay_t<int>>(Q), cpp11::as_cpp<cpp11::decay_t<int>>(N), cpp11::as_cpp<cpp11::decay_t<writable::doubles>>(sumFE), cpp11::as_cpp<cpp11::decay_t<writable::integers_matrix<>>>(dumMat), cpp11::as_cpp<cpp11::decay_t<writable::integers>>(cluster_sizes), cpp11::as_cpp<cpp11::decay_t<writable::integers_matrix<>>>(obsCluster)));
+    return cpp11::as_sexp(cpp_get_fe_gnl_(cpp11::as_cpp<cpp11::decay_t<int>>(Q), cpp11::as_cpp<cpp11::decay_t<int>>(N), cpp11::as_cpp<cpp11::decay_t<doubles>>(sumFE), cpp11::as_cpp<cpp11::decay_t<integers_matrix<>>>(dumMat), cpp11::as_cpp<cpp11::decay_t<integers>>(cluster_sizes), cpp11::as_cpp<cpp11::decay_t<integers_matrix<>>>(obsCluster)));
   END_CPP11
 }
 // 05_01_misc_helpers.cpp
@@ -579,6 +579,14 @@ extern "C" SEXP _fixest2_cpp_vcov_conley_(SEXP S, SEXP lon_rad, SEXP lat_rad, SE
     return cpp11::as_sexp(cpp_vcov_conley_(cpp11::as_cpp<cpp11::decay_t<doubles_matrix<>>>(S), cpp11::as_cpp<cpp11::decay_t<doubles>>(lon_rad), cpp11::as_cpp<cpp11::decay_t<doubles>>(lat_rad), cpp11::as_cpp<cpp11::decay_t<const int>>(distance), cpp11::as_cpp<cpp11::decay_t<const double>>(cutoff), cpp11::as_cpp<cpp11::decay_t<int>>(nthreads)));
   END_CPP11
 }
+// code.cpp
+void fun();
+extern "C" SEXP _fixest2_fun() {
+  BEGIN_CPP11
+    fun();
+    return R_NilValue;
+  END_CPP11
+}
 
 extern "C" {
 static const R_CallMethodDef CallEntries[] = {
@@ -661,6 +669,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_fixest2_cpppar_which_na_inf_vec_",       (DL_FUNC) &_fixest2_cpppar_which_na_inf_vec_,        2},
     {"_fixest2_cpppar_xbeta_",                  (DL_FUNC) &_fixest2_cpppar_xbeta_,                   3},
     {"_fixest2_cpppar_xwy_",                    (DL_FUNC) &_fixest2_cpppar_xwy_,                     4},
+    {"_fixest2_fun",                            (DL_FUNC) &_fixest2_fun,                             0},
     {"_fixest2_get_n_cells_",                   (DL_FUNC) &_fixest2_get_n_cells_,                    2},
     {"_fixest2_update_deriv_single_",           (DL_FUNC) &_fixest2_update_deriv_single_,            5},
     {"_fixest2_update_mu_single_cluster_",      (DL_FUNC) &_fixest2_update_mu_single_cluster_,      12},

@@ -29,7 +29,7 @@ devtools::load_all()
 # this is the same as to run fixef.fixest line by line
 # lines 924-1079 that do not apply for this case
 
-gravity_pois = fepois(Euros ~ log(dist_km) | Origin + Destination + Product + Year, trade)
+gravity_pois <- fepois(Euros ~ log(dist_km) | Origin + Destination + Product + Year, trade)
 
 object <- gravity_pois
 notes <- getFixest_notes()
@@ -51,6 +51,9 @@ dumMat <- matrix(unlist(id_dummies_vect), N, Q) - 1
 orderCluster <- matrix(unlist(lapply(id_dummies_vect, order)), N, Q) - 1
 nbCluster <- sapply(fixef_id, max)
 
+input <- list(Q = Q, N = N, S = S, dumMat = dumMat, nbCluster = nbCluster, orderCluster = orderCluster)
+saveRDS(input, "dev/input.rds")
+
 # check the data types
 print(paste("Q", class(Q)))
 print(paste("N", class(N)))
@@ -59,44 +62,12 @@ print(paste("dumMat", class(dumMat)))
 print(paste("nbCluster", class(nbCluster)))
 print(paste("orderCluster", class(orderCluster)))
 
-# ERROR 1 ----
-
-# THIS IS THE LINE THAT BREAKS FIXEF()
 fixef_values <- cpp_get_fe_gnl(Q, N, S, dumMat, nbCluster, orderCluster)
+# cpp11::cpp_source("dev/problem.cpp")
+# fixef_values <- problem(Q, N, S, dumMat, nbCluster, orderCluster)
 
-# ERROR MESSAGE:
-# 
-#  *** caught segfault ***
-# address 0x5623b3cd0df0, cause 'memory not mapped'
-# 
-# Traceback:
-#  1: .Call(`_fixest2_cpp_get_fe_gnl_`, as.integer(Q), as.integer(N),     sumFE, as.integer(dumMat), as.integer(cluster_sizes), as.integer(obsCluster))
-#  2: cpp_get_fe_gnl(Q, N, S, dumMat, nbCluster, orderCluster)
-# 
-# Possible actions:
-# 1: abort (with core dump, if enabled)
-# 2: normal R exit
-# 3: exit R without saving workspace
-# 4: exit R saving workspace
-
-# NOW WE TRY TO STORE THE MATRICES AS INTEGER-TYPE
-storage.mode(dumMat) <- "integer"
-storage.mode(orderCluster) <- "integer"
-
+# TRY TO STORE THE MATRICES AS INTEGER-TYPE
+# storage.mode(dumMat) <- "integer"
+# storage.mode(orderCluster) <- "integer"
 # THE FUNCTION BREAKS AGAIN
 # fixef_values <- cpp_get_fe_gnl(Q, N, S, dumMat, nbCluster, orderCluster)
-
-# ERROR MESSAGE:
-#
-#  *** caught segfault ***
-# address 0x56144c29706c, cause 'memory not mapped'
-#
-# Traceback:
-#  1: .Call(`_fixest2_cpp_get_fe_gnl_`, as.integer(Q), as.integer(N), sumFE, as.integer(dumMat), as.integer(cluster_sizes), as.integer(obsCluster))
-#  2: cpp_get_fe_gnl(Q, N, S, dumMat, nbCluster, orderCluster)
-#
-# Possible actions:
-# 1: abort (with core dump, if enabled)
-# 2: normal R exit
-# 3: exit R without saving workspace
-# 4: exit R saving workspace

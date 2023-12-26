@@ -327,3 +327,7 @@ cpp_driscoll_kraay_ <- function(S, w, time, T, nthreads) {
 cpp_vcov_conley_ <- function(S, lon_rad, lat_rad, distance, cutoff, nthreads) {
   .Call(`_fixest2_cpp_vcov_conley_`, S, lon_rad, lat_rad, distance, cutoff, nthreads)
 }
+
+fun <- function() {
+  invisible(.Call(`_fixest2_fun`))
+}

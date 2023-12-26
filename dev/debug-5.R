@@ -36,7 +36,7 @@ print(paste("dumMat", paste("rows", dim(dumMat)[1], "cols", dim(dumMat)[2])))
 print(paste("nbCluster", length(nbCluster)))
 print(paste("orderCluster", paste("rows", dim(orderCluster)[1], "cols", dim(orderCluster)[2])))
 
-fixef_values <- cpp_get_fe_gnl(Q, N, S, dumMat, nbCluster, orderCluster)
+cpp_get_fe_gnl(Q, N, S, dumMat, nbCluster, orderCluster)
 
 # # run 1 time
 
