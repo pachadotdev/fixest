@@ -69,5 +69,5 @@ Be sure to have run `install_github("mpadge/mpmisc")`, `apt install valgrind gdb
 sudo apt install valgrind gdb
 cd ~/github/fixest2
 # see vscode-debug.sh
-clear && debugr dev/gdb-debug-4.R
+clear && debugr dev/03_cpp11_incorrect_repeated_result.R
 ```

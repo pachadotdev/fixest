@@ -53,21 +53,3 @@ nbCluster <- sapply(fixef_id, max)
 
 input <- list(Q = Q, N = N, S = S, dumMat = dumMat, nbCluster = nbCluster, orderCluster = orderCluster)
 saveRDS(input, "dev/input.rds")
-
-# check the data types
-print(paste("Q", class(Q)))
-print(paste("N", class(N)))
-print(paste("S", class(S)))
-print(paste("dumMat", class(dumMat)))
-print(paste("nbCluster", class(nbCluster)))
-print(paste("orderCluster", class(orderCluster)))
-
-fixef_values <- cpp_get_fe_gnl(Q, N, S, dumMat, nbCluster, orderCluster)
-# cpp11::cpp_source("dev/problem.cpp")
-# fixef_values <- problem(Q, N, S, dumMat, nbCluster, orderCluster)
-
-# TRY TO STORE THE MATRICES AS INTEGER-TYPE
-# storage.mode(dumMat) <- "integer"
-# storage.mode(orderCluster) <- "integer"
-# THE FUNCTION BREAKS AGAIN
-# fixef_values <- cpp_get_fe_gnl(Q, N, S, dumMat, nbCluster, orderCluster)

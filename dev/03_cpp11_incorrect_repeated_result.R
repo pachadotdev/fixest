@@ -1,7 +1,3 @@
-if (!require("devtools")) { install.packages("devtools") }
-
-devtools::load_all()
-
 input <- readRDS("dev/input.rds")
 
 # explicitly convert to the right data types
@@ -36,7 +32,10 @@ print(paste("dumMat", paste("rows", dim(dumMat)[1], "cols", dim(dumMat)[2])))
 print(paste("nbCluster", length(nbCluster)))
 print(paste("orderCluster", paste("rows", dim(orderCluster)[1], "cols", dim(orderCluster)[2])))
 
-cpp_get_fe_gnl(Q, N, S, dumMat, nbCluster, orderCluster)
+# cpp11::cpp_source("dev/00_cpp11_get_fe_gnl.cpp")
+cpp11::cpp_source("dev/00_cpp11_get_fe_gnl_2.cpp")
+
+cpp11_get_fe_gnl(Q, N, S, dumMat, nbCluster, orderCluster)
 
 # # run 1 time
 
@@ -108,3 +107,5 @@ cpp_get_fe_gnl(Q, N, S, dumMat, nbCluster, orderCluster)
 
 # [[5]]
 # [1] 0 1 1 1
+
+# run again and R crashed
