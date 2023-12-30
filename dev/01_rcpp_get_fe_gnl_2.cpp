@@ -1,54 +1,51 @@
-#include <cpp11.hpp>
-#include <iostream>
+#include <Rcpp.h>
+
 #include <numeric>
 #include <vector>
 
-using namespace cpp11;
+using namespace Rcpp;
 using namespace std;
 
 void initializePindexCluster(vector<int *> &pindex_cluster,
                              vector<int> &index_cluster,
-                             const integers &cluster_sizes, int Q) {
+                             const IntegerVector &cluster_sizes, int Q) {
   pindex_cluster[0] = index_cluster.data();
   for (int q = 1; q < Q; q++) {
-    pindex_cluster[q] = pindex_cluster[q - 1] + cluster_sizes[q - 1];
+    pindex_cluster[q] = pindex_cluster[q - 1] + cluster_sizes(q - 1);
   }
 }
 
-integers calculateTableCluster(const integers_matrix<> &dumMat,
-                               const integers &cluster_sizes, int q, int N) {
-  writable::integers tableCluster(cluster_sizes[q]);
-  for (int i = 0; i < cluster_sizes[q]; i++) {
-    tableCluster[i] = 0;
-  }
-
+IntegerVector calculateTableCluster(const IntegerMatrix &dumMat,
+                                    const IntegerVector &cluster_sizes, int q,
+                                    int N) {
+  IntegerVector tableCluster(cluster_sizes(q));
   for (int i = 0; i < N; i++) {
     int k = dumMat(i, q);
-    tableCluster[k] += 1;  // the number of obs per case
+    tableCluster(k) += 1;  // the number of obs per case
   }
   return tableCluster;
 }
 
-void setClusterIndices(int q, const integers &cluster_sizes,
-                       const integers &tableCluster,
+void setClusterIndices(int q, const IntegerVector &cluster_sizes,
+                       const IntegerVector &tableCluster,
                        vector<int *> &pindex_cluster,
-                       writable::integers &start_cluster,
-                       writable::integers &end_cluster) {
-  for (int k = 0; k < cluster_sizes[q]; k++) {
+                       IntegerVector &start_cluster,
+                       IntegerVector &end_cluster) {
+  for (int k = 0; k < cluster_sizes(q); k++) {
     int *pindex = pindex_cluster[q];
     int index = pindex[k];
     if (k == 0) {
       start_cluster[index] = 0;
       end_cluster[index] = tableCluster[k];
     } else {
-      start_cluster[index] = static_cast<int>(end_cluster[index - 1]);
+      start_cluster[index] = end_cluster[index - 1];
       end_cluster[index] = end_cluster[index - 1] + tableCluster[k];
     }
   }
 }
 
-int calculateQuiMax(const integers &id2do, const integers &rowsums, int nb2do,
-                    int Q) {
+int calculateQuiMax(const Rcpp::IntegerVector &id2do,
+                    const Rcpp::IntegerVector &rowsums, int nb2do, int Q) {
   int qui_max = 0;
   int rs_max = -1;
   for (int i = 0; i < nb2do; i++) {
@@ -67,22 +64,18 @@ int calculateQuiMax(const integers &id2do, const integers &rowsums, int nb2do,
   return qui_max;
 }
 
-void updateId2do(int nb2do, writable::integers &id2do,
-                 const integers &id2do_next) {
-  // doesn't work with integers
-  // copy(id2do_next.begin(), id2do_next.begin() + nb2do, id2do.begin());
-  for (int i = 0; i < nb2do; ++i) {
-    id2do[i] = id2do_next[i];
-  }
+void updateId2do(int nb2do, Rcpp::IntegerVector &id2do,
+                 const Rcpp::IntegerVector &id2do_next) {
+  std::copy(id2do_next.begin(), id2do_next.begin() + nb2do, id2do.begin());
 }
 
-void updateClusterValues(int obs, int Q, writable::integers_matrix<> &mat_done,
-                         const integers_matrix<> &dumMat,
+void updateClusterValues(int obs, int Q, IntegerMatrix &mat_done,
+                         const IntegerMatrix &dumMat,
                          vector<int *> &pindex_cluster,
-                         writable::doubles &cluster_values,
-                         integers &start_cluster, integers &end_cluster,
-                         integers_matrix<> &obsCluster,
-                         writable::integers &rowsums, doubles &sumFE) {
+                         NumericVector &cluster_values,
+                         IntegerVector &start_cluster,
+                         IntegerVector &end_cluster, IntegerVector &obsCluster,
+                         IntegerVector &rowsums, NumericVector &sumFE) {
   int q = 0;
   while (mat_done(obs, q) != 0) {
     q++;
@@ -92,9 +85,9 @@ void updateClusterValues(int obs, int Q, writable::integers_matrix<> &mat_done,
   double other_value = 0;
   for (int l = 0; l < Q; l++) {
     int index = pindex_cluster[l][dumMat(obs, l)];
-    other_value += cluster_values[index];
+    other_value += cluster_values(index);
   }
-  cluster_values[index_select] = sumFE[obs] - other_value;
+  cluster_values(index_select) = sumFE(obs) - other_value;
   for (int j = start_cluster[index_select]; j < end_cluster[index_select];
        j++) {
     int obs = obsCluster(j, q);
@@ -103,74 +96,35 @@ void updateClusterValues(int obs, int Q, writable::integers_matrix<> &mat_done,
   }
 }
 
-[[cpp11::register]] list cpp11_get_fe_gnl(int Q, int N, doubles sumFE,
-                                          integers_matrix<> dumMat,
-                                          integers cluster_sizes,
-                                          integers_matrix<> obsCluster) {
+// [[Rcpp::export]]
+List rcpp_get_fe_gnl(int Q, int N, NumericVector sumFE, IntegerMatrix dumMat,
+                     IntegerVector cluster_sizes, IntegerVector obsCluster) {
   int iter = 0, iterMax = 10000;
   int iter_loop = 0, iterMax_loop = 10000;
+  IntegerVector nb_ref(Q);  // nb_ref takes the nb of elements set as ref
   int nb_coef = accumulate(cluster_sizes.begin(), cluster_sizes.end(), 0);
-
-  writable::integers nb_ref(Q);
-  for (int q = 0; q < Q; q++) {
-    nb_ref[q] = 0;
-  }
-
-  writable::doubles cluster_values(nb_coef);
-  for (int i = 0; i < nb_coef; i++) {
-    cluster_values[i] = 0;
-  }
-
-  // writable::integers cluster_visited(nb_coef);
-  // for (int i = 0; i < nb_coef; i++) {
-  //   cluster_visited[i] = 0;
-  // }
-
+  NumericVector cluster_values(nb_coef);
+  IntegerVector cluster_visited(nb_coef);
   vector<int *> pindex_cluster(Q);
   vector<int> index_cluster(nb_coef);
   iota(index_cluster.begin(), index_cluster.end(), 0);
   initializePindexCluster(pindex_cluster, index_cluster, cluster_sizes, Q);
-
-  writable::integers start_cluster(nb_coef), end_cluster(nb_coef);
-  for (int i = 0; i < nb_coef; i++) {
-    start_cluster[i] = 0;
-    end_cluster[i] = 0;
-  }
-
+  IntegerVector start_cluster(nb_coef), end_cluster(nb_coef);
   int index;
   int k;
   for (int q = 0; q < Q; q++) {
-    integers tableCluster = calculateTableCluster(dumMat, cluster_sizes, q, N);
+    IntegerVector tableCluster =
+        calculateTableCluster(dumMat, cluster_sizes, q, N);
     setClusterIndices(q, cluster_sizes, tableCluster, pindex_cluster,
                       start_cluster, end_cluster);
   }
-
-  writable::integers_matrix<> mat_done(N, Q);
-  for (int i = 0; i < N; i++) {
-    for (int q = 0; q < Q; q++) {
-      mat_done(i, q) = 0;
-    }
-  }
-
-  writable::integers rowsums(N);
-  for (int i = 0; i < N; i++) {
-    rowsums[i] = 0;
-  }
-
-  writable::integers id2do(N);
-  for (int i = 0; i < N; i++) {
-    id2do[i] = i;
-  }
-
-  writable::integers id2do_next(N);
-  for (int i = 0; i < N; i++) {
-    id2do_next[i] = i;
-  }
-
+  IntegerMatrix mat_done(N, Q);
+  IntegerVector rowsums(N, 0);
+  IntegerVector id2do(N);
+  IntegerVector id2do_next(N);
   int nb2do = N, nb2do_next = N;
   iota(id2do.begin(), id2do.end(), 0);
   iota(id2do_next.begin(), id2do_next.end(), 0);
-
   int qui_max, obs;
   int rs, rs_max;  // rs: row sum
   int id_cluster;
@@ -186,7 +140,6 @@ void updateClusterValues(int obs, int Q, writable::integers_matrix<> &mat_done,
       int qui_max = calculateQuiMax(id2do, rowsums, nb2do, Q);
     }
     first = true;
-
     for (int q = 0; q < Q; q++) {
       if (mat_done(qui_max, q) == 0) {
         if (first) {
@@ -195,13 +148,13 @@ void updateClusterValues(int obs, int Q, writable::integers_matrix<> &mat_done,
           id_cluster = dumMat(qui_max, q);
           int *pindex = pindex_cluster[q];
           index = pindex[id_cluster];
-          // VALGRIND ERROR: Conditional jump
+          cluster_values(index) = 0;
           for (int i = start_cluster[index]; i < end_cluster[index]; i++) {
             obs = obsCluster(i, q);
             mat_done(obs, q) = 1;
             rowsums[obs]++;
           }
-          nb_ref[q] += 1;
+          nb_ref(q)++;
         }
       }
     }
@@ -221,7 +174,6 @@ void updateClusterValues(int obs, int Q, writable::integers_matrix<> &mat_done,
           id2do_next[nb2do_next] = obs;
           nb2do_next++;
         } else if (rs == Q - 1) {
-          // VALGRIND ERROR: Conditional jump
           updateClusterValues(obs, Q, mat_done, dumMat, pindex_cluster,
                               cluster_values, start_cluster, end_cluster,
                               obsCluster, rowsums, sumFE);
@@ -237,17 +189,15 @@ void updateClusterValues(int obs, int Q, writable::integers_matrix<> &mat_done,
   if (iter == iterMax) {
     Rprintf("Problem getting FE");
   }
-
-  writable::list res(Q + 1);
+  List res(Q + 1);
   for (int q = 0; q < Q; q++) {
     auto &pindex = pindex_cluster[q];
-    writable::doubles quoi(cluster_sizes[q]);
+    NumericVector quoi(cluster_sizes[q]);
     for (int k = 0; k < cluster_sizes[q]; ++k) {
-      quoi[k] = static_cast<double>(cluster_values[pindex[k]]);
+      quoi[k] = cluster_values[pindex[k]];
     }
     res[q] = quoi;
   }
-  res[Q] = nb_ref;
-
+  res(Q) = nb_ref;
   return (res);
 }

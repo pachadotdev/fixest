@@ -286,13 +286,6 @@ extern "C" SEXP _fixest2_cpp_pgcd_(SEXP x) {
   END_CPP11
 }
 // 05_01_misc_helpers.cpp
-list cpp_get_fe_gnl_(int Q, int N, doubles sumFE, integers_matrix<> dumMat, integers cluster_sizes, integers_matrix<> obsCluster);
-extern "C" SEXP _fixest2_cpp_get_fe_gnl_(SEXP Q, SEXP N, SEXP sumFE, SEXP dumMat, SEXP cluster_sizes, SEXP obsCluster) {
-  BEGIN_CPP11
-    return cpp11::as_sexp(cpp_get_fe_gnl_(cpp11::as_cpp<cpp11::decay_t<int>>(Q), cpp11::as_cpp<cpp11::decay_t<int>>(N), cpp11::as_cpp<cpp11::decay_t<doubles>>(sumFE), cpp11::as_cpp<cpp11::decay_t<integers_matrix<>>>(dumMat), cpp11::as_cpp<cpp11::decay_t<integers>>(cluster_sizes), cpp11::as_cpp<cpp11::decay_t<integers_matrix<>>>(obsCluster)));
-  END_CPP11
-}
-// 05_01_misc_helpers.cpp
 strings cpp_escape_markup_(SEXP Rstr);
 extern "C" SEXP _fixest2_cpp_escape_markup_(SEXP Rstr) {
   BEGIN_CPP11
@@ -381,6 +374,13 @@ integers cpp_lag_obs_(integers id, integers time, int nlag);
 extern "C" SEXP _fixest2_cpp_lag_obs_(SEXP id, SEXP time, SEXP nlag) {
   BEGIN_CPP11
     return cpp11::as_sexp(cpp_lag_obs_(cpp11::as_cpp<cpp11::decay_t<integers>>(id), cpp11::as_cpp<cpp11::decay_t<integers>>(time), cpp11::as_cpp<cpp11::decay_t<int>>(nlag)));
+  END_CPP11
+}
+// 05_08_get_fe.cpp
+list cpp_get_fe_gnl_(int Q, int N, doubles sumFE, integers_matrix<> dumMat, integers cluster_sizes, integers_matrix<> obsCluster);
+extern "C" SEXP _fixest2_cpp_get_fe_gnl_(SEXP Q, SEXP N, SEXP sumFE, SEXP dumMat, SEXP cluster_sizes, SEXP obsCluster) {
+  BEGIN_CPP11
+    return cpp11::as_sexp(cpp_get_fe_gnl_(cpp11::as_cpp<cpp11::decay_t<int>>(Q), cpp11::as_cpp<cpp11::decay_t<int>>(N), cpp11::as_cpp<cpp11::decay_t<doubles>>(sumFE), cpp11::as_cpp<cpp11::decay_t<integers_matrix<>>>(dumMat), cpp11::as_cpp<cpp11::decay_t<integers>>(cluster_sizes), cpp11::as_cpp<cpp11::decay_t<integers_matrix<>>>(obsCluster)));
   END_CPP11
 }
 // 06_01_quf_helpers.cpp

@@ -160,10 +160,6 @@ cpp_pgcd_ <- function(x) {
   .Call(`_fixest2_cpp_pgcd_`, x)
 }
 
-cpp_get_fe_gnl_ <- function(Q, N, sumFE, dumMat, cluster_sizes, obsCluster) {
-  .Call(`_fixest2_cpp_get_fe_gnl_`, Q, N, sumFE, dumMat, cluster_sizes, obsCluster)
-}
-
 cpp_escape_markup_ <- function(Rstr) {
   .Call(`_fixest2_cpp_escape_markup_`, Rstr)
 }
@@ -214,6 +210,10 @@ cpp_tapply_vsum_ <- function(Q, x, dum) {
 
 cpp_lag_obs_ <- function(id, time, nlag) {
   .Call(`_fixest2_cpp_lag_obs_`, id, time, nlag)
+}
+
+cpp_get_fe_gnl_ <- function(Q, N, sumFE, dumMat, cluster_sizes, obsCluster) {
+  .Call(`_fixest2_cpp_get_fe_gnl_`, Q, N, sumFE, dumMat, cluster_sizes, obsCluster)
 }
 
 cpp_quf_gnl_ <- function(x) {

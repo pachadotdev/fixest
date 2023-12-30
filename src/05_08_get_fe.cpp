@@ -1,10 +1,4 @@
-#include <cpp11.hpp>
-#include <iostream>
-#include <numeric>
-#include <vector>
-
-using namespace cpp11;
-using namespace std;
+#include "05_0_misc.hpp"
 
 void initializePindexCluster(vector<int *> &pindex_cluster,
                              vector<int> &index_cluster,
@@ -103,10 +97,10 @@ void updateClusterValues(int obs, int Q, writable::integers_matrix<> &mat_done,
   }
 }
 
-[[cpp11::register]] list cpp11_get_fe_gnl(int Q, int N, doubles sumFE,
-                                          integers_matrix<> dumMat,
-                                          integers cluster_sizes,
-                                          integers_matrix<> obsCluster) {
+[[cpp11::register]] list cpp_get_fe_gnl_(int Q, int N, doubles sumFE,
+                                         integers_matrix<> dumMat,
+                                         integers cluster_sizes,
+                                         integers_matrix<> obsCluster) {
   int iter = 0, iterMax = 10000;
   int iter_loop = 0, iterMax_loop = 10000;
   int nb_coef = accumulate(cluster_sizes.begin(), cluster_sizes.end(), 0);
@@ -138,7 +132,6 @@ void updateClusterValues(int obs, int Q, writable::integers_matrix<> &mat_done,
   }
 
   int index;
-  int k;
   for (int q = 0; q < Q; q++) {
     integers tableCluster = calculateTableCluster(dumMat, cluster_sizes, q, N);
     setClusterIndices(q, cluster_sizes, tableCluster, pindex_cluster,
@@ -172,18 +165,15 @@ void updateClusterValues(int obs, int Q, writable::integers_matrix<> &mat_done,
   iota(id2do_next.begin(), id2do_next.end(), 0);
 
   int qui_max, obs;
-  int rs, rs_max;  // rs: row sum
+  int rs;  // rs: row sum
   int id_cluster;
-  double other_value;
   bool first;
   while (iter < iterMax) {
     iter++;
     if (iter == 1) {
       qui_max = 0;
     } else {
-      qui_max = 0;
-      rs_max = 0;
-      int qui_max = calculateQuiMax(id2do, rowsums, nb2do, Q);
+      qui_max = calculateQuiMax(id2do, rowsums, nb2do, Q);
     }
     first = true;
 
