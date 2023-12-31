@@ -120,7 +120,11 @@
   // we return indexes R style
 
   int n = x.size();
+
   writable::integers res(n_items);
+  for (int i = 0; i < n_items; ++i) {
+    res[i] = 0;
+  }
 
   for (int i = 0; i < n; ++i) {
     if (res[x[i] - 1] == 0) {
