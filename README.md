@@ -63,11 +63,8 @@ Of course the development of `fixest` has been inspired and pushed forward by (a
 
 ## Debugging
 
-Be sure to have run `install_github("mpadge/mpmisc")`, `apt install valgrind gdb`, and to put https://github.com/pachadotdev/fixest2/blob/cpp11_wip/vscode-debug.sh in your profile.
-
 ```bash
-sudo apt install valgrind gdb
+# sudo apt install valgrind
 cd ~/github/fixest2
-# see vscode-debug.sh
-clear && debugr dev/03_cpp11_incorrect_repeated_result.R
+clear && bash dev/test_memory_leaks.sh
 ```

@@ -1,8 +1,8 @@
-==19698== Memcheck, a memory error detector
-==19698== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==19698== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
-==19698== Command: /usr/lib/R/bin/exec/R -f dev/03_cpp11_incorrect_repeated_result.R
-==19698== 
+==30278== Memcheck, a memory error detector
+==30278== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==30278== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==30278== Command: /usr/lib/R/bin/exec/R -f dev/test_memory_leaks.r
+==30278== 
 
 R version 4.3.2 (2023-10-31) -- "Eye Holes"
 Copyright (C) 2023 The R Foundation for Statistical Computing
@@ -25,91 +25,304 @@ Type 'q()' to quit R.
 Loading required package: utils
 Tracing function "install.packages" in package "utils"
 Loading required package: usethis
-> input <- readRDS("dev/input.rds")
+> if (!require("devtools")) install.packages("devtools")
+> devtools::load_all()
+ℹ Loading fixest2
+(Permanently remove the following message with fixest_startup_msg(FALSE).)
+fixest 0.10.0:
+- vcov: new argument 'vcov' that replaces 'se' and 'cluster' in all functions
+(retro compatibility is ensured).
+- Breaking: arg. 'vcov' now comes after 'data'/'family', hence code using an
+offset w/t the arg. name may break (just use 'offset = stuff' now).
+- function 'dof()' has been renamed into 'ssc()' (i.e. small sample correction).
+From fixest 0.9.0 onward: BREAKING changes! 
+- In i():
+    + the first two arguments have been swapped! Now it's i(factor_var,
+    continuous_var) for interactions.
+    + argument 'drop' has been removed (put everything in 'ref' now).
+- In feglm(): 
+    + the default family becomes 'gaussian' to be in line with glm(). Hence, for
+    Poisson estimations, please use fepois() instead.
 > 
-> # explicitly convert to the right data types
+> # Simple example using trade data ----
 > 
-> Q <- as.integer(input$Q)
+> data(trade)
 > 
-> N <- as.integer(input$N)
+> # subset to 2015-2016
+> trade <- subset(trade, Year %in% c(2015, 2016))
 > 
-> S <- as.double(input$S)
+> gravity_ols <- feols(log(Euros) ~ log(dist_km) | Origin + Destination +
++   Product + Year, trade)
 > 
-> dumMat <- input$dumMat
-> storage.mode(dumMat) <- "integer"
+> gravity_pois <- fepois(Euros ~ log(dist_km) | Origin + Destination + Product +
++   Year, trade)
 > 
-> nbCluster <- as.integer(input$nbCluster)
+> gravity_negbin <- fenegbin(Euros ~ log(dist_km) | Origin + Destination +
++   Product + Year, trade)
 > 
-> orderCluster <- input$orderCluster
-> storage.mode(orderCluster) <- "integer"
+> summary(gravity_ols, vcov = "twoway")
+OLS estimation, Dep. Var.: log(Euros)
+Observations: 7,763 
+Fixed-effects: Origin: 15,  Destination: 15,  Product: 20,  Year: 2
+Standard-errors: Clustered (Origin & Destination) 
+             Estimate Std. Error  t value   Pr(>|t|)    
+log(dist_km) -2.09331   0.175617 -11.9197 1.0195e-08 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+RMSE: 1.70245     Adj. R2: 0.715632
+                Within R2: 0.214334
+> summary(gravity_ols, vcov = ~Product)
+OLS estimation, Dep. Var.: log(Euros)
+Observations: 7,763 
+Fixed-effects: Origin: 15,  Destination: 15,  Product: 20,  Year: 2
+Standard-errors: Clustered (Product) 
+             Estimate Std. Error  t value  Pr(>|t|)    
+log(dist_km) -2.09331   0.074682 -28.0295 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+RMSE: 1.70245     Adj. R2: 0.715632
+                Within R2: 0.214334
+> summary(gravity_ols, cluster = "Product")
+OLS estimation, Dep. Var.: log(Euros)
+Observations: 7,763 
+Fixed-effects: Origin: 15,  Destination: 15,  Product: 20,  Year: 2
+Standard-errors: Clustered (Product) 
+             Estimate Std. Error  t value  Pr(>|t|)    
+log(dist_km) -2.09331   0.074682 -28.0295 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+RMSE: 1.70245     Adj. R2: 0.715632
+                Within R2: 0.214334
+> summary(gravity_ols, cluster = ~Product)
+OLS estimation, Dep. Var.: log(Euros)
+Observations: 7,763 
+Fixed-effects: Origin: 15,  Destination: 15,  Product: 20,  Year: 2
+Standard-errors: Clustered (Product) 
+             Estimate Std. Error  t value  Pr(>|t|)    
+log(dist_km) -2.09331   0.074682 -28.0295 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+RMSE: 1.70245     Adj. R2: 0.715632
+                Within R2: 0.214334
 > 
-> # check the data types
-> print(paste("Q", class(Q)))
-[1] "Q integer"
-> print(paste("N", class(N)))
-[1] "N integer"
-> print(paste("S", class(S)))
-[1] "S numeric"
-> print(paste("dumMat", class(dumMat)))
-[1] "dumMat matrix" "dumMat array" 
-> print(paste("nbCluster", class(nbCluster)))
-[1] "nbCluster integer"
-> print(paste("orderCluster", class(orderCluster)))
-[1] "orderCluster matrix" "orderCluster array" 
+> summary(gravity_pois, vcov = "twoway")
+Poisson estimation, Dep. Var.: Euros
+Observations: 7,763 
+Fixed-effects: Origin: 15,  Destination: 15,  Product: 20,  Year: 2
+Standard-errors: Clustered (Origin & Destination) 
+             Estimate Std. Error  t value  Pr(>|t|)    
+log(dist_km) -1.51044   0.130572 -11.5679 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+Log-Likelihood: -1.567e+11   Adj. Pseudo R2: 0.768003
+           BIC:  3.133e+11     Squared Cor.: 0.624593
+> summary(gravity_pois, vcov = ~Product)
+Poisson estimation, Dep. Var.: Euros
+Observations: 7,763 
+Fixed-effects: Origin: 15,  Destination: 15,  Product: 20,  Year: 2
+Standard-errors: Clustered (Product) 
+             Estimate Std. Error  t value  Pr(>|t|)    
+log(dist_km) -1.51044   0.097639 -15.4696 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+Log-Likelihood: -1.567e+11   Adj. Pseudo R2: 0.768003
+           BIC:  3.133e+11     Squared Cor.: 0.624593
+> summary(gravity_pois, cluster = "Product")
+Poisson estimation, Dep. Var.: Euros
+Observations: 7,763 
+Fixed-effects: Origin: 15,  Destination: 15,  Product: 20,  Year: 2
+Standard-errors: Clustered (Product) 
+             Estimate Std. Error  t value  Pr(>|t|)    
+log(dist_km) -1.51044   0.097639 -15.4696 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+Log-Likelihood: -1.567e+11   Adj. Pseudo R2: 0.768003
+           BIC:  3.133e+11     Squared Cor.: 0.624593
+> summary(gravity_pois, cluster = ~Product)
+Poisson estimation, Dep. Var.: Euros
+Observations: 7,763 
+Fixed-effects: Origin: 15,  Destination: 15,  Product: 20,  Year: 2
+Standard-errors: Clustered (Product) 
+             Estimate Std. Error  t value  Pr(>|t|)    
+log(dist_km) -1.51044   0.097639 -15.4696 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+Log-Likelihood: -1.567e+11   Adj. Pseudo R2: 0.768003
+           BIC:  3.133e+11     Squared Cor.: 0.624593
 > 
-> # check dimensions
-> print(paste("Q", length(Q)))
-[1] "Q 1"
-> print(paste("N", length(N)))
-[1] "N 1"
-> print(paste("S", length(S)))
-[1] "S 38325"
-> print(paste("dumMat", paste("rows", dim(dumMat)[1], "cols", dim(dumMat)[2])))
-[1] "dumMat rows 38325 cols 4"
-> print(paste("nbCluster", length(nbCluster)))
-[1] "nbCluster 4"
-> print(paste("orderCluster", paste("rows", dim(orderCluster)[1], "cols", dim(orderCluster)[2])))
-[1] "orderCluster rows 38325 cols 4"
+> summary(gravity_negbin, vcov = "twoway")
+ML estimation, family = Negative Binomial, Dep. Var.: Euros
+Observations: 7,763 
+Fixed-effects: Origin: 15,  Destination: 15,  Product: 20,  Year: 2
+Standard-errors: Clustered (Origin & Destination) 
+             Estimate Std. Error  t value  Pr(>|t|)    
+log(dist_km) -1.70324   0.192281 -8.85808 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+Over-dispersion parameter: theta = 0.55731  
+Log-Likelihood: -132,024.1   Adj. Pseudo R2: 0.034365
+           BIC:  264,496.1     Squared Cor.: 0.426992
+> summary(gravity_negbin, vcov = ~Product)
+ML estimation, family = Negative Binomial, Dep. Var.: Euros
+Observations: 7,763 
+Fixed-effects: Origin: 15,  Destination: 15,  Product: 20,  Year: 2
+Standard-errors: Clustered (Product) 
+             Estimate Std. Error  t value  Pr(>|t|)    
+log(dist_km) -1.70324    0.10922 -15.5947 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+Over-dispersion parameter: theta = 0.55731  
+Log-Likelihood: -132,024.1   Adj. Pseudo R2: 0.034365
+           BIC:  264,496.1     Squared Cor.: 0.426992
+> summary(gravity_negbin, cluster = "Product")
+ML estimation, family = Negative Binomial, Dep. Var.: Euros
+Observations: 7,763 
+Fixed-effects: Origin: 15,  Destination: 15,  Product: 20,  Year: 2
+Standard-errors: Clustered (Product) 
+             Estimate Std. Error  t value  Pr(>|t|)    
+log(dist_km) -1.70324    0.10922 -15.5947 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+Over-dispersion parameter: theta = 0.55731  
+Log-Likelihood: -132,024.1   Adj. Pseudo R2: 0.034365
+           BIC:  264,496.1     Squared Cor.: 0.426992
+> summary(gravity_negbin, cluster = ~Product)
+ML estimation, family = Negative Binomial, Dep. Var.: Euros
+Observations: 7,763 
+Fixed-effects: Origin: 15,  Destination: 15,  Product: 20,  Year: 2
+Standard-errors: Clustered (Product) 
+             Estimate Std. Error  t value  Pr(>|t|)    
+log(dist_km) -1.70324    0.10922 -15.5947 < 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+Over-dispersion parameter: theta = 0.55731  
+Log-Likelihood: -132,024.1   Adj. Pseudo R2: 0.034365
+           BIC:  264,496.1     Squared Cor.: 0.426992
 > 
-> # cpp11::cpp_source("dev/00_cpp11_get_fe_gnl.cpp")
-> cpp11::cpp_source("dev/00_cpp11_get_fe_gnl_2.cpp")
-> 
-> cpp_get_fe_gnl_(Q, N, S, dumMat, nbCluster, orderCluster)
-[[1]]
- [1] 23.25143 22.44476 24.43460 20.23023 24.32840 23.19499 23.08105 23.75072
- [9] 24.67546 21.64615 24.96690 24.70769 23.56068 22.50802 23.44093
+> fixef(gravity_ols)
+$Origin
+      AT       BE       DE       DK       ES       FI       FR       GB 
+22.78090 24.72260 26.25004 24.04215 25.88812 22.13056 25.85174 24.78992 
+      GR       IE       IT       LU       NL       PT       SE 
+23.10831 22.67407 25.58418 19.68102 25.85746 23.37097 23.67324 
 
-[[2]]
- [1] 3.570083 2.552345 3.230585 0.000000 4.217882 2.588554 3.143755 4.064073
- [9] 4.168774 2.817644 4.043327 4.322875 2.695877 2.435895 2.451105
+$Destination
+      AT       BE       DE       DK       ES       FI       FR       GB 
+3.073390 3.892503 5.699235 3.720129 5.745865 3.995607 5.503352 5.150106 
+      GR       IE       IT       LU       NL       PT       SE 
+4.086007 2.965578 5.260367 0.000000 5.168845 3.866198 4.728687 
 
-[[3]]
- [1]  0.00000000  1.41436908  0.65624654  1.44923309 -1.52073341  0.24061915
- [7]  0.90627290  0.99818202 -0.43707295  0.38013238 -0.69887170 -0.09549963
-[13] -1.94791717 -4.43050543  0.69615767  0.33033306  0.07365566  0.49554792
-[19]  0.94009439  0.80754214
+$Product
+         1          2          3          4          5          6          7 
+ 0.0000000  2.7210066  2.1176140  3.2631068 -0.2498716  0.2620678  1.8258501 
+         8          9         10         11         12         13         14 
+ 2.1856435  0.7907786  1.2749119  0.4896358  0.8095704 -0.7007706 -3.6823831 
+        15         16         17         18         19         20 
+ 2.0196581  1.9833864  1.6894354  1.7438662  2.9383829  2.5641966 
 
-[[4]]
- [1] 0.000000000 0.069122284 0.005225473 0.073308208 0.163013386 0.192605170
- [7] 0.230629376 0.242605404 0.282800683 0.310325692
+$Year
+      2015       2016 
+0.00000000 0.04884659 
 
-[[5]]
-[1] 0 1 1 1
+attr(,"class")
+[1] "fixest.fixef" "list"        
+attr(,"references")
+     Origin Destination     Product        Year 
+          0           1           1           1 
+attr(,"exponential")
+[1] FALSE
+> fixef(gravity_pois)
+$Origin
+      AT       BE       DE       DK       ES       FI       FR       GB 
+22.69473 23.70576 24.82823 23.49723 25.18537 21.80104 24.70974 23.87860 
+      GR       IE       IT       LU       NL       PT       SE 
+23.28633 23.37247 24.47911 20.39719 24.58320 22.58856 23.52215 
 
+$Destination
+      AT       BE       DE       DK       ES       FI       FR       GB 
+2.444310 2.704139 4.351476 2.410524 4.049681 2.819979 4.149364 4.093035 
+      GR       IE       IT       LU       NL       PT       SE 
+2.901212 2.643809 4.140253 0.000000 3.273400 2.480531 3.614392 
+
+$Product
+          1           2           3           4           5           6 
+ 0.00000000  1.36527662  0.75182118  1.41810088 -1.49459042  0.23785655 
+          7           8           9          10          11          12 
+ 0.96136725  1.13051331 -0.21811830  0.25615677 -0.68396399 -0.07087864 
+         13          14          15          16          17          18 
+-1.85625745 -4.37639473  0.70240923  0.38948925  0.01502615  0.66112141 
+         19          20 
+ 1.02029789  0.85046557 
+
+$Year
+      2015       2016 
+0.00000000 0.02752376 
+
+attr(,"class")
+[1] "fixest.fixef" "list"        
+attr(,"references")
+     Origin Destination     Product        Year 
+          0           1           1           1 
+attr(,"exponential")
+[1] TRUE
+> fixef(gravity_negbin)
+$Origin
+      AT       BE       DE       DK       ES       FI       FR       GB 
+22.43408 23.99005 25.25177 23.86479 25.26002 22.36955 25.06822 24.06894 
+      GR       IE       IT       LU       NL       PT       SE 
+23.11606 23.06108 24.67797 20.74672 25.24491 23.72461 23.65669 
+
+$Destination
+      AT       BE       DE       DK       ES       FI       FR       GB 
+2.359675 3.232995 4.873952 3.266035 4.398614 3.087199 4.323786 4.388784 
+      GR       IE       IT       LU       NL       PT       SE 
+3.171263 2.532454 4.433821 0.000000 3.825526 3.192125 3.901744 
+
+$Product
+          1           2           3           4           5           6 
+ 0.00000000  2.05924653  2.29191734  2.36616331 -0.43174442  0.19991602 
+          7           8           9          10          11          12 
+ 1.32260496  1.70525856  0.42821789  1.13199605 -0.26160952  0.04686544 
+         13          14          15          16          17          18 
+-1.03638616 -3.26719737  1.31506341  1.02319610  0.92275591  1.19313505 
+         19          20 
+ 1.74339344  1.74287945 
+
+$Year
+      2015       2016 
+0.00000000 0.02373148 
+
+attr(,"class")
+[1] "fixest.fixef" "list"        
+attr(,"references")
+     Origin Destination     Product        Year 
+          0           1           1           1 
+attr(,"exponential")
+[1] TRUE
 > 
-==19698== 
-==19698== HEAP SUMMARY:
-==19698==     in use at exit: 99,389,917 bytes in 20,271 blocks
-==19698==   total heap usage: 81,103 allocs, 60,832 frees, 192,449,400 bytes allocated
-==19698== 
-==19698== LEAK SUMMARY:
-==19698==    definitely lost: 0 bytes in 0 blocks
-==19698==    indirectly lost: 0 bytes in 0 blocks
-==19698==      possibly lost: 0 bytes in 0 blocks
-==19698==    still reachable: 99,389,917 bytes in 20,271 blocks
-==19698==                       of which reachable via heuristic:
-==19698==                         newarray           : 4,264 bytes in 1 blocks
-==19698==         suppressed: 0 bytes in 0 blocks
-==19698== Rerun with --leak-check=full to see details of leaked memory
-==19698== 
-==19698== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+> # Simple example using iris + factor partition ----
+> 
+> nm <- names(iris)
+> 
+> fit1 <- feols(.[nm[1]] ~ .[nm[2:4]], iris, fsplit = ~Species)
+> fit2 <- fepois(.[nm[1]] ~ .[nm[2:4]], iris, fsplit = ~Species)
+> fit3 <- fenegbin(.[nm[1]] ~ .[nm[2:4]], iris, fsplit = ~Species)
+Notes from the estimations:
+[x 4] Very high value of theta (10000). There is no sign of overdispersion, you may consider a Poisson model.
+> 
+==30278== 
+==30278== HEAP SUMMARY:
+==30278==     in use at exit: 204,922,863 bytes in 35,021 blocks
+==30278==   total heap usage: 537,630 allocs, 502,609 frees, 1,219,816,587 bytes allocated
+==30278== 
+==30278== LEAK SUMMARY:
+==30278==    definitely lost: 0 bytes in 0 blocks
+==30278==    indirectly lost: 0 bytes in 0 blocks
+==30278==      possibly lost: 1,008 bytes in 3 blocks
+==30278==    still reachable: 204,921,855 bytes in 35,018 blocks
+==30278==                       of which reachable via heuristic:
+==30278==                         newarray           : 4,264 bytes in 1 blocks
+==30278==         suppressed: 0 bytes in 0 blocks
+==30278== Rerun with --leak-check=full to see details of leaked memory
+==30278== 
+==30278== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
