@@ -41,7 +41,7 @@ cpp_conv_acc_gnl <- function(family, iterMax, diffMax, diffMax_NR, theta, nb_clu
   .Call(`_fixest2_cpp_conv_acc_gnl_`, as.integer(family), as.integer(iterMax), diffMax, diffMax_NR, theta, nb_cluster_all, lhs, mu_init, dum_vector, tableCluster_vector, sum_y_vector, cumtable_vector, obsCluster_vector, as.integer(nthreads))
 }
 
-cpp_conv_seq_gnl <- function(family, iterMax, diffMax, diffMax_NR, theta, nb_cluster_all, lhs, mu_init, dum_vector, tableCluster_vector, sum_y_vector, cumtable_vector, obsCluster_vector, nthreads  = 1L) {
+cpp_conv_seq_gnl <- function(family, iterMax, diffMax, diffMax_NR, theta, nb_cluster_all, lhs, mu_init, dum_vector, tableCluster_vector, sum_y_vector, cumtable_vector, obsCluster_vector, nthreads = 1L) {
   .Call(`_fixest2_cpp_conv_seq_gnl_`, as.integer(family), as.integer(iterMax), diffMax, diffMax_NR, theta, nb_cluster_all, lhs, mu_init, dum_vector, tableCluster_vector, sum_y_vector, cumtable_vector, obsCluster_vector, as.integer(nthreads))
 }
 
@@ -61,11 +61,11 @@ cpp_conv_seq_gau_2 <- function(n_i, n_j, n_cells, r_mat_row, r_mat_col, r_mat_va
   .Call(`_fixest2_cpp_conv_seq_gau_2_`, as.integer(n_i), as.integer(n_j), as.integer(n_cells), r_mat_row, r_mat_col, r_mat_value_Ab, r_mat_value_Ba, dum_vector, lhs, invTableCluster_vector, as.integer(iterMax), diffMax, mu_in)
 }
 
-cpp_which_na_inf <- function(x, nthreads  = 1L) {
+cpp_which_na_inf <- function(x, nthreads = 1L) {
   .Call(`_fixest2_cpp_which_na_inf_`, x, as.integer(nthreads))
 }
 
-cpp_demean <- function(y, X_raw, r_weights, iterMax, diffMax, r_nb_id_Q, fe_id_list, table_id_I, slope_flag_Q, slope_vars_list, r_init, nthreads  = 1L, save_fixef = FALSE) {
+cpp_demean <- function(y, X_raw, r_weights, iterMax, diffMax, r_nb_id_Q, fe_id_list, table_id_I, slope_flag_Q, slope_vars_list, r_init, nthreads = 1L, save_fixef = FALSE) {
   .Call(`_fixest2_cpp_demean_`, y, X_raw, r_weights, as.integer(iterMax), diffMax, r_nb_id_Q, fe_id_list, table_id_I, slope_flag_Q, slope_vars_list, r_init, as.integer(nthreads), save_fixef)
 }
 
@@ -85,15 +85,15 @@ cpp_paste_conditional <- function(x, id, n) {
   .Call(`_fixest2_cpp_paste_conditional_`, x, as.integer(id), as.integer(n))
 }
 
-cpp_cholesky <- function(X, tol, nthreads  = 1L) {
+cpp_cholesky <- function(X, tol, nthreads = 1L) {
   .Call(`_fixest2_cpp_cholesky_`, X, tol, as.integer(nthreads))
 }
 
-cpp_sparse_products <- function(X, w, y, correct_0w = FALSE, nthreads  = 1L) {
+cpp_sparse_products <- function(X, w, y, correct_0w = FALSE, nthreads = 1L) {
   .Call(`_fixest2_cpp_sparse_products_`, X, w, y, correct_0w, as.integer(nthreads))
 }
 
-cpppar_crossprod <- function(X, w, nthreads  = 1L) {
+cpppar_crossprod <- function(X, w, nthreads = 1L) {
   .Call(`_fixest2_cpppar_crossprod_`, X, w, as.integer(nthreads))
 }
 
@@ -101,15 +101,15 @@ cpp_mat_reconstruct <- function(X, id_excl) {
   .Call(`_fixest2_cpp_mat_reconstruct_`, X, id_excl)
 }
 
-cpp_iv_products <- function(X, y, Z, u, w, nthreads  = 1L) {
+cpp_iv_products <- function(X, y, Z, u, w, nthreads = 1L) {
   .Call(`_fixest2_cpp_iv_products_`, X, y, Z, u, w, as.integer(nthreads))
 }
 
-cpp_iv_product_completion <- function(XtX, Xty, X, y, U, w, nthreads  = 1L) {
+cpp_iv_product_completion <- function(XtX, Xty, X, y, U, w, nthreads = 1L) {
   .Call(`_fixest2_cpp_iv_product_completion_`, XtX, Xty, X, y, U, w, as.integer(nthreads))
 }
 
-cpp_iv_resid <- function(resid_2nd, coef, resid_1st, is_int, nthreads  = 1L) {
+cpp_iv_resid <- function(resid_2nd, coef, resid_1st, is_int, nthreads = 1L) {
   .Call(`_fixest2_cpp_iv_resid_`, resid_2nd, coef, resid_1st, is_int, as.integer(nthreads))
 }
 
@@ -188,7 +188,13 @@ cpp_log_a_exp <- function(a, mu, exp_mu) {
 }
 
 cpp_partialDerivative_other <- function(iterMax, Q, N, epsDeriv, ll_d2, dx_dother, init, dumMat, nbCluster) {
-  .Call(`_fixest2_cpp_partialDerivative_other_`, as.integer(iterMax), as.integer(Q), as.integer(N), epsDeriv, ll_d2, dx_dother, init, dumMat, as.integer(nbCluster))
+  # change matrix storage mode
+  storage.mode(dumMat) <- "integer"
+
+  .Call(
+    `_fixest2_cpp_partialDerivative_other_`, as.integer(iterMax), as.integer(Q),
+    as.integer(N), epsDeriv, ll_d2, dx_dother, init, dumMat, as.integer(nbCluster)
+  )
 }
 
 cpp_table <- function(Q, dum) {

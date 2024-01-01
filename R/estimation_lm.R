@@ -509,7 +509,6 @@ feols <- function(fml, data, vcov, weights, offset, subset, split, fsplit, split
 
   do_multi_fixef <- get("do_multi_fixef", env)
   if (do_multi_fixef) {
-    print("CHECK HERE")
     res <- multi_fixef(env, feols)
 
     return(res)
@@ -987,7 +986,6 @@ feols <- function(fml, data, vcov, weights, offset, subset, split, fsplit, split
               }
             } else {
               if (isFixef) {
-                print("CHECK HERE")
                 my_res <- feols(
                   env = current_env, xwx = xwx[qui_X, qui_X, drop = FALSE], xwy = xwy[[ii]][qui_X],
                   X_demean = X_demean[, qui_X, drop = FALSE],
@@ -1864,7 +1862,6 @@ feols <- function(fml, data, vcov, weights, offset, subset, split, fsplit, split
       fvd <- res$fitted.values_demean
     }
 
-    print("CHECK HERE")
     res <- summary(res, vcov = vcov, agg = agg, ssc = ssc, lean = lean, summary_flags = summary_flags)
 
     if (isTRUE(dots$iv_call) && lean) {
@@ -2649,7 +2646,6 @@ multi_fixef <- function(env, estfun) {
       my_env_est <- reshape_env(env)
     }
 
-    print("CHECK HERE")
     data_results[[i]] <- estfun(env = my_env_est)
   }
 

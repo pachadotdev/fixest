@@ -2966,13 +2966,13 @@ fixest_env = function(fml, data, family = c("poisson", "negbin", "logit", "gauss
             mu = eval(nl.call, envir = envNL)
         }
 
-        # On sauvegarde les valeurs de la partie non lineaire
-        assign("nbMaxSave", 2, env) # nombre maximal de valeurs a sauvegarder
-        assign("nbSave", 1, env)  # nombre de valeurs totales sauvegardees
+        # We save the values of the non-linear part
+        assign("nbMaxSave", 2, env) # maximum number of values to save
+        assign("nbSave", 1, env)  # number of total values saved
         assign("savedCoef", list(start[nonlinear.params]), env)
         assign("savedValue", list(mu), env)
 
-        # Mise en place du calcul du gradient
+        # Setting up the gradient calculation
         gradient = femlm_gradient
         hessian = NULL
         if(useHessian) hessian = femlm_hessian

@@ -312,7 +312,7 @@ femlm_ll <- function(coef, env) {
   # 	stop("Convergence.")
   # }
 
-  return(-ll) # je retourne -ll car la fonction d'optimisation minimise
+  return(-ll) # return -ll because the optimisation function minimises
 }
 
 evalNLpart <- function(coef, env) {

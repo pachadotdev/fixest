@@ -584,7 +584,6 @@ summary.fixest = function(object, vcov = NULL, cluster = NULL, ssc = NULL, .vcov
         vcov = object$cov.scaled
 
     } else {
-        print("CHECK HERE")
         vcov = vcov.fixest(object, vcov = vcov, ssc = ssc, forceCovariance = forceCovariance,
                            keepBounded = keepBounded, nthreads = nthreads,
                            attr = TRUE, se = se, cluster = cluster, ...)

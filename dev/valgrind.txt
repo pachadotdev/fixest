@@ -1,8 +1,8 @@
-==48737== Memcheck, a memory error detector
-==48737== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==48737== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
-==48737== Command: /usr/lib/R/bin/exec/R -f dev/03_cpp11_incorrect_repeated_result.R
-==48737== 
+==19698== Memcheck, a memory error detector
+==19698== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==19698== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==19698== Command: /usr/lib/R/bin/exec/R -f dev/03_cpp11_incorrect_repeated_result.R
+==19698== 
 
 R version 4.3.2 (2023-10-31) -- "Eye Holes"
 Copyright (C) 2023 The R Foundation for Statistical Computing
@@ -74,7 +74,7 @@ Loading required package: usethis
 > # cpp11::cpp_source("dev/00_cpp11_get_fe_gnl.cpp")
 > cpp11::cpp_source("dev/00_cpp11_get_fe_gnl_2.cpp")
 > 
-> cpp11_get_fe_gnl(Q, N, S, dumMat, nbCluster, orderCluster)
+> cpp_get_fe_gnl_(Q, N, S, dumMat, nbCluster, orderCluster)
 [[1]]
  [1] 23.25143 22.44476 24.43460 20.23023 24.32840 23.19499 23.08105 23.75072
  [9] 24.67546 21.64615 24.96690 24.70769 23.56068 22.50802 23.44093
@@ -97,19 +97,19 @@ Loading required package: usethis
 [1] 0 1 1 1
 
 > 
-==48737== 
-==48737== HEAP SUMMARY:
-==48737==     in use at exit: 99,390,822 bytes in 20,271 blocks
-==48737==   total heap usage: 81,142 allocs, 60,871 frees, 192,463,369 bytes allocated
-==48737== 
-==48737== LEAK SUMMARY:
-==48737==    definitely lost: 0 bytes in 0 blocks
-==48737==    indirectly lost: 0 bytes in 0 blocks
-==48737==      possibly lost: 0 bytes in 0 blocks
-==48737==    still reachable: 99,390,822 bytes in 20,271 blocks
-==48737==                       of which reachable via heuristic:
-==48737==                         newarray           : 4,264 bytes in 1 blocks
-==48737==         suppressed: 0 bytes in 0 blocks
-==48737== Rerun with --leak-check=full to see details of leaked memory
-==48737== 
-==48737== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==19698== 
+==19698== HEAP SUMMARY:
+==19698==     in use at exit: 99,389,917 bytes in 20,271 blocks
+==19698==   total heap usage: 81,103 allocs, 60,832 frees, 192,449,400 bytes allocated
+==19698== 
+==19698== LEAK SUMMARY:
+==19698==    definitely lost: 0 bytes in 0 blocks
+==19698==    indirectly lost: 0 bytes in 0 blocks
+==19698==      possibly lost: 0 bytes in 0 blocks
+==19698==    still reachable: 99,389,917 bytes in 20,271 blocks
+==19698==                       of which reachable via heuristic:
+==19698==                         newarray           : 4,264 bytes in 1 blocks
+==19698==         suppressed: 0 bytes in 0 blocks
+==19698== Rerun with --leak-check=full to see details of leaked memory
+==19698== 
+==19698== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
