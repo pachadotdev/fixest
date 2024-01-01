@@ -1,5 +1,5 @@
-// cpp11 version: 0.4.6.9000
-// vendored on: 2023-12-25
+// cpp11 version: 0.4.7
+// vendored on: 2024-01-01
 #pragma once
 
 #include <csetjmp>    // for longjmp, setjmp, jmp_buf
@@ -281,7 +281,9 @@ static struct {
   void print() {
     static SEXP list = get_preserve_list();
     for (SEXP cell = list; cell != R_NilValue; cell = CDR(cell)) {
-      REprintf("%x CAR: %x CDR: %x TAG: %x\n", cell, CAR(cell), CDR(cell), TAG(cell));
+      REprintf("%p CAR: %p CDR: %p TAG: %p\n", reinterpret_cast<void*>(cell),
+               reinterpret_cast<void*>(CAR(cell)), reinterpret_cast<void*>(CDR(cell)),
+               reinterpret_cast<void*>(TAG(cell)));
     }
     REprintf("---\n");
   }
