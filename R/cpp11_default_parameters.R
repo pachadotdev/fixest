@@ -85,7 +85,7 @@ cpp_paste_conditional <- function(x, id, n) {
   .Call(`_fixest2_cpp_paste_conditional_`, x, as.integer(id), as.integer(n))
 }
 
-cpp_cholesky <- function(X, tol, nthreads = 1L) {
+cpp_cholesky <- function(X, tol = 1e-10, nthreads = 1L) {
   .Call(`_fixest2_cpp_cholesky_`, X, tol, as.integer(nthreads))
 }
 
