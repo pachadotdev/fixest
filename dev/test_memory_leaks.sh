@@ -3,7 +3,7 @@
 # Function to debug R scripts
 # Adapted from https://mpadge.github.io/blog/blog012.html
 
-function debug_symbols () {
+function r_debug_symbols () {
     # if src/Makevars does not exist, exit
     if [ ! -f src/Makevars ]; then
         echo "File src/Makevars does not exist"
@@ -35,6 +35,13 @@ function r_valgrind () {
         script=$1
     fi
 
+    # if no output file is provided, use dev/valgrind.txt
+    if [ -z "$2" ]; then
+        output="dev/valgrind.txt"
+    else
+        output=$2
+    fi
+
     # if the file does not exist, exit
     if [ ! -f "$script" ]; then
         echo "File $script does not exist"
@@ -52,9 +59,9 @@ function r_valgrind () {
     # run R in debug mode, but after that we compiled with debug symbols
     # see https://reside-ic.github.io/blog/debugging-memory-errors-with-valgrind-and-gdb/
     # R -d 'valgrind -s --leak-check=full --show-leak-kinds=all --track-origins=yes' -f $script 2>&1 | tee valgrind.txt
-    R -d 'valgrind -s --track-origins=yes' -f $script 2>&1 | tee dev/valgrind.txt
+    R -d 'valgrind -s --track-origins=yes' -f $script 2>&1 | tee $output
 } 
 
-debug_symbols
+r_debug_symbols
 
-r_valgrind dev/test_memory_leaks.r
+r_valgrind dev/test_memory_leaks.r dev/valgrind.txt
