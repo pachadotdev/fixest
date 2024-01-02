@@ -23,15 +23,14 @@ Three groups of non-parallel functions:
 #define omp_get_thread_num() 0
 #endif
 
-class simple_vec_double
-{
-    simple_vec_double() = delete;
-    double *px_double = nullptr;
-    int *px_int = nullptr;
-    int n;
-    bool is_real;
+class simple_vec_double {
+  simple_vec_double() = delete;
+  double *px_double = nullptr;
+  int *px_int = nullptr;
+  int n;
+  bool is_real;
 
-public:
-    simple_vec_double(SEXP x);
-    double operator[](int);
+ public:
+  simple_vec_double(SEXP x);
+  double operator[](int);
 };

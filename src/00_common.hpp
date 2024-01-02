@@ -9,17 +9,6 @@
 #include <numeric>
 #include <vector>
 
-// replace
-// using std::accumulate;
-// using std::fabs;
-// using std::fill;
-// using std::isnan;
-// using std::isinf;
-// using std::string;
-// using std::strlen;
-// using std::uintptr_t;
-// using std::vector;
-// with
 using namespace std;
 
 using namespace cpp11;
