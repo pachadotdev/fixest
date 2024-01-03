@@ -130,43 +130,17 @@ void CCC_gaussian_2(const vector<double> &pcluster_origin,
                     int n_cells, int *mat_row, int *mat_col,
                     double *mat_value_Ab, double *mat_value_Ba,
                     const vector<double> &a_tilde, vector<double> &beta) {
-  // alpha = a_tilde + (Ab %m% (Ba %m% alpha))
+  // Initialize pcluster_destination and beta
+  std::copy(a_tilde.begin(), a_tilde.begin() + n_i,
+            pcluster_destination.begin());
+  std::fill(beta.begin(), beta.begin() + n_j, 0);
 
-  // for(int i=0 ; i<n_i ; ++i){
-  // 	alpha[i] = 0;
-  // }
-  //
-  // for(int j=0 ; j<n_j ; ++j){
-  // 	beta[j] = 0;
-  // }
-  //
-  // for(int obs=0 ; obs<n_cells ; ++obs){
-  // 	beta[mat_col[obs]] += mat_value_Ba[obs]*pcluster_origin[mat_row[obs]];
-  // }
-  //
-  // for(int obs=0 ; obs<n_cells ; ++obs){
-  // 	alpha[mat_row[obs]] += mat_value_Ab[obs]*beta[mat_col[obs]];
-  // }
-  //
-  // for(int i=0 ; i<n_i ; ++i){
-  // 	pcluster_destination[i] = a_tilde[i] + alpha[i];
-  // }
-
-  for (int i = 0; i < n_i; ++i) {
-    pcluster_destination[i] = a_tilde[i];
-  }
-
-  for (int j = 0; j < n_j; ++j) {
-    beta[j] = 0;
-  }
-
+  // Compute beta and update pcluster_destination
   for (int obs = 0; obs < n_cells; ++obs) {
-    beta[mat_col[obs]] += mat_value_Ba[obs] * pcluster_origin[mat_row[obs]];
-  }
-
-  for (int obs = 0; obs < n_cells; ++obs) {
-    pcluster_destination[mat_row[obs]] +=
-        mat_value_Ab[obs] * beta[mat_col[obs]];
+    int col = mat_col[obs];
+    int row = mat_row[obs];
+    beta[col] += mat_value_Ba[obs] * pcluster_origin[row];
+    pcluster_destination[row] += mat_value_Ab[obs] * beta[col];
   }
 }
 
