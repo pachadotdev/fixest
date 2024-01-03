@@ -25,9 +25,9 @@
   double *mat_value_Ab = REAL(r_mat_value_Ab);
   double *mat_value_Ba = REAL(r_mat_value_Ba);
 
-  const int *pindex_i = INTEGER(index_i);
-  const int *pindex_j = INTEGER(index_j);
-  const int *new_order = INTEGER(order);
+  int *pindex_i = INTEGER(index_i);
+  int *pindex_j = INTEGER(index_j);
+  int *new_order = INTEGER(order);
 
   double value_Ab = invTable_i[dum_i[new_order[0]]];
   double value_Ba = invTable_j[dum_j[new_order[0]]];
@@ -48,10 +48,8 @@
       value_Ab = invTable_i[dum_i[new_order[obs]]];
       value_Ba = invTable_j[dum_j[new_order[obs]]];
     } else {
-      double temp_Ab = invTable_i[dum_i[new_order[obs]]];
-      double temp_Ba = invTable_j[dum_j[new_order[obs]]];
-      value_Ab += temp_Ab;
-      value_Ba += temp_Ba;
+      value_Ab += invTable_i[dum_i[new_order[obs]]];
+      value_Ba += invTable_j[dum_j[new_order[obs]]];
     }
   }
 
