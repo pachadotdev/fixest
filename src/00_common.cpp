@@ -20,53 +20,34 @@ bool stopping_criterion(double a, double b, double diffMax) {
   return ((diff < diffMax) || (diff / (0.1 + fabs(a)) < diffMax));
 }
 
-// TODO: interruption in cpp11
-// for interruption
-// int pending_interrupt() {
-//     if (check_user_interrupt()) {
-//         return 1;
-//     } else {
-//         return 0;
-//     }
-// }
-
 // IT update + returns numerical convergence indicator
 // nb_coef_no_KQ = K or Q
 bool update_X_IronsTuck(int nb_coef_no_KQ, vector<double> &X,
                         const vector<double> &GX, const vector<double> &GGX,
                         vector<double> &delta_GX, vector<double> &delta2_X) {
-  for (int i = 0; i < nb_coef_no_KQ; ++i) {
-    double GX_tmp = GX[i];
-    delta_GX[i] = GGX[i] - GX_tmp;
-    delta2_X[i] = delta_GX[i] - GX_tmp + X[i];
-    // delta_GX[i] = GGX[i] - GX[i];
-    // delta2_X[i] = delta_GX[i] - GX[i] + X[i];
-  }
+  std::transform(GGX.begin(), GGX.end(), GX.begin(), delta_GX.begin(),
+                 std::minus<double>());
+  std::transform(delta_GX.begin(), delta_GX.end(), GX.begin(), delta2_X.begin(),
+                 std::plus<double>());
+  std::transform(delta2_X.begin(), delta2_X.end(), X.begin(), delta2_X.begin(),
+                 std::minus<double>());
 
-  // delta_GX %*% delta2_X and crossprod(delta2_X)
-  double vprod = 0, ssq = 0;
-  for (int i = 0; i < nb_coef_no_KQ; ++i) {
-    double delta2_X_tmp = delta2_X[i];
-    vprod += delta_GX[i] * delta2_X_tmp;
-    ssq += delta2_X_tmp * delta2_X_tmp;
-    // vprod += delta_GX[i] * delta2_X[i];
-    // ssq += delta2_X[i] * delta2_X[i];
-  }
+  double vprod = std::inner_product(delta_GX.begin(), delta_GX.end(),
+                                    delta2_X.begin(), 0.0);
+  double ssq = std::inner_product(delta2_X.begin(), delta2_X.end(),
+                                  delta2_X.begin(), 0.0);
 
   bool res = false;
 
-  if (ssq == 0) {
-    res = true;
-  } else {
+  if (ssq != 0) {
     double coef = vprod / ssq;
-
-    // update of X:
-    for (int i = 0; i < nb_coef_no_KQ; ++i) {
-      X[i] = GGX[i] - coef * delta_GX[i];
-    }
+    std::transform(GGX.begin(), GGX.end(), delta_GX.begin(), X.begin(),
+                   [coef](double a, double b) { return a - coef * b; });
+  } else {
+    res = true;
   }
 
-  return (res);
+  return res;
 }
 
 // => this concerns only the parallel application on a 1-Dimensional matrix
