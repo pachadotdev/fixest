@@ -106,21 +106,23 @@ void CCC_gaussian(int n_obs, int nb_cluster, double *cluster_coef, double *mu,
   // compute cluster coef, gaussian
 
   // initialize cluster coef
-  for (int m = 0; m < nb_cluster; ++m) {
-    cluster_coef[m] = 0;
-  }
+  std::fill_n(cluster_coef, nb_cluster, 0.0);
 
   // looping sequentially over mu
   for (int i = 0; i < n_obs; ++i) {
-    cluster_coef[dum[i]] += mu[i];
+    int dum_i = dum[i];
+    double mu_i = mu[i];
+    cluster_coef[dum_i] += mu_i;
   }
 
   // calculating cluster coef
   for (int m = 0; m < nb_cluster; ++m) {
-    cluster_coef[m] = (sum_y[m] - cluster_coef[m]) / table[m];
-  }
+    double sum_y_m = sum_y[m];
+    double cluster_coef_m = cluster_coef[m];
+    int table_m = table[m];
 
-  // "output" is the update of my_cluster_coef
+    cluster_coef[m] = (sum_y_m - cluster_coef_m) / table_m;
+  }
 }
 
 void CCC_gaussian_2(const vector<double> &pcluster_origin,
