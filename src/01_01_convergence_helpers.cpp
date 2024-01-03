@@ -68,5 +68,5 @@
 
   UNPROTECT(4);
 
-  return (res);
+  return res;
 }
