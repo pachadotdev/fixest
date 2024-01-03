@@ -26,8 +26,6 @@ void CCC_poisson_2(const std::vector<double> &pcluster_origin,
                    std::vector<int> &mat_col, std::vector<double> &mat_value,
                    const std::vector<double> &ca, const std::vector<double> &cb,
                    std::vector<double> &alpha) {
-  // alpha = ca / (Ab %m% (cb / (Ab %tm% alpha)))
-
   double *beta = pcluster_destination.data() + n_i;
 
   std::fill(alpha.begin(), alpha.begin() + n_i, 0.0);
@@ -65,38 +63,40 @@ void CCC_poisson_log(int n_obs, int nb_cluster, double *cluster_coef,
   // substracting the max in the exp
 
   vector<double> mu_max(nb_cluster);
-  vector<bool> doInit(nb_cluster);
+  vector<bool> doInit(nb_cluster, true);
 
-  // initialize cluster coef
-  for (int m = 0; m < nb_cluster; ++m) {
-    cluster_coef[m] = 0;
-    doInit[m] = true;
-  }
+  std::fill_n(cluster_coef, nb_cluster, 0.0);
 
   // finding the max mu for each cluster
-  int d;
   for (int i = 0; i < n_obs; ++i) {
-    d = dum[i];
+    int d = dum[i];
+    double mu_i = mu[i];
+    double &mu_max_d = mu_max[d];
+
     if (doInit[d]) {
-      mu_max[d] = mu[i];
+      mu_max_d = mu_i;
       doInit[d] = false;
-    } else if (mu[i] > mu_max[d]) {
-      mu_max[d] = mu[i];
+    } else if (mu_i > mu_max_d) {
+      mu_max_d = mu_i;
     }
   }
 
   // looping sequentially over exp_mu
   for (int i = 0; i < n_obs; ++i) {
-    d = dum[i];
-    cluster_coef[d] += exp(mu[i] - mu_max[d]);
+    int d = dum[i];
+    double mu_i = mu[i];
+    double mu_max_d = mu_max[d];
+    cluster_coef[d] += exp(mu_i - mu_max_d);
   }
 
   // calculating cluster coef
   for (int m = 0; m < nb_cluster; ++m) {
-    cluster_coef[m] = log(sum_y[m]) - log(cluster_coef[m]) - mu_max[m];
-  }
+    double sum_y_m = sum_y[m];
+    double &cluster_coef_m = cluster_coef[m];
+    double mu_max_m = mu_max[m];
 
-  // "output" is the update of my_cluster_coef
+    cluster_coef_m = log(sum_y_m) - log(cluster_coef_m) - mu_max_m;
+  }
 }
 
 // GAUSSIAN
