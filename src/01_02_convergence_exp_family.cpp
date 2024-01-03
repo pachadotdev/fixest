@@ -20,26 +20,24 @@ void CCC_poisson(int n_obs, int nb_cluster, double *cluster_coef,
   }
 }
 
-void CCC_poisson_2(const vector<double> &pcluster_origin,
-                   vector<double> &pcluster_destination, int n_i, int n_j,
-                   int n_cells, const vector<int> &mat_row,
-                   vector<int> &mat_col, vector<double> &mat_value,
-                   const vector<double> &ca, const vector<double> &cb,
-                   vector<double> &alpha) {
+void CCC_poisson_2(const std::vector<double> &pcluster_origin,
+                   std::vector<double> &pcluster_destination, int n_i, int n_j,
+                   int n_cells, const std::vector<int> &mat_row,
+                   std::vector<int> &mat_col, std::vector<double> &mat_value,
+                   const std::vector<double> &ca, const std::vector<double> &cb,
+                   std::vector<double> &alpha) {
   // alpha = ca / (Ab %m% (cb / (Ab %tm% alpha)))
 
   double *beta = pcluster_destination.data() + n_i;
 
-  for (int i = 0; i < n_i; ++i) {
-    alpha[i] = 0;
-  }
-
-  for (int j = 0; j < n_j; ++j) {
-    beta[j] = 0;
-  }
+  std::fill(alpha.begin(), alpha.begin() + n_i, 0.0);
+  std::fill(beta, beta + n_j, 0.0);
 
   for (int obs = 0; obs < n_cells; ++obs) {
-    beta[mat_col[obs]] += mat_value[obs] * pcluster_origin[mat_row[obs]];
+    int row = mat_row[obs];
+    int col = mat_col[obs];
+    double value = mat_value[obs];
+    beta[col] += value * pcluster_origin[row];
   }
 
   for (int j = 0; j < n_j; ++j) {
@@ -47,7 +45,10 @@ void CCC_poisson_2(const vector<double> &pcluster_origin,
   }
 
   for (int obs = 0; obs < n_cells; ++obs) {
-    alpha[mat_row[obs]] += mat_value[obs] * beta[mat_col[obs]];
+    int row = mat_row[obs];
+    int col = mat_col[obs];
+    double value = mat_value[obs];
+    alpha[row] += value * beta[col];
   }
 
   for (int i = 0; i < n_i; ++i) {
