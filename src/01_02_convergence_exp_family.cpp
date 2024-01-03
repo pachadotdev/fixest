@@ -144,21 +144,110 @@ void CCC_gaussian_2(const vector<double> &pcluster_origin,
   }
 }
 
-// NEGATIVE BINOMIAL
+// NEGATIVE BINOMIAL and LOGIT (helper + negbin + logit)
+
+double computeClusterCoefficient(int m, double theta, double *mu, double *lhs,
+                                 double *sum_y, int *obsCluster, int *cumtable,
+                                 double lower_bound, double upper_bound,
+                                 double diffMax_NR, int iterFullDicho,
+                                 int iterMax) {
+  // we loop over each cluster
+  // we initialise the cluster coefficient at 0 (it should converge to 0 at
+  // some point)
+  double x1 = 0;
+  bool keepGoing = true;
+  int iter = 0, i;
+  int u0 = (m == 0 ? 0 : cumtable[m - 1]);
+
+  double value, x0, derivative = 0, exp_mu;
+
+  // Update of the value if it goes out of the boundaries
+  // because we dont know ex ante if 0 is within the bounds
+  if (x1 >= upper_bound || x1 <= lower_bound) {
+    x1 = (lower_bound + upper_bound) / 2;
+  }
+
+  while (keepGoing) {
+    ++iter;
+
+    // 1st step: start the bounds
+
+    // computing the value of f(x)
+    value = sum_y[m];
+    for (int u = u0; u < cumtable[m]; ++u) {
+      int i = obsCluster[u];
+      double denominator = 1 + theta * exp(-x1 - mu[i]);
+      value -= (lhs ? theta + lhs[i] : theta) / denominator;
+    }
+
+    // update bounds
+    if (value > 0) {
+      lower_bound = x1;
+    } else {
+      upper_bound = x1;
+    }
+
+    // 2nd step: NR iteration or Dichotomy
+
+    x0 = x1;
+    if (value == 0) {
+      keepGoing = false;
+    } else if (iter <= iterFullDicho) {
+      // computing the derivative
+      derivative = 0;
+      for (int u = u0; u < cumtable[m]; ++u) {
+        i = obsCluster[u];
+        exp_mu = exp(x1 + mu[i]);
+        derivative -= theta * (theta + lhs[i]) /
+                      ((theta / exp_mu + 1) * (theta + exp_mu));
+
+        double numerator = (lhs ? theta * (theta + lhs[i]) : theta * theta);
+        derivative -= numerator * exp_mu / (1 + theta * exp_mu);
+      }
+
+      x1 = x0 - value / derivative;
+
+      // 3rd step: dichotomy (if necessary)
+      // Update of the value if it goes out of the boundaries
+      if (x1 >= upper_bound || x1 <= lower_bound) {
+        x1 = (lower_bound + upper_bound) / 2;
+      }
+    } else {
+      x1 = (lower_bound + upper_bound) / 2;
+    }
+
+    // the stopping criterion
+    if (iter == iterMax) {
+      keepGoing = false;
+      if (omp_get_thread_num() == 0) {
+        Rprintf(
+            "[Getting cluster coefficients nber %i] max iterations reached "
+            "(%i).\n",
+            m, iterMax);
+        Rprintf("Value Sum Deriv (NR) = %f. Difference = %f.\n", value,
+                fabs(x0 - x1));
+      }
+    }
+
+    if (stopping_criterion(x0, x1, diffMax_NR)) {
+      keepGoing = false;
+    }
+  }
+
+  return x1;
+}
 
 void CCC_negbin(int nthreads, int nb_cluster, double theta, double diffMax_NR,
                 double *cluster_coef, double *mu, double *lhs, double *sum_y,
                 int *obsCluster, int *table, int *cumtable) {
-  // compute cluster coefficients negbin
-  // This is not direct: needs to apply dichotomy+NR algorithm
-
   // first we find the min max for each cluster to get the bounds
   int iterMax = 100, iterFullDicho = 10;
 
   // finding the max/min values of mu for each cluster
-  vector<double> borne_inf(nb_cluster);
-  vector<double> borne_sup(nb_cluster);
-  // attention borne_inf => quand mu est maximal
+  vector<double> lower_bound(nb_cluster);
+  vector<double> upper_bound(nb_cluster);
+
+  // attention lower_bound => when mu is maximum
   int u0;
   double value, mu_min, mu_max;
 
@@ -177,106 +266,17 @@ void CCC_negbin(int nthreads, int nb_cluster, double theta, double diffMax_NR,
     }
 
     // computing the bounds
-    borne_inf[m] = log(sum_y[m]) - log(static_cast<double>(table[m])) - mu_max;
-    borne_sup[m] = borne_inf[m] + (mu_max - mu_min);
+    lower_bound[m] =
+        log(sum_y[m]) - log(static_cast<double>(table[m])) - mu_max;
+    upper_bound[m] = lower_bound[m] + (mu_max - mu_min);
   }
-
-  // Rprintf("inf: %f -- sup: %f -- middle: %f\n", borne_inf[0], borne_sup[0],
-  // (borne_inf[0] + borne_sup[0])/2);
 
 #pragma omp parallel for num_threads(nthreads)
   for (int m = 0; m < nb_cluster; ++m) {
-    // we loop over each cluster
-
-    // we initialise the cluster coefficient at 0 (it should converge to 0 at
-    // some point)
-    double x1 = 0;
-    bool keepGoing = true;
-    int iter = 0, i;
-    int u0 = (m == 0 ? 0 : cumtable[m - 1]);
-
-    double value, x0, derivee = 0, exp_mu;
-
-    // the bounds
-    double lower_bound = borne_inf[m];
-    double upper_bound = borne_sup[m];
-
-    // Update of the value if it goes out of the boundaries
-    // because we dont know ex ante if 0 is within the bounds
-    if (x1 >= upper_bound || x1 <= lower_bound) {
-      x1 = (lower_bound + upper_bound) / 2;
-    }
-
-    while (keepGoing) {
-      ++iter;
-
-      // 1st step: initialisation des bornes
-
-      // computing the value of f(x)
-      value = sum_y[m];
-      for (int u = u0; u < cumtable[m]; ++u) {
-        i = obsCluster[u];
-        value -= (theta + lhs[i]) / (1 + theta * exp(-x1 - mu[i]));
-      }
-
-      // update of the bounds.
-      if (value > 0) {
-        lower_bound = x1;
-      } else {
-        upper_bound = x1;
-      }
-
-      // 2nd step: NR iteration or Dichotomy
-      x0 = x1;
-      if (value == 0) {
-        keepGoing = false;
-      } else if (iter <= iterFullDicho) {
-        // computing the derivative
-        derivee = 0;
-        for (int u = u0; u < cumtable[m]; ++u) {
-          i = obsCluster[u];
-          exp_mu = exp(x1 + mu[i]);
-          derivee -= theta * (theta + lhs[i]) /
-                     ((theta / exp_mu + 1) * (theta + exp_mu));
-        }
-
-        x1 = x0 - value / derivee;
-        // Rprintf("x1: %5.2f\n", x1);
-
-        // 3rd step: dichotomy (if necessary)
-        // Update of the value if it goes out of the boundaries
-        if (x1 >= upper_bound || x1 <= lower_bound) {
-          x1 = (lower_bound + upper_bound) / 2;
-        }
-      } else {
-        x1 = (lower_bound + upper_bound) / 2;
-      }
-
-      // the stopping criterion
-      if (iter == iterMax) {
-        keepGoing = false;
-        if (omp_get_thread_num() == 0) {
-          Rprintf(
-              "[Getting cluster coefficients nber %i] max iterations reached "
-              "(%i).\n",
-              m, iterMax);
-          Rprintf("Value Sum Deriv (NR) = %f. Difference = %f.\n", value,
-                  fabs(x0 - x1));
-        }
-      }
-
-      // if(fabs(x0-x1) / (0.1 + fabs(x1)) < diffMax_NR){
-      if (stopping_criterion(x0, x1, diffMax_NR)) {
-        keepGoing = false;
-      }
-    }
-
-    // if(m == 0) Rprintf("diffMax = %f, value = %f, test = %f\n", fabs(x0-x1),
-    // value, fabs(5.1 - 5)); if(m == 0) Rprintf("total iter = %i, final x1 =
-    // %f\n", iter, x1);
-
-    // after convegence: only update of cluster coef
-    cluster_coef[m] = x1;
+    // after convergence: update cluster coef
+    cluster_coef[m] = computeClusterCoefficient(
+        m, theta, mu, lhs, sum_y, obsCluster, cumtable, lower_bound[m],
+        upper_bound[m], diffMax_NR, iterFullDicho, iterMax);
   }
 }
 
@@ -290,12 +290,13 @@ void CCC_logit(int nthreads, int nb_cluster, double diffMax_NR,
   int iterMax = 100, iterFullDicho = 10;
 
   // finding the max/min values of mu for each cluster
-  vector<double> borne_inf(nb_cluster);
-  vector<double> borne_sup(nb_cluster);
-  // attention borne_inf => quand mu est maximal
+  vector<double> lower_bound(nb_cluster);
+  vector<double> upper_bound(nb_cluster);
 
+  // attention lower_bound => when mu is maximum
   int u0;
   double value, mu_min, mu_max;
+
   for (int m = 0; m < nb_cluster; ++m) {
     // the min/max of mu
     u0 = (m == 0 ? 0 : cumtable[m - 1]);
@@ -311,8 +312,8 @@ void CCC_logit(int nthreads, int nb_cluster, double diffMax_NR,
     }
 
     // computing the "bornes"
-    borne_inf[m] = log(sum_y[m]) - log(table[m] - sum_y[m]) - mu_max;
-    borne_sup[m] = borne_inf[m] + (mu_max - mu_min);
+    lower_bound[m] = log(sum_y[m]) - log(table[m] - sum_y[m]) - mu_max;
+    upper_bound[m] = lower_bound[m] + (mu_max - mu_min);
   }
 
   //
@@ -321,90 +322,9 @@ void CCC_logit(int nthreads, int nb_cluster, double diffMax_NR,
 
 #pragma omp parallel for num_threads(nthreads)
   for (int m = 0; m < nb_cluster; ++m) {
-    // we loop over each cluster
-
-    // we initialise the cluster coefficient at 0 (it should converge to 0 at
-    // some point)
-    double x1 = 0;
-    bool keepGoing = true;
-    int iter = 0;
-    int u0 = (m == 0 ? 0 : cumtable[m - 1]);
-
-    double value, x0, derivee = 0, exp_mu;
-
-    // the bounds
-    double lower_bound = borne_inf[m];
-    double upper_bound = borne_sup[m];
-
-    // Update of the value if it goes out of the boundaries
-    // because we dont know ex ante if 0 is within the bounds
-    if (x1 >= upper_bound || x1 <= lower_bound) {
-      x1 = (lower_bound + upper_bound) / 2;
-    }
-
-    while (keepGoing) {
-      ++iter;
-
-      // 1st step: initialisation des bornes
-
-      // computing the value of f(x)
-      value = sum_y[m];
-      for (int u = u0; u < cumtable[m]; ++u) {
-        value -= 1 / (1 + exp(-x1 - mu[obsCluster[u]]));
-      }
-
-      // update of the bounds.
-      if (value > 0) {
-        lower_bound = x1;
-      } else {
-        upper_bound = x1;
-      }
-
-      // 2nd step: NR iteration or Dichotomy
-      x0 = x1;
-      if (value == 0) {
-        keepGoing = false;
-      } else if (iter <= iterFullDicho) {
-        // computing the derivative
-        derivee = 0;
-        for (int u = u0; u < cumtable[m]; ++u) {
-          exp_mu = exp(x1 + mu[obsCluster[u]]);
-          derivee -= 1 / ((1 / exp_mu + 1) * (1 + exp_mu));
-        }
-
-        x1 = x0 - value / derivee;
-        // Rprintf("x1: %5.2f\n", x1);
-
-        // 3rd step: dichotomy (if necessary)
-        // Update of the value if it goes out of the boundaries
-        if (x1 >= upper_bound || x1 <= lower_bound) {
-          x1 = (lower_bound + upper_bound) / 2;
-        }
-      } else {
-        x1 = (lower_bound + upper_bound) / 2;
-      }
-
-      // the stopping criteria
-      if (iter == iterMax) {
-        keepGoing = false;
-        Rprintf(
-            "[Getting cluster coefficients nber %i] max iterations reached "
-            "(%i).\n",
-            m, iterMax);
-        Rprintf("Value Sum Deriv (NR) = %f. Difference = %f.\n", value,
-                fabs(x0 - x1));
-      }
-
-      // if(fabs(x0-x1) / (0.1 + fabs(x1)) < diffMax_NR){
-      if (stopping_criterion(x0, x1, diffMax_NR)) {
-        keepGoing = false;
-      }
-    }
-    // Rprintf("iter=%i.\n", iter);
-    // res[k] = iter;
-    // res[k] = value;
-
-    // after convegence: only update of cluster coef
-    cluster_coef[m] = x1;
+    // after convergence: update cluster coef
+    cluster_coef[m] = computeClusterCoefficient(
+        m, 0, mu, NULL, sum_y, obsCluster, cumtable, lower_bound[m],
+        upper_bound[m], diffMax_NR, iterFullDicho, iterMax);
   }
 }
