@@ -59,9 +59,9 @@ vector<int> set_parallel_scheme(int N, int nthreads) {
   double N_rest = N;
 
   for (int i = 0; i < nthreads; ++i) {
-    res[i + 1] = ceil(N_rest / (nthreads - i));
-    N_rest -= res[i + 1];
-    res[i + 1] += res[i];
+    int division = ceil(N_rest / (nthreads - i));
+    N_rest -= division;
+    res[i + 1] = division + res[i];
   }
 
   return res;
