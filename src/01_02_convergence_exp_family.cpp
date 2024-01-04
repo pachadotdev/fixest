@@ -144,82 +144,199 @@ void CCC_gaussian_2(const vector<double> &pcluster_origin,
   }
 }
 
-// NEGATIVE BINOMIAL and LOGIT (helper + negbin + logit)
+// NEGATIVE BINOMIAL and LOGIT (helpers + negbin + logit)
 
-double computeClusterCoefficient(int m, double theta, double *mu, double *lhs,
-                                 double *sum_y, int *obsCluster, int *cumtable,
-                                 double lower_bound, double upper_bound,
-                                 double diffMax_NR, int iterFullDicho,
-                                 int iterMax) {
-  // we loop over each cluster
-  // we initialise the cluster coefficient at 0 (it should converge to 0 at
-  // some point)
-  double x1 = 0;
-  bool keepGoing = true;
-  int iter = 0, i;
-  int u0 = (m == 0 ? 0 : cumtable[m - 1]);
+// Helpers
 
-  double value, x0, derivative = 0, exp_mu;
+void computeBounds(bool negbin, vector<double> &lower_bound,
+                   vector<double> &upper_bound, const double *mu,
+                   const int *cumtable, const int *obsCluster,
+                   const double *sum_y, const int *table, int nb_cluster) {
+  int u0;
+  double value, mu_min, mu_max;
 
-  // Update of the value if it goes out of the boundaries
-  // because we dont know ex ante if 0 is within the bounds
-  if (x1 >= upper_bound || x1 <= lower_bound) {
-    x1 = (lower_bound + upper_bound) / 2;
+  for (int m = 0; m < nb_cluster; ++m) {
+    u0 = (m == 0 ? 0 : cumtable[m - 1]);
+    mu_min = mu[obsCluster[u0]];
+    mu_max = mu[obsCluster[u0]];
+    for (int u = 1 + u0; u < cumtable[m]; ++u) {
+      value = mu[obsCluster[u]];
+      if (value < mu_min) {
+        mu_min = value;
+      } else if (value > mu_max) {
+        mu_max = value;
+      }
+    }
+
+    if (negbin) {
+      lower_bound[m] = log(sum_y[m]) - log(table[m]) - mu_max;
+    } else {
+      lower_bound[m] = log(sum_y[m]) - log(table[m] - sum_y[m]) - mu_max;
+    }
+
+    upper_bound[m] = lower_bound[m] + (mu_max - mu_min);
   }
+}
 
-  while (keepGoing) {
-    ++iter;
-
-    // 1st step: start the bounds
-
-    // computing the value of f(x)
-    value = sum_y[m];
+double computeValue(bool negbin, int m, int u0, const int *cumtable,
+                    const int *obsCluster, const double *mu, double x1,
+                    const double *sum_y, double theta = 0.0,
+                    const double *lhs = nullptr) {
+  double value = sum_y[m];
+  int i;
+  if (negbin) {
     for (int u = u0; u < cumtable[m]; ++u) {
-      int i = obsCluster[u];
-      double denominator = 1 + theta * exp(-x1 - mu[i]);
-      value -= (lhs ? theta + lhs[i] : theta) / denominator;
+      i = obsCluster[u];
+      value -= (theta + lhs[i]) / (1 + theta * exp(-x1 - mu[i]));
     }
+  } else {
+    for (int u = u0; u < cumtable[m]; ++u) {
+      i = obsCluster[u];
+      value -= 1 / (1 + exp(-x1 - mu[i]));
+    }
+  }
+  return value;
+}
 
-    // update bounds
-    if (value > 0) {
-      lower_bound = x1;
+double computeDerivative(bool negbin, int m, int u0, const int *cumtable,
+                         const int *obsCluster, const double *mu, double x1,
+                         double theta = 0, const double *lhs = nullptr) {
+  double derivative = 0, exp_mu;
+  int i;
+  for (int u = u0; u < cumtable[m]; ++u) {
+    if (negbin) {
+      i = obsCluster[u];
+      exp_mu = exp(x1 + mu[i]);
+      derivative -=
+          theta * (theta + lhs[i]) / ((theta / exp_mu + 1) * (theta + exp_mu));
     } else {
-      upper_bound = x1;
+      exp_mu = exp(x1 + mu[obsCluster[u]]);
+      derivative -= 1 / ((1 / exp_mu + 1) * (1 + exp_mu));
+    }
+  }
+  return derivative;
+}
+
+void CCC_negbin(int nthreads, int nb_cluster, double theta, double diffMax_NR,
+                double *cluster_coef, double *mu, double *lhs, double *sum_y,
+                int *obsCluster, int *table, int *cumtable) {
+  int iterMax = 100, iterFullDicho = 10;
+
+  vector<double> lower_bound(nb_cluster);
+  vector<double> upper_bound(nb_cluster);
+
+  computeBounds(true, lower_bound, upper_bound, mu, cumtable, obsCluster, sum_y,
+                table, nb_cluster);
+
+#pragma omp parallel for num_threads(nthreads)
+  for (int m = 0; m < nb_cluster; ++m) {
+    double x1 = 0;
+    bool keepGoing = true;
+    int iter = 0;
+    int u0 = (m == 0 ? 0 : cumtable[m - 1]);
+
+    double value, x0, derivative = 0;
+
+    double lb = lower_bound[m];
+    double ub = upper_bound[m];
+
+    if (x1 >= ub || x1 <= lb) {
+      x1 = (lb + ub) / 2;
     }
 
-    // 2nd step: NR iteration or Dichotomy
+    while (keepGoing) {
+      ++iter;
 
-    x0 = x1;
-    if (value == 0) {
-      keepGoing = false;
-    } else if (iter <= iterFullDicho) {
-      // computing the derivative
-      derivative = 0;
-      for (int u = u0; u < cumtable[m]; ++u) {
-        i = obsCluster[u];
-        exp_mu = exp(x1 + mu[i]);
-        derivative -= theta * (theta + lhs[i]) /
-                      ((theta / exp_mu + 1) * (theta + exp_mu));
+      value = computeValue(true, m, u0, cumtable, obsCluster, mu, x1, sum_y,
+                           theta, lhs);
 
-        double numerator = (lhs ? theta * (theta + lhs[i]) : theta * theta);
-        derivative -= numerator * exp_mu / (1 + theta * exp_mu);
+      if (value > 0) {
+        lb = x1;
+      } else {
+        ub = x1;
       }
 
-      x1 = x0 - value / derivative;
+      x0 = x1;
+      if (value == 0) {
+        keepGoing = false;
+      } else if (iter <= iterFullDicho) {
+        derivative = computeDerivative(true, m, u0, cumtable, obsCluster, mu,
+                                       x1, theta, lhs);
 
-      // 3rd step: dichotomy (if necessary)
-      // Update of the value if it goes out of the boundaries
-      if (x1 >= upper_bound || x1 <= lower_bound) {
-        x1 = (lower_bound + upper_bound) / 2;
+        x1 = x0 - value / derivative;
+
+        if (x1 >= ub || x1 <= lb) {
+          x1 = (lb + ub) / 2;
+        }
+      } else {
+        x1 = (lb + ub) / 2;
       }
-    } else {
-      x1 = (lower_bound + upper_bound) / 2;
+
+      if (iter == iterMax || stopping_criterion(x0, x1, diffMax_NR)) {
+        keepGoing = false;
+      }
     }
 
-    // the stopping criterion
-    if (iter == iterMax) {
-      keepGoing = false;
-      if (omp_get_thread_num() == 0) {
+    cluster_coef[m] = x1;
+  }
+}
+
+void CCC_logit(int nthreads, int nb_cluster, double diffMax_NR,
+               double *cluster_coef, double *mu, double *sum_y, int *obsCluster,
+               int *table, int *cumtable) {
+  int iterMax = 100, iterFullDicho = 10;
+
+  vector<double> lower_bound(nb_cluster);
+  vector<double> upper_bound(nb_cluster);
+
+  computeBounds(false, lower_bound, upper_bound, mu, cumtable, obsCluster,
+                sum_y, table, nb_cluster);
+
+#pragma omp parallel for num_threads(nthreads)
+  for (int m = 0; m < nb_cluster; ++m) {
+    double x1 = 0;
+    bool keepGoing = true;
+    int iter = 0;
+    int u0 = (m == 0 ? 0 : cumtable[m - 1]);
+
+    double value, x0, derivative = 0;
+
+    double lb = lower_bound[m];
+    double ub = upper_bound[m];
+
+    if (x1 >= ub || x1 <= lb) {
+      x1 = (lb + ub) / 2;
+    }
+
+    while (keepGoing) {
+      ++iter;
+
+      value = computeValue(false, m, u0, cumtable, obsCluster, mu, x1, sum_y);
+
+      if (value > 0) {
+        lb = x1;
+      } else {
+        ub = x1;
+      }
+
+      x0 = x1;
+      if (value == 0) {
+        keepGoing = false;
+      } else if (iter <= iterFullDicho) {
+        derivative =
+            computeDerivative(false, m, u0, cumtable, obsCluster, mu, x1);
+
+        x1 = x0 - value / derivative;
+
+        if (x1 >= ub || x1 <= lb) {
+          x1 = (lb + ub) / 2;
+        }
+      } else {
+        x1 = (lb + ub) / 2;
+      }
+
+      if (iter == iterMax) {
+        keepGoing = false;
         Rprintf(
             "[Getting cluster coefficients nber %i] max iterations reached "
             "(%i).\n",
@@ -227,104 +344,12 @@ double computeClusterCoefficient(int m, double theta, double *mu, double *lhs,
         Rprintf("Value Sum Deriv (NR) = %f. Difference = %f.\n", value,
                 fabs(x0 - x1));
       }
-    }
 
-    if (stopping_criterion(x0, x1, diffMax_NR)) {
-      keepGoing = false;
-    }
-  }
-
-  return x1;
-}
-
-void CCC_negbin(int nthreads, int nb_cluster, double theta, double diffMax_NR,
-                double *cluster_coef, double *mu, double *lhs, double *sum_y,
-                int *obsCluster, int *table, int *cumtable) {
-  // first we find the min max for each cluster to get the bounds
-  int iterMax = 100, iterFullDicho = 10;
-
-  // finding the max/min values of mu for each cluster
-  vector<double> lower_bound(nb_cluster);
-  vector<double> upper_bound(nb_cluster);
-
-  // attention lower_bound => when mu is maximum
-  int u0;
-  double value, mu_min, mu_max;
-
-  for (int m = 0; m < nb_cluster; ++m) {
-    // the min/max of mu
-    u0 = (m == 0 ? 0 : cumtable[m - 1]);
-    mu_min = mu[obsCluster[u0]];
-    mu_max = mu[obsCluster[u0]];
-    for (int u = 1 + u0; u < cumtable[m]; ++u) {
-      value = mu[obsCluster[u]];
-      if (value < mu_min) {
-        mu_min = value;
-      } else if (value > mu_max) {
-        mu_max = value;
+      if (stopping_criterion(x0, x1, diffMax_NR)) {
+        keepGoing = false;
       }
     }
 
-    // computing the bounds
-    lower_bound[m] =
-        log(sum_y[m]) - log(static_cast<double>(table[m])) - mu_max;
-    upper_bound[m] = lower_bound[m] + (mu_max - mu_min);
-  }
-
-#pragma omp parallel for num_threads(nthreads)
-  for (int m = 0; m < nb_cluster; ++m) {
-    // after convergence: update cluster coef
-    cluster_coef[m] = computeClusterCoefficient(
-        m, theta, mu, lhs, sum_y, obsCluster, cumtable, lower_bound[m],
-        upper_bound[m], diffMax_NR, iterFullDicho, iterMax);
-  }
-}
-
-void CCC_logit(int nthreads, int nb_cluster, double diffMax_NR,
-               double *cluster_coef, double *mu, double *sum_y, int *obsCluster,
-               int *table, int *cumtable) {
-  // compute cluster coefficients negbin
-  // This is not direct: needs to apply dichotomy+NR algorithm
-
-  // first we find the min max for each cluster to get the bounds
-  int iterMax = 100, iterFullDicho = 10;
-
-  // finding the max/min values of mu for each cluster
-  vector<double> lower_bound(nb_cluster);
-  vector<double> upper_bound(nb_cluster);
-
-  // attention lower_bound => when mu is maximum
-  int u0;
-  double value, mu_min, mu_max;
-
-  for (int m = 0; m < nb_cluster; ++m) {
-    // the min/max of mu
-    u0 = (m == 0 ? 0 : cumtable[m - 1]);
-    mu_min = mu[obsCluster[u0]];
-    mu_max = mu[obsCluster[u0]];
-    for (int u = 1 + u0; u < cumtable[m]; ++u) {
-      value = mu[obsCluster[u]];
-      if (value < mu_min) {
-        mu_min = value;
-      } else if (value > mu_max) {
-        mu_max = value;
-      }
-    }
-
-    // computing the "bornes"
-    lower_bound[m] = log(sum_y[m]) - log(table[m] - sum_y[m]) - mu_max;
-    upper_bound[m] = lower_bound[m] + (mu_max - mu_min);
-  }
-
-  //
-  // Parallel loop
-  //
-
-#pragma omp parallel for num_threads(nthreads)
-  for (int m = 0; m < nb_cluster; ++m) {
-    // after convergence: update cluster coef
-    cluster_coef[m] = computeClusterCoefficient(
-        m, 0, mu, NULL, sum_y, obsCluster, cumtable, lower_bound[m],
-        upper_bound[m], diffMax_NR, iterFullDicho, iterMax);
+    cluster_coef[m] = x1;
   }
 }
