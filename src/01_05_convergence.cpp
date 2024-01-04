@@ -4,7 +4,7 @@
     int family, int iterMax, double diffMax, double diffMax_NR, double theta,
     SEXP nb_cluster_all, SEXP lhs, SEXP mu_init, SEXP dum_vector,
     SEXP tableCluster_vector, SEXP sum_y_vector, SEXP cumtable_vector,
-    SEXP obsCluster_vector, int nthreads = 1) {
+    SEXP obsCluster_vector, int nthreads) {
   // initial variables
   int K = Rf_length(nb_cluster_all);
   int *pcluster = INTEGER(nb_cluster_all);
@@ -173,7 +173,7 @@
     int family, int iterMax, double diffMax, double diffMax_NR, double theta,
     SEXP nb_cluster_all, SEXP lhs, SEXP mu_init, SEXP dum_vector,
     SEXP tableCluster_vector, SEXP sum_y_vector, SEXP cumtable_vector,
-    SEXP obsCluster_vector, int nthreads = 1) {
+    SEXP obsCluster_vector, int nthreads) {
   // initial variables
   int K = Rf_length(nb_cluster_all);
   int *pcluster = INTEGER(nb_cluster_all);
