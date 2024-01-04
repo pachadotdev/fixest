@@ -36,17 +36,11 @@ void computeClusterCoef_single(int family, int n_obs, int nb_cluster,
 
 void updateMuWithCoef(int family, int n_obs, double *mu_with_coef,
                       double *my_cluster_coef, int *my_dum) {
-  switch (family) {
-    case 1:  // Poisson
-      for (int i = 0; i < n_obs; ++i) {
-        mu_with_coef[i] *= my_cluster_coef[my_dum[i]];
-      }
-      break;
-    default:
-      for (int i = 0; i < n_obs; ++i) {
-        mu_with_coef[i] += my_cluster_coef[my_dum[i]];
-      }
-      break;
+  auto operation = (family == 1) ? [](double &mu, double coef) { mu *= coef; }
+                                 : [](double &mu, double coef) { mu += coef; };
+
+  for (int i = 0; i < n_obs; ++i) {
+    operation(mu_with_coef[i], my_cluster_coef[my_dum[i]]);
   }
 }
 
@@ -110,13 +104,10 @@ struct ClusterData {
     SEXP r_cumtable, int nthreads = 1) {
   int n_obs = Rf_length(r_mu);
 
-  ClusterData data = {.mu = REAL(r_mu),
-                      .lhs = REAL(r_lhs),
-                      .sum_y = REAL(r_sum_y),
-                      .dum = INTEGER(r_dum),
-                      .obsCluster = INTEGER(r_obsCluster),
-                      .table = INTEGER(r_table),
-                      .cumtable = INTEGER(r_cumtable)};
+  ClusterData data = {
+      REAL(r_mu),         REAL(r_lhs),           REAL(r_sum_y),
+      INTEGER(r_dum),     INTEGER(r_obsCluster), INTEGER(r_table),
+      INTEGER(r_cumtable)};
 
   SEXP res = PROTECT(Rf_allocVector(REALSXP, nb_coef));
   double *pcoef = REAL(res);
@@ -140,13 +131,9 @@ struct ClusterData {
 
   int n_obs = Rf_length(mu_in);
 
-  ClusterData data = {.mu = REAL(mu_in),
-                      .lhs = REAL(lhs),
-                      .sum_y = REAL(sum_y),
-                      .dum = INTEGER(dum),
-                      .obsCluster = INTEGER(obsCluster),
-                      .table = INTEGER(table),
-                      .cumtable = INTEGER(cumtable)};
+  ClusterData data = {REAL(mu_in),      REAL(lhs),           REAL(sum_y),
+                      INTEGER(dum),     INTEGER(obsCluster), INTEGER(table),
+                      INTEGER(cumtable)};
 
   // The cluster coeffficients
   vector<double> cluster_coef(nb_cluster);
@@ -179,7 +166,7 @@ struct ClusterData {
 [[cpp11::register]] int get_n_cells_(integers index_i, integers index_j) {
   int n = index_i.size();
 
-  // we count the nber of different elements
+  // we count the number of different elements
   int index_current = 0;
 
   for (int i = 1; i < n; ++i) {
@@ -189,7 +176,5 @@ struct ClusterData {
     }
   }
 
-  index_current++;
-
-  return index_current;
+  return (index_current + 1);
 }
