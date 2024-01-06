@@ -215,7 +215,7 @@ print.fixest_fitstat = function(x, na.rm = FALSE, ...){
 #'
 #' @param type A character scalar giving the type-name.
 #' @param fun A function to be applied to a `fixest` estimation. It must return either a scalar, or a list of unitary elements. If the number of elements returned is greater than 1, then each element must be named! If the fit statistic is not valid for a given estimation, a plain `NA` value should be returned.
-#' @param alias A (named) character vector. An alias to be used in lieu of the type name in the display methods (ie when used in [`print.fixest_fitstat`] or [`etable`]). If the function returns several values, i.e. sub-types, you can give an alias to these sub-types. The syntax is `c("type" = "alias", "subtype_i" = "alias_i")`, with "type" (resp. "subtype") the value of the argument `type` resp. (`subtypes`). You can also give an alias encompassing the type and sub-type with the syntax `c("type.subtype_i" = "alias")`.
+#' @param alias A (named) character vector. An alias to be used in lieu of the type name in the display methods (ie when used in [`print.fixest_fitstat`]. If the function returns several values, i.e. sub-types, you can give an alias to these sub-types. The syntax is `c("type" = "alias", "subtype_i" = "alias_i")`, with "type" (resp. "subtype") the value of the argument `type` resp. (`subtypes`). You can also give an alias encompassing the type and sub-type with the syntax `c("type.subtype_i" = "alias")`.
 #' @param subtypes A character vector giving the name of each element returned by the function `fun`. This is only used when the function returns more than one value. Note that you can use the shortcut "test" when the sub-types are "stat", "p" and "df"; and "test2" when these are "stat", "p", "df1" and "df2".
 #'
 #' @details
@@ -434,17 +434,14 @@ fitstat_register = function(type, fun, alias = NULL, subtypes = NULL){
 #' \item{`theta`: }{The over-dispersion parameter in Negative Binomial models. Low values mean high overdispersion.}
 #' \item{`f`, `wf`: }{The F-tests of nullity of the coefficients. The `w` stands for 'within'. These types return the following values: `stat`, `p`, `df1` and `df2`. If you want to display only one of these, use their name after a dot: e.g. `f.stat` will give the statistic of the F-test, or `wf.p` will give the p-values of the F-test on the projected model (i.e. projected onto the fixed-effects).}
 #' \item{`wald`: }{Wald test of joint nullity of the coefficients. This test always excludes the intercept and the fixed-effects. These type returns the following values: `stat`, `p`, `df1`, `df2` and `vcov`. The element `vcov` reports the way the VCOV matrix was computed since it directly influences this statistic.}
-#' \item{`ivf`, `ivf1`, `ivf2`, `ivfall`: }{These statistics are specific to IV estimations. They report either the IV F-test (namely the Cragg-Donald F statistic in the presence of only one endogenous regressor) of the first stage (`ivf` or `ivf1`), of the second stage (`ivf2`) or of both (`ivfall`). The F-test of the first stage is commonly named weak instrument test. The value of `ivfall` is only useful in [`etable`] when both the 1st and 2nd stages are displayed (it leads to the 1st stage F-test(s) to be displayed on the 1st stage estimation(s), and the 2nd stage one on the 2nd stage estimation -- otherwise, `ivf1` would also be displayed on the 2nd stage estimation). These types return the following values: `stat`, `p`, `df1` and `df2`.}
-#' \item{`ivwald`, `ivwald1`, `ivwald2`, `ivwaldall`: }{These statistics are specific to IV estimations. They report either the IV Wald-test of the first stage (`ivwald` or `ivwald1`), of the second stage (`ivwald2`) or of both (`ivwaldall`). The Wald-test of the first stage is commonly named weak instrument test. Note that if the estimation was done with a robust VCOV and there is only one endogenous regressor, this is equivalent to the Kleibergen-Paap statistic. The value of `ivwaldall` is only useful in [`etable`] when both the 1st and 2nd stages are displayed (it leads to the 1st stage Wald-test(s) to be displayed on the 1st stage estimation(s), and the 2nd stage one on the 2nd stage estimation -- otherwise, `ivwald1` would also be displayed on the 2nd stage estimation). These types return the following values: `stat`, `p`, `df1`, `df2`, and `vcov`.}
+#' \item{`ivf`, `ivf1`, `ivf2`: }{These statistics are specific to IV estimations. They report either the IV F-test (namely the Cragg-Donald F statistic in the presence of only one endogenous regressor) of the first stage (`ivf` or `ivf1`), of the second stage (`ivf2`). The F-test of the first stage is commonly named weak instrument test. These types return the following values: `stat`, `p`, `df1` and `df2`.}
+#' \item{`ivwald`, `ivwald1`, `ivwald2`, `ivwaldall`: }{These statistics are specific to IV estimations. They report either the IV Wald-test of the first stage (`ivwald` or `ivwald1`), of the second stage (`ivwald2`) or of both (`ivwaldall`). The Wald-test of the first stage is commonly named weak instrument test. Note that if the estimation was done with a robust VCOV and there is only one endogenous regressor, this is equivalent to the Kleibergen-Paap statistic. These types return the following values: `stat`, `p`, `df1`, `df2`, and `vcov`.}
 #' \item{`cd`: }{The Cragg-Donald test for weak instruments.}
 #' \item{`kpr`: }{The Kleibergen-Paap test for weak instruments.}
 #' \item{`wh`: }{This statistic is specific to IV estimations. Wu-Hausman endogeneity test. H0 is the absence of endogeneity of the instrumented variables. It returns the following values: `stat`, `p`, `df1`, `df2`.}
 #' \item{`sargan`: }{Sargan test of overidentifying restrictions. H0: the instruments are not correlated with the second stage residuals. It returns the following values: `stat`, `p`, `df`.}
 #' \item{`lr`, `wlr`: }{Likelihood ratio and within likelihood ratio tests. It returns the following elements: `stat`, `p`, `df`. Concerning the within-LR test, note that, contrary to estimations with `femlm` or `feNmlm`, estimations with `feglm`/`fepois` need to estimate the model with fixed-effects only which may prove time-consuming (depending on your model). Bottom line, if you really need the within-LR and estimate a Poisson model, use `femlm` instead of `fepois` (the former uses direct ML maximization for which the only FEs model is a by product).}
 #' }
-#'
-#'
-#'
 #'
 #' @return
 #' By default an object of class `fixest_fitstat` is returned. Using `verbose = FALSE` returns a simple a list. Finally, if only one type is selected, `simplify = TRUE` leads to the selected type to be returned.
@@ -460,12 +457,6 @@ fitstat_register = function(type, fun, alias = NULL, subtypes = NULL){
 #' # Some fit statistics
 #' fitstat(gravity, ~ rmse + r2 + wald + wf)
 #'
-#' # You can use them in etable
-#' etable(gravity, fitstat = ~ rmse + r2 + wald + wf)
-#'
-#' # For wald and wf, you could show the pvalue instead:
-#' etable(gravity, fitstat = ~ rmse + r2 + wald.p + wf.p)
-#'
 #' # Now let's display some statistics that are not built-in
 #' # => we use fitstat_register to create them
 #'
@@ -476,9 +467,6 @@ fitstat_register = function(type, fun, alias = NULL, subtypes = NULL){
 #' fitstat_register("thc", function(x) tstat(x, se = "heter")[1], "t-stat (HC1)")
 #' fitstat_register("t1w", function(x) tstat(x, se = "clus")[1], "t-stat (clustered)")
 #' fitstat_register("t2w", function(x) tstat(x, se = "twow")[1], "t-stat (2-way)")
-#'
-#' # Now we can use these keywords in fitstat:
-#' etable(gravity, fitstat = ~ . + tstand + thc + t1w + t2w)
 #'
 #' # Note that the custom stats we created are can easily lead
 #' # to errors, but that's another story!
@@ -501,13 +489,13 @@ fitstat = function(x, type, simplify = FALSE, verbose = TRUE, show_types = FALSE
         # Compound types => types yielding several values
 
         # F-test etc
-        comp_types = c("f", "wf", "ivf", "ivf1", "ivf2", "ivfall", "wald", "ivwald",
+        comp_types = c("f", "wf", "ivf", "ivf1", "ivf2", "wald", "ivwald",
                        "ivwald1", "ivwald2", "ivwaldall", "wh", "sargan", "lr",
                        "wlr", "kpr", "cd")
 
         full_comp_types = paste(comp_types, rep(c("stat", "p"), each = length(comp_types)), sep = ".")
 
-        comp_alias = c(f = "F-test", wf = "F-test (projected)", ivfall = "F-test (IV only)", ivf1 = "F-test (1st stage)", ivf2 = "F-test (2nd stage)", wald = "Wald (joint nullity)", ivwaldall = "Wald (IV only)", ivwald1 = "Wald (1st stage)", ivwald2 = "Wald (2nd stage)", wh = "Wu-Hausman", sargan = "Sargan", lr = "LR", wlr = "LR (within)", df1 = "DoF (first)", df2 = "DoF (second)", df = "DoF", kpr = "Kleibergen-Paap", cd = "Cragg-Donald")
+        comp_alias = c(f = "F-test", wf = "F-test (projected)", ivf1 = "F-test (1st stage)", ivf2 = "F-test (2nd stage)", wald = "Wald (joint nullity)", ivwaldall = "Wald (IV only)", ivwald1 = "Wald (1st stage)", ivwald2 = "Wald (2nd stage)", wh = "Wu-Hausman", sargan = "Sargan", lr = "LR", wlr = "LR (within)", df1 = "DoF (first)", df2 = "DoF (second)", df = "DoF", kpr = "Kleibergen-Paap", cd = "Cragg-Donald")
         my_names = paste(names(comp_alias), rep(c("stat", "p"), each = length(comp_alias)), sep = ".")
         full_comp_alias = setNames(paste0(comp_alias, ", ", rep(c("stat.", "p-value"), each = length(comp_alias))), my_names)
 
@@ -556,7 +544,6 @@ fitstat = function(x, type, simplify = FALSE, verbose = TRUE, show_types = FALSE
         x = summary(x, ...)
     }
 
-    IS_ETABLE = isTRUE(dots$etable)
     set_value = function(vec, value){
         if(length(vec) == 1) return(vec)
 
@@ -567,8 +554,6 @@ fitstat = function(x, type, simplify = FALSE, verbose = TRUE, show_types = FALSE
             }
 
             return(vec[[value]])
-        } else if(IS_ETABLE){
-            return(vec[1])
         } else {
             return(vec)
         }
@@ -678,37 +663,6 @@ fitstat = function(x, type, simplify = FALSE, verbose = TRUE, show_types = FALSE
                     res_all[[type]] = NA
                 }
 
-
-            } else if(root == "ivfall"){
-                if(isTRUE(x$iv)){
-                    if(x$iv_stage == 1){
-                        df1 = degrees_freedom(x, vars = x$iv_inst_names_xpd)
-                        df2 = degrees_freedom(x, "resid")
-
-                        stat = ((x$ssr_no_inst - x$ssr) / df1) / (x$ssr / df2)
-                        p = pf(stat, df1, df2, lower.tail = FALSE)
-                        vec = list(stat = stat, p = p, df1 = df1, df2 = df2)
-                        res_all[[type]] = set_value(vec, value)
-
-                    } else {
-                        # f stat for the second stage
-
-                        df1 = degrees_freedom(x, vars = x$iv_endo_names_fit)
-                        df2 = degrees_freedom(x, "resid")
-
-                        w = 1
-                        if(!is.null(x$weights)) w = x$weights
-                        ssr = cpp_ssq(x$iv_residuals, w)
-
-                        stat = ((x$ssr_no_endo - ssr) / df1) / (ssr / df2)
-                        p = pf(stat, df1, df2, lower.tail = FALSE)
-                        vec = list(stat = stat, p = p, df1 = df1, df2 = df2)
-                        res_all[[type]] = set_value(vec, value)
-                    }
-
-                } else {
-                    res_all[[type]] = NA
-                }
 
             } else if(root == "ivf1"){
 
@@ -991,7 +945,6 @@ fitstat = function(x, type, simplify = FALSE, verbose = TRUE, show_types = FALSE
 #'
 #' @inheritParams print.fixest
 #' @inheritParams summary.fixest
-#' @inheritParams etable
 #'
 #' @param print Logical, default is `TRUE`. If `TRUE`, then a verbose description of the test is prompted on the R console. Otherwise only a named vector containing the test statistics is returned.
 #' @param ... Any other element to be passed to [`summary.fixest`].

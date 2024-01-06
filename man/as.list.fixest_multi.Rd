@@ -19,11 +19,11 @@ Extracts the results from a `fixest_multi` object and place them into a list.
 }
 \examples{
 
-base = iris
-names(base) = c("y", "x1", "x2", "x3", "species")
+base <- iris
+names(base) <- c("y", "x1", "x2", "x3", "species")
 
 # Multiple estimation
-res = feols(y ~ csw(x1, x2, x3), base, split = ~species)
+res <- feols(y ~ csw(x1, x2, x3), base, split = ~species)
 
 # All the results at once
 as.list(res)

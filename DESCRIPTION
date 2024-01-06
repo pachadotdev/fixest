@@ -31,7 +31,6 @@ License: MIT + file LICENSE
 BugReports: https://github.com/pachadotdev/fixest2/issues
 URL: https://pacha.dev/fixest2/, https://github.com/pachadotdev/fixest2
 LazyData: true
-VignetteBuilder: knitr
 RoxygenNote: 7.2.3
 Encoding: UTF-8
 SystemRequirements: C++11

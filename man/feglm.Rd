@@ -280,8 +280,6 @@ You can provide several leads/lags/differences at once: e.g. if your formula is 
 
 You can interact a numeric variable with a "factor-like" variable by using `i(factor_var, continuous_var, ref)`, where `continuous_var` will be interacted with each value of `factor_var` and the argument `ref` is a value of `factor_var` taken as a reference (optional).
 
-Using this specific way to create interactions leads to a different display of the interacted values in [`etable`]. See examples.
-
  It is important to note that *if you do not care about the standard-errors of the interactions*, then you can add interactions in the fixed-effects part of the formula, it will be incomparably faster (using the syntax `factor_var[continuous_var]`, as explained in the section \dQuote{Varying slopes}).
 
 The function [`i`] has in fact more arguments, please see details in its associated help page.
@@ -365,6 +363,7 @@ When the element to be expanded i) is equal to the empty string or, ii) is of le
 }
 
 \examples{
+# Single estimation ----
 
 # Poisson estimation
 res <- feglm(Sepal.Length ~ Sepal.Width + Petal.Length | Species, iris, "poisson")
@@ -375,27 +374,12 @@ res_pois <- fepois(Sepal.Length ~ Sepal.Width + Petal.Length | Species, iris)
 # With the fit method:
 res_fit <- feglm.fit(iris$Sepal.Length, iris[, 2:3], iris$Species, "poisson")
 
-# All results are identical:
-etable(res, res_pois, res_fit)
-
 # Note that you have many more examples in feols
 
-#
-# Multiple estimations:
-#
+# Multiple estimations ----
 
 # 6 estimations
 est_mult <- fepois(c(Ozone, Solar.R) ~ Wind + Temp + csw0(Wind:Temp, Day), airquality)
-
-# We can display the results for the first lhs:
-etable(est_mult[lhs = 1])
-
-# And now the second (access can be made by name)
-etable(est_mult[lhs = "Solar.R"])
-
-# Now we focus on the two last right hand sides
-# (note that .N can be used to specify the last item)
-etable(est_mult[rhs = 2:.N])
 
 # Combining with split
 est_split <- fepois(c(Ozone, Solar.R) ~ sw(poly(Wind, 2), poly(Temp, 2)),
@@ -421,7 +405,7 @@ For models with multiple fixed-effects:
 Gaure, Simen, 2013, "OLS with multiple high dimensional category variables", Computational Statistics & Data Analysis 66 pp. 8--18
 }
 \seealso{
-See also [`summary.fixest`] to see the results with the appropriate standard-errors, [`fixef.fixest`] to extract the fixed-effects coefficients, and the function [`etable`] to visualize the results of multiple estimations.
+See also [`summary.fixest`] to see the results with the appropriate standard-errors, [`fixef.fixest`] to extract the fixed-effects coefficients.
 And other estimation methods: [`feols`], [`femlm`], [`fenegbin`], [`feNmlm`].
 }
 \author{

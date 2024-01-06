@@ -197,8 +197,6 @@ You can provide several leads/lags/differences at once: e.g. if your formula is 
 
 You can interact a numeric variable with a "factor-like" variable by using `i(factor_var, continuous_var, ref)`, where `continuous_var` will be interacted with each value of `factor_var` and the argument `ref` is a value of `factor_var` taken as a reference (optional).
 
-Using this specific way to create interactions leads to a different display of the interacted values in [`etable`]. See examples.
-
  It is important to note that *if you do not care about the standard-errors of the interactions*, then you can add interactions in the fixed-effects part of the formula, it will be incomparably faster (using the syntax `factor_var[continuous_var]`, as explained in the section \dQuote{Varying slopes}).
 
 The function [`i`] has in fact more arguments, please see details in its associated help page.
@@ -282,9 +280,10 @@ When the element to be expanded i) is equal to the empty string or, ii) is of le
 }
 
 \examples{
-
-# Load trade data
+# Load trade data ----
 data(trade)
+
+# Single estimation ----
 
 # We estimate the effect of distance on trade => we account for 3 fixed-effects
 # 1) Poisson estimation
@@ -293,36 +292,16 @@ est_pois <- femlm(Euros ~ log(dist_km) | Origin + Destination + Product, trade)
 # 2) Log-Log Gaussian estimation (with same FEs)
 est_gaus <- update(est_pois, log(Euros + 1) ~ ., family = "gaussian")
 
-# Comparison of the results using the function etable
-etable(est_pois, est_gaus)
-# Now using two way clustered standard-errors
-etable(est_pois, est_gaus, se = "twoway")
-
 # Comparing different types of standard errors
 sum_hetero <- summary(est_pois, se = "hetero")
 sum_oneway <- summary(est_pois, se = "cluster")
 sum_twoway <- summary(est_pois, se = "twoway")
 sum_threeway <- summary(est_pois, se = "threeway")
 
-etable(sum_hetero, sum_oneway, sum_twoway, sum_threeway)
-
-
-#
-# Multiple estimations:
-#
+# Multiple estimation ----
 
 # 6 estimations
 est_mult <- femlm(c(Ozone, Solar.R) ~ Wind + Temp + csw0(Wind:Temp, Day), airquality)
-
-# We can display the results for the first lhs:
-etable(est_mult[lhs = 1])
-
-# And now the second (access can be made by name)
-etable(est_mult[lhs = "Solar.R"])
-
-# Now we focus on the two last right hand sides
-# (note that .N can be used to specify the last item)
-etable(est_mult[rhs = 2:.N])
 
 # Combining with split
 est_split <- fepois(c(Ozone, Solar.R) ~ sw(poly(Wind, 2), poly(Temp, 2)),
@@ -338,7 +317,6 @@ summary(est_split, "compact")
 
 # You can still select which sample/LHS/RHS to display
 est_split[sample = 1:2, lhs = 1, rhs = 1]
-
 }
 \references{
 Berge, Laurent, 2018, "Efficient estimation of maximum likelihood models with multiple fixed-effects: the R package FENmlm." CREA Discussion Papers, 13 ([](https://wwwen.uni.lu/content/download/110162/1299525/file/2018_13)).
@@ -352,7 +330,7 @@ On the unconditionnal Negative Binomial model:
 Allison, Paul D and Waterman, Richard P, 2002, "Fixed-Effects Negative Binomial Regression Models", Sociological Methodology 32(1) pp. 247--265
 }
 \seealso{
-See also [`summary.fixest`] to see the results with the appropriate standard-errors, [`fixef.fixest`] to extract the fixed-effects coefficients, and the function [`etable`] to visualize the results of multiple estimations.
+See also [`summary.fixest`] to see the results with the appropriate standard-errors, [`fixef.fixest`] to extract the fixed-effects coefficients.
 And other estimation methods: [`feols`], [`feglm`], [`fepois`], [`feNmlm`].
 }
 \author{

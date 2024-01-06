@@ -47,11 +47,11 @@ Summary information for fixest_multi objects. In particular, this is used to spe
 }
 \examples{
 
-base = iris
-names(base) = c("y", "x1", "x2", "x3", "species")
+base <- iris
+names(base) <- c("y", "x1", "x2", "x3", "species")
 
 # Multiple estimation
-res = feols(y ~ csw(x1, x2, x3), base, split = ~species)
+res <- feols(y ~ csw(x1, x2, x3), base, split = ~species)
 
 # By default, the type is "short"
 # You can still use the arguments from summary.fixest

@@ -20,14 +20,14 @@ Extracts the meta information on all the models contained in a `fixest_multi` es
 \examples{
 
 # a multiple estimation
-base = setNames(iris, c("y", "x1", "x2", "x3", "species"))
-est = feols(y ~ csw(x.[, 1:3]), base, fsplit = ~species)
+base <- setNames(iris, c("y", "x1", "x2", "x3", "species"))
+est <- feols(y ~ csw(x.[, 1:3]), base, fsplit = ~species)
 
 # All the meta information
 models(est)
 
 # Illustration: Why use simplify
-est_sub = est[sample = 2]
+est_sub <- est[sample = 2]
 models(est_sub)
 models(est_sub, simplify = TRUE)
 

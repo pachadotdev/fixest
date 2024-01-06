@@ -2454,14 +2454,11 @@ getFixest_ssc <- function() {
 #' est_two_FE <- feols(y ~ x1 | id + period, base_did)
 #' est_panel <- feols(y ~ x1 | id + period, base_did, panel.id = ~ id + period)
 #'
-#' etable(est_no_FE, est_one_FE, est_two_FE)
-#'
 #' # Changing the default standard-errors
 #' setFixest_vcov(
 #'     no_FE = "hetero", one_FE = "iid",
 #'     two_FE = "twoway", panel = "drisc"
 #' )
-#' etable(est_no_FE, est_one_FE, est_two_FE, est_panel)
 #'
 #' # Resetting the defaults
 #' setFixest_vcov(reset = TRUE)

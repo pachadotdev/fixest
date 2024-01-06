@@ -51,14 +51,6 @@
 \arguments{
 \item{object}{A `fixest_multi` object, coming from a `fixest` multiple estimation.}
 
-\item{vcov}{A function to be used to compute the standard-errors of each fixest object. You can pass extra arguments to this function using the argument `.vcov_args`. See the example.}
-
-\item{keep}{Character vector. This element is used to display only a subset of variables. This should be a vector of regular expressions (see [`base::regex`] help for more info). Each variable satisfying any of the regular expressions will be kept. This argument is applied post aliasing (see argument `dict`). Example: you have the variable `x1` to `x55` and want to display only `x1` to `x9`, then you could use `keep = "x[[:digit:]]$"`. If the first character is an exclamation mark, the effect is reversed (e.g. keep = "!Intercept" means: every variable that does not contain \dQuote{Intercept} is kept). See details.}
-
-\item{drop}{Character vector. This element is used if some variables are not to be displayed. This should be a vector of regular expressions (see [`base::regex`] help for more info). Each variable satisfying any of the regular expressions will be discarded. This argument is applied post aliasing (see argument `dict`). Example: you have the variable `x1` to `x55` and want to display only `x1` to `x9`, then you could use `drop = "x[[:digit:]]{2}`". If the first character is an exclamation mark, the effect is reversed (e.g. drop = "!Intercept" means: every variable that does not contain \dQuote{Intercept} is dropped). See details.}
-
-\item{order}{Character vector. This element is used if the user wants the variables to be ordered in a certain way. This should be a vector of regular expressions (see [`base::regex`] help for more info). The variables satisfying the first regular expression will be placed first, then the order follows the sequence of regular expressions. This argument is applied post aliasing (see argument `dict`). Example: you have the following variables: `month1` to `month6`, then `x1` to `x5`, then `year1` to `year6`. If you want to display first the x's, then the years, then the months you could use: `order = c("x", "year")`. If the first character is an exclamation mark, the effect is reversed (e.g. order = "!Intercept" means: every variable that does not contain \dQuote{Intercept} goes first).  See details.}
-
 \item{long}{Logical scalar, default is `FALSE`. If `TRUE`, then all the information is stacked, with two columns containing the information: `"param"` and `"value"`. The column `param` contains the values `coef`/`se`/`tstat`/`pvalue`.}
 
 \item{wide}{A logical scalar, default is `FALSE`. If `TRUE`, then a list is returned: the elements of the list are coef/se/tstat/pvalue. Each element of the list is a wide table with a column per coefficient.}
@@ -86,8 +78,8 @@ Series of methods to extract the coefficients table or its sub-components from a
 }}
 \examples{
 
-base = setNames(iris, c("y", "x1", "x2", "x3", "species"))
-est_multi = feols(y~ csw(x.[,1:3]), base, split = ~species)
+base <- setNames(iris, c("y", "x1", "x2", "x3", "species"))
+est_multi <- feols(y ~ csw(x.[, 1:3]), base, split = ~species)
 
 # we get all the coefficient tables at once
 coeftable(est_multi)
@@ -100,7 +92,5 @@ coeftable(est_multi, wide = TRUE)
 
 # long = TRUE, all the information is stacked
 coeftable(est_multi, long = TRUE)
-
-
 
 }

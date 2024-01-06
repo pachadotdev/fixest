@@ -41,24 +41,11 @@ Use logical keys to easily reorder. For example, say the object `res` contains a
 \examples{
 
 # Estimation with multiple samples/LHS/RHS
-aq = airquality[airquality$Month \%in\% 5:6, ]
-est_split = feols(c(Ozone, Solar.R) ~ sw(poly(Wind, 2), poly(Temp, 2)),
-                  aq, split = ~ Month)
-
-# By default: sample is the root
-etable(est_split)
-
-# Let's reorder, by considering lhs the root
-etable(est_split[lhs = 1:.N])
-
-# Selecting only one LHS and RHS
-etable(est_split[lhs = "Ozone", rhs = 1])
-
-# Taking the first root (here sample = 5)
-etable(est_split[I = 1])
-
-# The first and last estimations
-etable(est_split[i = c(1, .N)])
+aq <- airquality[airquality$Month \%in\% 5:6, ]
+est_split <- feols(c(Ozone, Solar.R) ~ sw(poly(Wind, 2), poly(Temp, 2)),
+    aq,
+    split = ~Month
+)
 
 }
 \seealso{

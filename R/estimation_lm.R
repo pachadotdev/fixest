@@ -52,8 +52,6 @@
 #'
 #' You can interact a numeric variable with a "factor-like" variable by using `i(factor_var, continuous_var, ref)`, where `continuous_var` will be interacted with each value of `factor_var` and the argument `ref` is a value of `factor_var` taken as a reference (optional).
 #'
-#' Using this specific way to create interactions leads to a different display of the interacted values in [`etable`]. See examples.
-#'
 #'  It is important to note that *if you do not care about the standard-errors of the interactions*, then you can add interactions in the fixed-effects part of the formula, it will be incomparably faster (using the syntax `factor_var[continuous_var]`, as explained in the section \dQuote{Varying slopes}).
 #'
 #' The function [`i`] has in fact more arguments, please see details in its associated help page.
@@ -154,9 +152,8 @@
 #' \item{y_demeaned}{Only when `demeaned = TRUE`: the centered dependent variable.}
 #' \item{X_demeaned}{Only when `demeaned = TRUE`: the centered explanatory variable.}
 #'
-#'
 #' @seealso
-#' See also [`summary.fixest`] to see the results with the appropriate standard-errors, [`fixef.fixest`] to extract the fixed-effects coefficients, and the function [`etable`] to visualize the results of multiple estimations. For plotting coefficients: see [`coefplot`].
+#' See also [`summary.fixest`] to see the results with the appropriate standard-errors, [`fixef.fixest`] to extract the fixed-effects coefficients.
 #'
 #' And other estimation methods: [`femlm`], [`feglm`], [`fepois`], [`fenegbin`], [`feNmlm`].
 #'
@@ -214,23 +211,14 @@
 #' # We need to set up the panel with the arg. panel.id
 #' est1 <- feols(y ~ l(x1, 0:1), base_did, panel.id = ~ id + period)
 #' est2 <- feols(f(y) ~ l(x1, -1:1), base_did, panel.id = ~ id + period)
-#' etable(est1, est2, order = "f", drop = "Int")
 #'
-#' #
-#' # Using interactions:
-#' #
+#' # Using interactions ----
 #'
 #' data(base_did)
 #' # We interact the variable 'period' with the variable 'treat'
 #' est_did <- feols(y ~ x1 + i(period, treat, 5) | id + period, base_did)
 #'
-#' # Now we can plot the result of the interaction with coefplot
-#' coefplot(est_did)
-#' # You have many more example in coefplot help
-#'
-#' #
-#' # Instrumental variables
-#' #
+#' # Instrumental variables ----
 #'
 #' # To estimate Two stage least squares,
 #' # insert a formula describing the endo. vars./instr. relation after a pipe:
@@ -266,30 +254,10 @@
 #' # You can navigate through it by subsetting:
 #' sum_res_iv2[iv = 1]
 #'
-#' # The stage argument also works in etable:
-#' etable(res_iv, res_iv_fe, res_iv2, order = "endo")
-#'
-#' etable(res_iv, res_iv_fe, res_iv2,
-#'   stage = 1:2, order = c("endo", "inst"),
-#'   group = list(control = "!endo|inst")
-#' )
-#'
-#' #
-#' # Multiple estimations:
-#' #
+#' # Multiple estimations ----
 #'
 #' # 6 estimations
 #' est_mult <- feols(c(Ozone, Solar.R) ~ Wind + Temp + csw0(Wind:Temp, Day), airquality)
-#'
-#' # We can display the results for the first lhs:
-#' etable(est_mult[lhs = 1])
-#'
-#' # And now the second (access can be made by name)
-#' etable(est_mult[lhs = "Solar.R"])
-#'
-#' # Now we focus on the two last right hand sides
-#' # (note that .N can be used to specify the last item)
-#' etable(est_mult[rhs = 2:.N])
 #'
 #' # Combining with split
 #' est_split <- feols(c(Ozone, Solar.R) ~ sw(poly(Wind, 2), poly(Temp, 2)),
@@ -313,21 +281,16 @@
 #' base <- setNames(iris, c("y", "x1", "x2", "x3", "species"))
 #'
 #' est <- feols(y ~ x.[1:3], base, split = ~species)
-#' etable(est)
 #'
 #' # You can select specific values with the %keep% and %drop% operators
 #' # By default, partial matching is enabled. It should refer to a single variable.
 #' est <- feols(y ~ x.[1:3], base, split = ~ species %keep% c("set", "vers"))
-#' etable(est)
 #'
 #' # You can supply regular expression by using an @ first.
 #' # regex can match several values.
 #' est <- feols(y ~ x.[1:3], base, split = ~ species %keep% c("@set|vers"))
-#' etable(est)
 #'
-#' #
-#' # Argument sliding
-#' #
+#' # Argument sliding ----
 #'
 #' # When the data set is set up globally, you can use the vcov argument implicitly
 #'
@@ -341,15 +304,10 @@
 #' # ~species is implicitly deduced to be equal to 'vcov'
 #' sliding <- feols(y ~ x1 + x2, ~species)
 #'
-#' etable(no_sliding, sliding)
-#'
 #' # Resetting the global options
 #' setFixest_estimation(data = NULL)
 #'
-#'
-#' #
-#' # Formula expansions
-#' #
+#' # Formula expansions ----
 #'
 #' # By default, the features of the xpd function are enabled in
 #' # all fixest estimations
@@ -366,8 +324,6 @@
 #' # NOTA: it also works for multiple LHS
 #' mult1 <- feols(x.[1:2] ~ y + species, base)
 #' mult2 <- feols(..("y|3") ~ x.[1:2] + species, base)
-#' etable(mult1, mult2)
-#'
 #'
 #' # Use .[, stuff] to include variables in functions:
 #' feols(y ~ csw(x.[, 1:3]), base)

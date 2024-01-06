@@ -27,12 +27,6 @@ fitstat(gravity, "g", simplify = TRUE)
 # Some fit statistics
 fitstat(gravity, ~ rmse + r2 + wald + wf)
 
-# You can use them in etable
-etable(gravity, fitstat = ~ rmse + r2 + wald + wf)
-
-# For wald and wf, you could show the pvalue instead:
-etable(gravity, fitstat = ~ rmse + r2 + wald.p + wf.p)
-
 # Now let's display some statistics that are not built-in
 # => we use fitstat_register to create them
 
@@ -43,9 +37,6 @@ fitstat_register("tstand", function(x) tstat(x, se = "stand")[1], "t-stat (regul
 fitstat_register("thc", function(x) tstat(x, se = "heter")[1], "t-stat (HC1)")
 fitstat_register("t1w", function(x) tstat(x, se = "clus")[1], "t-stat (clustered)")
 fitstat_register("t2w", function(x) tstat(x, se = "twow")[1], "t-stat (2-way)")
-
-# Now we can use these keywords in fitstat:
-etable(gravity, fitstat = ~ . + tstand + thc + t1w + t2w)
 
 # Note that the custom stats we created are can easily lead
 # to errors, but that's another story!

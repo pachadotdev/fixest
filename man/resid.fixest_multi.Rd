@@ -36,11 +36,11 @@ Utility to extract the residuals from multiple `fixest` estimations. If possible
 }
 \examples{
 
-base = iris
-names(base) = c("y", "x1", "x2", "x3", "species")
+base <- iris
+names(base) <- c("y", "x1", "x2", "x3", "species")
 
 # A multiple estimation
-est = feols(y ~ x1 + csw0(x2, x3), base)
+est <- feols(y ~ x1 + csw0(x2, x3), base)
 
 # We can get all the residuals at once,
 # each column is a model

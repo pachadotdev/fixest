@@ -169,7 +169,7 @@ A `fixest` object. Note that `fixest` objects contain many elements and most of 
 \item{theta}{In the case of a negative binomial estimation: the overdispersion parameter.}
 
  @seealso
-See also [`summary.fixest`] to see the results with the appropriate standard-errors, [`fixef.fixest`] to extract the fixed-effects coefficients, and the function [`etable`] to visualize the results of multiple estimations.
+See also [`summary.fixest`] to see the results with the appropriate standard-errors, [`fixef.fixest`] to extract the fixed-effects coefficients.
 
 And other estimation methods: [`feols`], [`femlm`], [`feglm`], [`fepois`][fixest2::feglm], [`fenegbin`][fixest2::femlm].
 }
@@ -211,8 +211,6 @@ You can provide several leads/lags/differences at once: e.g. if your formula is 
 
 
 You can interact a numeric variable with a "factor-like" variable by using `i(factor_var, continuous_var, ref)`, where `continuous_var` will be interacted with each value of `factor_var` and the argument `ref` is a value of `factor_var` taken as a reference (optional).
-
-Using this specific way to create interactions leads to a different display of the interacted values in [`etable`]. See examples.
 
  It is important to note that *if you do not care about the standard-errors of the interactions*, then you can add interactions in the fixed-effects part of the formula, it will be incomparably faster (using the syntax `factor_var[continuous_var]`, as explained in the section \dQuote{Varying slopes}).
 
@@ -313,8 +311,6 @@ base <- data.frame(x, y, z1)
 est1_L <- femlm(z1 ~ log(x) + log(y), base)
 # Estimating the same 'linear' relation using a 'non-linear' call
 est1_NL <- feNmlm(z1 ~ 1, base, NL.fml = ~ a * log(x) + b * log(y), NL.start = list(a = 0, b = 0))
-# we compare the estimates with the function esttable (they are identical)
-etable(est1_L, est1_NL)
 
 # Now generating a non-linear relation (E(z2) = x + y + 1):
 z2 <- rpois(n, x + y) + rpois(n, 1)
@@ -328,14 +324,6 @@ est2_NL <- feNmlm(z2 ~ 0, base,
 # we can't estimate this relation linearily
 # => closest we can do:
 est2_L <- femlm(z2 ~ log(x) + log(y), base)
-
-# Difference between the two models:
-etable(est2_L, est2_NL)
-
-# Plotting the fits:
-plot(x, z2, pch = 18)
-points(x, fitted(est2_L), col = 2, pch = 1)
-points(x, fitted(est2_NL), col = 4, pch = 2)
 
 }
 \references{

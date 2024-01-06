@@ -17,8 +17,7 @@ The main features are:
 \item{Estimation. The core functions are: [`feols`], [`feglm`] and [`femlm`] to estimate, respectively, linear models, generalized linear models and maximum likelihood models with multiple fixed-effects. The function [`feNmlm`] allows the inclusion of non-linear in parameters right hand sides. Finally [`fepois`][fixest2::feglm] and [`fenegbin`][fixest2::femlm] are shorthands to estimate Poisson and Negative Binomial models.}
 \item{Multiple estimations}{You can perform multiple estimations at once with the [`stepwise`] functions. It's then very easy to manipulate multiple results with the associated methods. See an introduction in the dedicated vignette: [Multiple estimations](https://cran.r-project.org/package=fixest/vignettes/multiple_estimations.html)}
 \item{Easy and flexible clustering of standard-errors. By using the arguments `vcov` and `ssc` (see [`summary.fixest`]). To have a sense of how the standard errors are computed, see the vignette [On standard-errors](https://lrberge.github.io/fixest/articles/standard_errors.html).}
-\item{Visualization and exportation of results. You can visualize the results of multiple estimations in R, or export them in Latex using the function [`etable`]. This vignette details how to customize the Latex tables: [Exporting estimation tables](https://lrberge.github.io/fixest/articles/exporting_tables.html).}
-\item{Plot multiple results. You can plot the coefficients and confidence intervals of estimations easily with the function [`coefplot`]. This function also offers a specific layout for interactions.}
+\item{Visualization and exportation of results. You can visualize the results of multiple estimations in R. This vignette details how to customize the Latex tables: [Exporting estimation tables](https://lrberge.github.io/fixest/articles/exporting_tables.html).}
 }
 }
 \references{

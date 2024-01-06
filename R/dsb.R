@@ -1,5 +1,5 @@
 #' @exportS3Method
-print.dsb = function(x, ...){
+print.dsb <- function(x, ...) {
     cat(x, sep = "\n")
 }
 
@@ -33,14 +33,16 @@ print.dsb = function(x, ...){
 #' # BASIC USAGE ####
 #' #
 #'
-#' x = c("Romeo", "Juliet")
+#' x <- c("Romeo", "Juliet")
 #'
 #' # .[x] inserts x
 #' dsb("Hello .[x]!")
 #'
 #' # elements in ... are collapsed with "" (default)
-#' dsb("Hello .[x[1]], ",
-#'     "how is .[x[2]] doing?")
+#' dsb(
+#'     "Hello .[x[1]], ",
+#'     "how is .[x[2]] doing?"
+#' )
 #'
 #' # Splitting a comma separated string
 #' # The mechanism is explained later
@@ -70,7 +72,7 @@ print.dsb = function(x, ...){
 #' # operation: usually 'arg'op with op an operation code.
 #'
 #' # Example: splitting
-#' x = "hello dear"
+#' x <- "hello dear"
 #' dsb(".[' 's ? x]")
 #' # x is split by ' '
 #'
@@ -141,7 +143,7 @@ print.dsb = function(x, ...){
 #' # syntax: 'pattern'x
 #' # Default is '[[:alnum:]]+'
 #'
-#' x = "This years is... 2020"
+#' x <- "This years is... 2020"
 #' dsb("x ? x")
 #' dsb("X ? x")
 #'
@@ -178,8 +180,8 @@ print.dsb = function(x, ...){
 #' # f, F: formats the string to fit the same length
 #'
 #'
-#' score = c(-10, 2050)
-#' nm = c("Wilkins", "David")
+#' score <- c(-10, 2050)
+#' nm <- c("Wilkins", "David")
 #' dsb("Monopoly scores:\n.['\n'c ! - .[f ? nm]: .[F ? score] US$]")
 #'
 #' # OK that example may have been a bit too complex,
@@ -212,14 +214,14 @@ print.dsb = function(x, ...){
 #' dsb("'[|]'a, ' + 'c!x.[1:4]")
 #'
 #' # Enumerations
-#' acad = dsb("/you like admin, you enjoy working on weekends, you really love emails")
+#' acad <- dsb("/you like admin, you enjoy working on weekends, you really love emails")
 #' dsb("Main reasons to pursue an academic career:\n .[':i:) 'a, C ? acad].")
 #'
 #' #
 #' # A: same as 'a' but adds at the begging/end of the full string (not on the elements)
 #' # special values: :n:, :N:, give the number of elements
 #'
-#' characters = dsb("/David, Wilkins, Dora, Agnes")
+#' characters <- dsb("/David, Wilkins, Dora, Agnes")
 #' dsb("There are .[':N: characters: 'A, C ? characters].")
 #'
 #'
@@ -235,7 +237,7 @@ print.dsb = function(x, ...){
 #' #         'n|s'k: same + adds 's' at the end of shortened strings
 #' #         'n||s'k: same but 's' counts in the n characters kept
 #'
-#' words = dsb("/short, constitutional")
+#' words <- dsb("/short, constitutional")
 #' dsb("5k ? words")
 #'
 #' dsb("'5|..'k ? words")
@@ -250,7 +252,7 @@ print.dsb = function(x, ...){
 #' #
 #' # Special values :rest: and :REST:, give the number of items dropped
 #'
-#' bx = dsb("/Pessac Leognan, Saint Emilion, Marguaux, Saint Julien, Pauillac")
+#' bx <- dsb("/Pessac Leognan, Saint Emilion, Marguaux, Saint Julien, Pauillac")
 #' dsb("Bordeaux wines I like: .[3K, ', 'C ? bx].")
 #'
 #' dsb("Bordeaux wines I like: .['3|etc..'K, ', 'C ? bx].")
@@ -305,7 +307,7 @@ print.dsb = function(x, ...){
 #' # D: deletes all elements
 #' # -> useful in conditions
 #'
-#' x = dsb("/I'll, be, deleted")
+#' x <- dsb("/I'll, be, deleted")
 #' dsb("D ? x")
 #'
 #' #
@@ -313,7 +315,7 @@ print.dsb = function(x, ...){
 #' # syntax: 's1|s2'i: inserts s1 first and s2 last
 #' # I: is the same as i but is 'invisibly' included
 #'
-#' characters = dsb("/David, Wilkins, Dora, Agnes, Trotwood")
+#' characters <- dsb("/David, Wilkins, Dora, Agnes, Trotwood")
 #' dsb("'Heep|Spenlow'i, C ? characters")
 #'
 #' dsb("'Heep|Spenlow'I, C ? characters")
@@ -328,7 +330,7 @@ print.dsb = function(x, ...){
 #' #
 #' # *s, *s_: adds 's' or 's ' depending on the number of elements
 #'
-#' nb = 1:5
+#' nb <- 1:5
 #' dsb("Number.[*s, D ? nb]: .[C ? nb]")
 #' dsb("Number.[*s, D ? 2 ]: .[C ? 2 ]")
 #'
@@ -341,11 +343,11 @@ print.dsb = function(x, ...){
 #' # syntax: 'verb'v
 #'
 #' # Unpopular opinion?
-#' brand = c("Apple", "Samsung")
+#' brand <- c("Apple", "Samsung")
 #' dsb(".[V, C ? brand] overrated.")
 #' dsb(".[V, C ? brand[1]] overrated.")
 #'
-#' win = dsb("/Peggoty, Agnes, Emily")
+#' win <- dsb("/Peggoty, Agnes, Emily")
 #' dsb("The winner.[*s_, v, C ? win].")
 #' dsb("The winner.[*s_, v, C ? win[1]].")
 #'
@@ -362,7 +364,7 @@ print.dsb = function(x, ...){
 #' #         if length == 1: applies 's1|s2'A
 #' #         if length >  1: applies 's3|s4'A
 #'
-#' win = dsb("/Barkis, Micawber, Murdstone")
+#' win <- dsb("/Barkis, Micawber, Murdstone")
 #' dsb("The winner.[' is /s are '*A, C ? win].")
 #' dsb("The winner.[' is /s are '*A, C ? win[1]].")
 #'
@@ -386,7 +388,7 @@ print.dsb = function(x, ...){
 #'
 #' dsb("'char <= 2'if('(|)'a : '[|]'a), ' + 'c ? c(1, 12, 123)")
 #'
-#' sentence = "This is a sentence with some longish words."
+#' sentence <- "This is a sentence with some longish words."
 #' dsb("s, 'char<=4'if(D), c ? sentence")
 #'
 #' dsb("s, 'fixed == e'if(:D), c ! Only words with an e are selected.")
@@ -398,25 +400,29 @@ print.dsb = function(x, ...){
 #' # Arguments can be evaluated from the calling frame.
 #' # Simply use backticks instead of quotes.
 #'
-#' dollar = 6
-#' reason = "glory"
+#' dollar <- 6
+#' reason <- "glory"
 #' dsb("Why do you develop packages? For .[`dollar`*c!$]?",
-#'     "For money? No... for .[U,''s, c?reason]!", sep = "\n")
+#'     "For money? No... for .[U,''s, c?reason]!",
+#'     sep = "\n"
+#' )
 #'
 #' @export
-dsb = function(..., frame = parent.frame(), sep = "", vectorize = FALSE, nest = TRUE,
-               collapse = NULL){
+dsb <- function(..., frame = parent.frame(), sep = "", vectorize = FALSE, nest = TRUE,
+                collapse = NULL) {
     check_arg(vectorize, nest, "logical scalar")
     check_arg(sep, "character scalar")
     check_arg(collapse, "NULL character scalar")
     check_arg(frame, "class(environment) l0")
     check_arg(..., "vector len(1)")
 
-    if(...length() == 0) return("")
+    if (...length() == 0) {
+        return("")
+    }
 
-    sc = sys.call()
-    if(identical(sc[[2]], "--help")){
-        msg = c(
+    sc <- sys.call()
+    if (identical(sc[[2]], "--help")) {
+        msg <- c(
             "Welcome to dsb help\nUsage: dsb(s) with 's' a character string",
             " ",
             "BASIC usage ------------|",
@@ -599,624 +605,625 @@ dsb = function(..., frame = parent.frame(), sep = "", vectorize = FALSE, nest = 
             "",
             "    In quoted arguments, use backticks to evaluate them from the frame.",
             '    Ex: n = 3 ; dsb("`n`*c!$") -> "$$$". The \'$\' is replicated n times, then collapsed.'
-            )
+        )
 
         message(paste(msg, collapse = "\n"))
         return(invisible(NULL))
     }
 
-    res = .dsb(..., frame = frame, sep = sep, vectorize = vectorize, nest = nest, collapse = collapse, check = TRUE)
+    res <- .dsb(..., frame = frame, sep = sep, vectorize = vectorize, nest = nest, collapse = collapse, check = TRUE)
 
-    class(res) = c("dsb", "character")
+    class(res) <- c("dsb", "character")
     res
 }
 
-#' @rdname etable
 #' @export
-.dsb0 = function(..., frame = parent.frame(), sep = "", vectorize = FALSE, check = FALSE){
+.dsb0 <- function(..., frame = parent.frame(), sep = "", vectorize = FALSE, check = FALSE) {
     .dsb(..., frame = frame, nest = FALSE, sep = sep, vectorize = vectorize, check = check)
 }
 
-#' @rdname etable
 #' @export
-.dsb = function(..., frame = parent.frame(), sep = "", vectorize = FALSE,
-                nest = TRUE, collapse = NULL, check = FALSE){
-
-    if(...length() == 0){
+.dsb <- function(..., frame = parent.frame(), sep = "", vectorize = FALSE,
+                 nest = TRUE, collapse = NULL, check = FALSE) {
+    if (...length() == 0) {
         return("")
-    } else if(...length() == 1){
-        x = as.character(..1)
+    } else if (...length() == 1) {
+        x <- as.character(..1)
 
-        if(length(x) > 1){
-            stop("dsb can only be applied to character scalars. Problem: the argument is of length ",
-                 length(qui), "")
+        if (length(x) > 1) {
+            stop(
+                "dsb can only be applied to character scalars. Problem: the argument is of length ",
+                length(qui), ""
+            )
         }
-
     } else {
-
-        if(check){
-            dots = error_sender(list(...), "In dsb, one element of ... could not be evaluated.")
+        if (check) {
+            dots <- error_sender(list(...), "In dsb, one element of ... could not be evaluated.")
         } else {
-            dots = list(...)
+            dots <- list(...)
         }
 
-        if(any(lengths(dots) > 1)){
-            qui = which(lengths(dots) > 1)[1]
-            stop("dsb can only be applied to character scalars. Problem: The ", n_th(qui),
-                 " elment in ... is of length ", length(dots[[qui]]), ".")
+        if (any(lengths(dots) > 1)) {
+            qui <- which(lengths(dots) > 1)[1]
+            stop(
+                "dsb can only be applied to character scalars. Problem: The ", n_th(qui),
+                " elment in ... is of length ", length(dots[[qui]]), "."
+            )
         }
 
-        if(!vectorize){
+        if (!vectorize) {
             # Note: using paste(..1, ..2, sep = sep) explicitly only saves 2us vav do.call
             # not worth it.
 
-            dots$sep = sep
-            x = do.call(paste, dots)
+            dots$sep <- sep
+            x <- do.call(paste, dots)
         } else {
             # vectorize
-            n = length(dots)
-            res = vector("list", n)
-            for(i in 1:n){
-                res[[i]] = .dsb(dots[[i]], nest = nest, frame = frame, check = check)
+            n <- length(dots)
+            res <- vector("list", n)
+            for (i in 1:n) {
+                res[[i]] <- .dsb(dots[[i]], nest = nest, frame = frame, check = check)
             }
 
             return(unlist(res))
         }
     }
 
-    if(is.na(x) || length(x) == 0){
+    if (is.na(x) || length(x) == 0) {
         return(x)
     }
 
-    if(nest){
-        x_parsed = list(cpp_dsb_full_string(x))
-
-    } else if(!grepl(".[", x, fixed = TRUE)){
+    if (nest) {
+        x_parsed <- list(cpp_dsb_full_string(x))
+    } else if (!grepl(".[", x, fixed = TRUE)) {
         return(x)
-
     } else {
-        x_parsed = cpp_dsb(x)
-
+        x_parsed <- cpp_dsb(x)
     }
 
-    n_x_all = lengths(x_parsed)
+    n_x_all <- lengths(x_parsed)
 
-    n = length(x_parsed)
-    res = character(0)
-    i_done = FALSE
-    for(i in 1:n){
-
-        if(i_done){
-            i_done = FALSE
+    n <- length(x_parsed)
+    res <- character(0)
+    i_done <- FALSE
+    for (i in 1:n) {
+        if (i_done) {
+            i_done <- FALSE
             next
         }
 
-        xi = x_parsed[[i]]
+        xi <- x_parsed[[i]]
 
-        if(length(xi) == 1){
-
-            if(i == 1){
-                res = xi
+        if (length(xi) == 1) {
+            if (i == 1) {
+                res <- xi
             } else {
-                res = paste0(res, xi)
+                res <- paste0(res, xi)
             }
-
         } else {
-            operators = xi[[1]]
-            xi = xi[[2]]
+            operators <- xi[[1]]
+            xi <- xi[[2]]
 
-            if(length(operators) == 0){
-
-                if(nest){
+            if (length(operators) == 0) {
+                if (nest) {
                     # means verbatim => no evaluation
-                    if(grepl(".[", xi, fixed = TRUE)){
-                        xi = .dsb(xi, frame = frame, nest = FALSE, check = check)
+                    if (grepl(".[", xi, fixed = TRUE)) {
+                        xi <- .dsb(xi, frame = frame, nest = FALSE, check = check)
                     }
-
                 } else {
                     # we need to evaluate xi
-                    if(check){
-                        xi_call = error_sender(str2lang(xi), "The value '", xi,
-                                               "' could not be parsed.")
+                    if (check) {
+                        xi_call <- error_sender(
+                            str2lang(xi), "The value '", xi,
+                            "' could not be parsed."
+                        )
                     } else {
-                        xi_call = str2lang(xi)
+                        xi_call <- str2lang(xi)
                     }
 
-                    if(is.character(xi_call)){
+                    if (is.character(xi_call)) {
                         # if a string literal => it's nesting
-                        if(grepl(".[", xi_call, fixed = TRUE)){
-                            xi = .dsb(xi_call, frame = frame, nest = FALSE, check = check)
+                        if (grepl(".[", xi_call, fixed = TRUE)) {
+                            xi <- .dsb(xi_call, frame = frame, nest = FALSE, check = check)
                         }
                     } else {
-                        if(check){
-                            xi = error_sender(eval(xi_call, frame), "The value '", xi,
-                                              "' could not be evaluated.")
+                        if (check) {
+                            xi <- error_sender(
+                                eval(xi_call, frame), "The value '", xi,
+                                "' could not be evaluated."
+                            )
                         } else {
-                            xi = eval(xi_call, frame)
+                            xi <- eval(xi_call, frame)
                         }
                     }
                 }
-
             } else {
+                n_op <- length(operators)
+                verbatim <- operators[n_op] %in% c("!", "/")
 
-                n_op = length(operators)
-                verbatim = operators[n_op] %in% c("!", "/")
-
-                if(operators[n_op] == "/"){
-                    operators = "',[ \t\n\r]*'S"
+                if (operators[n_op] == "/") {
+                    operators <- "',[ \t\n\r]*'S"
                 } else {
-                    operators = operators[-n_op]
+                    operators <- operators[-n_op]
                     # The two separators ? and ! have no default operation
                 }
 
                 # If split operator, we concatenate
-                concat_nested = length(operators) > 0 && grepl("(s|S)$", operators[[1]])
+                concat_nested <- length(operators) > 0 && grepl("(s|S)$", operators[[1]])
 
-                if(verbatim && grepl(".[", xi, fixed = TRUE)){
-                    xi = .dsb(xi, frame = frame, nest = FALSE, vectorize = concat_nested, check = check)
-
-                } else if(!verbatim){
+                if (verbatim && grepl(".[", xi, fixed = TRUE)) {
+                    xi <- .dsb(xi, frame = frame, nest = FALSE, vectorize = concat_nested, check = check)
+                } else if (!verbatim) {
                     # evaluation
-                    if(check){
-                        xi_call = error_sender(str2lang(xi), "The value '", xi,
-                                               "' could not be parsed.")
-                        xi = error_sender(eval(xi_call, frame), "The value '", xi,
-                                          "' could not be evaluated.")
+                    if (check) {
+                        xi_call <- error_sender(
+                            str2lang(xi), "The value '", xi,
+                            "' could not be parsed."
+                        )
+                        xi <- error_sender(
+                            eval(xi_call, frame), "The value '", xi,
+                            "' could not be evaluated."
+                        )
                     } else {
-                        xi = eval(str2lang(xi), frame)
+                        xi <- eval(str2lang(xi), frame)
                     }
 
-                    if(is.function(xi)){
-                        stop_up("dsb cannot coerce functions into strings. Problem: '",
-                                trimws(x_parsed[[i]][[2]]), "' is a function.")
+                    if (is.function(xi)) {
+                        stop_up(
+                            "dsb cannot coerce functions into strings. Problem: '",
+                            trimws(x_parsed[[i]][[2]]), "' is a function."
+                        )
                     }
-
                 }
 
                 # Now we apply the operators
-                for(j in seq_along(operators)){
-                    opi = operators[[j]]
-                    op_parsed = dsb_char2operator(opi)
+                for (j in seq_along(operators)) {
+                    opi <- operators[[j]]
+                    op_parsed <- dsb_char2operator(opi)
 
-                    if(op_parsed$do_eval){
-                        if(check){
-                            quoted_call = error_sender(str2lang(op_parsed$quoted),
-                                                       "In operation '", opi, "', the value '",
-                                                       op_parsed$quoted, "' could not be parsed.")
+                    if (op_parsed$do_eval) {
+                        if (check) {
+                            quoted_call <- error_sender(
+                                str2lang(op_parsed$quoted),
+                                "In operation '", opi, "', the value '",
+                                op_parsed$quoted, "' could not be parsed."
+                            )
 
-                            quoted = error_sender(eval(quoted_call, frame),
-                                                  "In operation '", opi, "', the value '",
-                                                  op_parsed$quoted, "' could not be evaluated.")
+                            quoted <- error_sender(
+                                eval(quoted_call, frame),
+                                "In operation '", opi, "', the value '",
+                                op_parsed$quoted, "' could not be evaluated."
+                            )
                         } else {
-                            quoted = eval(str2lang(op_parsed$quoted), frame)
+                            quoted <- eval(str2lang(op_parsed$quoted), frame)
                         }
-
                     } else {
-                        quoted = op_parsed$quoted
+                        quoted <- op_parsed$quoted
                     }
 
-                    if(check){
-                        xi = error_sender(dsb_operators(xi, quoted, op_parsed$op,
-                                                        check = check, frame = frame),
-                                          "The operation '", opi, "' failed. Please revise your call.")
+                    if (check) {
+                        xi <- error_sender(
+                            dsb_operators(xi, quoted, op_parsed$op,
+                                check = check, frame = frame
+                            ),
+                            "The operation '", opi, "' failed. Please revise your call."
+                        )
                     } else {
-                        xi = dsb_operators(xi, quoted, op_parsed$op, check = check, frame = frame)
+                        xi <- dsb_operators(xi, quoted, op_parsed$op, check = check, frame = frame)
                     }
                 }
 
-                extra = attr(xi, "extra")
-                if(length(extra) > 0){
-
-                    if(length(extra$element_add_first) > 0){
-                        if(length(extra$element_add_last) > 0){
-                            xi = c(extra$element_add_first, xi, extra$element_add_last)
+                extra <- attr(xi, "extra")
+                if (length(extra) > 0) {
+                    if (length(extra$element_add_first) > 0) {
+                        if (length(extra$element_add_last) > 0) {
+                            xi <- c(extra$element_add_first, xi, extra$element_add_last)
                         } else {
-                            xi = c(extra$element_add_first, xi)
+                            xi <- c(extra$element_add_first, xi)
                         }
-                    } else if(length(extra$element_add_last) > 0){
-                        xi = c(xi, extra$element_add_last)
+                    } else if (length(extra$element_add_last) > 0) {
+                        xi <- c(xi, extra$element_add_last)
                     }
 
-                    if(length(extra$str_add_first) > 0){
-                        if(length(xi) > 0){
-                            xi[1] = paste0(extra$str_add_first, xi[1])
+                    if (length(extra$str_add_first) > 0) {
+                        if (length(xi) > 0) {
+                            xi[1] <- paste0(extra$str_add_first, xi[1])
                         } else {
-                            xi = extra$str_add_first
-                        }
-                    }
-
-                    if(length(extra$str_add_last) > 0){
-                        if(length(xi) > 0){
-                            xi[length(xi)] = paste0(xi[length(xi)], extra$str_add_last)
-                        } else {
-                            xi = extra$str_add_last
+                            xi <- extra$str_add_first
                         }
                     }
 
-                    attr(xi, "extra") = NULL
+                    if (length(extra$str_add_last) > 0) {
+                        if (length(xi) > 0) {
+                            xi[length(xi)] <- paste0(xi[length(xi)], extra$str_add_last)
+                        } else {
+                            xi <- extra$str_add_last
+                        }
+                    }
+
+                    attr(xi, "extra") <- NULL
                 }
             }
 
-            if(i == 1){
-                res = xi
-            } else{
-                if(i < n && n_x_all[i + 1] == 1){
-                    if(vectorize){
-                        res = c(res, xi, x_parsed[[i + 1]])
+            if (i == 1) {
+                res <- xi
+            } else {
+                if (i < n && n_x_all[i + 1] == 1) {
+                    if (vectorize) {
+                        res <- c(res, xi, x_parsed[[i + 1]])
                     } else {
-                        res = paste0(res, xi, x_parsed[[i + 1]])
+                        res <- paste0(res, xi, x_parsed[[i + 1]])
                     }
 
-                    i_done = TRUE
+                    i_done <- TRUE
                 } else {
-                    if(vectorize){
-                        res = c(res, xi)
+                    if (vectorize) {
+                        res <- c(res, xi)
                     } else {
-                        res = paste0(res, xi)
+                        res <- paste0(res, xi)
                     }
                 }
             }
         }
     }
 
-    if(!is.null(collapse) && length(res) > 1){
-        res = paste0(res, collapse = collapse)
+    if (!is.null(collapse) && length(res) > 1) {
+        res <- paste0(res, collapse = collapse)
     }
 
     return(res)
 }
 
 
-dsb_char2operator = function(x){
+dsb_char2operator <- function(x) {
+    quote <- substr(x, 1, 1)
 
-    quote = substr(x, 1, 1)
+    OPERATORS <- c(
+        "s", "S", "x", "X", "c", "C", "r", "R",
+        "*", "*c", "**", "**c",
+        "u", "U", "l", "L", "q", "Q", "f", "F", "%",
+        "a", "A", "k", "K", "d", "D", "v", "V",
+        "w", "W", "stop", "i", "I",
+        "*s", "*s_", "*A", "*if", "if", "IF"
+    )
 
-    OPERATORS = c("s", "S", "x", "X", "c", "C", "r", "R",
-                  "*", "*c", "**", "**c",
-                  "u", "U", "l", "L", "q", "Q", "f", "F", "%",
-                  "a", "A", "k", "K", "d", "D", "v", "V",
-                  "w", "W", "stop", "i", "I",
-                  "*s", "*s_", "*A", "*if", "if", "IF")
+    ok <- do_eval <- FALSE
 
-    ok = do_eval = FALSE
+    if (quote %in% c("'", "\"", "`")) {
+        pat <- paste0("^", quote, "[^", quote, "]*", quote)
+        op_abbrev <- sub(pat, "", x)
+        in_quote <- str_trim(x, 1, nchar(op_abbrev) + 1)
 
-    if(quote %in% c("'", "\"", "`")){
-        pat = paste0("^", quote, "[^", quote, "]*", quote)
-        op_abbrev = sub(pat, "", x)
-        in_quote = str_trim(x, 1, nchar(op_abbrev) + 1)
+        do_eval <- quote == "`"
 
-        do_eval = quote == "`"
-
-        if(do_eval && substr(in_quote, 1, 1) == "!"){
+        if (do_eval && substr(in_quote, 1, 1) == "!") {
             # special case: back ticks used as extra quote
             # => enables to use ' and " freely in arguments
-            do_eval = FALSE
-            in_quote = str_trim(in_quote, 1)
+            do_eval <- FALSE
+            in_quote <- str_trim(in_quote, 1)
         }
 
-        if(nchar(op_abbrev) == 0){
+        if (nchar(op_abbrev) == 0) {
             stop_up("In dsb, if a quoted value is present, the operators must always be of the form 'value'op, with 'op' an operator. Problem: In '", x, "' the operator is missing.")
         }
-
-    } else if(x %in% OPERATORS){
+    } else if (x %in% OPERATORS) {
         # default values
-        in_quote = switch(x,
-                          s = " ", S = ", *",
-                          x = "[[:alnum:]]+", X = "[[:alnum:]]+",
-                          c = " ", C = ", || and ",
-                          "*" = "1", "*c" = "1",
-                          "**" = "1", "**c" = "1",
-                          r = "\n", R = "^[ \t\r\n]+|[ \t\r\n]+$",
-                          v = "is ", V = " is",
-                          "")
-        op_abbrev = x
+        in_quote <- switch(x,
+            s = " ",
+            S = ", *",
+            x = "[[:alnum:]]+",
+            X = "[[:alnum:]]+",
+            c = " ",
+            C = ", || and ",
+            "*" = "1",
+            "*c" = "1",
+            "**" = "1",
+            "**c" = "1",
+            r = "\n",
+            R = "^[ \t\r\n]+|[ \t\r\n]+$",
+            v = "is ",
+            V = " is",
+            ""
+        )
+        op_abbrev <- x
 
-        if(op_abbrev %in% c("%", "k", "K", "a", "A", "if", "IF", "*A")){
-            ex = c("%" = ".['.3f'%?pi]",
-                   "k" = ".[4k ! longuest word ]", "K" = ".[2K ? 1:5]",
-                   "a" = ".['|s'a ! cat]", "A" = ".['|two'A ! one]",
-                   "if" = ".['len<3'if(d) ? c('a', 'abc')]",
-                   "IF" = ".['char>3'IF(D) ? c('a', 'abc')]",
-                   "*A" = ".['The winner/All winners'*A ? c('John', 'Steve')]")
-            stop_up("The operator '", op_abbrev,
-                    "' has no default value, you must provide values explicitly. Like in ",
-                    ex[op_abbrev], " for instance.")
+        if (op_abbrev %in% c("%", "k", "K", "a", "A", "if", "IF", "*A")) {
+            ex <- c(
+                "%" = ".['.3f'%?pi]",
+                "k" = ".[4k ! longuest word ]", "K" = ".[2K ? 1:5]",
+                "a" = ".['|s'a ! cat]", "A" = ".['|two'A ! one]",
+                "if" = ".['len<3'if(d) ? c('a', 'abc')]",
+                "IF" = ".['char>3'IF(D) ? c('a', 'abc')]",
+                "*A" = ".['The winner/All winners'*A ? c('John', 'Steve')]"
+            )
+            stop_up(
+                "The operator '", op_abbrev,
+                "' has no default value, you must provide values explicitly. Like in ",
+                ex[op_abbrev], " for instance."
+            )
         }
-
     } else {
-        last1 = substr(x, nchar(x), nchar(x))
-        if(last1 %in% c("*", "k", "K")){
-            in_quote = str_trim(x, -1)
+        last1 <- substr(x, nchar(x), nchar(x))
+        if (last1 %in% c("*", "k", "K")) {
+            in_quote <- str_trim(x, -1)
 
-            op_abbrev = last1
+            op_abbrev <- last1
 
-            if(op_abbrev == "*" && substr(in_quote, nchar(in_quote), nchar(in_quote)) == "*"){
-                op_abbrev = "**"
-                in_quote = str_trim(in_quote, -1)
+            if (op_abbrev == "*" && substr(in_quote, nchar(in_quote), nchar(in_quote)) == "*") {
+                op_abbrev <- "**"
+                in_quote <- str_trim(in_quote, -1)
             }
-
         } else {
-            last2 = substr(x, nchar(x) - 1, nchar(x))
-            if(last2 %in% c("*c", "Ko", "KO")){
-                in_quote = str_trim(x, -2)
-                op_abbrev = last2
+            last2 <- substr(x, nchar(x) - 1, nchar(x))
+            if (last2 %in% c("*c", "Ko", "KO")) {
+                in_quote <- str_trim(x, -2)
+                op_abbrev <- last2
 
-                if(op_abbrev == "*c" && substr(in_quote, nchar(in_quote), nchar(in_quote)) == "*"){
-                    op_abbrev = "**c"
-                    in_quote = str_trim(in_quote, -1)
+                if (op_abbrev == "*c" && substr(in_quote, nchar(in_quote), nchar(in_quote)) == "*") {
+                    op_abbrev <- "**c"
+                    in_quote <- str_trim(in_quote, -1)
                 }
 
-                if(op_abbrev %in% c("Ko", "KO")){
+                if (op_abbrev %in% c("Ko", "KO")) {
                     # special case
-                    text = if(op_abbrev == "Ko") "||:rest: others" else "||:REST: others"
-                    in_quote = paste0(in_quote, text)
-                    op_abbrev = "K"
+                    text <- if (op_abbrev == "Ko") "||:rest: others" else "||:REST: others"
+                    in_quote <- paste0(in_quote, text)
+                    op_abbrev <- "K"
                 }
-
             } else {
-                first3 = substr(x, 1, 3)
+                first3 <- substr(x, 1, 3)
 
-                if(first3 %in% c("*if")){
-                    ok = TRUE
-                    in_quote = ""
-                    op_abbrev = x
+                if (first3 %in% c("*if")) {
+                    ok <- TRUE
+                    in_quote <- ""
+                    op_abbrev <- x
                     # OK, dealt with later => special case
                 } else {
-                    op_abbrev = "problem"
+                    op_abbrev <- "problem"
                 }
             }
         }
     }
 
-    if(!ok && !op_abbrev %in% OPERATORS){
-
-        first2 = substr(op_abbrev, 1, 2)
-        if(!first2 %in% c("if", "IF")){
-            msg = c("The operation '", x, "' is not valid. It must be something quoted followed by a valid operator.",
-                    "\n  Valid operators: to split: s, S / to replace: r, R  / to collapse: c, C / to extract: x, X",
-                    "\n                   to replicate: * / to replicate and collapse with the empty string: *c",
-                    "\n                   to upper/lower case: u, U, L / to single/double quote: q, Q",
-                    "\n                   to format f, F / to apply sprintf format: %",
-                    "\n                   to format whitespaces: w, W / to append: a, A / to insert: i, I",
-                    "\n                   to keep: k (#characters), K (#items) / to delete: d, D",
-                    "\n                   to remove stopwords: stop / to add a verb: v, V / to add an 's': *s, *s_",
-                    "\n                   Conditions: *if(true:false), 'cond'if(true:false), 'cond'IF(true:false)",
-                    "\n                   cond: 'regex==expr', 'fixed==expr', 'len==digit', or 'char==digit'.",
-                    "\n------------------------------",
-                    "\n  type dsb('--help') for more help.",
-                    "\n  Example: .[', *'S, 'a => b'r? var] first splits the variable var by commas then replaces every 'a' with a 'b'.")
+    if (!ok && !op_abbrev %in% OPERATORS) {
+        first2 <- substr(op_abbrev, 1, 2)
+        if (!first2 %in% c("if", "IF")) {
+            msg <- c(
+                "The operation '", x, "' is not valid. It must be something quoted followed by a valid operator.",
+                "\n  Valid operators: to split: s, S / to replace: r, R  / to collapse: c, C / to extract: x, X",
+                "\n                   to replicate: * / to replicate and collapse with the empty string: *c",
+                "\n                   to upper/lower case: u, U, L / to single/double quote: q, Q",
+                "\n                   to format f, F / to apply sprintf format: %",
+                "\n                   to format whitespaces: w, W / to append: a, A / to insert: i, I",
+                "\n                   to keep: k (#characters), K (#items) / to delete: d, D",
+                "\n                   to remove stopwords: stop / to add a verb: v, V / to add an 's': *s, *s_",
+                "\n                   Conditions: *if(true:false), 'cond'if(true:false), 'cond'IF(true:false)",
+                "\n                   cond: 'regex==expr', 'fixed==expr', 'len==digit', or 'char==digit'.",
+                "\n------------------------------",
+                "\n  type dsb('--help') for more help.",
+                "\n  Example: .[', *'S, 'a => b'r? var] first splits the variable var by commas then replaces every 'a' with a 'b'."
+            )
 
             message(msg)
 
             stop_up("In dsb, the operation is not valid, see upper message.")
         }
-
     }
 
-    res = list(quoted = in_quote, do_eval = do_eval, op = op_abbrev)
+    res <- list(quoted = in_quote, do_eval = do_eval, op = op_abbrev)
     res
 }
 
 
-dsb_operators = function(x, quoted, op, check = FALSE, frame = NULL){
-
-    extra = attr(x, "extra")
+dsb_operators <- function(x, quoted, op, check = FALSE, frame = NULL) {
+    extra <- attr(x, "extra")
 
     # S, C, R ####
 
-    if(op %in% c("s", "S")){
+    if (op %in% c("s", "S")) {
         # Split is always applied on verbatim stuff => length 1
-        if(op == "s"){
-            res = unlist(strsplit(x, quoted, fixed = TRUE))
+        if (op == "s") {
+            res <- unlist(strsplit(x, quoted, fixed = TRUE))
         } else {
-            res = unlist(strsplit(x, quoted, perl = TRUE))
+            res <- unlist(strsplit(x, quoted, perl = TRUE))
         }
 
-        res = res[nchar(res) > 0]
-
-    } else if(op %in% c("c", "C")){
+        res <- res[nchar(res) > 0]
+    } else if (op %in% c("c", "C")) {
         # collapse
 
-        n_x = length(x)
-        if(n_x > 1 && grepl("||", quoted, fixed = TRUE)){
+        n_x <- length(x)
+        if (n_x > 1 && grepl("||", quoted, fixed = TRUE)) {
             # This is the "last" operator
-            quoted_split = strsplit(quoted, "||", fixed = TRUE)[[1]]
-            if(n_x == 2){
-                res = paste(x, collapse = quoted_split[[2]])
+            quoted_split <- strsplit(quoted, "||", fixed = TRUE)[[1]]
+            if (n_x == 2) {
+                res <- paste(x, collapse = quoted_split[[2]])
             } else {
-                res = paste(x[-n_x], collapse = quoted_split[[1]])
-                res = paste0(res, quoted_split[[2]], x[n_x])
+                res <- paste(x[-n_x], collapse = quoted_split[[1]])
+                res <- paste0(res, quoted_split[[2]], x[n_x])
             }
         } else {
-            res = paste(x, collapse = quoted)
+            res <- paste(x, collapse = quoted)
         }
+    } else if (op %in% c("r", "R")) {
+        new <- ""
+        if (grepl("=>", quoted, fixed = TRUE)) {
+            pat <- "=>"
 
-    } else if(op %in% c("r", "R")){
-        new = ""
-        if(grepl("=>", quoted, fixed = TRUE)){
-            pat = "=>"
-
-            if(grepl(" => ", quoted, fixed = TRUE)){
-                pat = " => "
-            } else if(grepl("_=>_", quoted, fixed = TRUE)){
-                pat = "_=>_"
+            if (grepl(" => ", quoted, fixed = TRUE)) {
+                pat <- " => "
+            } else if (grepl("_=>_", quoted, fixed = TRUE)) {
+                pat <- "_=>_"
             }
 
-            quoted_split = strsplit(quoted, pat, fixed = TRUE)[[1]]
-            quoted = quoted_split[[1]]
-            new = quoted_split[[2]]
+            quoted_split <- strsplit(quoted, pat, fixed = TRUE)[[1]]
+            quoted <- quoted_split[[1]]
+            new <- quoted_split[[2]]
         }
 
-        if(op == "r"){
-            res = gsub(quoted, new, x, fixed = TRUE)
+        if (op == "r") {
+            res <- gsub(quoted, new, x, fixed = TRUE)
         } else {
-            res = gsub(quoted, new, x, perl = TRUE)
+            res <- gsub(quoted, new, x, perl = TRUE)
         }
-
-    } else if(op %in% c("*", "**", "*c", "**c")){
+    } else if (op %in% c("*", "**", "*c", "**c")) {
         # *, X ####
 
-        if(!is_numeric_in_char(quoted)){
+        if (!is_numeric_in_char(quoted)) {
             stop("In dsb: the operator '", op, "' must have numeric arguments, '", quoted, "' is not numeric.")
         }
 
-        if(substr(op, 1, 2) == "**"){
-            res = rep(x, each = as.numeric(quoted))
+        if (substr(op, 1, 2) == "**") {
+            res <- rep(x, each = as.numeric(quoted))
         } else {
-            res = rep(x, as.numeric(quoted))
+            res <- rep(x, as.numeric(quoted))
         }
 
-        if(substr(op, nchar(op), nchar(op)) == "c"){
-            res = paste(res, collapse = "")
+        if (substr(op, nchar(op), nchar(op)) == "c") {
+            res <- paste(res, collapse = "")
         }
-
-    } else if(op == "x"){
+    } else if (op == "x") {
         # extract the first pattern
 
-        x_pat = regexpr(quoted, x, perl = TRUE)
+        x_pat <- regexpr(quoted, x, perl = TRUE)
 
-        res = substr(x, x_pat, x_pat - 1 + attr(x_pat, "match.length"))
-
-    } else if(op == "X"){
+        res <- substr(x, x_pat, x_pat - 1 + attr(x_pat, "match.length"))
+    } else if (op == "X") {
         # extract all patterns
 
-        x_list = regmatches(x, gregexpr(quoted, x, perl = TRUE))
+        x_list <- regmatches(x, gregexpr(quoted, x, perl = TRUE))
 
-        res = unlist(x_list)
-
-    } else if(op == "U"){
+        res <- unlist(x_list)
+    } else if (op == "U") {
         # U, L, Q, F, %, W ####
 
-        res = toupper(x)
-    } else if(op == "u"){
+        res <- toupper(x)
+    } else if (op == "u") {
         # First letter only, if relevant
-        res = x
-        substr(res, 1, 1) = toupper(substr(x, 1, 1))
-    } else if(op %in% c("l", "L")){
-        res = tolower(x)
-    } else if(op == "q"){
-        res = paste0("'", x, "'")
-    } else if(op == "Q"){
-        res = paste0("\"", x, "\"")
-    } else if(op == "f"){
-        res = format(x)
-        if(is.numeric(x)){
-            res = format(trimws(res))
+        res <- x
+        substr(res, 1, 1) <- toupper(substr(x, 1, 1))
+    } else if (op %in% c("l", "L")) {
+        res <- tolower(x)
+    } else if (op == "q") {
+        res <- paste0("'", x, "'")
+    } else if (op == "Q") {
+        res <- paste0("\"", x, "\"")
+    } else if (op == "f") {
+        res <- format(x)
+        if (is.numeric(x)) {
+            res <- format(trimws(res))
         }
-    } else if(op == "F"){
-        res = format(x, justify = "right")
-    } else if(op == "%"){
-        res = sprintf(paste0("%", quoted), x)
-    } else if(op %in% c("w", "W")){
+    } else if (op == "F") {
+        res <- format(x, justify = "right")
+    } else if (op == "%") {
+        res <- sprintf(paste0("%", quoted), x)
+    } else if (op %in% c("w", "W")) {
         # w: only whitespaces
         # W: whitespaces extended
 
-        res = trimws(x)
+        res <- trimws(x)
 
         # now the whitespaces
-        pat = if(op == "w") "[ \t\r\n]+" else "[[:blank:][:punct:]]+"
-        res = gsub(pat, " ", res, perl = TRUE)
-
-    } else if(op %in% c("k", "K")){
+        pat <- if (op == "w") "[ \t\r\n]+" else "[[:blank:][:punct:]]+"
+        res <- gsub(pat, " ", res, perl = TRUE)
+    } else if (op %in% c("k", "K")) {
         # keep: either the nber of characters (k) or the number of elements (K)
 
         #
         # Keep ####
         #
 
-        quoted_split = quoted
-        pat = c("_||_", "_|_", "||", "|")
-        for(p in pat){
-            if(grepl(p, quoted, fixed = TRUE)){
-                quoted_split = strsplit(quoted, p, fixed = TRUE)[[1]]
+        quoted_split <- quoted
+        pat <- c("_||_", "_|_", "||", "|")
+        for (p in pat) {
+            if (grepl(p, quoted, fixed = TRUE)) {
+                quoted_split <- strsplit(quoted, p, fixed = TRUE)[[1]]
                 break
             }
         }
-        is_included = grepl("||", p, fixed = TRUE)
+        is_included <- grepl("||", p, fixed = TRUE)
 
-        if(length(quoted_split) == 1){
-            nb = quoted
-            add = ""
-            is_included = FALSE
+        if (length(quoted_split) == 1) {
+            nb <- quoted
+            add <- ""
+            is_included <- FALSE
         } else {
-            nb = quoted_split[[1]]
-            add = quoted_split[[2]]
+            nb <- quoted_split[[1]]
+            add <- quoted_split[[2]]
         }
 
-        if(!is_numeric_in_char(nb)){
+        if (!is_numeric_in_char(nb)) {
             stop("In dsb: the operator '", op, "' must first contain a numeric argument, '", quoted, "' does not contain a numeric first.")
         }
 
-        nb = as.numeric(nb)
+        nb <- as.numeric(nb)
 
-        if(op == "k"){
-            qui = nchar(x) > nb
-            res = substr(x, 1, nb)
+        if (op == "k") {
+            qui <- nchar(x) > nb
+            res <- substr(x, 1, nb)
 
-            if(is_included){
-                res[qui] = substr(res[qui], 1, nb - nchar(add))
+            if (is_included) {
+                res[qui] <- substr(res[qui], 1, nb - nchar(add))
             }
 
-            if(nchar(add) > 0){
-                res[qui] = paste0(res[qui], add)
+            if (nchar(add) > 0) {
+                res[qui] <- paste0(res[qui], add)
             }
-
-        } else if(op == "K"){
-
-            if(nb == 0){
-                res = character(0)
+        } else if (op == "K") {
+            if (nb == 0) {
+                res <- character(0)
             } else {
-                res = if(nb < length(x)) x[1:nb] else x
+                res <- if (nb < length(x)) x[1:nb] else x
 
-                if(any(grepl(":(n|N|rest|REST):", add))){
-                    n = length(x)
-                    N = ""
-                    if(grepl(":N:", add, fixed = TRUE)){
-                        N = n_letter(n)
-                        add = gsub(":N:", N, add, fixed = TRUE)
+                if (any(grepl(":(n|N|rest|REST):", add))) {
+                    n <- length(x)
+                    N <- ""
+                    if (grepl(":N:", add, fixed = TRUE)) {
+                        N <- n_letter(n)
+                        add <- gsub(":N:", N, add, fixed = TRUE)
                     }
 
-                    add = gsub(":n:", n, add, fixed = TRUE)
-                    n_rest = n - nb + is_included
-                    if(n_rest > 0){
-                        add = gsub(":rest:", n_rest, add, fixed = TRUE)
-                        add = gsub(":REST:", n_letter(n_rest), add, fixed = TRUE)
+                    add <- gsub(":n:", n, add, fixed = TRUE)
+                    n_rest <- n - nb + is_included
+                    if (n_rest > 0) {
+                        add <- gsub(":rest:", n_rest, add, fixed = TRUE)
+                        add <- gsub(":REST:", n_letter(n_rest), add, fixed = TRUE)
                     }
                 }
 
-                if(length(x) > nb){
-                    if(is_included){
-                        res = res[-nb]
+                if (length(x) > nb) {
+                    if (is_included) {
+                        res <- res[-nb]
                     }
 
-                    if(nchar(add) > 0){
-                        res = c(res, add)
+                    if (nchar(add) > 0) {
+                        res <- c(res, add)
                     }
                 }
             }
         }
-    } else if(op %in% c("a", "i", "A", "I", "*A")){
+    } else if (op %in% c("a", "i", "A", "I", "*A")) {
         # Appends at the beginning/end of all strings
 
 
         # Conditional A
-        if(op == "*A"){
+        if (op == "*A") {
             # We transform it into a regular A call
-            op = "A"
+            op <- "A"
 
-            pat = c("_/_", " / ", "/")
-            quoted_split = quoted
-            for(p in pat){
-                if(grepl(p, quoted, fixed = TRUE)){
-                    quoted_split = strsplit(quoted, p, fixed = TRUE)[[1]]
+            pat <- c("_/_", " / ", "/")
+            quoted_split <- quoted
+            for (p in pat) {
+                if (grepl(p, quoted, fixed = TRUE)) {
+                    quoted_split <- strsplit(quoted, p, fixed = TRUE)[[1]]
                     break
                 }
             }
 
-            if(length(x) == 1){
-                quoted = quoted_split[[1]]
+            if (length(x) == 1) {
+                quoted <- quoted_split[[1]]
             } else {
-                quoted = if(length(quoted_split) > 1) quoted_split[[2]] else ""
+                quoted <- if (length(quoted_split) > 1) quoted_split[[2]] else ""
             }
         }
 
@@ -1224,61 +1231,58 @@ dsb_operators = function(x, quoted, op, check = FALSE, frame = NULL){
         # Insert/Append ####
         #
 
-        pat = c("_|_", "|")
-        quoted_split = quoted
-        for(p in pat){
-            if(grepl(p, quoted, fixed = TRUE)){
-                quoted_split = strsplit(quoted, p, fixed = TRUE)[[1]]
+        pat <- c("_|_", "|")
+        quoted_split <- quoted
+        for (p in pat) {
+            if (grepl(p, quoted, fixed = TRUE)) {
+                quoted_split <- strsplit(quoted, p, fixed = TRUE)[[1]]
                 break
             }
         }
 
-        left = quoted_split[[1]]
-        right = if(length(quoted_split) > 1) quoted_split[[2]] else ""
+        left <- quoted_split[[1]]
+        right <- if (length(quoted_split) > 1) quoted_split[[2]] else ""
 
-        if(nchar(quoted) == 0){
-            res = x
-
-        } else if(op == "a"){
-
-            if(length(x) == 0){
-                res = x
-
+        if (nchar(quoted) == 0) {
+            res <- x
+        } else if (op == "a") {
+            if (length(x) == 0) {
+                res <- x
             } else {
-
                 # We replace the special values
                 # :1:, :i:, :a:
                 # we allow only one special value
-                n_x = length(x)
+                n_x <- length(x)
 
-                pat = c(":1:", ":i:", ":a:", ":I:", ":A:")
+                pat <- c(":1:", ":i:", ":a:", ":I:", ":A:")
 
-                for(i in 1:2){
-                    tmp = if(i == 1) left else right
-                    any_done = FALSE
+                for (i in 1:2) {
+                    tmp <- if (i == 1) left else right
+                    any_done <- FALSE
 
-                    for(p in pat){
-                        if(grepl(p, tmp, fixed = TRUE)){
-                            any_done = TRUE
-                            tmp_split = strsplit(tmp, p, perl = TRUE)[[1]]
-                            if(length(tmp_split) > 1){
-                                txt = switch(p,
-                                             ":1:" = 1:n_x,
-                                             ":i:" = tolower(as.roman(1:n_x)),
-                                             ":I:" = as.character(as.roman(1:n_x)),
-                                             ":a:" = enum_letter(n_x),
-                                             ":A:" = toupper(enum_letter(n_x)))
+                    for (p in pat) {
+                        if (grepl(p, tmp, fixed = TRUE)) {
+                            any_done <- TRUE
+                            tmp_split <- strsplit(tmp, p, perl = TRUE)[[1]]
+                            if (length(tmp_split) > 1) {
+                                txt <- switch(p,
+                                    ":1:" = 1:n_x,
+                                    ":i:" = tolower(as.roman(1:n_x)),
+                                    ":I:" = as.character(as.roman(1:n_x)),
+                                    ":a:" = enum_letter(n_x),
+                                    ":A:" = toupper(enum_letter(n_x))
+                                )
 
-                                if(length(tmp_split) == 1){
-                                    tmp = paste0(tmp_split[[1]], txt)
-                                } else  {
-                                    tmp_new = paste0(tmp_split[[1]], txt, tmp_split[[2]])
-                                    k = 2
-                                    while(k + 1 <= length(tmp_split)){
-                                        k = k + 1
-                                        tmp_new = paste0(tmp_new, txt, tmp_split[[k]])
+                                if (length(tmp_split) == 1) {
+                                    tmp <- paste0(tmp_split[[1]], txt)
+                                } else {
+                                    tmp_new <- paste0(tmp_split[[1]], txt, tmp_split[[2]])
+                                    k <- 2
+                                    while (k + 1 <= length(tmp_split)) {
+                                        k <- k + 1
+                                        tmp_new <- paste0(tmp_new, txt, tmp_split[[k]])
                                     }
-                                    tmp = tmp_new
+                                    tmp <- tmp_new
                                 }
                             }
 
@@ -1286,87 +1290,85 @@ dsb_operators = function(x, quoted, op, check = FALSE, frame = NULL){
                         }
                     }
 
-                    if(any_done){
-                        if(i == 1){
-                            left = tmp
+                    if (any_done) {
+                        if (i == 1) {
+                            left <- tmp
                         } else {
-                            right = tmp
+                            right <- tmp
                         }
                     }
                 }
 
 
-                if(any(nchar(left) > 0)){
-                    if(any(nchar(right) > 0)){
-                        res = paste0(left, x, right)
+                if (any(nchar(left) > 0)) {
+                    if (any(nchar(right) > 0)) {
+                        res <- paste0(left, x, right)
                     } else {
-                        res = paste0(left, x)
+                        res <- paste0(left, x)
                     }
                 } else {
-                    res = paste0(x, right)
+                    res <- paste0(x, right)
                 }
             }
-        } else if(op == "i"){
+        } else if (op == "i") {
             # inserts an ELEMENT at the beginning/end
 
-            if(nchar(left) > 0){
-                if(nchar(right) > 0){
-                    res = c(left, x, right)
+            if (nchar(left) > 0) {
+                if (nchar(right) > 0) {
+                    res <- c(left, x, right)
                 } else {
-                    res = c(left, x)
+                    res <- c(left, x)
                 }
             } else {
-                res = c(x, right)
+                res <- c(x, right)
             }
-
-        } else if(op %in% c("A", "I")){
+        } else if (op %in% c("A", "I")) {
             # appends/inserts **implicitly** at the beginning of the first/last string
 
-            res = x
+            res <- x
 
-            if(any(grepl(":(n|N):", c(left, right)))){
-                n = length(x)
-                n_letter = ""
-                if(any(grepl(":N:", c(left, right), fixed = TRUE))){
-                    n_letter = n_letter(n)
-                    left = gsub(":N:", n_letter, left)
-                    right = gsub(":N:", n_letter, right)
+            if (any(grepl(":(n|N):", c(left, right)))) {
+                n <- length(x)
+                n_letter <- ""
+                if (any(grepl(":N:", c(left, right), fixed = TRUE))) {
+                    n_letter <- n_letter(n)
+                    left <- gsub(":N:", n_letter, left)
+                    right <- gsub(":N:", n_letter, right)
                 }
 
-                left = gsub(":n:", n, left)
-                right = gsub(":n:", n, right)
+                left <- gsub(":n:", n, left)
+                right <- gsub(":n:", n, right)
             }
 
-            if(is.null(extra)){
-                extra = list()
+            if (is.null(extra)) {
+                extra <- list()
             }
 
-            if(op == "A"){
-                if(nchar(left) > 0){
-                    extra$str_add_first = paste0(extra$str_add_first, left)
+            if (op == "A") {
+                if (nchar(left) > 0) {
+                    extra$str_add_first <- paste0(extra$str_add_first, left)
                 }
 
-                if(nchar(right) > 0){
-                    extra$str_add_last = paste0(extra$str_add_last, right)
+                if (nchar(right) > 0) {
+                    extra$str_add_last <- paste0(extra$str_add_last, right)
                 }
-            } else if(op == "I"){
-                if(nchar(left) > 0){
-                    extra$element_add_first = c(extra$element_add_first, left)
+            } else if (op == "I") {
+                if (nchar(left) > 0) {
+                    extra$element_add_first <- c(extra$element_add_first, left)
                 }
 
-                if(nchar(right) > 0){
-                    extra$element_add_last = c(extra$element_add_last, right)
+                if (nchar(right) > 0) {
+                    extra$element_add_last <- c(extra$element_add_last, right)
                 }
             }
         }
 
         # END: insert/append
-
-    } else if(op == "d"){
-        res = rep("", length(x))
-    } else if(op == "D"){
-        res = character(0)
-    } else if(op %in% c("v", "V")){
+    } else if (op == "d") {
+        res <- rep("", length(x))
+    } else if (op == "D") {
+        res <- character(0)
+    } else if (op %in% c("v", "V")) {
         # The verb is added implicitly
         # original code from dreamerr
 
@@ -1374,105 +1376,113 @@ dsb_operators = function(x, quoted, op, check = FALSE, frame = NULL){
         # *A, D, Verb ####
         #
 
-        res = x
+        res <- x
 
-        PLURAL = length(x) > 1
+        PLURAL <- length(x) > 1
 
-        space_left = space_right = ""
-        if(grepl("^ ", quoted)){
-            space_left = " "
-            quoted = str_trim(quoted, 1)
+        space_left <- space_right <- ""
+        if (grepl("^ ", quoted)) {
+            space_left <- " "
+            quoted <- str_trim(quoted, 1)
         }
 
-        if(grepl(" $", quoted)){
-            space_right = " "
-            quoted = str_trim(quoted, -1)
+        if (grepl(" $", quoted)) {
+            space_right <- " "
+            quoted <- str_trim(quoted, -1)
         }
 
-        past = grepl("\\bpast\\b", quoted)
-        if(past){
-            quoted = gsub("\\bquoted\\b", "", quoted)
+        past <- grepl("\\bpast\\b", quoted)
+        if (past) {
+            quoted <- gsub("\\bquoted\\b", "", quoted)
         }
 
-        verb = trimws(quoted)
-        if(nchar(verb) == 0){
-            verb = "is"
+        verb <- trimws(quoted)
+        if (nchar(verb) == 0) {
+            verb <- "is"
         }
 
-        if(verb %in% c("be", "are")){
-            verb = "is"
-        } else if(verb == "have"){
-            verb = "has"
-        } else if(verb == "does"){
-            verb = "do"
-        } else if(verb %in% c("do not", "does not", "don't", "doesn't")){
-            verb = "do not"
-        } else if(verb %in% c("is not", "are not", "isn't", "aren't")){
-            verb = "is not"
-        } else if(verb %in% c("was", "were")){
-            verb = "is"
-            past = TRUE
+        if (verb %in% c("be", "are")) {
+            verb <- "is"
+        } else if (verb == "have") {
+            verb <- "has"
+        } else if (verb == "does") {
+            verb <- "do"
+        } else if (verb %in% c("do not", "does not", "don't", "doesn't")) {
+            verb <- "do not"
+        } else if (verb %in% c("is not", "are not", "isn't", "aren't")) {
+            verb <- "is not"
+        } else if (verb %in% c("was", "were")) {
+            verb <- "is"
+            past <- TRUE
         }
 
-        if(past){
-            if(verb %in% c("is", "is not", "has", "do", "do not")){
-                verb_format = switch(verb, is = ifelse(!PLURAL, "was", "were"), "is not" = ifelse(!PLURAL, "wasn't", "weren't"), has = "had", do = "did", "do not" = "didn't")
+        if (past) {
+            if (verb %in% c("is", "is not", "has", "do", "do not")) {
+                verb_format <- switch(verb,
+                    is = ifelse(!PLURAL, "was", "were"),
+                    "is not" = ifelse(!PLURAL, "wasn't", "weren't"),
+                    has = "had",
+                    do = "did",
+                    "do not" = "didn't"
+                )
             } else {
-                verb_format = paste0(verb, "ed")
+                verb_format <- paste0(verb, "ed")
             }
         } else {
-            if(verb %in% c("is", "is not", "has", "do", "do not")){
-                verb_format = switch(verb, is = ifelse(!PLURAL, "is", "are"), "is not" = ifelse(!PLURAL, "isn't", "aren't"), has = ifelse(!PLURAL, "has", "have"), do = ifelse(!PLURAL, "does", "do"), "do not" = ifelse(!PLURAL, "doesn't", "don't"))
+            if (verb %in% c("is", "is not", "has", "do", "do not")) {
+                verb_format <- switch(verb,
+                    is = ifelse(!PLURAL, "is", "are"),
+                    "is not" = ifelse(!PLURAL, "isn't", "aren't"),
+                    has = ifelse(!PLURAL, "has", "have"),
+                    do = ifelse(!PLURAL, "does", "do"),
+                    "do not" = ifelse(!PLURAL, "doesn't", "don't")
+                )
             } else {
-                verb_format = ifelse(PLURAL, verb, paste0(verb, "s"))
+                verb_format <- ifelse(PLURAL, verb, paste0(verb, "s"))
             }
         }
 
         # Adding the verb
-        if(is.null(extra)){
-            extra = list()
+        if (is.null(extra)) {
+            extra <- list()
         }
 
-        if(op == "v"){
-            extra$str_add_first = paste0(extra$str_add_first, space_left, verb_format, space_right)
-        } else if(op == "V"){
-            extra$str_add_last = paste0(extra$str_add_last, space_left, verb_format, space_right)
+        if (op == "v") {
+            extra$str_add_first <- paste0(extra$str_add_first, space_left, verb_format, space_right)
+        } else if (op == "V") {
+            extra$str_add_last <- paste0(extra$str_add_last, space_left, verb_format, space_right)
+        }
+    } else if (op %in% c("*s", "*s_")) {
+        res <- x
+
+        if (is.null(extra)) {
+            extra <- list()
         }
 
-    } else if(op %in% c("*s", "*s_")){
-
-        res = x
-
-        if(is.null(extra)){
-            extra = list()
-        }
-
-        if(length(x) > 1){
-            if(op == "*s_"){
-                extra$str_add_first = paste0(extra$str_add_first, "s ")
+        if (length(x) > 1) {
+            if (op == "*s_") {
+                extra$str_add_first <- paste0(extra$str_add_first, "s ")
             } else {
-                extra$str_add_first = paste0(extra$str_add_first, "s")
+                extra$str_add_first <- paste0(extra$str_add_first, "s")
             }
-
-        } else if(op == "*s_"){
-            extra$str_add_first = paste0(extra$str_add_first, " ")
+        } else if (op == "*s_") {
+            extra$str_add_first <- paste0(extra$str_add_first, " ")
         }
-
-    } else if(grepl("^(\\*?if|IF)", op)){
+    } else if (grepl("^(\\*?if|IF)", op)) {
         # The operator is ALWAYS of the form if(yes:no), there must be a parenthesis
 
         #
         # IF ####
         #
 
-        if(substr(op, 1, 1) == "*"){
+        if (substr(op, 1, 1) == "*") {
             # star if
-            quoted = "len > 1"
-            if_operators = str_trim(op, 4, 1)
-            op = "*if"
+            quoted <- "len > 1"
+            if_operators <- str_trim(op, 4, 1)
+            op <- "*if"
         } else {
-            if_operators = str_trim(op, 3, 1)
-            op = substr(op, 1, 2)
+            if_operators <- str_trim(op, 3, 1)
+            op <- substr(op, 1, 2)
         }
 
         # We have 4 types:
@@ -1482,223 +1492,231 @@ dsb_operators = function(x, quoted, op, check = FALSE, frame = NULL){
         # - regex
 
         # left trim
-        quoted = sub("^ +", "", quoted)
+        quoted <- sub("^ +", "", quoted)
 
-        type = substr(quoted, 1, 3)
-        if(type %in% c("fix", "reg")){
-            type = substr(quoted, 1, 5)
-        } else if(type == "cha"){
-            type = substr(quoted, 1, 4)
+        type <- substr(quoted, 1, 3)
+        if (type %in% c("fix", "reg")) {
+            type <- substr(quoted, 1, 5)
+        } else if (type == "cha") {
+            type <- substr(quoted, 1, 4)
         }
 
-        if(!type %in% c("len", "char", "regex", "fixed")){
-            stop("In the operator 'if', the argument must be of the form 'type comp value', with 'comp' a comparator (eg ==, >=, etc), and type one of 4 types: 'len', 'char', 'regex' or 'fixed'.",
-                 "\nIn the current argument ('", quoted, "') the type is not valid.")
+        if (!type %in% c("len", "char", "regex", "fixed")) {
+            stop(
+                "In the operator 'if', the argument must be of the form 'type comp value', with 'comp' a comparator (eg ==, >=, etc), and type one of 4 types: 'len', 'char', 'regex' or 'fixed'.",
+                "\nIn the current argument ('", quoted, "') the type is not valid."
+            )
         }
 
-        rest = str_trim(quoted, type)
+        rest <- str_trim(quoted, type)
 
-        is_space = substr(rest, 1, 1) == " "
-        if(is_space){
-            rest = str_trim(rest, 1)
+        is_space <- substr(rest, 1, 1) == " "
+        if (is_space) {
+            rest <- str_trim(rest, 1)
         }
 
-        comp1 = substr(rest, 1, 1)
-        comp2 = substr(rest, 2, 2)
+        comp1 <- substr(rest, 1, 1)
+        comp2 <- substr(rest, 2, 2)
 
-        if(!comp1 %in% c("<", ">", "!", "=") || (comp1 %in% c("!", "=") && comp2 != "=")){
-            comp = if(comp1 %in% c("!", "=") && comp2 != "=") paste0(comp1, comp2) else comp1
-            stop("In the operator 'if', the argument must be of the form 'type comp value', with 'comp' a comparator (eg ==, >=, etc), and type one of 4 types: 'len', 'char', 'regex' or 'fixed'.",
-                 "\nIn the current argument ('", quoted, "') the comparator ('", comp, "') is not valid.")
+        if (!comp1 %in% c("<", ">", "!", "=") || (comp1 %in% c("!", "=") && comp2 != "=")) {
+            comp <- if (comp1 %in% c("!", "=") && comp2 != "=") paste0(comp1, comp2) else comp1
+            stop(
+                "In the operator 'if', the argument must be of the form 'type comp value', with 'comp' a comparator (eg ==, >=, etc), and type one of 4 types: 'len', 'char', 'regex' or 'fixed'.",
+                "\nIn the current argument ('", quoted, "') the comparator ('", comp, "') is not valid."
+            )
         }
 
-        if(comp2 == "="){
-            comp = paste0(comp1, comp2)
-            rest = str_trim(rest, 2)
+        if (comp2 == "=") {
+            comp <- paste0(comp1, comp2)
+            rest <- str_trim(rest, 2)
         } else {
-            comp = comp1
-            rest = str_trim(rest, 1)
+            comp <- comp1
+            rest <- str_trim(rest, 1)
         }
 
-        if(is_space && substr(rest, 1, 1) == " "){
-            rest = str_trim(rest, 1)
+        if (is_space && substr(rest, 1, 1) == " ") {
+            rest <- str_trim(rest, 1)
         }
 
-        value = rest
+        value <- rest
 
         # Now we have the 3 elements:
         # - type
         # - comp
         # - value
 
-        if(type %in% c("len", "char")){
-            if(!is_numeric_in_char(value)){
+        if (type %in% c("len", "char")) {
+            if (!is_numeric_in_char(value)) {
                 stop("In the operator 'if' (equal to '", quoted, "'), '", type, "' should be compared to a number. Problem: '", value, "' is not a number.")
             }
         }
 
-        is_len = type == "len"
+        is_len <- type == "len"
 
-        operators_TF = cpp_dsb_if_extract(if_operators)
+        operators_TF <- cpp_dsb_if_extract(if_operators)
 
-        if(isFALSE(operators_TF[[1]])){
+        if (isFALSE(operators_TF[[1]])) {
             # means error
-            stop("Parsing error in the operators of the '", op, "' statement. ",
-                 "\nIt must be of the form: ", op, "(yes:no) with yes and no chains of valid operations. Further, 'if' statements cannot be nested.",
-                 "\nEx: 'len>3'if(3K, '| and others'A, ', 'c : 'n <= 3'A, D)")
+            stop(
+                "Parsing error in the operators of the '", op, "' statement. ",
+                "\nIt must be of the form: ", op, "(yes:no) with yes and no chains of valid operations. Further, 'if' statements cannot be nested.",
+                "\nEx: 'len>3'if(3K, '| and others'A, ', 'c : 'n <= 3'A, D)"
+            )
         }
 
-        len_true = FALSE
-        if(is_len){
-            n_x = length(x)
+        len_true <- FALSE
+        if (is_len) {
+            n_x <- length(x)
 
-            len_true = eval(str2lang(paste0(n_x, comp, value)))
-            if(len_true){
-                x_true = x
-                x_false = character(0)
+            len_true <- eval(str2lang(paste0(n_x, comp, value)))
+            if (len_true) {
+                x_true <- x
+                x_false <- character(0)
             } else {
-                x_true = character(0)
-                x_false = x
+                x_true <- character(0)
+                x_false <- x
             }
         } else {
-            if(type == "char"){
-                comp_call = str2lang(paste0("nchar(x)", comp, value))
+            if (type == "char") {
+                comp_call <- str2lang(paste0("nchar(x)", comp, value))
             } else {
-                comp_txt = paste0("grepl(\"", value, "\", x")
-                if(type == "regex"){
-                    comp_txt = paste0(comp_txt, ", perl = TRUE)")
+                comp_txt <- paste0("grepl(\"", value, "\", x")
+                if (type == "regex") {
+                    comp_txt <- paste0(comp_txt, ", perl = TRUE)")
                 } else {
-                    comp_txt = paste0(comp_txt, ", fixed = TRUE)")
+                    comp_txt <- paste0(comp_txt, ", fixed = TRUE)")
                 }
-                comp_call = str2lang(comp_txt)
+                comp_call <- str2lang(comp_txt)
             }
 
-            qui = eval(comp_call)
+            qui <- eval(comp_call)
 
-            if(op == "IF"){
-                is_len = TRUE
-                len_true = any(qui)
-                if(len_true){
-                    x_true = x
-                    x_false = character(0)
+            if (op == "IF") {
+                is_len <- TRUE
+                len_true <- any(qui)
+                if (len_true) {
+                    x_true <- x
+                    x_false <- character(0)
                 } else {
-                    x_true = character(0)
-                    x_false = x
+                    x_true <- character(0)
+                    x_false <- x
                 }
             } else {
-                x_true = x[qui]
-                x_false = x[!qui]
+                x_true <- x[qui]
+                x_false <- x[!qui]
             }
         }
 
         # All operators that change the length of the element:
-        FORBIDDEN = c("c", "C", "*", "*c", "s", "S", "i", "I", "A", "v", "V")
+        FORBIDDEN <- c("c", "C", "*", "*c", "s", "S", "i", "I", "A", "v", "V")
 
         # if TRUE
-        op_true = operators_TF[[1]]
+        op_true <- operators_TF[[1]]
 
-        for(state in c("true", "false")){
-
-            if(state == "true"){
-                if(is_len && !len_true) next
-                xi = x_true
+        for (state in c("true", "false")) {
+            if (state == "true") {
+                if (is_len && !len_true) next
+                xi <- x_true
             } else {
-                if(is_len && len_true) next
-                xi = x_false
+                if (is_len && len_true) next
+                xi <- x_false
             }
 
-            index = 1 + (state == "false")
-            op_all = operators_TF[[index]]
+            index <- 1 + (state == "false")
+            op_all <- operators_TF[[index]]
 
-            for(i in seq_along(op_all)){
-                opi = op_all[i]
+            for (i in seq_along(op_all)) {
+                opi <- op_all[i]
 
-                op_parsed = dsb_char2operator(opi)
+                op_parsed <- dsb_char2operator(opi)
 
-                if(!is_len && op_parsed$op %in% FORBIDDEN){
+                if (!is_len && op_parsed$op %in% FORBIDDEN) {
                     stop_up("In the 'if' statement, you cannot use operators that would change the length of the vector, hence '", op_parsed$op, "' is forbidden. The IF statement (which does like 'if(any(cond))'), or if applied to the length, would be OK since they apply changes to the full vector.")
                 }
 
-                if(op_parsed$do_eval){
-                    if(check){
-                        quoted_call = error_sender(up = 1, str2lang(op_parsed$quoted),
-                                                   "In operation '", opi, "', the value '",
-                                                   op_parsed$quoted, "' could not be parsed.")
+                if (op_parsed$do_eval) {
+                    if (check) {
+                        quoted_call <- error_sender(
+                            up = 1, str2lang(op_parsed$quoted),
+                            "In operation '", opi, "', the value '",
+                            op_parsed$quoted, "' could not be parsed."
+                        )
 
-                        quoted = error_sender(up = 1, eval(quoted_call, frame),
-                                              "In operation '", opi, "', the value '",
-                                              op_parsed$quoted, "' could not be evaluated.")
+                        quoted <- error_sender(
+                            up = 1, eval(quoted_call, frame),
+                            "In operation '", opi, "', the value '",
+                            op_parsed$quoted, "' could not be evaluated."
+                        )
                     } else {
-                        quoted = eval(str2lang(op_parsed$quoted), frame)
+                        quoted <- eval(str2lang(op_parsed$quoted), frame)
                     }
-
                 } else {
-                    quoted = op_parsed$quoted
+                    quoted <- op_parsed$quoted
                 }
 
-                if(check){
-                    xi = error_sender(up = 1, dsb_operators(xi, quoted, op_parsed$op),
-                                      "The operation '", opi, "' failed. Please revise your call.")
+                if (check) {
+                    xi <- error_sender(
+                        up = 1, dsb_operators(xi, quoted, op_parsed$op),
+                        "The operation '", opi, "' failed. Please revise your call."
+                    )
                 } else {
-                    xi = dsb_operators(xi, quoted, op_parsed$op)
+                    xi <- dsb_operators(xi, quoted, op_parsed$op)
                 }
             }
 
-            if(state == "true"){
-                x_true = xi
+            if (state == "true") {
+                x_true <- xi
             } else {
-                x_false = xi
+                x_false <- xi
             }
         }
 
-        if(is_len){
-            res = if(len_true) x_true else x_false
+        if (is_len) {
+            res <- if (len_true) x_true else x_false
 
             # we can add extra stuff, if needed
 
-            extra_if = attr(res, "extra")
-            if(length(extra_if) > 0){
-                if(is.null(extra)){
-                    extra = list()
+            extra_if <- attr(res, "extra")
+            if (length(extra_if) > 0) {
+                if (is.null(extra)) {
+                    extra <- list()
                 }
 
-                if(length(extra_if$element_add_first) > 0){
-                    extra$element_add_first = c(extra$element_add_first, extra_if$element_add_first)
+                if (length(extra_if$element_add_first) > 0) {
+                    extra$element_add_first <- c(extra$element_add_first, extra_if$element_add_first)
                 }
 
-                if(length(extra_if$element_add_last) > 0){
-                    extra$element_add_last = c(extra$element_add_last, extra_if$element_add_last)
+                if (length(extra_if$element_add_last) > 0) {
+                    extra$element_add_last <- c(extra$element_add_last, extra_if$element_add_last)
                 }
 
-                if(length(extra_if$str_add_first) > 0){
-                    extra$str_add_first = paste0(extra$str_add_first, extra_if$str_add_first)
+                if (length(extra_if$str_add_first) > 0) {
+                    extra$str_add_first <- paste0(extra$str_add_first, extra_if$str_add_first)
                 }
 
-                if(length(extra_if$str_add_last) > 0){
-                    extra$str_add_last = paste0(extra$str_add_last, extra_if$str_add_last)
+                if (length(extra_if$str_add_last) > 0) {
+                    extra$str_add_last <- paste0(extra$str_add_last, extra_if$str_add_last)
                 }
             }
-
         } else {
             # extra is not touched
 
-            res = x
+            res <- x
 
-            if(length(x_true) == 0 && length(x_false) == 0){
-                res = character(0)
-            } else if(length(x_true) == 0){
-                res[!qui] = x_false
-                res = res[!qui]
-            } else if(length(x_false) == 0){
-                res[qui] = x_true
-                res = res[qui]
+            if (length(x_true) == 0 && length(x_false) == 0) {
+                res <- character(0)
+            } else if (length(x_true) == 0) {
+                res[!qui] <- x_false
+                res <- res[!qui]
+            } else if (length(x_false) == 0) {
+                res[qui] <- x_true
+                res <- res[qui]
             } else {
-                res[qui] = x_true
-                res[!qui] = x_false
+                res[qui] <- x_true
+                res[!qui] <- x_false
             }
         }
-
-    } else if(op == "stop"){
+    } else if (op == "stop") {
         # stop ####
 
         # current limitation: does not work for quoted words
@@ -1706,57 +1724,57 @@ dsb_operators = function(x, quoted, op, check = FALSE, frame = NULL){
 
         # Snowball stopwords
         # These come from http://snowballstem.org/algorithms/english/stop.txt
-        stopwords = c("i", "me", "my", "myself", "we", "our", "ours", "ourselves",
-                      "you", "your", "yours", "yourself", "yourselves", "he", "him",
-                      "his", "himself", "she", "her", "hers", "herself", "it", "its",
-                      "itself", "they", "them", "their", "theirs", "themselves", "what",
-                      "which", "who", "whom", "this", "that", "these", "those", "am", "is",
-                      "are", "was", "were", "be", "been", "being", "have", "has", "had",
-                      "having", "do", "does", "did", "doing", "would", "should",
-                      "could", "ought", "i'm", "you're", "he's", "she's", "it's",
-                      "we're", "they're", "i've", "you've", "we've", "they've",
-                      "i'd", "you'd", "he'd", "she'd", "we'd", "they'd", "i'll",
-                      "you'll", "he'll", "she'll", "we'll", "they'll", "isn't",
-                      "aren't", "wasn't", "weren't", "hasn't", "haven't", "hadn't",
-                      "doesn't", "don't", "didn't", "won't", "wouldn't", "shan't",
-                      "shouldn't", "can't", "cannot", "couldn't", "mustn't", "let's",
-                      "that's", "who's", "what's", "here's", "there's", "when's", "where's",
-                      "why's", "how's", "a", "an", "the", "and", "but", "if", "or",
-                      "because", "as", "until", "while", "of", "at", "by", "for",
-                      "with", "about", "against", "between", "into", "through",
-                      "during", "before", "after", "above", "below", "to", "from",
-                      "up", "down", "in", "out", "on", "off", "over", "under",
-                      "again", "further", "then", "once", "here", "there", "when",
-                      "where", "why", "how", "all", "any", "both", "each", "few",
-                      "more", "most", "other", "some", "such", "no", "nor", "not",
-                      "only", "own", "same", "so", "than", "too", "very")
+        stopwords <- c(
+            "i", "me", "my", "myself", "we", "our", "ours", "ourselves",
+            "you", "your", "yours", "yourself", "yourselves", "he", "him",
+            "his", "himself", "she", "her", "hers", "herself", "it", "its",
+            "itself", "they", "them", "their", "theirs", "themselves", "what",
+            "which", "who", "whom", "this", "that", "these", "those", "am", "is",
+            "are", "was", "were", "be", "been", "being", "have", "has", "had",
+            "having", "do", "does", "did", "doing", "would", "should",
+            "could", "ought", "i'm", "you're", "he's", "she's", "it's",
+            "we're", "they're", "i've", "you've", "we've", "they've",
+            "i'd", "you'd", "he'd", "she'd", "we'd", "they'd", "i'll",
+            "you'll", "he'll", "she'll", "we'll", "they'll", "isn't",
+            "aren't", "wasn't", "weren't", "hasn't", "haven't", "hadn't",
+            "doesn't", "don't", "didn't", "won't", "wouldn't", "shan't",
+            "shouldn't", "can't", "cannot", "couldn't", "mustn't", "let's",
+            "that's", "who's", "what's", "here's", "there's", "when's", "where's",
+            "why's", "how's", "a", "an", "the", "and", "but", "if", "or",
+            "because", "as", "until", "while", "of", "at", "by", "for",
+            "with", "about", "against", "between", "into", "through",
+            "during", "before", "after", "above", "below", "to", "from",
+            "up", "down", "in", "out", "on", "off", "over", "under",
+            "again", "further", "then", "once", "here", "there", "when",
+            "where", "why", "how", "all", "any", "both", "each", "few",
+            "more", "most", "other", "some", "such", "no", "nor", "not",
+            "only", "own", "same", "so", "than", "too", "very"
+        )
 
-        n = length(x)
-        x_split = strsplit(x, "(?<=[[:alnum:]])(?=[^[:alnum:]'])|(?<=[^[:alnum:]'])(?=[[:alnum:]])", perl = TRUE)
-        x_len = lengths(x_split)
-        x_vec = unlist(x_split)
+        n <- length(x)
+        x_split <- strsplit(x, "(?<=[[:alnum:]])(?=[^[:alnum:]'])|(?<=[^[:alnum:]'])(?=[[:alnum:]])", perl = TRUE)
+        x_len <- lengths(x_split)
+        x_vec <- unlist(x_split)
 
-        id = rep(1:n, x_len)
+        id <- rep(1:n, x_len)
 
         # Lowering is costly, checking costs a bit less
-        if(any(grepl("[[:upper:]]", x))){
-            qui_drop = which(tolower(x_vec) %in% stopwords)
+        if (any(grepl("[[:upper:]]", x))) {
+            qui_drop <- which(tolower(x_vec) %in% stopwords)
         } else {
-            qui_drop = which(x_vec %in% stopwords)
+            qui_drop <- which(x_vec %in% stopwords)
         }
 
-        x_vec = x_vec[-qui_drop]
-        id = id[-qui_drop]
+        x_vec <- x_vec[-qui_drop]
+        id <- id[-qui_drop]
 
-        res = cpp_paste_conditional(x_vec, id, n)
-
-
+        res <- cpp_paste_conditional(x_vec, id, n)
     } else {
         stop("In dsb: the operator '", op, "' is not recognized. Internal error: this problem should have been spotted beforehand.")
     }
 
-    if(length(extra) > 0){
-        attr(res, "extra") = extra
+    if (length(extra) > 0) {
+        attr(res, "extra") <- extra
     }
 
     return(res)
@@ -1765,64 +1783,65 @@ dsb_operators = function(x, quoted, op, check = FALSE, frame = NULL){
 
 
 
-n_letter = function(n){
-    num2char = c("zero", "one", "two", "three", "four", "five", "six", "seven",
-                 "eight", "nine", "ten", "eleven", "twelve", "thirteen",
-                 "fourteen", "fifteen", "sixteen", "seventeen", "eighteen",
-                 "nineteen")
-    if(n < 20){
-        n_letter = num2char[n + 1]
-    } else if(n < 100){
-        tens = n %/% 10
-        digit = n %% 10
-        tens_letter = c("twenty", "thirty", "forty", "fifty",
-                        "sixty", "seventy", "eighty", "ninety")
+n_letter <- function(n) {
+    num2char <- c(
+        "zero", "one", "two", "three", "four", "five", "six", "seven",
+        "eight", "nine", "ten", "eleven", "twelve", "thirteen",
+        "fourteen", "fifteen", "sixteen", "seventeen", "eighteen",
+        "nineteen"
+    )
+    if (n < 20) {
+        n_letter <- num2char[n + 1]
+    } else if (n < 100) {
+        tens <- n %/% 10
+        digit <- n %% 10
+        tens_letter <- c(
+            "twenty", "thirty", "forty", "fifty",
+            "sixty", "seventy", "eighty", "ninety"
+        )
 
-        num2char = paste0("-", num2char)
-        num2char[1] = ""
+        num2char <- paste0("-", num2char)
+        num2char[1] <- ""
 
-        n_letter = paste0(tens_letter[tens - 1], num2char[digit + 1])
+        n_letter <- paste0(tens_letter[tens - 1], num2char[digit + 1])
     } else {
-        n_letter = n
+        n_letter <- n
     }
 
     n_letter
 }
 
-enum_letter = function(n){
+enum_letter <- function(n) {
     # returns only lowercase
     # oddity: there is no powers of z
     # => because otherwise the algorithm would have been too complex
     # and we don't care tbh
 
 
-    if(n < 27){
+    if (n < 27) {
         return(letters[1:n])
     }
 
-    n_26 = log(n, 26)
-    n_26 = floor(n_26) + (n_26 %% 1 == 0)
+    n_26 <- log(n, 26)
+    n_26 <- floor(n_26) + (n_26 %% 1 == 0)
 
-    rest = (1:n) - 1
-    res = vector("list", n_26 + 1)
-    i = 1
-    for(p in n_26:0){
-        num = 26**p
+    rest <- (1:n) - 1
+    res <- vector("list", n_26 + 1)
+    i <- 1
+    for (p in n_26:0) {
+        num <- 26**p
 
-        if(p == 0){
-            res[[i]] = letters[(rest %/% num) + 1]
+        if (p == 0) {
+            res[[i]] <- letters[(rest %/% num) + 1]
         } else {
-            res[[i]] = c("", letters)[(rest %/% num) + 1]
+            res[[i]] <- c("", letters)[(rest %/% num) + 1]
         }
 
-        rest = rest %% num
-        i = i + 1
+        rest <- rest %% num
+        i <- i + 1
     }
 
-    res = do.call(base::paste0, res)
+    res <- do.call(base::paste0, res)
 
     res
 }
-
-
-

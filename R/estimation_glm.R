@@ -72,7 +72,7 @@
 #'
 #'
 #' @seealso
-#' See also [`summary.fixest`] to see the results with the appropriate standard-errors, [`fixef.fixest`] to extract the fixed-effects coefficients, and the function [`etable`] to visualize the results of multiple estimations.
+#' See also [`summary.fixest`] to see the results with the appropriate standard-errors, [`fixef.fixest`] to extract the fixed-effects coefficients.
 #' And other estimation methods: [`feols`], [`femlm`], [`fenegbin`], [`feNmlm`].
 #'
 #' @author
@@ -88,6 +88,7 @@
 #'
 #'
 #' @examples
+#' # Single estimation ----
 #'
 #' # Poisson estimation
 #' res <- feglm(Sepal.Length ~ Sepal.Width + Petal.Length | Species, iris, "poisson")
@@ -98,27 +99,12 @@
 #' # With the fit method:
 #' res_fit <- feglm.fit(iris$Sepal.Length, iris[, 2:3], iris$Species, "poisson")
 #'
-#' # All results are identical:
-#' etable(res, res_pois, res_fit)
-#'
 #' # Note that you have many more examples in feols
 #'
-#' #
-#' # Multiple estimations:
-#' #
+#' # Multiple estimations ----
 #'
 #' # 6 estimations
 #' est_mult <- fepois(c(Ozone, Solar.R) ~ Wind + Temp + csw0(Wind:Temp, Day), airquality)
-#'
-#' # We can display the results for the first lhs:
-#' etable(est_mult[lhs = 1])
-#'
-#' # And now the second (access can be made by name)
-#' etable(est_mult[lhs = "Solar.R"])
-#'
-#' # Now we focus on the two last right hand sides
-#' # (note that .N can be used to specify the last item)
-#' etable(est_mult[rhs = 2:.N])
 #'
 #' # Combining with split
 #' est_split <- fepois(c(Ozone, Solar.R) ~ sw(poly(Wind, 2), poly(Temp, 2)),
@@ -1002,7 +988,7 @@ feglm.fit <- function(y, X, fixef_df, family = "gaussian", vcov, offset, split,
 #'
 #'
 #' @seealso
-#' See also [`summary.fixest`] to see the results with the appropriate standard-errors, [`fixef.fixest`] to extract the fixed-effects coefficients, and the function [`etable`] to visualize the results of multiple estimations.
+#' See also [`summary.fixest`] to see the results with the appropriate standard-errors, [`fixef.fixest`] to extract the fixed-effects coefficients.
 #' And other estimation methods: [`feols`], [`feglm`], [`fepois`], [`feNmlm`].
 #'
 #' @author
@@ -1021,9 +1007,10 @@ feglm.fit <- function(y, X, fixef_df, family = "gaussian", vcov, offset, split,
 #' Allison, Paul D and Waterman, Richard P, 2002, "Fixed-Effects Negative Binomial Regression Models", Sociological Methodology 32(1) pp. 247--265
 #'
 #' @examples
-#'
-#' # Load trade data
+#' # Load trade data ----
 #' data(trade)
+#'
+#' # Single estimation ----
 #'
 #' # We estimate the effect of distance on trade => we account for 3 fixed-effects
 #' # 1) Poisson estimation
@@ -1032,36 +1019,16 @@ feglm.fit <- function(y, X, fixef_df, family = "gaussian", vcov, offset, split,
 #' # 2) Log-Log Gaussian estimation (with same FEs)
 #' est_gaus <- update(est_pois, log(Euros + 1) ~ ., family = "gaussian")
 #'
-#' # Comparison of the results using the function etable
-#' etable(est_pois, est_gaus)
-#' # Now using two way clustered standard-errors
-#' etable(est_pois, est_gaus, se = "twoway")
-#'
 #' # Comparing different types of standard errors
 #' sum_hetero <- summary(est_pois, se = "hetero")
 #' sum_oneway <- summary(est_pois, se = "cluster")
 #' sum_twoway <- summary(est_pois, se = "twoway")
 #' sum_threeway <- summary(est_pois, se = "threeway")
 #'
-#' etable(sum_hetero, sum_oneway, sum_twoway, sum_threeway)
-#'
-#'
-#' #
-#' # Multiple estimations:
-#' #
+#' # Multiple estimation ----
 #'
 #' # 6 estimations
 #' est_mult <- femlm(c(Ozone, Solar.R) ~ Wind + Temp + csw0(Wind:Temp, Day), airquality)
-#'
-#' # We can display the results for the first lhs:
-#' etable(est_mult[lhs = 1])
-#'
-#' # And now the second (access can be made by name)
-#' etable(est_mult[lhs = "Solar.R"])
-#'
-#' # Now we focus on the two last right hand sides
-#' # (note that .N can be used to specify the last item)
-#' etable(est_mult[rhs = 2:.N])
 #'
 #' # Combining with split
 #' est_split <- fepois(c(Ozone, Solar.R) ~ sw(poly(Wind, 2), poly(Temp, 2)),
@@ -1077,7 +1044,6 @@ feglm.fit <- function(y, X, fixef_df, family = "gaussian", vcov, offset, split,
 #'
 #' # You can still select which sample/LHS/RHS to display
 #' est_split[sample = 1:2, lhs = 1, rhs = 1]
-#'
 #' @export
 femlm <- function(fml, data, family = c("poisson", "negbin", "logit", "gaussian"), vcov,
                   start = 0, fixef, fixef.rm = "perfect", offset, subset,
@@ -1304,7 +1270,7 @@ fepois <- function(fml, data, vcov, offset, weights, subset, split, fsplit, spli
 #' \item{theta}{In the case of a negative binomial estimation: the overdispersion parameter.}
 #'
 #'  @seealso
-#' See also [`summary.fixest`] to see the results with the appropriate standard-errors, [`fixef.fixest`] to extract the fixed-effects coefficients, and the function [`etable`] to visualize the results of multiple estimations.
+#' See also [`summary.fixest`] to see the results with the appropriate standard-errors, [`fixef.fixest`] to extract the fixed-effects coefficients.
 #'
 #' And other estimation methods: [`feols`], [`femlm`], [`feglm`], [`fepois`][fixest2::feglm], [`fenegbin`][fixest2::femlm].
 #'
@@ -1340,8 +1306,6 @@ fepois <- function(fml, data, vcov, offset, weights, subset, split, fsplit, spli
 #' est1_L <- femlm(z1 ~ log(x) + log(y), base)
 #' # Estimating the same 'linear' relation using a 'non-linear' call
 #' est1_NL <- feNmlm(z1 ~ 1, base, NL.fml = ~ a * log(x) + b * log(y), NL.start = list(a = 0, b = 0))
-#' # we compare the estimates with the function esttable (they are identical)
-#' etable(est1_L, est1_NL)
 #'
 #' # Now generating a non-linear relation (E(z2) = x + y + 1):
 #' z2 <- rpois(n, x + y) + rpois(n, 1)
@@ -1355,14 +1319,6 @@ fepois <- function(fml, data, vcov, offset, weights, subset, split, fsplit, spli
 #' # we can't estimate this relation linearily
 #' # => closest we can do:
 #' est2_L <- femlm(z2 ~ log(x) + log(y), base)
-#'
-#' # Difference between the two models:
-#' etable(est2_L, est2_NL)
-#'
-#' # Plotting the fits:
-#' plot(x, z2, pch = 18)
-#' points(x, fitted(est2_L), col = 2, pch = 1)
-#' points(x, fitted(est2_NL), col = 4, pch = 2)
 #'
 #' @export
 feNmlm <- function(fml, data, family = c("poisson", "negbin", "logit", "gaussian"), NL.fml, vcov,

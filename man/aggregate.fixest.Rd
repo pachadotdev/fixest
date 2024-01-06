@@ -43,29 +43,34 @@ data(base_stagg)
 # Note: the never treated have a time_to_treatment equal to -1000
 
 # Now we perform the estimation
-res_twfe = feols(y ~ x1 + i(time_to_treatment, treated,
-                            ref = c(-1, -1000)) | id + year, base_stagg)
+res_twfe <- feols(y ~ x1 + i(time_to_treatment, treated,
+    ref = c(-1, -1000)
+) | id + year, base_stagg)
 
 # we use the "i." prefix to force year_treated to be considered as a factor
-res_cohort = feols(y ~ x1 + i(time_to_treatment, i.year_treated,
-                              ref = c(-1, -1000)) | id + year, base_stagg)
+res_cohort <- feols(y ~ x1 + i(time_to_treatment, i.year_treated,
+    ref = c(-1, -1000)
+) | id + year, base_stagg)
 
 # Displaying the results
-iplot(res_twfe, ylim = c(-6, 8))
-att_true = tapply(base_stagg$treatment_effect_true,
-                  base_stagg$time_to_treatment, mean)[-1]
+att_true <- tapply(
+    base_stagg$treatment_effect_true,
+    base_stagg$time_to_treatment, mean
+)[-1]
 points(-9:8 + 0.15, att_true, pch = 15, col = 2)
 
 # The aggregate effect for each period
-agg_coef = aggregate(res_cohort, "(ti.*nt)::(-?[[:digit:]]+)")
-x = c(-9:-2, 0:8) + .35
+agg_coef <- aggregate(res_cohort, "(ti.*nt)::(-?[[:digit:]]+)")
+x <- c(-9:-2, 0:8) + .35
 points(x, agg_coef[, 1], pch = 17, col = 4)
-ci_low = agg_coef[, 1] - 1.96 * agg_coef[, 2]
-ci_up = agg_coef[, 1] + 1.96 * agg_coef[, 2]
+ci_low <- agg_coef[, 1] - 1.96 * agg_coef[, 2]
+ci_up <- agg_coef[, 1] + 1.96 * agg_coef[, 2]
 segments(x0 = x, y0 = ci_low, x1 = x, y1 = ci_up, col = 4)
 
-legend("topleft", col = c(1, 2, 4), pch = c(20, 15, 17),
-       legend = c("TWFE", "True", "Sun & Abraham"))
+legend("topleft",
+    col = c(1, 2, 4), pch = c(20, 15, 17),
+    legend = c("TWFE", "True", "Sun & Abraham")
+)
 
 
 # The ATT

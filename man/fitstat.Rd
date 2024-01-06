@@ -54,8 +54,8 @@ The types are case sensitive, please use lower case only. The types available ar
 \item{`theta`: }{The over-dispersion parameter in Negative Binomial models. Low values mean high overdispersion.}
 \item{`f`, `wf`: }{The F-tests of nullity of the coefficients. The `w` stands for 'within'. These types return the following values: `stat`, `p`, `df1` and `df2`. If you want to display only one of these, use their name after a dot: e.g. `f.stat` will give the statistic of the F-test, or `wf.p` will give the p-values of the F-test on the projected model (i.e. projected onto the fixed-effects).}
 \item{`wald`: }{Wald test of joint nullity of the coefficients. This test always excludes the intercept and the fixed-effects. These type returns the following values: `stat`, `p`, `df1`, `df2` and `vcov`. The element `vcov` reports the way the VCOV matrix was computed since it directly influences this statistic.}
-\item{`ivf`, `ivf1`, `ivf2`, `ivfall`: }{These statistics are specific to IV estimations. They report either the IV F-test (namely the Cragg-Donald F statistic in the presence of only one endogenous regressor) of the first stage (`ivf` or `ivf1`), of the second stage (`ivf2`) or of both (`ivfall`). The F-test of the first stage is commonly named weak instrument test. The value of `ivfall` is only useful in [`etable`] when both the 1st and 2nd stages are displayed (it leads to the 1st stage F-test(s) to be displayed on the 1st stage estimation(s), and the 2nd stage one on the 2nd stage estimation -- otherwise, `ivf1` would also be displayed on the 2nd stage estimation). These types return the following values: `stat`, `p`, `df1` and `df2`.}
-\item{`ivwald`, `ivwald1`, `ivwald2`, `ivwaldall`: }{These statistics are specific to IV estimations. They report either the IV Wald-test of the first stage (`ivwald` or `ivwald1`), of the second stage (`ivwald2`) or of both (`ivwaldall`). The Wald-test of the first stage is commonly named weak instrument test. Note that if the estimation was done with a robust VCOV and there is only one endogenous regressor, this is equivalent to the Kleibergen-Paap statistic. The value of `ivwaldall` is only useful in [`etable`] when both the 1st and 2nd stages are displayed (it leads to the 1st stage Wald-test(s) to be displayed on the 1st stage estimation(s), and the 2nd stage one on the 2nd stage estimation -- otherwise, `ivwald1` would also be displayed on the 2nd stage estimation). These types return the following values: `stat`, `p`, `df1`, `df2`, and `vcov`.}
+\item{`ivf`, `ivf1`, `ivf2`: }{These statistics are specific to IV estimations. They report either the IV F-test (namely the Cragg-Donald F statistic in the presence of only one endogenous regressor) of the first stage (`ivf` or `ivf1`), of the second stage (`ivf2`). The F-test of the first stage is commonly named weak instrument test. These types return the following values: `stat`, `p`, `df1` and `df2`.}
+\item{`ivwald`, `ivwald1`, `ivwald2`, `ivwaldall`: }{These statistics are specific to IV estimations. They report either the IV Wald-test of the first stage (`ivwald` or `ivwald1`), of the second stage (`ivwald2`) or of both (`ivwaldall`). The Wald-test of the first stage is commonly named weak instrument test. Note that if the estimation was done with a robust VCOV and there is only one endogenous regressor, this is equivalent to the Kleibergen-Paap statistic. These types return the following values: `stat`, `p`, `df1`, `df2`, and `vcov`.}
 \item{`cd`: }{The Cragg-Donald test for weak instruments.}
 \item{`kpr`: }{The Kleibergen-Paap test for weak instruments.}
 \item{`wh`: }{This statistic is specific to IV estimations. Wu-Hausman endogeneity test. H0 is the absence of endogeneity of the instrumented variables. It returns the following values: `stat`, `p`, `df1`, `df2`.}
@@ -75,12 +75,6 @@ fitstat(gravity, "g", simplify = TRUE)
 # Some fit statistics
 fitstat(gravity, ~ rmse + r2 + wald + wf)
 
-# You can use them in etable
-etable(gravity, fitstat = ~ rmse + r2 + wald + wf)
-
-# For wald and wf, you could show the pvalue instead:
-etable(gravity, fitstat = ~ rmse + r2 + wald.p + wf.p)
-
 # Now let's display some statistics that are not built-in
 # => we use fitstat_register to create them
 
@@ -91,9 +85,6 @@ fitstat_register("tstand", function(x) tstat(x, se = "stand")[1], "t-stat (regul
 fitstat_register("thc", function(x) tstat(x, se = "heter")[1], "t-stat (HC1)")
 fitstat_register("t1w", function(x) tstat(x, se = "clus")[1], "t-stat (clustered)")
 fitstat_register("t2w", function(x) tstat(x, se = "twow")[1], "t-stat (2-way)")
-
-# Now we can use these keywords in fitstat:
-etable(gravity, fitstat = ~ . + tstand + thc + t1w + t2w)
 
 # Note that the custom stats we created are can easily lead
 # to errors, but that's another story!

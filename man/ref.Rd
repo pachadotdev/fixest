@@ -89,12 +89,7 @@ a <- feols(Petal.Width ~ Petal.Length + Species, iris)
 # We change the reference
 b <- feols(Petal.Width ~ Petal.Length + ref(Species, "vers"), iris)
 
-etable(a, b)
-
-
-#
-# Binning
-#
+# Binning ----
 
 # You can also bin factor values on the fly
 # Using @ first means a regular expression will be used to match the values.

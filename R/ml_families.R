@@ -1,6 +1,4 @@
-#*************************** #
-#### ===== POISSON ===== ####
-#*************************** #
+# POISSON ----
 
 ml_poisson <- function() {
   # Cette fonction renvoie une famille de fonctions
@@ -44,10 +42,7 @@ ml_poisson <- function() {
   return(list(ll = ll, expected.predictor = expected.predictor, ll_dl = ll_dl, ll_d2 = ll_d2, closedFormDummies = closedFormDummies, linearFromExpected = linearFromExpected))
 }
 
-#************************ #
-#### ===== LOGIT ==== ####
-#************************ #
-
+# LOGIT ----
 
 ml_logit <- function() {
   ll <- function(y, mu, exp_mu, env, ...) {
@@ -85,10 +80,7 @@ ml_logit <- function() {
   return(list(ll = ll, expected.predictor = expected.predictor, ll_dl = ll_dl, ll_d2 = ll_d2, guessDummy = guessDummy, guessExpDummy = guessExpDummy, linearFromExpected = linearFromExpected))
 }
 
-
-#************************* #
-#### ===== NEGBIN ==== ####
-#************************* #
+# NEGBIN ----
 
 ml_negbin <- function() {
   # Cette fonction renvoie une famille de fonctions
@@ -205,11 +197,7 @@ ml_negbin <- function() {
   return(list(ll = ll, expected.predictor = expected.predictor, linearFromExpected = linearFromExpected, ll0_theta = ll0_theta, grad0_theta = grad0_theta, hess0_theta = hess0_theta, hess.theta = hess.theta, hess.thetaL = hess.thetaL, hess_theta_part = hess_theta_part, grad.theta = grad.theta, scores.theta = scores.theta, ll_dl = ll_dl, ll_d2 = ll_d2, guessDummy = guessDummy, ll_dx_dother = ll_dx_dother, guessExpDummy = guessExpDummy))
 }
 
-
-#*************************** #
-#### ===== GAUSSIAN ==== ####
-#*************************** #
-
+# GAUSSIAN ----
 
 ml_gaussian <- function() {
   ll <- function(y, mu, exp_mu, env, ...) {

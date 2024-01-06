@@ -4,8 +4,6 @@
 # ~: Startup related functions
 #----------------------------------------------#
 
-
-
 #' Permanently removes the fixest package startup message
 #'
 #' Package startup messages can be very annoying, although sometimes they can be necessary. Use this function to prevent `fixest`'s package startup message from popping when loading. This will be specific to your current project.
@@ -19,11 +17,8 @@
 #'
 #' @export
 fixest_startup_msg = function(x){
-
     check_arg(x, "logical scalar mbt")
-
     config_update("fixest_startup_msg", x)
-
 }
 
 initialize_startup_msg = function(startup_msg){
@@ -56,11 +51,6 @@ initialize_startup_msg = function(startup_msg){
     if(getRversion() < "4.0.0"){
         # No startup message for version < 4.0
         # because there's no way to monitor the messages
-        return(FALSE)
-    }
-
-    if(is_Rmarkdown()){
-        # Never in Rmarkdown: too ugly
         return(FALSE)
     }
 
