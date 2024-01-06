@@ -1,13 +1,14 @@
 #include "04_0_linear_model.hpp"
 
-void invert_tri(writable::doubles_matrix<> &R, int K, int nthreads) {
+void invert_tri(writable::doubles_matrix<> &R, int K, int nthreads = 1) {
   // Strategy: we invert by bands (b) => better for parallelization
 
   // https://stackoverflow.com/a/76020237/3720258
   // initialization of R prime
   for (int i = 0; i < K; ++i) {
     for (int j = i + 1; j < K; ++j) {
-      R(j, i) = (double)R(i, j);
+      double temp = R(i, j);
+      R(j, i) = temp;
     }
   }
 
@@ -23,7 +24,6 @@ void invert_tri(writable::doubles_matrix<> &R, int K, int nthreads) {
 
   for (int b = 1; b < K; ++b) {
     if (b % iterSecond == 0) {
-      // Rprintf("check\n");
       R_CheckUserInterrupt();
     }
 
@@ -39,14 +39,16 @@ void invert_tri(writable::doubles_matrix<> &R, int K, int nthreads) {
   }
 }
 
+// TODO: check race conditions with OMP here
 void tproduct_tri(writable::doubles_matrix<> &RRt,
-                  writable::doubles_matrix<> &R, int nthreads) {
+                  writable::doubles_matrix<> &R, int nthreads = 1) {
   int K = RRt.ncol();
 
   // initialization of R prime
   for (int i = 0; i < K; ++i) {
     for (int j = i + 1; j < K; ++j) {
-      R(j, i) = (double)R(i, j);
+      double temp = R(i, j);
+      R(j, i) = temp;
     }
   }
 
@@ -56,12 +58,15 @@ void tproduct_tri(writable::doubles_matrix<> &RRt,
   int iterSecond = ceil(2000000000 / flop / 5);  // nber iter per 1/5 second
   int n_iter_main = 0;
 
-#pragma omp parallel for num_threads(nthreads) schedule(static, 1)
+  // #pragma omp parallel for num_threads(nthreads) schedule(static, 1)
   for (int i = 0; i < K; ++i) {
-    if (omp_get_thread_num() == 0 && n_iter_main % iterSecond == 0) {
-      // Rprintf("check\n");
+    if (omp_get_thread_num() == 0) {
+      // #pragma omp atomic
+      n_iter_main++;
+    }
+
+    if (n_iter_main % iterSecond == 0) {
       R_CheckUserInterrupt();
-      ++n_iter_main;
     }
 
     for (int j = i; j < K; ++j) {
@@ -77,7 +82,7 @@ void tproduct_tri(writable::doubles_matrix<> &RRt,
 }
 
 [[cpp11::register]] list cpp_cholesky_(doubles_matrix<> X, double tol,
-                                       int nthreads) {
+                                       int nthreads = 1) {
   // X eis symmetric, positive semi-definite
   // rank-revealing on-the-fly
 
@@ -87,13 +92,12 @@ void tproduct_tri(writable::doubles_matrix<> &RRt,
 
   writable::doubles_matrix<> R(K, K);
 
-// fill R with 0s
-#pragma omp parallel for num_threads(nthreads)
-  for (int i = 0; i < K; ++i) {
-    for (int j = 0; j < K; ++j) {
-      R(i, j) = 0;
-    }
-  }
+  // fill R with 0s
+  // for (int i = 0; i < K; ++i) {
+  //   for (int j = 0; j < K; ++j) {
+  //     R(i, j) = 0.0;
+  //   }
+  // }
 
   writable::logicals id_excl(K);
   for (int k = 0; k < K; ++k) {
@@ -111,7 +115,6 @@ void tproduct_tri(writable::doubles_matrix<> &RRt,
 
   for (int j = 0; j < K; ++j) {
     if (j % iterSecond == 0) {
-      // Rprintf("check\n");
       R_CheckUserInterrupt();
     }
 
@@ -124,14 +127,12 @@ void tproduct_tri(writable::doubles_matrix<> &RRt,
         continue;
       }
 
-      R_jj -= R(k, j) * R(k, j);
+      R_jj -= pow(R(k, j), 2);
     }
 
     if (R_jj < tol) {
       n_excl++;
       id_excl[j] = true;
-
-      // Rcout << "excluded: " << j << ", L_jj: " << L_jj << "\n";
 
       // Corner case, may happen:
       if (n_excl == K) {
@@ -165,8 +166,8 @@ void tproduct_tri(writable::doubles_matrix<> &RRt,
     }
   }
 
-  // we reconstruct the R matrix, otherwise it's just a mess to handle excluded
-  // variables on the fly changes are in place
+  // we reconstruct the R matrix, otherwise it's just a mess to handle
+  // excluded variables on the fly changes are in place
 
   if (n_excl > 0) {
     int n_j_excl = 0;
@@ -200,6 +201,13 @@ void tproduct_tri(writable::doubles_matrix<> &RRt,
   invert_tri(R, K, nthreads);
 
   writable::doubles_matrix<> XtX_inv(K, K);
+  // fill with 0s
+  // for (int i = 0; i < K; ++i) {
+  //   for (int j = 0; j < K; ++j) {
+  //     XtX_inv(i, j) = 0.0;
+  //   }
+  // }
+
   tproduct_tri(XtX_inv, R, nthreads);
 
   res.push_back({"XtX_inv"_nm = XtX_inv});
