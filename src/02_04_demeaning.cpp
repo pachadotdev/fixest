@@ -455,7 +455,8 @@ void demean_single_gnl(int v, PARAM_DEMEAN *args) {
                                      SEXP r_nb_id_Q, SEXP fe_id_list,
                                      SEXP table_id_I, SEXP slope_flag_Q,
                                      SEXP slope_vars_list, SEXP r_init,
-                                     int nthreads, bool save_fixef = false) {
+                                     int nthreads = 1,
+                                     bool save_fixef = false) {
   // main fun that calls demean_single
   // preformats all the information needed on the fixed-effects
   // y: the dependent variable

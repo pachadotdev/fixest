@@ -199,7 +199,7 @@
     }
   }
 
-  // l == 0 => easy
+// l == 0 => easy
 #pragma omp parallel for num_threads(nthreads)
   for (int index = 0; index < K_sq; ++index) {
     int k1 = all_k1[index];
@@ -319,7 +319,7 @@
   // Scores
   writable::doubles_matrix<> time_scores(T, K);
 
-  // we sum the scores by period
+// we sum the scores by period
 #pragma omp parallel for num_threads(nthreads)
   for (int k = 0; k < K; ++k) {
     for (int i = 0; i < N; ++i) {
@@ -337,7 +337,7 @@
   }
 
   for (int l = 0; l < L; ++l) {
-    // X_t' %*% X_t+l
+// X_t' %*% X_t+l
 #pragma omp parallel for num_threads(nthreads) schedule(static, 1)
     for (int index = 0; index < K_sq; ++index) {
       int k1 = all_k1[index];

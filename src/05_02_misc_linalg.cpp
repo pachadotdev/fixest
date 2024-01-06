@@ -71,6 +71,12 @@ double simple_vec_double::operator[](int i) {
   }
 
   writable::doubles_matrix<> res(n, K);
+  // fill with 0
+  for (int i = 0; i < n; ++i) {
+    for (int k = 0; k < K; ++k) {
+      res(i, k) = 0;
+    }
+  }
 
   // The interacted var
   simple_vec_double my_var(var);
@@ -106,6 +112,10 @@ double simple_vec_double::operator[](int i) {
   int K = X.ncol();
 
   writable::doubles res(n);
+  // fill with 0
+  for (int i = 0; i < n; ++i) {
+    res[i] = 0;
+  }
 
   for (int i = 0; i < n; ++i) {
     double res_i = 0;

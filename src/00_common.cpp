@@ -53,7 +53,7 @@ bool update_X_IronsTuck(int nb_coef_no_KQ, vector<double> &X,
 // takes in the nber of observations of the vector and the nber of threads
 // gives back a vector of the length the nber of threads + 1 giving the
 // start/stop of each threads
-vector<int> set_parallel_scheme(int N, int nthreads) {
+vector<int> set_parallel_scheme(int N, int nthreads = 1) {
   vector<int> res(nthreads + 1, 0);
   double N_rest = N;
 

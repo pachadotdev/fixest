@@ -50,74 +50,73 @@ bool continue_criterion(double a, double b, double diffMax);
 bool stopping_criterion(double a, double b, double diffMax);
 
 bool update_X_IronsTuck(int nb_coef_no_K, vector<double> &X,
-						const vector<double> &GX, const vector<double> &GGX,
-						vector<double> &delta_GX, vector<double> &delta2_X);
+                        const vector<double> &GX, const vector<double> &GGX,
+                        vector<double> &delta_GX, vector<double> &delta2_X);
 
 // STAT FAMILIES
 
-struct PARAM_CCC
-{
-	int family;
-	int n_obs;
-	int K;
-	double theta;
-	double diffMax_NR;
-	int nthreads;
+struct PARAM_CCC {
+  int family;
+  int n_obs;
+  int K;
+  double theta;
+  double diffMax_NR;
+  int nthreads;
 
-	// vectors from R
-	double *mu_init;
-	int *pcluster;
-	double *lhs;
+  // vectors from R
+  double *mu_init;
+  int *pcluster;
+  double *lhs;
 
-	// vectors of pointers
-	vector<int *> pdum;
-	vector<int *> ptable;
-	vector<double *> psum_y;
-	vector<int *> pobsCluster;
-	vector<int *> pcumtable;
+  // vectors of pointers
+  vector<int *> pdum;
+  vector<int *> ptable;
+  vector<double *> psum_y;
+  vector<int *> pobsCluster;
+  vector<int *> pcumtable;
 
-	// value that will vary
-	double *mu_with_coef;
+  // value that will vary
+  double *mu_with_coef;
 };
 
-void CCC_poisson(int n_obs, int nb_cluster,
-				 double *cluster_coef, double *exp_mu,
-				 double *sum_y, int *dum);
+void CCC_poisson(int n_obs, int nb_cluster, double *cluster_coef,
+                 double *exp_mu, double *sum_y, int *dum);
 
-void CCC_poisson_2(const vector<double> &pcluster_origin, vector<double> &pcluster_destination,
-				   int n_i, int n_j, int n_cells,
-				   const vector<int> &mat_row, vector<int> &mat_col, vector<double> &mat_value,
-				   const vector<double> &ca, const vector<double> &cb,
-				   vector<double> &alpha);
+void CCC_poisson_2(const vector<double> &pcluster_origin,
+                   vector<double> &pcluster_destination, int n_i, int n_j,
+                   int n_cells, const vector<int> &mat_row,
+                   vector<int> &mat_col, vector<double> &mat_value,
+                   const vector<double> &ca, const vector<double> &cb,
+                   vector<double> &alpha);
 
 void CCC_negbin(int nthreads, int nb_cluster, double theta, double diffMax_NR,
-				double *cluster_coef, double *mu,
-				double *lhs, double *sum_y, int *obsCluster, int *table, int *cumtable);
+                double *cluster_coef, double *mu, double *lhs, double *sum_y,
+                int *obsCluster, int *table, int *cumtable);
 
 void CCC_logit(int nthreads, int nb_cluster, double diffMax_NR,
-			   double *cluster_coef, double *mu,
-			   double *sum_y, int *obsCluster, int *table, int *cumtable);
+               double *cluster_coef, double *mu, double *sum_y, int *obsCluster,
+               int *table, int *cumtable);
 
-void CCC_gaussian(int n_obs, int nb_cluster,
-				  double *cluster_coef, double *mu,
-				  double *sum_y, int *dum, int *table);
+void CCC_gaussian(int n_obs, int nb_cluster, double *cluster_coef, double *mu,
+                  double *sum_y, int *dum, int *table);
 
-void CCC_gaussian_2(const vector<double> &pcluster_origin, vector<double> &pcluster_destination,
-					int n_i, int n_j, int n_cells,
-					int *mat_row, int *mat_col,
-					double *mat_value_Ab, double *mat_value_Ba,
-					const vector<double> &a_tilde, vector<double> &beta);
+void CCC_gaussian_2(const vector<double> &pcluster_origin,
+                    vector<double> &pcluster_destination, int n_i, int n_j,
+                    int n_cells, int *mat_row, int *mat_col,
+                    double *mat_value_Ab, double *mat_value_Ba,
+                    const vector<double> &a_tilde, vector<double> &beta);
 
-void CCC_poisson_log(int n_obs, int nb_cluster,
-					 double *cluster_coef, double *mu,
-					 double *sum_y, int *dum);
+void CCC_poisson_log(int n_obs, int nb_cluster, double *cluster_coef,
+                     double *mu, double *sum_y, int *dum);
 
 // CLUSTERS
 
-void computeClusterCoef_single(int family, int n_obs, int nb_cluster, double theta, double diffMax_NR,
-							   double *cluster_coef, double *mu,
-							   double *lhs, double *sum_y,
-							   int *dum, int *obsCluster, int *table, int *cumtable, int nthreads);
+void computeClusterCoef_single(int family, int n_obs, int nb_cluster,
+                               double theta, double diffMax_NR,
+                               double *cluster_coef, double *mu, double *lhs,
+                               double *sum_y, int *dum, int *obsCluster,
+                               int *table, int *cumtable, int nthreads = 1);
 
-void computeClusterCoef(vector<double *> &pcluster_origin, vector<double *> &pcluster_destination,
-						PARAM_CCC *args);
+void computeClusterCoef(vector<double *> &pcluster_origin,
+                        vector<double *> &pcluster_destination,
+                        PARAM_CCC *args);

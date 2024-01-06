@@ -29,20 +29,41 @@ vector<int> set_parallel_scheme(int N, int nthreads);
 
 bool sparse_check(const doubles_matrix<> &X);
 
-void set_sparse(std::vector<int> &n_j, std::vector<int> &start_j, std::vector<int> &all_i, std::vector<double> &x, const doubles_matrix<> &X, const doubles &w);
+void set_sparse(std::vector<int> &n_j, std::vector<int> &start_j,
+                std::vector<int> &all_i, std::vector<double> &x,
+                const doubles_matrix<> &X, const doubles &w);
 
-void mp_XtX(writable::doubles_matrix<> &XtX, const doubles_matrix<> &X, const doubles_matrix<> &wX, int nthreads);
+void mp_XtX(writable::doubles_matrix<> &XtX, const doubles_matrix<> &X,
+            const doubles_matrix<> &wX, int nthreads = 1);
 
-void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y, int nthreads);
+void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y,
+            int nthreads = 1);
 
-void mp_ZXtu(writable::doubles &ZXtu, const doubles_matrix<> &X, const doubles_matrix<> &Z, const double *u, int nthreads);
+void mp_ZXtu(writable::doubles &ZXtu, const doubles_matrix<> &X,
+             const doubles_matrix<> &Z, const double *u, int nthreads = 1);
 
-void mp_ZXtZX(writable::doubles_matrix<> &ZXtZX, const doubles_matrix<> &XtX, const doubles_matrix<> &X, const doubles_matrix<> &Z, const doubles_matrix<> &wZ, int nthreads);
+void mp_ZXtZX(writable::doubles_matrix<> &ZXtZX, const doubles_matrix<> &XtX,
+              const doubles_matrix<> &X, const doubles_matrix<> &Z,
+              const doubles_matrix<> &wZ, int nthreads = 1);
 
-void mp_sparse_XtX(writable::doubles_matrix<> &XtX, const std::vector<int> &n_j, const std::vector<int> &start_j, const std::vector<int> &all_i, const std::vector<double> &x, const doubles_matrix<> &X, int nthreads);
+void mp_sparse_XtX(writable::doubles_matrix<> &XtX, const std::vector<int> &n_j,
+                   const std::vector<int> &start_j,
+                   const std::vector<int> &all_i, const std::vector<double> &x,
+                   const doubles_matrix<> &X, int nthreads = 1);
 
-void mp_sparse_Xty(writable::doubles &Xty, const std::vector<int> &start_j, const std::vector<int> &all_i, const std::vector<double> &x, const double *y, int nthreads);
+void mp_sparse_Xty(writable::doubles &Xty, const std::vector<int> &start_j,
+                   const std::vector<int> &all_i, const std::vector<double> &x,
+                   const double *y, int nthreads = 1);
 
-void mp_sparse_ZXtu(writable::doubles &ZXtu, const std::vector<int> &start_j, const std::vector<int> &all_i, const std::vector<double> &x, const double *u, const doubles_matrix<> &X, const doubles_matrix<> &wZ, int nthreads);
+void mp_sparse_ZXtu(writable::doubles &ZXtu, const std::vector<int> &start_j,
+                    const std::vector<int> &all_i, const std::vector<double> &x,
+                    const double *u, const doubles_matrix<> &X,
+                    const doubles_matrix<> &wZ, int nthreads = 1);
 
-void mp_sparse_ZXtZX(writable::doubles_matrix<> &ZXtZX, const doubles_matrix<> &XtX, const std::vector<int> &n_j, const std::vector<int> &start_j, const std::vector<int> &all_i, const std::vector<double> &x, const doubles_matrix<> &X, const doubles_matrix<> &Z, const doubles_matrix<> &wZ, int nthreads);
+void mp_sparse_ZXtZX(writable::doubles_matrix<> &ZXtZX,
+                     const doubles_matrix<> &XtX, const std::vector<int> &n_j,
+                     const std::vector<int> &start_j,
+                     const std::vector<int> &all_i,
+                     const std::vector<double> &x, const doubles_matrix<> &X,
+                     const doubles_matrix<> &Z, const doubles_matrix<> &wZ,
+                     int nthreads = 1);
