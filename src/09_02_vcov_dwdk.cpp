@@ -118,17 +118,15 @@
 // time: must be int
 // the data MUST be sorted by unit and time (in that order)
 // Note that the first weight needs to be halved
-[[cpp11::register]] doubles_matrix<> cpp_newey_west_panel_(doubles_matrix<> S,
-                                                           doubles w,
-                                                           integers unit, int G,
-                                                           integers time, int T,
-                                                           int nthreads) {
+[[cpp11::register]] doubles_matrix<> cpp_newey_west_panel_(
+    doubles_matrix<> S, doubles w, integers unit, int G, integers time,
+    int n_time, int nthreads) {
   int N = S.nrow();
   int K = S.ncol();
 
   int L = w.size();
   if (w[L - 1] == 0) L -= 1;
-  if (L > T - 1) L = T - 1;
+  if (L > n_time - 1) L = n_time - 1;
 
   writable::doubles_matrix<> meat(K, K);
   for (int i = 0; i < K; ++i) {
@@ -138,23 +136,23 @@
   }
 
   // utilities
-  writable::doubles time_table(T);
-  for (int t = 0; t < T; ++t) {
+  writable::doubles time_table(n_time);
+  for (int t = 0; t < n_time; ++t) {
     time_table[t] = 0;
   }
   for (int i = 0; i < N; ++i) {
     ++time_table[time[i] - 1];
   }
 
-  writable::doubles time_start(T);
-  writable::doubles time_end(T);
-  for (int t = 0; t < T; ++t) {
+  writable::doubles time_start(n_time);
+  writable::doubles time_end(n_time);
+  for (int t = 0; t < n_time; ++t) {
     time_start[t] = 0;
     time_end[t] = 0;
   }
 
   time_end[0] += time_table[0];
-  for (int t = 1; t < T; ++t) {
+  for (int t = 1; t < n_time; ++t) {
     time_start[t] += time_start[t - 1] + time_table[t - 1];
     time_end[t] += time_end[t - 1] + time_table[t];
   }
@@ -224,7 +222,7 @@
       int s2 = time_start[0];
 
       int nmax = 0;
-      for (int t = l; t < T; ++t) {
+      for (int t = l; t < n_time; ++t) {
         nmax += time_table[t];
       }
 
@@ -256,7 +254,7 @@
 
         double tmp = 0;
 
-        for (int t = l; t < T; ++t) {
+        for (int t = l; t < n_time; ++t) {
           // we only make the product of matching units
 
           int obs_left = time_start[t];
@@ -303,21 +301,19 @@
 // time: must be int
 // the data MUST be sorted by time
 // Note that the first weight needs to be halved
-[[cpp11::register]] doubles_matrix<> cpp_driscoll_kraay_(doubles_matrix<> S,
-                                                         doubles w,
-                                                         integers time, int T,
-                                                         int nthreads) {
+[[cpp11::register]] doubles_matrix<> cpp_driscoll_kraay_(
+    doubles_matrix<> S, doubles w, integers time, int n_time, int nthreads) {
   int N = S.nrow();
   int K = S.ncol();
 
   int L = w.size();
   if (w[L - 1] == 0) L -= 1;
-  if (L > T - 1) L = T - 1;
+  if (L > n_time - 1) L = n_time - 1;
 
   writable::doubles_matrix<> meat(K, K);
 
   // Scores
-  writable::doubles_matrix<> time_scores(T, K);
+  writable::doubles_matrix<> time_scores(n_time, K);
 
 // we sum the scores by period
 #pragma omp parallel for num_threads(nthreads)
@@ -346,7 +342,7 @@
       if (l == 0 && k1 > k2) continue;
 
       double tmp = 0;
-      for (int t = 0; t < T - l; ++t) {
+      for (int t = 0; t < n_time - l; ++t) {
         tmp += time_scores(t, k1) * time_scores(t + l, k2);
       }
 
