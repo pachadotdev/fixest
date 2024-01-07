@@ -1,9 +1,3 @@
-#----------------------------------------------#
-# Author: Laurent Berge
-# Date creation: Wed Apr 13 10:05:46 2022
-# ~: Data related tools
-#----------------------------------------------#
-
 #' Fast transform of any type of vector(s) into an integer vector
 #'
 #' Tool to transform any type of vector, or even combination of vectors, into an integer vector ranging from 1 to the number of unique values. This actually creates an unique identifier vector.
@@ -47,10 +41,7 @@
 #' res <- to_integer(x2, add_items = TRUE, sorted = TRUE, items.list = TRUE)
 #' all(res$items[res$x] == x2)
 #'
-#'
-#' #
-#' # Multiple vectors
-#' #
+#' # Multiple vectors ----
 #'
 #' to_integer(x1, x2, add_items = TRUE)
 #'
