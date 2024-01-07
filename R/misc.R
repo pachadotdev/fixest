@@ -3693,7 +3693,6 @@ fml_combine <- function(fml_char, fastCombine, vars = FALSE) {
     fml
 }
 
-# x = c('combine_clusters(bin(fe1, "!bin::2"), fe2)', 'fe3')
 rename_hat <- function(x) {
     qui <- grepl("combine_clusters", x, fixed = TRUE)
     if (!any(qui)) {
