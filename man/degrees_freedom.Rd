@@ -49,15 +49,15 @@ Simple utility to extract the degrees of freedom from a `fixest` estimation.
 
 # First: an estimation
 
-base = iris
-names(base) = c("y", "x1", "x2", "x3", "species")
-est = feols(y ~ x1 + x2 | species, base)
+base <- iris
+names(base) <- c("y", "x1", "x2", "x3", "species")
+est <- feols(y ~ x1 + x2 | species, base)
 
 # "Normal" standard-errors (SE)
-est_standard = summary(est, se = "st")
+est_standard <- summary(est, se = "st")
 
 # Clustered SEs
-est_clustered = summary(est, se = "clu")
+est_clustered <- summary(est, se = "clu")
 
 # The different degrees of freedom
 

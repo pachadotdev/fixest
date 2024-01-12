@@ -67,7 +67,7 @@ The types are case sensitive, please use lower case only. The types available ar
 \examples{
 
 data(trade)
-gravity = feols(log(Euros) ~ log(dist_km) | Destination + Origin, trade)
+gravity <- feols(log(Euros) ~ log(dist_km) | Destination + Origin, trade)
 
 # Extracting the 'working' number of observations used to compute the pvalues
 fitstat(gravity, "g", simplify = TRUE)

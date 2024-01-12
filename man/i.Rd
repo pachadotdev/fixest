@@ -15,16 +15,6 @@ i(factor_var, var, ref, keep, bin, ref2, keep2, bin2, ...)
 
 \item{keep}{A vector of values to be kept from `factor_var` (all others are dropped). By default they should be values from `factor_var` and if `keep` is a character vector partial matching is applied. Use "@" as the first character to enable regular expression matching instead.}
 
-\item{bin}{A list of values to be grouped, a vector, a formula, or the special values `"bin::digit"` or `"cut::values"`. To create a new value from old values, use `bin = list("new_value"=old_values)` with `old_values` a vector of existing values. You can use `.()` for `list()`.
-It accepts regular expressions, but they must start with an `"@"`, like in `bin="@Aug|Dec"`. It accepts one-sided formulas which must contain the variable `x`, e.g. `bin=list("<2" = ~x < 2)`.
-The names of the list are the new names. If the new name is missing, the first value matched becomes the new name. In the name, adding `"@d"`, with `d` a digit, will relocate the value in position `d`: useful to change the position of factors. Use `"@"` as first item to make subsequent items be located first in the factor.
-Feeding in a vector is like using a list without name and only a single element. If the vector is numeric, you can use the special value `"bin::digit"` to group every `digit` element.
-For example if `x` represents years, using `bin="bin::2"` creates bins of two years.
-With any data, using `"!bin::digit"` groups every digit consecutive values starting from the first value.
-Using `"!!bin::digit"` is the same but starting from the last value.
-With numeric vectors you can: a) use `"cut::n"` to cut the vector into `n` equal parts, b) use `"cut::a]b["` to create the following bins: `[min, a]`, `]a, b[`, `[b, max]`.
-The latter syntax is a sequence of number/quartile (q0 to q4)/percentile (p0 to p100) followed by an open or closed square bracket. You can add custom bin names by adding them in the character vector after `'cut::values'`. See details and examples. Dot square bracket expansion (see [`dsb`]) is enabled.}
-
 \item{ref2}{A vector of values to be dropped from `var`. By default they should be values from `var` and if `ref2` is a character vector partial matching is applied. Use "@" as the first character to enable regular expression matching instead.}
 
 \item{keep2}{A vector of values to be kept from `var` (all others are dropped). By default they should be values from `var` and if `keep2` is a character vector partial matching is applied. Use "@" as the first character to enable regular expression matching instead.}

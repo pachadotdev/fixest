@@ -28,7 +28,7 @@ if (eval_trade) {
   # if (!require("dplyr")) install.packages("dplyr")
   # library(dplyr)
 
-  # trade_short <- trade %>%
+  # trade_short <- Trade %>%
   #   filter(Year %in% c(2015, 2016)) %>%
   #   group_by(Year, Destination, Origin) %>%
   #   summarise(
@@ -42,15 +42,15 @@ if (eval_trade) {
 
   gravity_pois <- fepois(Euros ~ log(dist_km) | Origin + Destination + Year, trade_short)
   s1 <- summary(gravity_pois, vcov = "twoway")
-  s2 <- summary(gravity_pois, vcov = ~Product)
-  s3 <- summary(gravity_pois, cluster = "Product")
-  s4 <- summary(gravity_pois, cluster = ~Product)
-  s5 <- summary(gravity_pois, cluster = ~Product)
+  s2 <- summary(gravity_pois, vcov = ~Year)
+  s3 <- summary(gravity_pois, cluster = "Year")
+  s4 <- summary(gravity_pois, cluster = ~Year)
+  s5 <- summary(gravity_pois, cluster = ~Year)
 
   gravity_simple <- fepois(Euros ~ log(dist_km), trade_short)
   s6 <- summary(gravity_simple, ~ Origin + Destination)
 
-  gravity_pois_2 <- fepois(Euros ~ log(dist_km), trade_short, vcov = ~Product)
+  gravity_pois_2 <- fepois(Euros ~ log(dist_km), trade_short, vcov = ~Year)
 
   gravity_ols <- feols(log(Euros) ~ log(dist_km) | Origin + Destination + Year, trade_short)
 
@@ -156,43 +156,11 @@ if (eval_interactions) {
   res_i3 <- feols(Ozone ~ Solar.R + i(Month, keep = 5:6), airquality)
 
   est_did <- feols(y ~ x1 + i(period, treat, 5) | id + period, base_did)
-  iplot(est_did)
-
-  if (!require("ggplot2")) install.packages("ggplot2")
-  library(ggplot2)
-
-  g <- ggplot(
-    aggregate(base_stagg[, c("year_treated", "treatment_effect_true")],
-      by = list(
-        year = base_stagg$year,
-        group = to_integer(base_stagg$year_treated)
-      ),
-      mean
-    ),
-    aes(year, group, fill = year >= year_treated, alpha = treatment_effect_true)
-  ) +
-    geom_tile(colour = "white", lwd = 1) +
-    scale_fill_brewer("Treated?", palette = "Set1") +
-    scale_alpha("Avg. treatment\neffect") +
-    labs(x = "Year", y = "Group") +
-    theme_minimal()
 
   res_twfe <- feols(y ~ x1 + i(time_to_treatment, ref = c(-1, -1000)) |
     id + year, base_stagg)
+
   res_sa20 <- feols(y ~ x1 + sunab(year_treated, year) | id + year, base_stagg)
-
-  iplot(list(res_twfe, res_sa20), sep = 0.5)
-
-  att_true <- tapply(
-    base_stagg$treatment_effect_true,
-    base_stagg$time_to_treatment, mean
-  )[-1]
-  points(-9:8, att_true, pch = 15, col = 4)
-
-  legend("topleft",
-    col = c(1, 4, 2), pch = c(20, 15, 17),
-    legend = c("TWFE", "Truth", "Sun & Abraham (2020)")
-  )
 
   s_sa20 <- summary(res_sa20, agg = "att")
 }

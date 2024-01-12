@@ -36,7 +36,7 @@ The type of VCOV matrix plays a crucial role in this test. Use the arguments `se
 
 data(airquality)
 
-est = feols(Ozone ~ Solar.R + Wind + poly(Temp, 3), airquality)
+est <- feols(Ozone ~ Solar.R + Wind + poly(Temp, 3), airquality)
 
 # Testing the joint nullity of the Temp polynomial
 wald(est, "poly")
@@ -53,7 +53,7 @@ wald(est, drop = "Inte|poly")
 
 data(base_did)
 
-est_did = feols(y ~ x1 + i(period, treat, 5) | id + period, base_did)
+est_did <- feols(y ~ x1 + i(period, treat, 5) | id + period, base_did)
 
 # The graph of the coefficients
 coefplot(est_did)

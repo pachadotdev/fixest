@@ -423,7 +423,7 @@ get_mu <- function(coef, env, final = FALSE) {
   }
 
   if (length(coefMu) > 0) {
-    for (i in 1:length(coefMu)) {
+    for (i in seq_along(coefMu)) {
       if (all(coef == coefMu[[i]])) {
         return(list(mu = valueMu[[i]], exp_mu = valueExpMu[[i]]))
       }
@@ -526,7 +526,7 @@ get_savedMu <- function(coef, env) {
   assign("wasUsed", TRUE, env)
 
   if (length(coefMu) > 0) {
-    for (i in 1:length(coefMu)) {
+    for (i in seq_along(coefMu)) {
       if (all(coef == coefMu[[i]])) {
         # cat("coef nb:", i, "\n")
         return(list(mu = valueMu[[i]], exp_mu = valueExpMu[[i]]))

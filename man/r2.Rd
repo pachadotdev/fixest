@@ -34,7 +34,7 @@ For the adjusted within-R2s, the adjustment factor is `(n - nb_fe) / (n - nb_fe 
 data(trade)
 
 # We estimate the effect of distance on trade (with 3 fixed-effects)
-est = feols(log(Euros) ~ log(dist_km)|Origin+Destination+Product, trade)
+est <- feols(log(Euros) ~ log(dist_km) | Origin + Destination + Product, trade)
 
 # Squared correlation:
 r2(est, "cor2")

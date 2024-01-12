@@ -14,7 +14,7 @@ ml_poisson <- function() {
     sum(y * mu - exp_mu) - lfact
   }
 
-  # Derivee
+  # Derivative
   ll_dl <- function(y, mu, exp_mu, ...) {
     c(y - exp_mu)
   }

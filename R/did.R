@@ -480,7 +480,7 @@ aggregate.fixest <- function(x, agg, full = FALSE, use_weights = TRUE, ...) {
 
     c_all <- c()
     se_all <- c()
-    for (i in 1:nrow(name_df)) {
+    for (i in seq_len(nrow(name_df))) {
         r <- name_df[i, 1]
         v <- name_df[i, 2]
         v_names <- cname_select[root == r & val == v]
@@ -530,7 +530,7 @@ aggregate.fixest <- function(x, agg, full = FALSE, use_weights = TRUE, ...) {
         i_min <- min(which(qui)) - 1
         before <- if (i_min > 0) table_origin[1:i_min, , drop = FALSE] else NULL
 
-        i_after <- (1:nrow(table_origin)) > i_min & !qui
+        i_after <- (seq_len(nrow(table_origin))) > i_min & !qui
         after <- if (any(i_after)) table_origin[i_after, , drop = FALSE] else NULL
 
         res <- rbind(before, res, after)
