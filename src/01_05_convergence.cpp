@@ -260,14 +260,12 @@
   bool keepGoing = true;
   int iter = 1;
   while (keepGoing && iter <= iterMax) {
-    // Rprintf("\n%i.", iter);
     ++iter;
     keepGoing = false;
 
     /// we loop over all clusters => from K to 1
     for (int k = (K - 1); k >= 0; k--) {
-      // Rprintf("k=%i ", k);
-      R_CheckUserInterrupt();
+      check_user_interrupt();
 
       // 1) computing the cluster coefficient
 

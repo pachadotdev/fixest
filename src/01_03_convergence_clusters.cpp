@@ -63,7 +63,7 @@ void computeClusterCoef(vector<double *> &pcluster_origin,
   }
 
   for (int k = K - 1; k >= 0; k--) {
-    R_CheckUserInterrupt();
+    check_user_interrupt();
 
     // computing the optimal cluster coef -- given mu_with_coef
     computeClusterCoef_single(

@@ -198,7 +198,7 @@ void updateClusterValues(int obs, int Q, writable::integers_matrix<> &mat_done,
     iter_loop = 0;
     while (iter_loop < iterMax_loop) {
       iter_loop++;
-      R_CheckUserInterrupt();
+      check_user_interrupt();
       if (iter_loop != 1) {
         nb2do = nb2do_next;
         updateId2do(nb2do, id2do, id2do_next);

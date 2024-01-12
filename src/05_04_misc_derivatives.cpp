@@ -65,7 +65,7 @@
     ok = false;
 
     for (q = 0; q < Q; q++) {
-      R_CheckUserInterrupt();
+      check_user_interrupt();
 
       for (i = 0; i < N; i++) {
         index = start[q] + dumMat(i, q);

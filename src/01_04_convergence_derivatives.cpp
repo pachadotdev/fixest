@@ -89,8 +89,7 @@
       // update the clusters sequentially
       // loop over all clusters => from K to 1
       for (int k = (K - 1); k >= 0; k--) {
-        // Rprintf("k=%i ", k);
-        R_CheckUserInterrupt();
+        check_user_interrupt();
 
         // loading the required info
         double *my_deriv_coef = pderiv_coef[k];
@@ -204,7 +203,7 @@ void computeDerivCoef(std::vector<double *> &pcoef_origin,
   }
 
   for (int k = K - 1; k >= 0; k--) {
-    R_CheckUserInterrupt();
+    check_user_interrupt();
 
     // computing the optimal cluster coef given mu_with_coef
     double *my_deriv_coef = pcoef_destination[k];

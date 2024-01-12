@@ -24,7 +24,7 @@ void invert_tri(writable::doubles_matrix<> &R, int K, int nthreads = 1) {
 
   for (int b = 1; b < K; ++b) {
     if (b % iterSecond == 0) {
-      R_CheckUserInterrupt();
+      check_user_interrupt();
     }
 
 #pragma omp parallel for num_threads(nthreads) schedule(static, 1)
@@ -58,15 +58,11 @@ void tproduct_tri(writable::doubles_matrix<> &RRt,
   int iterSecond = ceil(2000000000 / flop / 5);  // nber iter per 1/5 second
   int n_iter_main = 0;
 
-  // #pragma omp parallel for num_threads(nthreads) schedule(static, 1)
+#pragma omp parallel for num_threads(nthreads) schedule(static, 1)
   for (int i = 0; i < K; ++i) {
-    if (omp_get_thread_num() == 0) {
-      // #pragma omp atomic
-      n_iter_main++;
-    }
-
-    if (n_iter_main % iterSecond == 0) {
-      R_CheckUserInterrupt();
+    if (omp_get_thread_num() == 0 && n_iter_main % iterSecond == 0) {
+      check_user_interrupt();
+      ++n_iter_main;
     }
 
     for (int j = i; j < K; ++j) {
@@ -115,7 +111,7 @@ void tproduct_tri(writable::doubles_matrix<> &RRt,
 
   for (int j = 0; j < K; ++j) {
     if (j % iterSecond == 0) {
-      R_CheckUserInterrupt();
+      check_user_interrupt();
     }
 
     // implicit pivoting (it's like 0-rank variables are stacked in the end)
