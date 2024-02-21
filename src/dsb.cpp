@@ -1,65 +1,62 @@
-#include <Rcpp.h>
-#include <string>
+#include <cpp11.hpp>
 #include <cstring>
+#include <string>
 #include <vector>
-using namespace Rcpp;
 
+using namespace cpp11;
 
-inline bool is_dsb_open(const char * str, int i, int n){
-  if(i + 2 < n){
+inline bool is_dsb_open(const char *str, int i, int n) {
+  if (i + 2 < n) {
     return str[i] == '.' && str[i + 1] == '[';
   } else {
     return false;
   }
 }
 
-inline bool is_dsb_bound(const char * str, int i, int n){
-  if(str[i] == ']'){
+inline bool is_dsb_bound(const char *str, int i, int n) {
+  if (str[i] == ']') {
     return true;
-  } else if(i + 2 < n){
+  } else if (i + 2 < n) {
     return str[i] == '.' && str[i + 1] == '[';
   } else {
     return false;
   }
 }
 
-inline bool is_special_char(const char * str, int i){
+inline bool is_special_char(const char *str, int i) {
   return str[i] == '\'' || str[i] == '"' || str[i] == '`' || str[i] == ':' ||
-    str[i] == ';' || str[i] == '/';
+         str[i] == ';' || str[i] == '/';
 }
 
-inline bool is_quote(const char * str, int i){
+inline bool is_quote(const char *str, int i) {
   return str[i] == '\'' || str[i] == '"' || str[i] == '`';
 }
 
-inline bool is_basic_quote(const char * str, int i){
+inline bool is_basic_quote(const char *str, int i) {
   return str[i] == '\'' || str[i] == '"';
 }
 
-inline bool is_separator(const char * str, int i){
+inline bool is_separator(const char *str, int i) {
   return str[i] == '!' || str[i] == '?';
 }
 
-
-void extract_quote(const char * str, int &i, int n,
-           std::string &operator_tmp){
-
+void extract_quote(const char *str, int &i, int n, std::string &operator_tmp) {
   char quote = str[i++];
   operator_tmp += quote;
 
-  while(i < n && str[i] != quote){
+  while (i < n && str[i] != quote) {
     operator_tmp += str[i++];
   }
 
-  if(i < n){
+  if (i < n) {
     operator_tmp += quote;
     ++i;
   }
 }
 
-void extract_operator(const char * str, int &i, int n,
-            std::vector<std::string> &operator_vec,
-            bool &is_eval, bool no_whitespace = false){
+void extract_operator(const char *str, int &i, int n,
+                      std::vector<std::string> &operator_vec, bool &is_eval,
+                      bool no_whitespace = false) {
   // modifies the operator and gives the updated i
   // the i should start where to evaluate post separator (if present)
 
@@ -69,7 +66,7 @@ void extract_operator(const char * str, int &i, int n,
   int i_start = i;
   bool any_operator = true;
 
-  if(str[i] == '/'){
+  if (str[i] == '/') {
     // special case!!!!
     operator_tmp = "/";
     operator_vec.push_back(operator_tmp);
@@ -80,35 +77,34 @@ void extract_operator(const char * str, int &i, int n,
 
     bool is_comma = false;
 
-    if(str[i] == ' '){
-      if(no_whitespace){
+    if (str[i] == ' ') {
+      if (no_whitespace) {
         // not an operator.
         // i = n to avoid the loop
         i = n;
         any_operator = false;
       } else {
         // skip the first whitespaces
-        while(i < n && str[i] == ' ') ++i;
+        while (i < n && str[i] == ' ') ++i;
       }
     }
 
-    while(i < n && !is_separator(str, i)){
-      if(str[i] == '('){
+    while (i < n && !is_separator(str, i)) {
+      if (str[i] == '(') {
         // we deal with quotes
         // Used (so far) only in if statements
-        if(i >= 2 && str[i - 1] == 'f' && str[i - 2] == 'i'){
-
+        if (i >= 2 && str[i - 1] == 'f' && str[i - 2] == 'i') {
           // There is no such thing as nested if(),
           // so if we find another '(' it's a problem
 
           operator_tmp += '(';
           ++i;
 
-          while(i < n && str[i] != ')' && !is_separator(str, i)){
+          while (i < n && str[i] != ')' && !is_separator(str, i)) {
             // we don't really care about parsing here
             // we'll do that later
 
-            if(is_quote(str, i)){
+            if (is_quote(str, i)) {
               extract_quote(str, i, n, operator_tmp);
             } else {
               // any other stuff gets in
@@ -117,7 +113,7 @@ void extract_operator(const char * str, int &i, int n,
             }
           }
 
-          if(i < n && str[i] != ')'){
+          if (i < n && str[i] != ')') {
             any_operator = false;
             break;
           }
@@ -129,9 +125,9 @@ void extract_operator(const char * str, int &i, int n,
         }
       }
 
-      if(is_quote(str, i)){
+      if (is_quote(str, i)) {
         is_comma = false;
-        if(operator_tmp.length() > 0){
+        if (operator_tmp.size() > 0) {
           // we save the existing command if needed
           operator_vec.push_back(operator_tmp);
           operator_tmp = "";
@@ -140,7 +136,7 @@ void extract_operator(const char * str, int &i, int n,
         // we get the full quoted value
         extract_quote(str, i, n, operator_tmp);
 
-      } else if(is_dsb_bound(str, i, n)){
+      } else if (is_dsb_bound(str, i, n)) {
         // there should be no dsb bound in the operator
         // if so, this is an error
 
@@ -148,20 +144,19 @@ void extract_operator(const char * str, int &i, int n,
         break;
 
       } else {
-
         // comma: separation between operations
-        if(str[i] == ','){
-          if(operator_tmp.length() > 0){
+        if (str[i] == ',') {
+          if (operator_tmp.size() > 0) {
             operator_vec.push_back(operator_tmp);
             operator_tmp = "";
           }
           is_comma = true;
-        } else if(str[i] == ' '){
+        } else if (str[i] == ' ') {
           // nothing, but if NOT after a comma => error
-          if(!is_comma){
+          if (!is_comma) {
             // if the spaces are only trailing, OK
-            while(i < n && str[i] == ' ') ++i;
-            if(is_separator(str, i)){
+            while (i < n && str[i] == ' ') ++i;
+            if (is_separator(str, i)) {
               // OK
               break;
             } else {
@@ -179,13 +174,13 @@ void extract_operator(const char * str, int &i, int n,
       }
     }
 
-    if(any_operator){
-      if(operator_tmp.length() > 0){
+    if (any_operator) {
+      if (operator_tmp.size() > 0) {
         operator_vec.push_back(operator_tmp);
         operator_tmp = "";
       }
 
-      if(i < n){
+      if (i < n) {
         // we end with a separator
         is_eval = str[i] == '?';
         operator_tmp = str[i];
@@ -197,7 +192,7 @@ void extract_operator(const char * str, int &i, int n,
       }
     }
 
-    if(!any_operator){
+    if (!any_operator) {
       std::vector<std::string> empty_vec;
       operator_vec = empty_vec;
       i = i_start;
@@ -205,11 +200,10 @@ void extract_operator(const char * str, int &i, int n,
   }
 }
 
-// [[Rcpp::export]]
-List cpp_dsb(SEXP Rstr){
+[[cpp11::register]] list cpp_dsb(SEXP Rstr) {
   // Rstr: string from R of length 1
 
-  List res;
+  writable::list res;
   const char *str = CHAR(STRING_ELT(Rstr, 0));
 
   // DSB open flag
@@ -221,54 +215,52 @@ List cpp_dsb(SEXP Rstr){
   int n = std::strlen(str);
 
   int i = 0;
-  while(i < n){
-
+  while (i < n) {
     // if not currently open => we check until open
-    if(n_open == 0){
-      while(i < n && !is_dsb_open(str, i, n)){
+    if (n_open == 0) {
+      while (i < n && !is_dsb_open(str, i, n)) {
         string_value += str[i];
         ++i;
       }
 
-      res.push_back(string_value);
+      res.push_back({"string_value"_nm = string_value});
 
-      if(i < n){
+      if (i < n) {
         // there was one open
-        i += 2; // we increment i bc the opening string is 2 char long
+        i += 2;  // we increment i bc the opening string is 2 char long
         ++n_open;
         string_value = "";
       }
 
     } else {
-
-      List dsb_element;
+      writable::list dsb_element;
       std::vector<std::string> operator_vec;
 
       // modifies i and operator_vec "in place"
       bool is_eval = true;
       extract_operator(str, i, n, operator_vec, is_eval);
 
-      dsb_element.push_back(operator_vec);
+      dsb_element.push_back({"operator_vec"_nm = operator_vec});
 
       // init
       dsb_value = "";
 
       // we now get the value to be evaluated or treated as verbatim
 
-      if(is_eval){
+      if (is_eval) {
         // we strip all the white spaces
-        while(i < n && str[i] == ' ') ++i;
+        while (i < n && str[i] == ' ') ++i;
 
-        if(is_basic_quote(str, i)){
+        if (is_basic_quote(str, i)) {
           // we take verbatim the full quote
           // this means it can contain .[] without issue
 
           char quote = str[i++];
           dsb_value += quote;
 
-          while(i < n && str[i] != quote) dsb_value += str[i++];
+          while (i < n && str[i] != quote) dsb_value += str[i++];
 
-          if(i < n){
+          if (i < n) {
             dsb_value += quote;
             ++i;
             // we then let it go, if there is a parsing problem, we'll
@@ -278,15 +270,14 @@ List cpp_dsb(SEXP Rstr){
         }
       }
 
-      while(i < n && n_open > 0){
-
-        if(str[i] == '['){
+      while (i < n && n_open > 0) {
+        if (str[i] == '[') {
           ++n_open;
-        } else if(str[i] == ']'){
+        } else if (str[i] == ']') {
           --n_open;
         }
 
-        if(n_open == 0){
+        if (n_open == 0) {
           ++i;
           break;
         }
@@ -295,7 +286,7 @@ List cpp_dsb(SEXP Rstr){
         ++i;
       }
 
-      dsb_element.push_back(dsb_value);
+      dsb_element.push_back({"dsb_value"_nm = dsb_value});
 
       res.push_back(dsb_element);
     }
@@ -304,15 +295,14 @@ List cpp_dsb(SEXP Rstr){
   return res;
 }
 
-// [[Rcpp::export]]
-List cpp_dsb_full_string(SEXP Rstr){
+[[cpp11::register]] list cpp_dsb_full_string(SEXP Rstr) {
   // When we consider the full string a verbatim within dsb
 
   const char *str = CHAR(STRING_ELT(Rstr, 0));
 
   int n = std::strlen(str);
 
-  List dsb_element;
+  writable::list dsb_element;
   std::vector<std::string> operator_vec;
 
   // is eval is not used here but is required in extract_operator
@@ -322,36 +312,35 @@ List cpp_dsb_full_string(SEXP Rstr){
   int i = 0;
   extract_operator(str, i, n, operator_vec, is_eval, true);
 
-  dsb_element.push_back(operator_vec);
+  dsb_element.push_back({"operator_vec"_nm = operator_vec});
 
   // init
   std::string dsb_value = "";
 
   // Remember that the full string is verbatim
-  for(; i < n ; ++i){
+  for (; i < n; ++i) {
     dsb_value += str[i];
   }
 
-  dsb_element.push_back(dsb_value);
+  dsb_element.push_back({"dsb_value"_nm = dsb_value});
 
   return dsb_element;
 }
 
-inline bool is_if_separator(const char * str, int i, int n, bool semicolon = false){
-  if(semicolon){
+inline bool is_if_separator(const char *str, int i, int n,
+                            bool semicolon = false) {
+  if (semicolon) {
     return i < n && str[i] == ':';
   } else {
     return i >= n;
   }
 }
 
-// [[Rcpp::export]]
-List cpp_dsb_if_extract(SEXP Rstr){
-
+[[cpp11::register]] list cpp_dsb_if_extract(SEXP Rstr) {
   const char *str = CHAR(STRING_ELT(Rstr, 0));
   int n = std::strlen(str);
 
-  List if_elements;
+  writable::list if_elements;
   std::vector<std::string> operator_vec;
   std::vector<std::string> empty_vec;
   std::string operator_tmp = "";
@@ -367,17 +356,15 @@ List cpp_dsb_if_extract(SEXP Rstr){
   int i = 0;
   int n_loop = 0;
 
-  while(n_loop++ < 2){
-
+  while (n_loop++ < 2) {
     // 1st loop: semicolon is separator
     bool semicolon = n_loop == 1;
     // 2nd loop: EOL is separator
 
-    while(i < n && !is_if_separator(str, i, n, semicolon)){
-
-      if(is_quote(str, i)){
+    while (i < n && !is_if_separator(str, i, n, semicolon)) {
+      if (is_quote(str, i)) {
         is_comma = false;
-        if(operator_tmp.length() > 0){
+        if (operator_tmp.size() > 0) {
           // we save the existing command if needed
           operator_vec.push_back(operator_tmp);
           operator_tmp = "";
@@ -387,23 +374,22 @@ List cpp_dsb_if_extract(SEXP Rstr){
         extract_quote(str, i, n, operator_tmp);
 
       } else {
-
         // comma: separation between operations
-        if(str[i] == ','){
-          if(operator_tmp.length() > 0){
+        if (str[i] == ',') {
+          if (operator_tmp.size() > 0) {
             operator_vec.push_back(operator_tmp);
             operator_tmp = "";
           }
           is_comma = true;
-        } else if(str[i] == ' '){
+        } else if (str[i] == ' ') {
           // nothing, but if NOT after a comma => error
-          if(!is_comma){
+          if (!is_comma) {
             // if the spaces are only trailing, OK
-            while(i < n && str[i] == ' ') ++i;
-            if(is_if_separator(str, i, n, semicolon)){
+            while (i < n && str[i] == ' ') ++i;
+            if (is_if_separator(str, i, n, semicolon)) {
               // OK
               break;
-            } else if(i < n){
+            } else if (i < n) {
               any_problem = true;
               break;
             }
@@ -418,45 +404,41 @@ List cpp_dsb_if_extract(SEXP Rstr){
       }
     }
 
-    if(any_problem){
-      List error;
-      error.push_back(false);
-      return(error);
+    if (any_problem) {
+      writable::list error;
+      error.push_back({"error"_nm = true});
+      return (error);
     }
 
-    while(i < n && (str[i] == ' ' || str[i] == ':')) ++i;
+    while (i < n && (str[i] == ' ' || str[i] == ':')) ++i;
 
-    if(operator_tmp.length() > 0){
+    if (operator_tmp.size() > 0) {
       operator_vec.push_back(operator_tmp);
       operator_tmp = "";
     }
 
-    if_elements.push_back(operator_vec);
+    if_elements.push_back({"operator_vec"_nm = operator_vec});
     operator_vec = empty_vec;
   }
-
 
   return if_elements;
 }
 
+[[cpp11::register]] strings cpp_paste_conditional(strings x, integers id,
+                                                  int n) {
+  writable::strings res(n);
 
+  int n_x = x.size();
 
-// [[Rcpp::export]]
-StringVector cpp_paste_conditional(StringVector x, IntegerVector id, int n){
-
-  StringVector res(n);
-
-  int n_x = x.length();
-
-  if(n_x == 0){
+  if (n_x == 0) {
     return res;
   }
 
   std::string tmp = "";
   int id_current = id[0];
 
-  for(int i=0 ; i<n_x ; ++i){
-    if(id[i] == id_current){
+  for (int i = 0; i < n_x; ++i) {
+    if (id[i] == id_current) {
       tmp += x[i];
     } else {
       res[id_current - 1] = tmp;
@@ -470,4 +452,3 @@ StringVector cpp_paste_conditional(StringVector x, IntegerVector id, int n){
 
   return res;
 }
-

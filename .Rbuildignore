@@ -13,5 +13,6 @@
 ^check$
 ^CONTRIBUTORS\.md$
 ^.vscode
-
 ^_
+^Makefile$
+
