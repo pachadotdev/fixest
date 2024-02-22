@@ -122,9 +122,9 @@ void tproduct_tri(writable::doubles_matrix<> &RRt,
   }
 }
 
-[[cpp11::register]] list cpp_cholesky(doubles_matrix<> X,
-                                      double tol = 1.0 / 100000.0 / 100000.0,
-                                      int nthreads = 1) {
+[[cpp11::register]] list cpp_cholesky_(doubles_matrix<> X,
+                                       double tol = 1.0 / 100000.0 / 100000.0,
+                                       int nthreads = 1) {
   // X est symetrique, semi definie positive
   // rank-revealing on-the-fly
 
@@ -457,9 +457,9 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y,
   }
 }
 
-[[cpp11::register]] list cpp_sparse_products(doubles_matrix<> X, doubles w,
-                                             SEXP y, bool correct_0w = false,
-                                             int nthreads = 1) {
+[[cpp11::register]] list cpp_sparse_products_(doubles_matrix<> X, doubles w,
+                                              SEXP y, bool correct_0w = false,
+                                              int nthreads = 1) {
   int N = X.nrow();
   int K = X.ncol();
 
@@ -581,8 +581,8 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y,
   return res;
 }
 
-[[cpp11::register]] doubles_matrix<> cpp_crossprod(doubles_matrix<> X,
-                                                   doubles w, int nthreads) {
+[[cpp11::register]] doubles_matrix<> cpp_crossprod_(doubles_matrix<> X,
+                                                    doubles w, int nthreads) {
   int N = X.nrow();
   int K = X.ncol();
 
@@ -639,8 +639,8 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y,
   return XtX;
 }
 
-[[cpp11::register]] doubles_matrix<> cpp_mat_reconstruct(doubles_matrix<> X,
-                                                         logicals id_excl) {
+[[cpp11::register]] doubles_matrix<> cpp_mat_reconstruct_(doubles_matrix<> X,
+                                                          logicals id_excl) {
   int K = id_excl.size();
   int K_small = X.ncol();
 
@@ -858,9 +858,9 @@ void mp_sparse_ZXtu(writable::doubles &ZXtu, const std::vector<int> &start_j,
   }
 }
 
-[[cpp11::register]] list cpp_iv_products(doubles_matrix<> X, SEXP y,
-                                         doubles_matrix<> Z, SEXP u, doubles w,
-                                         int nthreads) {
+[[cpp11::register]] list cpp_iv_products_(doubles_matrix<> X, SEXP y,
+                                          doubles_matrix<> Z, SEXP u, doubles w,
+                                          int nthreads) {
   // We compute the following:
   // - X'X
   // - X'y
@@ -1020,7 +1020,7 @@ void mp_sparse_ZXtu(writable::doubles &ZXtu, const std::vector<int> &start_j,
   return res;
 }
 
-[[cpp11::register]] list cpp_iv_product_completion(
+[[cpp11::register]] list cpp_iv_product_completion_(
     doubles_matrix<> XtX, doubles Xty, doubles_matrix<> X, doubles y,
     doubles_matrix<> U, doubles w, int nthreads) {
   // We compute the following
@@ -1091,9 +1091,9 @@ void mp_sparse_ZXtu(writable::doubles &ZXtu, const std::vector<int> &start_j,
   return res;
 }
 
-[[cpp11::register]] doubles cpp_iv_resid(doubles resid_2nd, doubles coef,
-                                         SEXP resid_1st, bool is_int,
-                                         int nthreads) {
+[[cpp11::register]] doubles cpp_iv_resid_(doubles resid_2nd, doubles coef,
+                                          SEXP resid_1st, bool is_int,
+                                          int nthreads) {
   int N = resid_2nd.size();
   int K = Rf_length(resid_1st);
 

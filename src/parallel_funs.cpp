@@ -62,7 +62,7 @@ using namespace cpp11;
 //     return fixest_in_fork;
 // }
 
-[[cpp11::register]] int cpp_get_nb_threads() { return omp_get_max_threads(); }
+[[cpp11::register]] int cpp_get_nb_threads_() { return omp_get_max_threads(); }
 
 // The following function is already defined in lm_related (I know...)
 std::vector<int> set_parallel_scheme_bis(int N, int nthreads) {
@@ -83,7 +83,7 @@ std::vector<int> set_parallel_scheme_bis(int N, int nthreads) {
   return res;
 }
 
-[[cpp11::register]] doubles cpp_exp(doubles x, int nthreads) {
+[[cpp11::register]] doubles cpp_exp_(doubles x, int nthreads) {
   // parallel exponentiation using omp
 
   int n = x.size();
@@ -97,7 +97,7 @@ std::vector<int> set_parallel_scheme_bis(int N, int nthreads) {
   return (res);
 }
 
-[[cpp11::register]] doubles cpp_log(doubles x, int nthreads) {
+[[cpp11::register]] doubles cpp_log_(doubles x, int nthreads) {
   // parallel exponentiation using omp
 
   int n = x.size();
@@ -111,8 +111,8 @@ std::vector<int> set_parallel_scheme_bis(int N, int nthreads) {
   return (res);
 }
 
-[[cpp11::register]] doubles cpp_log_a_exp(double a, doubles mu, doubles exp_mu,
-                                          int nthreads = 1) {
+[[cpp11::register]] doubles cpp_log_a_exp_(double a, doubles mu, doubles exp_mu,
+                                           int nthreads = 1) {
   // faster this way
 
   int n = mu.size();
@@ -130,7 +130,7 @@ std::vector<int> set_parallel_scheme_bis(int N, int nthreads) {
   return (res);
 }
 
-[[cpp11::register]] doubles cpp_lgamma(doubles x, int nthreads = 1) {
+[[cpp11::register]] doubles cpp_lgamma_(doubles x, int nthreads = 1) {
   // parallel lgamma using omp
 
   int n = x.size();
@@ -144,7 +144,7 @@ std::vector<int> set_parallel_scheme_bis(int N, int nthreads) {
   return (res);
 }
 
-[[cpp11::register]] doubles cpp_digamma(doubles x, int nthreads) {
+[[cpp11::register]] doubles cpp_digamma_(doubles x, int nthreads) {
   // parallel digamma using omp
 
   int n = x.size();
@@ -158,7 +158,7 @@ std::vector<int> set_parallel_scheme_bis(int N, int nthreads) {
   return (res);
 }
 
-[[cpp11::register]] doubles cpp_trigamma(doubles x, int nthreads) {
+[[cpp11::register]] doubles cpp_trigamma_(doubles x, int nthreads) {
   // parallel trigamma using omp
 
   int n = x.size();
@@ -176,7 +176,7 @@ inline double poisson_linkinv(double x) {
   return x < -36 ? DBL_EPSILON : exp(x);
 }
 
-[[cpp11::register]] doubles cpp_poisson_linkinv(doubles x, int nthreads) {
+[[cpp11::register]] doubles cpp_poisson_linkinv_(doubles x, int nthreads) {
   int n = x.size();
   writable::doubles res(n);
 
@@ -188,7 +188,7 @@ inline double poisson_linkinv(double x) {
   return (res);
 }
 
-[[cpp11::register]] bool cpp_poisson_validmu(SEXP x, int nthreads) {
+[[cpp11::register]] bool cpp_poisson_validmu_(SEXP x, int nthreads) {
   int n = Rf_length(x);
   double *px = REAL(x);
   bool res = true;
@@ -204,7 +204,7 @@ inline double poisson_linkinv(double x) {
   return res;
 }
 
-[[cpp11::register]] doubles cpp_logit_linkfun(doubles x, int nthreads) {
+[[cpp11::register]] doubles cpp_logit_linkfun_(doubles x, int nthreads) {
   // parallel trigamma using omp
 
   int n = x.size();
@@ -225,7 +225,7 @@ inline double logit_linkinv(double x) {
                     : 1 / (1 + 1 / exp(x));
 }
 
-[[cpp11::register]] doubles cpp_logit_linkinv(doubles x, int nthreads) {
+[[cpp11::register]] doubles cpp_logit_linkinv_(doubles x, int nthreads) {
   // parallel trigamma using omp
 
   int n = x.size();
@@ -249,7 +249,7 @@ inline double logit_mueta(double x) {
   }
 }
 
-[[cpp11::register]] doubles cpp_logit_mueta(doubles x, int nthreads) {
+[[cpp11::register]] doubles cpp_logit_mueta_(doubles x, int nthreads) {
   // parallel trigamma using omp
 
   int n = x.size();
@@ -265,8 +265,8 @@ inline double logit_mueta(double x) {
   return (res);
 }
 
-[[cpp11::register]] doubles cpp_logit_devresids(doubles y, doubles mu,
-                                                doubles wt, int nthreads) {
+[[cpp11::register]] doubles cpp_logit_devresids_(doubles y, doubles mu,
+                                                 doubles wt, int nthreads) {
   int n = mu.size();
   writable::doubles res(n);
   bool isWeight = wt.size() != 1;
@@ -289,7 +289,7 @@ inline double logit_mueta(double x) {
 }
 
 // [[cpp11::register]]
-// doubles_matrix<> cpp_crossprod(doubles_matrix<> X, doubles w, int nthreads){
+// doubles_matrix<> cpp_crossprod_(doubles_matrix<> X, doubles w, int nthreads){
 //
 // 	int N = X.nrow();
 // 	int K = X.ncol();
@@ -345,8 +345,8 @@ inline double logit_mueta(double x) {
 // 	return(res);
 // }
 
-[[cpp11::register]] doubles cpp_xwy(doubles_matrix<> X, doubles y, doubles w,
-                                    int nthreads) {
+[[cpp11::register]] doubles cpp_xwy_(doubles_matrix<> X, doubles y, doubles w,
+                                     int nthreads) {
   int N = X.nrow();
   int K = X.ncol();
 
@@ -376,8 +376,8 @@ inline double logit_mueta(double x) {
   return (res);
 }
 
-[[cpp11::register]] doubles cpp_xbeta(doubles_matrix<> X, doubles beta,
-                                      int nthreads) {
+[[cpp11::register]] doubles cpp_xbeta_(doubles_matrix<> X, doubles beta,
+                                       int nthreads) {
   int N = X.nrow();
   int K = X.ncol();
 
@@ -396,9 +396,9 @@ inline double logit_mueta(double x) {
   return (res);
 }
 
-[[cpp11::register]] doubles_matrix<> cpp_matprod(doubles_matrix<> x,
-                                                 doubles_matrix<> y,
-                                                 int nthreads) {
+[[cpp11::register]] doubles_matrix<> cpp_matprod_(doubles_matrix<> x,
+                                                  doubles_matrix<> y,
+                                                  int nthreads) {
   // => simply x %*% y
 
   int N = x.nrow();
@@ -421,7 +421,7 @@ inline double logit_mueta(double x) {
   return (xy);
 }
 
-[[cpp11::register]] list cpp_which_na_inf_vec(SEXP x, int nthreads) {
+[[cpp11::register]] list cpp_which_na_inf_vec_(SEXP x, int nthreads) {
   /*
     This function takes a vector and looks at whether it contains NA or infinite
     values return: flag for na/inf + logical vector of obs that are na/inf x is
@@ -481,8 +481,8 @@ inline double logit_mueta(double x) {
                          "is_na_inf"_nm = is_na_inf});
 }
 
-[[cpp11::register]] list cpp_which_na_inf_mat(doubles_matrix<> mat,
-                                              int nthreads) {
+[[cpp11::register]] list cpp_which_na_inf_mat_(doubles_matrix<> mat,
+                                               int nthreads) {
   // almost identical to cpp_which_na_inf_vec but for R matrices. Changes:
   // - main argument becomes doubles_matrix<>
   // - k-for loop within the i-for loop
@@ -552,7 +552,7 @@ inline double logit_mueta(double x) {
                          "is_na_inf"_nm = is_na_inf});
 }
 
-[[cpp11::register]] list cpp_which_na_inf_df(SEXP df, int nthreads) {
+[[cpp11::register]] list cpp_which_na_inf_df_(SEXP df, int nthreads) {
   // almost identical to cpp_which_na_inf_vec but for R **numeric** data frames.
   // Changes:
   // - main argument becomes SEXP
@@ -627,8 +627,8 @@ inline double logit_mueta(double x) {
                          "is_na_inf"_nm = is_na_inf});
 }
 
-[[cpp11::register]] list cpp_cond_means(doubles_matrix<> mat_vars,
-                                        integers treat, int nthreads = 1) {
+[[cpp11::register]] list cpp_cond_means_(doubles_matrix<> mat_vars,
+                                         integers treat, int nthreads = 1) {
   // conditional means: function did_means
 
   int N = mat_vars.nrow();
@@ -695,8 +695,8 @@ inline double logit_mueta(double x) {
                          "n"_nm = n_mat, "n_01"_nm = n_01, "na"_nm = na_vect});
 }
 
-[[cpp11::register]] integers cpp_check_only_0(doubles_matrix<> x_mat,
-                                              int nthreads) {
+[[cpp11::register]] integers cpp_check_only_0_(doubles_matrix<> x_mat,
+                                               int nthreads) {
   // returns a 0/1 vectors => 1 means only 0
 
   int n = x_mat.nrow();

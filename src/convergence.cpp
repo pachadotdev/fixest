@@ -510,12 +510,10 @@ void computeClusterCoef_single(int family, int n_obs, int nb_cluster,
 }
 
 // Function to delete => only for debugging
-[[cpp11::register]] SEXP compute_cluster_coef_r(int family, int nb_coef,
-                                                double theta, double diffMax_NR,
-                                                SEXP r_mu, SEXP r_lhs,
-                                                SEXP r_sum_y, SEXP r_dum,
-                                                SEXP r_obsCluster, SEXP r_table,
-                                                SEXP r_cumtable, int nthreads) {
+[[cpp11::register]] SEXP compute_cluster_coef_r_(
+    int family, int nb_coef, double theta, double diffMax_NR, SEXP r_mu,
+    SEXP r_lhs, SEXP r_sum_y, SEXP r_dum, SEXP r_obsCluster, SEXP r_table,
+    SEXP r_cumtable, int nthreads) {
   int n_obs = Rf_length(r_mu);
 
   // pointers to R values
@@ -539,7 +537,7 @@ void computeClusterCoef_single(int family, int n_obs, int nb_cluster,
   return (res);
 }
 
-[[cpp11::register]] SEXP update_mu_single_cluster(
+[[cpp11::register]] SEXP update_mu_single_cluster_(
     int family, int nb_cluster, double theta, double diffMax_NR, SEXP mu_in,
     SEXP lhs, SEXP sum_y, SEXP dum, SEXP obsCluster, SEXP table, SEXP cumtable,
     int nthreads) {
@@ -754,7 +752,7 @@ void computeClusterCoef(vector<double *> &pcluster_origin,
   // In the end, the array pcluster_coef is fully updated, starting from K to 1
 }
 
-[[cpp11::register]] list cpp_conv_acc_gnl(
+[[cpp11::register]] list cpp_conv_acc_gnl_(
     int family, int iterMax, double diffMax, double diffMax_NR, double theta,
     SEXP nb_cluster_all, SEXP lhs, SEXP mu_init, SEXP dum_vector,
     SEXP tableCluster_vector, SEXP sum_y_vector, SEXP cumtable_vector,
@@ -1017,7 +1015,7 @@ void computeClusterCoef(vector<double *> &pcluster_origin,
   return (res);
 }
 
-[[cpp11::register]] list cpp_conv_seq_gnl(
+[[cpp11::register]] list cpp_conv_seq_gnl_(
     int family, int iterMax, double diffMax, double diffMax_NR, double theta,
     SEXP nb_cluster_all, SEXP lhs, SEXP mu_init, SEXP dum_vector,
     SEXP tableCluster_vector, SEXP sum_y_vector, SEXP cumtable_vector,
@@ -1197,7 +1195,7 @@ void computeClusterCoef(vector<double *> &pcluster_origin,
   return (res);
 }
 
-[[cpp11::register]] int get_n_cells(integers index_i, integers index_j) {
+[[cpp11::register]] int get_n_cells_(integers index_i, integers index_j) {
   int n = index_i.size();
 
   // we count the nber of different elements
@@ -1250,11 +1248,11 @@ void CCC_poisson_2(const vector<double> &pcluster_origin,
   }
 }
 
-[[cpp11::register]] list cpp_conv_acc_poi_2(int n_i, int n_j, int n_cells,
-                                            SEXP index_i, SEXP index_j,
-                                            SEXP dum_vector, SEXP sum_y_vector,
-                                            int iterMax, double diffMax,
-                                            SEXP exp_mu_in, SEXP order) {
+[[cpp11::register]] list cpp_conv_acc_poi_2_(int n_i, int n_j, int n_cells,
+                                             SEXP index_i, SEXP index_j,
+                                             SEXP dum_vector, SEXP sum_y_vector,
+                                             int iterMax, double diffMax,
+                                             SEXP exp_mu_in, SEXP order) {
   // values that will be used later
   vector<double> alpha(n_i);
 
@@ -1448,11 +1446,11 @@ void CCC_poisson_2(const vector<double> &pcluster_origin,
   return (res);
 }
 
-[[cpp11::register]] list cpp_conv_seq_poi_2(int n_i, int n_j, int n_cells,
-                                            SEXP index_i, SEXP index_j,
-                                            SEXP dum_vector, SEXP sum_y_vector,
-                                            int iterMax, double diffMax,
-                                            SEXP exp_mu_in, SEXP order) {
+[[cpp11::register]] list cpp_conv_seq_poi_2_(int n_i, int n_j, int n_cells,
+                                             SEXP index_i, SEXP index_j,
+                                             SEXP dum_vector, SEXP sum_y_vector,
+                                             int iterMax, double diffMax,
+                                             SEXP exp_mu_in, SEXP order) {
   // values that will be used later
   vector<double> alpha(n_i);
 
@@ -1586,11 +1584,11 @@ void CCC_poisson_2(const vector<double> &pcluster_origin,
   return (res);
 }
 
-[[cpp11::register]] list cpp_fixed_cost_gaussian(int n_i, int n_cells,
-                                                 SEXP index_i, SEXP index_j,
-                                                 SEXP order,
-                                                 SEXP invTableCluster_vector,
-                                                 SEXP dum_vector) {
+[[cpp11::register]] list cpp_fixed_cost_gaussian_(int n_i, int n_cells,
+                                                  SEXP index_i, SEXP index_j,
+                                                  SEXP order,
+                                                  SEXP invTableCluster_vector,
+                                                  SEXP dum_vector) {
   // conversion of R objects
   int n_obs = Rf_length(index_i);
   int *dum_i = INTEGER(dum_vector);
@@ -1704,7 +1702,7 @@ void CCC_gaussian_2(const vector<double> &pcluster_origin,
   }
 }
 
-[[cpp11::register]] list cpp_conv_acc_gau_2(
+[[cpp11::register]] list cpp_conv_acc_gau_2_(
     int n_i, int n_j, int n_cells, SEXP r_mat_row, SEXP r_mat_col,
     SEXP r_mat_value_Ab, SEXP r_mat_value_Ba, SEXP dum_vector, SEXP lhs,
     SEXP invTableCluster_vector, int iterMax, double diffMax, SEXP mu_in) {
@@ -1955,7 +1953,7 @@ void CCC_gaussian_2(const vector<double> &pcluster_origin,
   return (res);
 }
 
-[[cpp11::register]] list cpp_conv_seq_gau_2(
+[[cpp11::register]] list cpp_conv_seq_gau_2_(
     int n_i, int n_j, int n_cells, SEXP r_mat_row, SEXP r_mat_col,
     SEXP r_mat_value_Ab, SEXP r_mat_value_Ba, SEXP dum_vector, SEXP lhs,
     SEXP invTableCluster_vector, int iterMax, double diffMax, SEXP mu_in) {
@@ -2115,11 +2113,11 @@ void CCC_gaussian_2(const vector<double> &pcluster_origin,
 // Maintenant la convergence des derivees
 //
 
-[[cpp11::register]] list cpp_derivconv_seq_gnl(int iterMax, double diffMax,
-                                               int n_vars, SEXP nb_cluster_all,
-                                               SEXP ll_d2, SEXP jacob_vector,
-                                               SEXP deriv_init_vector,
-                                               SEXP dum_vector) {
+[[cpp11::register]] list cpp_derivconv_seq_gnl_(int iterMax, double diffMax,
+                                                int n_vars, SEXP nb_cluster_all,
+                                                SEXP ll_d2, SEXP jacob_vector,
+                                                SEXP deriv_init_vector,
+                                                SEXP dum_vector) {
   int n_obs = Rf_length(ll_d2);
   int K = Rf_length(nb_cluster_all);
 
@@ -2382,11 +2380,11 @@ void computeDerivCoef(vector<double *> &pcoef_origin,
   }
 }
 
-[[cpp11::register]] list cpp_derivconv_acc_gnl(int iterMax, double diffMax,
-                                               int n_vars, SEXP nb_cluster_all,
-                                               SEXP ll_d2, SEXP jacob_vector,
-                                               SEXP deriv_init_vector,
-                                               SEXP dum_vector) {
+[[cpp11::register]] list cpp_derivconv_acc_gnl_(int iterMax, double diffMax,
+                                                int n_vars, SEXP nb_cluster_all,
+                                                SEXP ll_d2, SEXP jacob_vector,
+                                                SEXP deriv_init_vector,
+                                                SEXP dum_vector) {
   int n_obs = Rf_length(ll_d2);
   int K = Rf_length(nb_cluster_all);
 
@@ -2631,7 +2629,7 @@ void computeDerivCoef_2(vector<double> &alpha_origin,
   }
 }
 
-[[cpp11::register]] list cpp_derivconv_acc_2(
+[[cpp11::register]] list cpp_derivconv_acc_2_(
     int iterMax, double diffMax, int n_vars, SEXP nb_cluster_all, int n_cells,
     SEXP index_i, SEXP index_j, SEXP ll_d2, SEXP order, SEXP jacob_vector,
     SEXP deriv_init_vector, SEXP dum_vector) {
@@ -2868,7 +2866,7 @@ void computeDerivCoef_2(vector<double> &alpha_origin,
   return (res);
 }
 
-[[cpp11::register]] list cpp_derivconv_seq_2(
+[[cpp11::register]] list cpp_derivconv_seq_2_(
     int iterMax, double diffMax, int n_vars, SEXP nb_cluster_all, int n_cells,
     SEXP index_i, SEXP index_j, SEXP order, SEXP ll_d2, SEXP jacob_vector,
     SEXP deriv_init_vector, SEXP dum_vector) {
@@ -3094,11 +3092,11 @@ void computeDerivCoef_2(vector<double> &alpha_origin,
   return (res);
 }
 
-[[cpp11::register]] doubles_matrix<> update_deriv_single(int n_vars,
-                                                         int nb_coef,
-                                                         SEXP r_ll_d2,
-                                                         SEXP r_jacob_vector,
-                                                         SEXP r_dum_vector) {
+[[cpp11::register]] doubles_matrix<> update_deriv_single_(int n_vars,
+                                                          int nb_coef,
+                                                          SEXP r_ll_d2,
+                                                          SEXP r_jacob_vector,
+                                                          SEXP r_dum_vector) {
   int n_obs = Rf_length(r_ll_d2);
 
   // loading variables

@@ -29,9 +29,9 @@ knitr::opts_chunk$set(
 
 set.seed(0)
 
-is_DT = requireNamespace("data.table", quietly = TRUE)
+is_DT <- requireNamespace("data.table", quietly = TRUE)
 
-if(is_DT) library(data.table)
+if (is_DT) library(data.table)
 
 library(fixest)
 setFixest_nthreads(1)
@@ -58,13 +58,12 @@ This example deals with international trade, which is a setup that usually requi
 ```{r echo=TRUE}
 library(fixest)
 data(trade)
-
 ```
 
 This data is a sample of bilateral importations between EU15 countries from 2007 and 2016. The data is further broken down according to 20 product categories. Here is a sample of the data:
 
 ```{r, echo=FALSE, results='asis'}
-tab = head(trade)
+tab <- head(trade)
 knitr::kable(tab)
 ```
 
@@ -85,7 +84,7 @@ $E\left(Trade_{i,j,p,t}\right)=\exp\left(\gamma_{i}^{Exporter}+\gamma_{j}^{Impor
 The estimation of this model using a Poisson likelihood is as follows:
 
 ```{r}
-gravity_pois = fepois(Euros ~ log(dist_km) | Origin + Destination + Product + Year, trade)
+gravity_pois <- fepois(Euros ~ log(dist_km) | Origin + Destination + Product + Year, trade)
 ```
 
 The function `fepois` is actually an alias to the function `feglm` with `family = poisson`. The results can be shown directly with the `print` method:
@@ -119,10 +118,10 @@ summary(gravity_pois, cluster = ~Product)
 Note that you can always cluster the standard-errors, even when the estimation contained no fixed-effect:
 
 ```{r}
-gravity_simple = fepois(Euros ~ log(dist_km), trade)
+gravity_simple <- fepois(Euros ~ log(dist_km), trade)
 # We use a formula to specify the variables used for two way clustering
 # (note that the values of the variables are fetched directly in the original database)
-summary(gravity_simple, ~Origin + Destination)
+summary(gravity_simple, ~ Origin + Destination)
 ```
 
 Finally, the standard-errors can also be computed at estimation time, you simply need to add the `vcov` argument:
@@ -142,7 +141,7 @@ Talking about standard-errors... there are more than clustered standard-errors t
 Now we estimate the same relationship by OLS. We need to put the left hand side in logarithm (since the right-hand-side is not exponentialized):
 
 ```{r}
-gravity_ols = feols(log(Euros) ~ log(dist_km) | Origin + Destination + Product + Year, trade)
+gravity_ols <- feols(log(Euros) ~ log(dist_km) | Origin + Destination + Product + Year, trade)
 ```
 
 Of course you can use different families in `feglm`, exactly as in `glm`. 
@@ -150,8 +149,7 @@ Of course you can use different families in `feglm`, exactly as in `glm`.
 To get the estimation for the fixed-effects Negative Binomial:
 
 ```{r}
-gravity_negbin = fenegbin(Euros ~ log(dist_km) | Origin + Destination + Product + Year, trade)
-
+gravity_negbin <- fenegbin(Euros ~ log(dist_km) | Origin + Destination + Product + Year, trade)
 ```
 
 
@@ -161,10 +159,11 @@ Now let's say that we want a compact overview of the results of several estimati
 
 ```{r, eval=FALSE}
 etable(gravity_pois, gravity_negbin, gravity_ols,
-         vcov = "twoway", headers = c("Poisson", "Negative Binomial", "Gaussian"))
+  vcov = "twoway", headers = c("Poisson", "Negative Binomial", "Gaussian")
+)
 ```
 ```{r, echo=FALSE, results='asis'}
-tab = etable(gravity_pois, gravity_negbin, gravity_ols, vcov = "twoway", headers = c("Poisson", "Negative Binomial", "Gaussian"))
+tab <- etable(gravity_pois, gravity_negbin, gravity_ols, vcov = "twoway", headers = c("Poisson", "Negative Binomial", "Gaussian"))
 # problem to display the second empty line in markdown
 knitr::kable(tab[-2, ])
 ```
@@ -175,20 +174,20 @@ In the previous example, we directly added the estimation results as arguments o
 Let's give an example. Say you want to see the influence of the introduction of fixed-effects on the estimate of the elasticity of distance. You can do it with the following code where we use the argument `fixef` to include fixed-effects (instead of inserting them directly in the formula):
 
 ```{r}
-gravity_subfe = list()
-all_FEs = c("Year", "Destination", "Origin")
-for(i in 0:3){
-	gravity_subfe[[i+1]] = fepois(Euros ~ log(dist_km), trade, fixef = all_FEs[0:i])
+gravity_subfe <- list()
+all_FEs <- c("Year", "Destination", "Origin")
+for (i in 0:3) {
+  gravity_subfe[[i + 1]] <- fepois(Euros ~ log(dist_km), trade, fixef = all_FEs[0:i])
 }
 ```
 
 The previous code performs 4 estimations with an increasing number of fixed-effects and store their results into the list named `gravity_subfe`. To show the results of all 4 estimations, it's easy:
 
 ```{r, eval=FALSE}
-etable(gravity_subfe, cluster = ~Origin+Destination)
+etable(gravity_subfe, cluster = ~ Origin + Destination)
 ```
 ```{r, echo=FALSE, results='asis'}
-tab = etable(gravity_subfe, cluster = ~Origin+Destination)
+tab <- etable(gravity_subfe, cluster = ~ Origin + Destination)
 knitr::kable(tab)
 ```
 
@@ -199,7 +198,7 @@ We have a view of the 4 estimations, all reporting two-way clustered standard-er
 Note that since version 0.8.0, multiple estimations can be performed at once without requiring loops. Let's replicate the previous example using `fixest` stepwise functions:
 
 ```{r}
-res_multi = fepois(Euros ~ log(dist_km) | csw0(Year, Destination, Origin), trade)
+res_multi <- fepois(Euros ~ log(dist_km) | csw0(Year, Destination, Origin), trade)
 ```
 
 The previous line of code performs 4 estimations. The function `csw0` is the key here, it means: *cumulative stepwise starting with the empty element*. Starting with the empty element, each new estimation adds a new element in the `csw0()` function, quite like the previous loop. Then you can consider the results, here `res_multi`, as a list of results, although with specific methods to easily access each element. 
@@ -213,7 +212,7 @@ So far we have seen how to report the results of multiple estimations on the R c
 
 ```{r}
 # with two-way clustered SEs
-etable(res_multi, cluster = ~Origin+Destination, tex = TRUE)
+etable(res_multi, cluster = ~ Origin + Destination, tex = TRUE)
 ```
 
 The user can export the Latex table directly into a file (argument `file`), add a title (arg. `title`) and a label to the table (arg. `label`).  Note that when the argument `file` is present, the Latex format becomes the default (i.e. `tex = TRUE` by default).
@@ -228,16 +227,19 @@ Consider the following example of the exportation of two tables:
 
 ```{r, eval=FALSE}
 # we set the dictionary once and for all
-myDict = c("log(dist_km)" = "$\\ln (Distance)$", "(Intercept)" = "Constant")
+myDict <- c("log(dist_km)" = "$\\ln (Distance)$", "(Intercept)" = "Constant")
 # 1st export: we change the signif code and drop the intercept
-etable(res_multi, signifCode = c("a" = 0.01, "b" = 0.05),
-       drop = "Const", dict = myDict, file = "Estimation Tables.tex", 
-       replace = TRUE, title = "First export -- normal Standard-errors")
+etable(res_multi,
+  signifCode = c("a" = 0.01, "b" = 0.05),
+  drop = "Const", dict = myDict, file = "Estimation Tables.tex",
+  replace = TRUE, title = "First export -- normal Standard-errors"
+)
 # 2nd export: clustered S-E + distance as the first coefficient
-etable(res_multi, cluster = ~Product, order = "Dist", 
-       dict = myDict, file = "Estimation Tables.tex", 
-       title = "Second export -- clustered standard-errors (on Product variable)")
-
+etable(res_multi,
+  cluster = ~Product, order = "Dist",
+  dict = myDict, file = "Estimation Tables.tex",
+  title = "Second export -- clustered standard-errors (on Product variable)"
+)
 ```
 
 In this example, two tables containing the results of the 4 estimations are directly exported to a Latex table into the file "Estimation Tables.tex". First take notice (again) that *we do not need to use the argument* `tex=TRUE` since when the argument `file` is present, the Latex format becomes the default. The file is re-created in the first exportation thanks to the argument `replace = TRUE`. 
@@ -254,7 +256,7 @@ Note that you can completely customize the style of the table by using the `styl
 To obtain the fixed-effects of the estimation, the function `fixef` must be performed on the results. This function returns a list containing the fixed-effects coefficients for each dimension. The `summary` method helps to have a quick overview:
 
 ```{r}
-fixedEffects = fixef(gravity_pois)
+fixedEffects <- fixef(gravity_pois)
 summary(fixedEffects)
 ```
 
@@ -305,7 +307,7 @@ Most of the VCOV types need the information on some variables to be computed. Fo
 
 ```{r}
 data(base_did)
-est = feols(y ~ x1, base_did)
+est <- feols(y ~ x1, base_did)
 # Note that there is partial matching enabled (newey = newey_west)
 summary(est, newey ~ id + period)
 ```
@@ -319,13 +321,13 @@ summary(est, "newey_west")
 But, huh what does the error message says? That the `time` variable can be deduced? Indeed, that's the thing: the algorithm tries hard to provide sensible default values for the user.
 Let's now try with panel identifiers set at estimation time:
 ```{r}
-est_panel = feols(y ~ x1, base_did, panel.id = ~id + period)
+est_panel <- feols(y ~ x1, base_did, panel.id = ~ id + period)
 summary(est_panel, "newey_west")
 ```
 Oh, now it works! However I can see some shade of disappointment in your eyes: since we need to add `panel.id = ~id + period` we end up with more typing! Well, I'm not done: typically we tend to make many estimations with the same data set, so it may be useful to set some characteristics globally. This can be done with the `setFixest_estimation()` function:
 ```{r}
-setFixest_estimation(panel.id = ~id + period)
-est_implicit = feols(y ~ x1, base_did)
+setFixest_estimation(panel.id = ~ id + period)
+est_implicit <- feols(y ~ x1, base_did)
 summary(est_implicit, "newey_west")
 ```
 Although the exact same two lines of code led to an error a few paragraphs ago, now it works fine. 
@@ -347,7 +349,7 @@ feols(y ~ x1 | period, base_did, "cluster")
 
 Talking about clustered SEs, note that this is such a common operation that the empty keyword is equivalent to clustered SEs, so that `vcov = ~id + period` would lead to SEs clustered by `id` and `period`:
 ```{r}
-feols(y ~ x1 | period, base_did, ~id + period)
+feols(y ~ x1 | period, base_did, ~ id + period)
 ```
 
 Finally, a last example using Conley SEs:
@@ -381,8 +383,10 @@ There are also dedicated VCOV functions which work in a more standard way. Let's
 ```{r}
 feols(y ~ x1 | period, base_did, vcov_NW("id", "period", lag = 2))
 
-feols(depth ~ mag, quakes, vcov_conley(lat = "lat", lon = "long", 
-                                       cutoff = 200, distance = "spherical"))
+feols(depth ~ mag, quakes, vcov_conley(
+  lat = "lat", lon = "long",
+  cutoff = 200, distance = "spherical"
+))
 ```
 
 Contrary to the helper functions: a) these functions cannot be used in a formula, b) they accept the variables to compute the SEs as arguments. They provide an alternative way to specify the VCOV.
@@ -394,17 +398,19 @@ The value of the SEs can (sometimes quite surprisingly) be impacted by the type 
 
 Most `fixest` functions accept an `ssc` argument that you can readily use. Here's an example:
 ```{r}
-est = feols(y ~ x1 | id, base_did)
-est_up = feols(y ~ x1 | id, base_did, ssc = ssc(fixef.K = "full"))
-est_down = feols(y ~ x1 | id, base_did, ssc = ssc(adj = FALSE, cluster.adj = FALSE))
+est <- feols(y ~ x1 | id, base_did)
+est_up <- feols(y ~ x1 | id, base_did, ssc = ssc(fixef.K = "full"))
+est_down <- feols(y ~ x1 | id, base_did, ssc = ssc(adj = FALSE, cluster.adj = FALSE))
 etable(est, est_up, est_down)
 ```
 
 Instead of providing the argument `ssc`, you can instead add the `ssc` call directly within the formula of the `vcov`. In this case you should simply add it as a variable.
 We now replicate the previous example using a list of several VCOVs in `etable` (that's the only function that accepts lists in the argument `vcov`):
 ```{r}
-etable(est, vcov = list(~id, ~id + ssc(fixef.K = "full"), 
-                        ~id + ssc(adj = FALSE, cluster.adj = FALSE)))
+etable(est, vcov = list(
+  ~id, ~ id + ssc(fixef.K = "full"),
+  ~ id + ssc(adj = FALSE, cluster.adj = FALSE)
+))
 ```
 
 You can also tweak `iid` or `hetero` SEs using a formula:
@@ -437,13 +443,13 @@ feols(y ~ x1 | id, base_did, vcov = function(x) sandwich::vcovHC(x, type = "HC1"
 Two stage least square estimations can be performed by simply adding in the formula the link between the endogenous and the instrumental variables. Let's have an example.
 
 ```{r}
-base = iris
-names(base) = c("y", "x1", "x_endo_1", "x_inst_1", "fe")
+base <- iris
+names(base) <- c("y", "x1", "x_endo_1", "x_inst_1", "fe")
 set.seed(2)
-base$x_inst_2 = 0.2 * base$y + 0.2 * base$x_endo_1 + rnorm(150, sd = 0.5)
-base$x_endo_2 = 0.2 * base$y - 0.2 * base$x_inst_1 + rnorm(150, sd = 0.5)
+base$x_inst_2 <- 0.2 * base$y + 0.2 * base$x_endo_1 + rnorm(150, sd = 0.5)
+base$x_endo_2 <- 0.2 * base$y - 0.2 * base$x_inst_1 + rnorm(150, sd = 0.5)
 
-est_iv = feols(y ~ x1 | x_endo_1 + x_endo_2 ~ x_inst_1 + x_inst_2, base)
+est_iv <- feols(y ~ x1 | x_endo_1 + x_endo_2 ~ x_inst_1 + x_inst_2, base)
 est_iv
 ```
 
@@ -471,7 +477,7 @@ In the previous code, `fitstat = ~ . + ivwald2` means that we want to add the se
 Now what about adding some fixed-effects? That's of course possible, you need to add them after the first right-hand-side, as follows:
 
 ```{r}
-est_iv_fe = feols(y ~ x1 | fe | x_endo_1 + x_endo_2 ~ x_inst_1 + x_inst_2, base)
+est_iv_fe <- feols(y ~ x1 | fe | x_endo_1 + x_endo_2 ~ x_inst_1 + x_inst_2, base)
 est_iv_fe
 ```
 
@@ -501,10 +507,10 @@ There are two reasons why we would want to interact variables in the fixed-effec
 
 ```{r}
 # Our base data for this section
-base = iris
-names(base) = c("y", paste0("x", 1:3), "fe1")
+base <- iris
+names(base) <- c("y", paste0("x", 1:3), "fe1")
 # Create another "fixed-effect"
-base$fe2 = rep(letters[1:5], 30)
+base$fe2 <- rep(letters[1:5], 30)
 head(base)
 ```
 
@@ -513,7 +519,7 @@ head(base)
 Say we want to "combine" the two fixed-effect variables `fe1` and `fe2` to create a brand new fixed-effect variable. We can do it simply via `fixest`'s special `^` operator:
 
 ```{r}
-est_comb = feols(y ~ x1 | fe1^fe2, base)
+est_comb <- feols(y ~ x1 | fe1^fe2, base)
 est_comb
 ```
 
@@ -536,7 +542,7 @@ head(base)
 Say we want to estimate `y` as a function of `x1`, but controlling for `x2`. Moreover, we think that the slope coefficient of our `x2` control variable should be allowed to vary by the `fe1` fixed-effect variable. We can do this as follows:
 
 ```{r}
-est_vs = feols(y ~ x1 | fe1[x2], base)
+est_vs <- feols(y ~ x1 | fe1[x2], base)
 est_vs
 ```
 
@@ -564,12 +570,14 @@ The function `i()` accepts the arguments `ref`, and `keep` which are used to ide
 
 ```{r}
 data(airquality)
-res_i1 = feols(Ozone ~ Solar.R + i(Month), airquality)
-res_i2 = feols(Ozone ~ Solar.R + i(Month, ref = 8), airquality)
-res_i3 = feols(Ozone ~ Solar.R + i(Month, keep = 5:6), airquality)
+res_i1 <- feols(Ozone ~ Solar.R + i(Month), airquality)
+res_i2 <- feols(Ozone ~ Solar.R + i(Month, ref = 8), airquality)
+res_i3 <- feols(Ozone ~ Solar.R + i(Month, keep = 5:6), airquality)
 
-etable(res_i1, res_i2, res_i3, dict = c("6" = "June", "Month::5" = "May"), 
-       order = c("Int|May", "Mon"))
+etable(res_i1, res_i2, res_i3,
+  dict = c("6" = "June", "Month::5" = "May"),
+  order = c("Int|May", "Mon")
+)
 ```
 
 Now that we've seen the basic `i()` functionality with a single variable, let's see how it can be put to use in an interaction context. We will consider two DiD examples of increasing complexity.
@@ -591,7 +599,7 @@ The empirical approach that we will use here is the canonical two-way fixed effe
 ```{r, eval = TRUE}
 # Estimation of treatment × period effects
 # We also add individual and period fixed-effects:
-est_did = feols(y ~ x1 + i(period, treat, 5) | id + period, base_did)
+est_did <- feols(y ~ x1 + i(period, treat, 5) | id + period, base_did)
 est_did
 ```
 
@@ -626,16 +634,19 @@ head(base_stagg)
 Note that the variable `year_treated` is set to 1000 (i.e. above the maximum value of `year`) for the never treated. Here's a quick visual depiction of the data. Again, notice the staggered treatment rollout and time-varying intensity.
 
 ```{r, echo=FALSE}
-if(requireNamespace("ggplot2", quietly = TRUE)){
+if (requireNamespace("ggplot2", quietly = TRUE)) {
   suppressWarnings(library(ggplot2))
-  ggplot(aggregate(base_stagg[, c('year_treated', 'treatment_effect_true')], 
-                   by = list(year = base_stagg$year, group = to_integer(base_stagg$year_treated)), 
-                   mean), 
-         aes(year, group, fill = year>=year_treated, alpha = treatment_effect_true)) + 
-    geom_tile(colour = "white", lwd = 1) + 
-    scale_fill_brewer('Treated?', palette = 'Set1') +
-    scale_alpha('Avg. treatment\neffect') +
-    labs(x = 'Year', y = 'Group') +
+  ggplot(
+    aggregate(base_stagg[, c("year_treated", "treatment_effect_true")],
+      by = list(year = base_stagg$year, group = to_integer(base_stagg$year_treated)),
+      mean
+    ),
+    aes(year, group, fill = year >= year_treated, alpha = treatment_effect_true)
+  ) +
+    geom_tile(colour = "white", lwd = 1) +
+    scale_fill_brewer("Treated?", palette = "Set1") +
+    scale_alpha("Avg. treatment\neffect") +
+    labs(x = "Year", y = "Group") +
     theme_minimal()
 } else {
   print("This graph requires ggplot2 which is currently not available.")
@@ -649,13 +660,13 @@ With our data in hand, let's move on to the estimations. We'll implement two DiD
 
 ```{r}
 # "Naive" TWFE DiD (note that the time to treatment for the never treated is -1000)
-# (by using ref = c(-1, -1000) we exclude the period just before the treatment and 
+# (by using ref = c(-1, -1000) we exclude the period just before the treatment and
 # the never treated)
-res_twfe = feols(y ~ x1 + i(time_to_treatment, ref = c(-1, -1000)) | id + year, base_stagg)
+res_twfe <- feols(y ~ x1 + i(time_to_treatment, ref = c(-1, -1000)) | id + year, base_stagg)
 
 # To implement the Sun and Abraham (2020) method,
 # we use the sunab(cohort, period) function
-res_sa20 = feols(y ~ x1 + sunab(year_treated, year) | id + year, base_stagg)
+res_sa20 <- feols(y ~ x1 + sunab(year_treated, year) | id + year, base_stagg)
 ```
 
 Let's compare our results in plot form:
@@ -665,11 +676,13 @@ Let's compare our results in plot form:
 iplot(list(res_twfe, res_sa20), sep = 0.5)
 
 # Add the true results
-att_true = tapply(base_stagg$treatment_effect_true, base_stagg$time_to_treatment, mean)[-1]
+att_true <- tapply(base_stagg$treatment_effect_true, base_stagg$time_to_treatment, mean)[-1]
 points(-9:8, att_true, pch = 15, col = 4)
 
-legend("topleft", col = c(1, 4, 2), pch = c(20, 15, 17), 
-       legend = c("TWFE", "Truth", "Sun & Abraham (2020)"))
+legend("topleft",
+  col = c(1, 4, 2), pch = c(20, 15, 17),
+  legend = c("TWFE", "Truth", "Sun & Abraham (2020)")
+)
 ```
 
 As we can see, the TWFE results suffer from varying degrees of bias due to the staggered rollout. In contrast, the aggregated SA20 results do a much better job of consistently estimating the true effects.
@@ -715,16 +728,16 @@ It can be useful, to tidy up the workflow or simply for convenience, to define f
 
 Here is an example:
 ```{r}
-base = iris
-names(base) = c("y", "x1", "x2", "x3", "species")
+base <- iris
+names(base) <- c("y", "x1", "x2", "x3", "species")
 # Defining the macro variables
-setFixest_fml(..ctrl = ~poly(x2, 2) + poly(x3, 2))
+setFixest_fml(..ctrl = ~ poly(x2, 2) + poly(x3, 2))
 # Accessing them
 xpd(y ~ x1 + ..ctrl)
 
 # Definition at run time
-vars = c("x2", "x2^2", "x3")
-for(i in 1:3){
+vars <- c("x2", "x2^2", "x3")
+for (i in 1:3) {
   print(xpd(y ~ x1 + ..ctrl, ..ctrl = vars[1:i]))
 }
 ```
@@ -753,16 +766,16 @@ feols(Armed.Forces ~ Population + regex("GNP|ployed"), longley)
 
 The special operator `.[]` can be used in `fixest` formulas to replace the enclosed item by its value in the current environment. Let's give an example:
 ```{r}
-base = setNames(iris, c("y", "x1", "x2", "x3", "species"))
-i = 2:3
-z = "i(species)"
+base <- setNames(iris, c("y", "x1", "x2", "x3", "species"))
+i <- 2:3
+z <- "i(species)"
 feols(y ~ x.[i] + .[z], base)
 ```
 What just happened? When `.[]` is encountered in a formula, its value is evaluated and inserted verbatim in the formula. Further, when the value in brackets is a vector, as many variables are added in the model. That's why `x.[i]` led to `x2 + x3`. Of course, numbers can be used directly: `x.[2:3]` would have led to the same result.
 
 Variable names in which `.[]` is in the middle of the name can also be created, but it has to be nested:
 ```{r}
-i = 1:3
+i <- 1:3
 xpd(y ~ .["x.[i]_sq"])
 ```
 
@@ -777,7 +790,7 @@ etable(feols(y ~ csw(x.[, 1:3]), base))
 Finally, there is a special shortcut to facilitate multiple estimations with variable names stored in a vector. If `vars` is a vector of variable names, just use `.[vars]` in the LHS to perform a multiple estimation:
 
 ```{r}
-vars = c("x1", "x2", "x3") # Equiv. to: dsb("x.[1:3]")
+vars <- c("x1", "x2", "x3") # Equiv. to: dsb("x.[1:3]")
 etable(feols(.[vars] ~ i(species), base))
 ```
 
@@ -793,9 +806,9 @@ There are two ways to provide leads and/or lags in a `fixest` estimation. Either
 To set up the panel on-the-fly, you need to use the `panel.id` argument, which will give you access to the functions `f` and `l` to create leads and lags, respectively. Let's give an example, using the previous data set, where we use lags and leads of the explanatory and dependent variables.
 
 ```{r}
-est1 = feols(y ~ l(x1, 0:1), base_did, panel.id = ~id+period)
-est2 = feols(f(y) ~ l(x1, -1:1), base_did, panel.id = ~id+period)
-est3 = feols(l(y) ~ l(x1, 0:3), base_did, panel.id = ~id+period)
+est1 <- feols(y ~ l(x1, 0:1), base_did, panel.id = ~ id + period)
+est2 <- feols(f(y) ~ l(x1, -1:1), base_did, panel.id = ~ id + period)
+est3 <- feols(l(y) ~ l(x1, 0:3), base_did, panel.id = ~ id + period)
 etable(est1, est2, est3, order = "f", drop = "Int")
 ```
 
@@ -810,12 +823,12 @@ You can set up a panel data set with the function `panel`. There are between two
 Let's repeat the previous example, now with a panel data set:
 ```{r}
 # setting up the panel
-pdat = panel(base_did, ~id + period)
+pdat <- panel(base_did, ~ id + period)
 # Now the panel.id argument is not required
-est1 = feols(y ~ l(x1, 0:1), pdat)
-est2 = feols(f(y) ~ l(x1, -1:1), pdat)
+est1 <- feols(y ~ l(x1, 0:1), pdat)
+est2 <- feols(f(y) ~ l(x1, -1:1), pdat)
 # You can use sub selections of the panel data
-est_sub = feols(y ~ l(x1, 0:1), pdat[!pdat$period %in% c(2, 4)])
+est_sub <- feols(y ~ l(x1, 0:1), pdat[!pdat$period %in% c(2, 4)])
 etable(est1, est2, est_sub, order = "f", drop = "Int")
 ```
 
@@ -823,10 +836,10 @@ Last, if you also use `data.table`, let's give an example of lead/lag creation:
 
 ```{r, eval = is_DT}
 library(data.table)
-pdat_dt = panel(as.data.table(base_did), ~id+period)
+pdat_dt <- panel(as.data.table(base_did), ~ id + period)
 # we create a lagged value of the variable x1
 pdat_dt[, x1_l1 := l(x1)]
-# Now 
+# Now
 pdat_dt[, c("x1_l1_fill0", "y_f2") := .(l(x1, fill = 0), f(y, 2))]
 head(pdat_dt)
 ```
@@ -836,9 +849,9 @@ head(pdat_dt)
 If you just want to create a single lag/lead variable, a simple and fast method has been implemented: `lag.formula`. Let's give an example:
 
 ```{r}
-base_lag = base_did
+base_lag <- base_did
 # we create a lagged value of the variable x1
-base_lag$x1.l1 = lag(x1 ~ id + period, 1, base_lag)
+base_lag$x1.l1 <- lag(x1 ~ id + period, 1, base_lag)
 head(base_lag)
 ```
 
@@ -848,7 +861,7 @@ In case you use the popular package `data.table`, you can create lagged variable
 
 ```{r, eval = is_DT}
 library(data.table)
-base_lag_dt = as.data.table(base_did)
+base_lag_dt <- as.data.table(base_did)
 # we create a lagged value of the variable x1
 base_lag_dt[, x1.l1 := lag(x1 ~ id + period, 1)]
 ```
@@ -868,19 +881,19 @@ So let's estimate such a relation. (Note that you can estimate this relation wit
 
 ```{r}
 # Generating data:
-n = 1000
+n <- 1000
 # x and y: two positive random variables
-x = rnorm(n, 1, 5)**2
-y = rnorm(n, -1, 5)**2
+x <- rnorm(n, 1, 5)**2
+y <- rnorm(n, -1, 5)**2
 # E(z) = 2*x + 3*y and some noise
-z = rpois(n, 2*x + 3*y) + rpois(n, 1)
-base = data.frame(x, y, z)
+z <- rpois(n, 2 * x + 3 * y) + rpois(n, 1)
+base <- data.frame(x, y, z)
 ```
 
 To estimate the non-linear relationship, we need to use the argument `NL.fml` where we put the non-linear part. We also have to provide starting values with the argument `NL.start`. Finally, to ensure the RHS can be evaluated in any situation, we add lower bounds for the parameters with the argument `lower`.
 
 ```{r}
-result_NL = feNmlm(z~0, base, NL.fml = ~ log(a*x + b*y), NL.start = list(a=1, b=1), lower = list(a=0, b=0))
+result_NL <- feNmlm(z ~ 0, base, NL.fml = ~ log(a * x + b * y), NL.start = list(a = 1, b = 1), lower = list(a = 0, b = 0))
 ```
 
 Note that the arguments `NL.start` and `lower` are named lists. Setting `lower = list(a=0, b=0)` means that the optimization algorithm will never explore parameters for $a$ and $b$ that are lower than 0.
@@ -912,25 +925,24 @@ Let's generate this relation:
 
 ```{r}
 # the class of each observation
-id = sample(20, n, replace = TRUE)
-base$id = id
+id <- sample(20, n, replace = TRUE)
+base$id <- id
 # the vector of fixed-effects
-gamma = rnorm(20)**2
+gamma <- rnorm(20)**2
 # the new vector z_bis
-z_bis = rpois(n, gamma[id] * (2*x + 3*y)) + rpois(n, 1)
-base$z_bis = z_bis
+z_bis <- rpois(n, gamma[id] * (2 * x + 3 * y)) + rpois(n, 1)
+base$z_bis <- z_bis
 ```
 
 Now we estimate it with the fixed-effects while fixing one of the coefficients (we fix $a$ to its true value but it could be any value):
 
 ```{r}
 # we add the fixed-effect in the formula
-result_NL_fe = feNmlm(z_bis~0|id, base, NL.fml = ~ log(2*x + b*y), NL.start = list(b=1), lower = list(b=0))
+result_NL_fe <- feNmlm(z_bis ~ 0 | id, base, NL.fml = ~ log(2 * x + b * y), NL.start = list(b = 1), lower = list(b = 0))
 # The coef should be around 3
 coef(result_NL_fe)
 # the gamma and the exponential of the fixed-effects should be similar
 rbind(gamma, exp(fixef(result_NL_fe)$id[as.character(1:20)]))
-
 ```
 
 As we can see, we obtain the "right" estimates. 
@@ -943,11 +955,11 @@ The package `fixest` integrates multi-platform parallelism to hasten the estimat
 ```{r, eval = FALSE}
 # Sample of results:
 # 1 nthreads: 3.13s
-system.time(fenegbin(Euros ~ log(dist_km)|Origin+Destination+Product+Year, trade, nthreads = 1))
+system.time(fenegbin(Euros ~ log(dist_km) | Origin + Destination + Product + Year, trade, nthreads = 1))
 # 2 nthreads: 1.82s
-system.time(fenegbin(Euros ~ log(dist_km)|Origin+Destination+Product+Year, trade, nthreads = 2))
+system.time(fenegbin(Euros ~ log(dist_km) | Origin + Destination + Product + Year, trade, nthreads = 2))
 # 4 nthreads: 1.17s
-system.time(fenegbin(Euros ~ log(dist_km)|Origin+Destination+Product+Year, trade, nthreads = 4))
+system.time(fenegbin(Euros ~ log(dist_km) | Origin + Destination + Product + Year, trade, nthreads = 4))
 ```
 
 As you can see, the efficiency of increasing the number of threads is not 1 to 1. Two threads do not divide the computing time by 2, nor four threads by 4. However it still reduces significantly the computing time, which might be valuable for large sample estimations.

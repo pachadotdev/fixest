@@ -49,8 +49,15 @@
 
 #include <cpp11.hpp>
 #include <cstdint>
+#include <iostream>
 #include <numeric>
 #include <vector>
+
+#ifdef _OPENMP
+#include <omp.h>
+#else
+#define omp_get_thread_num() 0
+#endif
 
 using namespace cpp11;
 using std::vector;
@@ -327,7 +334,7 @@ void quf_int(int n, int *x_uf, void *px, vector<double> &x_unik, int x_min,
   }
 }
 
-[[cpp11::register]] list cpp_quf_gnl(SEXP x) {
+[[cpp11::register]] list cpp_quf_gnl_(SEXP x) {
   // INT: we try as possible to send the data to quf_int, the most efficient
   // function for data of large range, we have a separate algorithms that avoids
   // the creation of a possibly too large lookup table. for extreme ranges (>
@@ -839,11 +846,11 @@ void quf_refactor_table_sum_single(
   }
 }
 
-[[cpp11::register]] list cpp_quf_table_sum(SEXP x, SEXP y, bool do_sum_y,
-                                           bool rm_0, bool rm_1, bool rm_single,
-                                           integers only_slope, int nthreads,
-                                           bool do_refactor, SEXP r_x_sizes,
-                                           integers obs2keep) {
+[[cpp11::register]] list cpp_quf_table_sum_(SEXP x, SEXP y, bool do_sum_y,
+                                            bool rm_0, bool rm_1,
+                                            bool rm_single, integers only_slope,
+                                            int nthreads, bool do_refactor,
+                                            SEXP r_x_sizes, integers obs2keep) {
   // x: doubles of vectors of IDs (type int/num or char only)
   // y: dependent variable
   // rm_0: remove FEs where dep var is only 0
@@ -868,8 +875,6 @@ void quf_refactor_table_sum_single(
       check_pblm[q] = only_slope[q] == false;
     }
   }
-
-  // Rcout << "Q = " << Q << "\n";
 
   double *py = nullptr;
   if (TYPEOF(y) == REALSXP) {
@@ -944,8 +949,6 @@ void quf_refactor_table_sum_single(
         xi_uintptr = reinterpret_cast<std::uintptr_t>(pxi);
 
         x_ull_all[q].push_back(static_cast<unsigned long long>(xi_uintptr));
-
-        // Rcout << xi_uintptr << "  ----  " << xi_ull << "\n";
       }
 
       px_all[q] = x_ull_all[q].data();
@@ -971,8 +974,6 @@ void quf_refactor_table_sum_single(
       break;
     }
   }
-
-  // Rcout << "Any problem: " << is_pblm << "\n";
 
   if (obs2keep[0] != 0) {
     n = n_keep;

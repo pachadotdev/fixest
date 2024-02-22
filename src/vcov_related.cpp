@@ -14,8 +14,8 @@ using namespace cpp11;
 
 using std::int64_t;
 
-[[cpp11::register]] doubles_matrix<> cpp_newey_west(doubles_matrix<> S,
-                                                    doubles w, int nthreads) {
+[[cpp11::register]] doubles_matrix<> cpp_newey_west_(doubles_matrix<> S,
+                                                     doubles w, int nthreads) {
   // Basic NeweyWest for time series
   // note that the data MUST be sorted by period beforehand
   // S: scores
@@ -127,11 +127,11 @@ using std::int64_t;
   return meat;
 }
 
-[[cpp11::register]] doubles_matrix<> cpp_newey_west_panel(doubles_matrix<> S,
-                                                          doubles w,
-                                                          integers unit, int G,
-                                                          integers time, int T,
-                                                          int nthreads) {
+[[cpp11::register]] doubles_matrix<> cpp_newey_west_panel_(doubles_matrix<> S,
+                                                           doubles w,
+                                                           integers unit, int G,
+                                                           integers time, int T,
+                                                           int nthreads) {
   // Newey West,  but for panels
   // S: scores
   // w: weights
@@ -300,10 +300,10 @@ using std::int64_t;
   return meat;
 }
 
-[[cpp11::register]] doubles_matrix<> cpp_driscoll_kraay(doubles_matrix<> S,
-                                                        doubles w,
-                                                        integers time, int T,
-                                                        int nthreads) {
+[[cpp11::register]] doubles_matrix<> cpp_driscoll_kraay_(doubles_matrix<> S,
+                                                         doubles w,
+                                                         integers time, int T,
+                                                         int nthreads) {
   // Driscoll and Kraay
   // S: scores
   // w: weights
@@ -491,7 +491,7 @@ inline double fabs_lat(double x, double y) {
   return fabs(x - y);
 }
 
-[[cpp11::register]] doubles_matrix<> cpp_vcov_conley(
+[[cpp11::register]] doubles_matrix<> cpp_vcov_conley_(
     doubles_matrix<> S, doubles lon_rad, doubles lat_rad, const int distance,
     const double cutoff, int nthreads) {
   // S: scores

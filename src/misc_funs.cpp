@@ -75,7 +75,7 @@ void updateId2do(int nb2do, writable::integers &id2do,
   }
 }
 
-[[cpp11::register]] doubles cpp_partialDerivative_other(
+[[cpp11::register]] doubles cpp_partialDerivative_other_(
     int iterMax, int Q, int N, double epsDeriv, doubles ll_d2,
     doubles dx_dother, doubles init, integers_matrix<> dumMat,
     integers nbCluster) {
@@ -170,8 +170,8 @@ void updateId2do(int nb2do, writable::integers &id2do,
 }
 
 // Function to get the conditional sum of a matrix
-[[cpp11::register]] doubles_matrix<> cpp_tapply_sum(int Q, doubles_matrix<> x,
-                                                    integers dum) {
+[[cpp11::register]] doubles_matrix<> cpp_tapply_sum_(int Q, doubles_matrix<> x,
+                                                     integers dum) {
   // Q: nber of classes
   // N: nber of observations
   // x: a matrix
@@ -195,7 +195,7 @@ void updateId2do(int nb2do, writable::integers &id2do,
 }
 
 // Function to get the conditional sum of a vector
-[[cpp11::register]] doubles cpp_tapply_vsum(int Q, doubles x, integers dum) {
+[[cpp11::register]] doubles cpp_tapply_vsum_(int Q, doubles x, integers dum) {
   // Q: nber of classes
   // x: a matrix
   // dum: the N vector of clusters
@@ -214,7 +214,7 @@ void updateId2do(int nb2do, writable::integers &id2do,
 }
 
 // similar a table but faster
-[[cpp11::register]] doubles cpp_table(int Q, integers dum) {
+[[cpp11::register]] doubles cpp_table_(int Q, integers dum) {
   // Q: nber of classes
   // dum: the N vector of clusters
 
@@ -235,10 +235,10 @@ void updateId2do(int nb2do, writable::integers &id2do,
 // Getting the cluster coefficients
 //
 
-[[cpp11::register]] list cpp_get_fe_gnl(int Q, int N, doubles sumFE,
-                                        integers_matrix<> dumMat,
-                                        integers cluster_sizes,
-                                        integers_matrix<> obsCluster) {
+[[cpp11::register]] list cpp_get_fe_gnl_(int Q, int N, doubles sumFE,
+                                         integers_matrix<> dumMat,
+                                         integers cluster_sizes,
+                                         integers_matrix<> obsCluster) {
   // This function returns a list of the cluster coefficients for each cluster
   // dumMat: the matrix of cluster ID for each observation, with cpp index style
   // Q, N: nber of clusters / obs
@@ -492,7 +492,7 @@ void updateId2do(int nb2do, writable::integers &id2do,
   return (res);
 }
 
-[[cpp11::register]] double cpp_ssr_null(doubles y, doubles w = doubles(0)) {
+[[cpp11::register]] double cpp_ssr_null_(doubles y, doubles w = doubles(0)) {
   // simple fun to compute the ssr of the null ols model
   // 2/3 times faster than pure r
 
@@ -531,7 +531,7 @@ void updateId2do(int nb2do, writable::integers &id2do,
   return (res);
 }
 
-[[cpp11::register]] double cpp_ssq(doubles x, doubles w = doubles(0)) {
+[[cpp11::register]] double cpp_ssq_(doubles x, doubles w = doubles(0)) {
   // simple fun to compute the sum of the square of the elt of a vector
   // 30% faster than pure r (twice faster with weights)
 
@@ -552,7 +552,7 @@ void updateId2do(int nb2do, writable::integers &id2do,
   return res;
 }
 
-[[cpp11::register]] bool cpp_isConstant(doubles x) {
+[[cpp11::register]] bool cpp_isConstant_(doubles x) {
   // simple fun to see whether a variable is constant
   // it is unexpensive -- not the most useful function however:
   //		for 1e7 obs, you gain 50ms over var(x)==0, but it's still 50ms!
@@ -570,7 +570,7 @@ void updateId2do(int nb2do, writable::integers &id2do,
   return (res);
 }
 
-[[cpp11::register]] bool cpp_any_na_null(SEXP x) {
+[[cpp11::register]] bool cpp_any_na_null_(SEXP x) {
   // > twice faster than testing the two separately
   // x is a vector
 
@@ -587,8 +587,8 @@ void updateId2do(int nb2do, writable::integers &id2do,
   return false;
 }
 
-[[cpp11::register]] int cpp_constant_dum(int k, doubles x, integers dum,
-                                         bool only_0 = false) {
+[[cpp11::register]] int cpp_constant_dum_(int k, doubles x, integers dum,
+                                          bool only_0 = false) {
   // number of values of dum for which x is constant
 
   int n_obs = dum.size();
@@ -628,7 +628,7 @@ void updateId2do(int nb2do, writable::integers &id2do,
 // Lag related functions //
 //
 
-[[cpp11::register]] list cpp_find_duplicates(integers id, integers time) {
+[[cpp11::register]] list cpp_find_duplicates_(integers id, integers time) {
   // we check whether there are duplicated rows
   // if so, we provide information
 
@@ -660,7 +660,7 @@ void updateId2do(int nb2do, writable::integers &id2do,
   return writable::list({"n_dup"_nm = n_dup, "obs_dup"_nm = obs_dup});
 }
 
-[[cpp11::register]] int cpp_pgcd(integers x) {
+[[cpp11::register]] int cpp_pgcd_(integers x) {
   // quick and dirty, but does not matter
 
   int n = x.size();
@@ -694,7 +694,8 @@ void updateId2do(int nb2do, writable::integers &id2do,
   return pgcd;
 }
 
-[[cpp11::register]] integers cpp_lag_obs(integers id, integers time, int nlag) {
+[[cpp11::register]] integers cpp_lag_obs_(integers id, integers time,
+                                          int nlag) {
   // in case of ties, we sum
   // must be two consecutive years
   // returns an observation nber of where to find the lagged obs
@@ -788,8 +789,8 @@ void updateId2do(int nb2do, writable::integers &id2do,
   return (res);
 }
 
-[[cpp11::register]] integers cpp_check_nested(SEXP fe_list, SEXP cluster_list,
-                                              integers fe_sizes, int n) {
+[[cpp11::register]] integers cpp_check_nested_(SEXP fe_list, SEXP cluster_list,
+                                               integers fe_sizes, int n) {
   // Returns boolean vector of whether each FE is nested in the clusters
 
   int Q = Rf_length(fe_list);
@@ -831,8 +832,8 @@ void updateId2do(int nb2do, writable::integers &id2do,
   return res;
 }
 
-[[cpp11::register]] doubles cpp_diag_XUtX(doubles_matrix<> X,
-                                          doubles_matrix<> U) {
+[[cpp11::register]] doubles cpp_diag_XUtX_(doubles_matrix<> X,
+                                           doubles_matrix<> U) {
   // computes the diagonal of X %*% U %*% t(X)
 
   int n = X.nrow();
@@ -895,11 +896,11 @@ double simple_vec_double::operator[](int i) {
   }
 }
 
-[[cpp11::register]] doubles_matrix<> cpp_factor_matrix(integers fact,
-                                                       logicals is_na_all,
-                                                       integers who_is_dropped,
-                                                       SEXP var,
-                                                       strings col_names) {
+[[cpp11::register]] doubles_matrix<> cpp_factor_matrix_(integers fact,
+                                                        logicals is_na_all,
+                                                        integers who_is_dropped,
+                                                        SEXP var,
+                                                        strings col_names) {
   // fact: integer vector from 1 (!) to K, can contain NAs
   // Checking Na is cheap as opposed to populating the matrix, but having an
   // argument avoids creating a new object
@@ -969,8 +970,8 @@ double simple_vec_double::operator[](int i) {
   return res;
 }
 
-[[cpp11::register]] std::string cpp_add_commas(double x, int r = 1,
-                                               bool whole = true) {
+[[cpp11::register]] std::string cpp_add_commas_(double x, int r = 1,
+                                                bool whole = true) {
   // a bit like (but not exactly equal to) format(x, nsmall = 1, big.mark = ",")
   // but about 40-100 times faster for whole numbers => no trailing digits does
   // not accept vectors, although super easy to expand to vectors
@@ -1019,8 +1020,8 @@ double simple_vec_double::operator[](int i) {
   return res;
 }
 
-[[cpp11::register]] list cpp_find_never_always_treated(integers cohort,
-                                                       doubles period) {
+[[cpp11::register]] list cpp_find_never_always_treated_(integers cohort,
+                                                        doubles period) {
   // Note that both cohort and period are sorted according to cohort
 
   writable::integers always_treated;
@@ -1079,7 +1080,7 @@ double simple_vec_double::operator[](int i) {
       {"always_treated"_nm = always_treated, "ref"_nm = cohort_ref});
 }
 
-[[cpp11::register]] integers cpp_get_first_item(integers x, int n_items) {
+[[cpp11::register]] integers cpp_get_first_item_(integers x, int n_items) {
   // observation id of the first occurrence
   // x ranges from 1 to n_items
   // we return indexes R style
@@ -1096,8 +1097,8 @@ double simple_vec_double::operator[](int i) {
   return res;
 }
 
-[[cpp11::register]] integers cpp_combine_clusters(SEXP cluster_list,
-                                                  integers index) {
+[[cpp11::register]] integers cpp_combine_clusters_(SEXP cluster_list,
+                                                   integers index) {
   // cluster: list of integer vectors, each ranging from 1 to the number of
   // cases index: result of order() on the clusters
 
@@ -1157,8 +1158,8 @@ double simple_vec_double::operator[](int i) {
   return res;
 }
 
-[[cpp11::register]] list cpp_cut(doubles x_sorted, doubles cut_points,
-                                 integers is_included) {
+[[cpp11::register]] list cpp_cut_(doubles x_sorted, doubles cut_points,
+                                  integers is_included) {
   // x_sorted: no NA, sorted
   // cut_points: bounds
   // is_included: for each bound, if it is included or not
@@ -1233,7 +1234,7 @@ double simple_vec_double::operator[](int i) {
                          "is_int"_nm = is_int});
 }
 
-[[cpp11::register]] bool cpp_is_int(SEXP x) {
+[[cpp11::register]] bool cpp_is_int_(SEXP x) {
   if (TYPEOF(x) == INTSXP) {
     return true;
   }
@@ -1256,7 +1257,7 @@ double simple_vec_double::operator[](int i) {
   return is_int;
 }
 
-[[cpp11::register]] double cpp_hash_string(std::string x) {
+[[cpp11::register]] double cpp_hash_string_(std::string x) {
   // simple function hashing a string
   // used to identify tables in etable
 
@@ -1410,7 +1411,7 @@ std::string apply_escape_markup(const char *x) {
   return tmp_all[0];
 }
 
-[[cpp11::register]] strings cpp_escape_markup(SEXP Rstr) {
+[[cpp11::register]] strings cpp_escape_markup_(SEXP Rstr) {
   // cpp_escape_markup("**bonjour** *les* ***gens * \\***heureux*** ")
   // cpp_escape_markup("stars: 10%: *, 5%: **, 1%: ***")
 

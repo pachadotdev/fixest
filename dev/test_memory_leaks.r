@@ -4,27 +4,23 @@ devtools::load_all()
 # is_DT <- requireNamespace("data.table", quietly = TRUE)
 # if (is_DT) library(data.table)
 
-eval_logit <- T
-eval_trade <- T
-eval_quakes <- T
-eval_did <- T
-eval_smallsample <- T
-eval_othervcovs <- T
-eval_ivs <- T
-eval_interactions <- T # error with feols(Ozone ~ Solar.R + i(Month), airquality)
-eval_formulas <- T
-eval_dotsquare <- T
+# logit, trade, quakes, did, smallsample, othervcovs, ivs, interactions, formulas, dotsquare
+tests <- c(T, rep(F, 9))
 
 # LOGIT ----
 
-if (eval_logit) {
-  fit <- feglm(am ~ wt | cyl, mtcars, family = binomial)
+# debug(cpp_quf_table_sum)
+# fit <- feglm(am ~ wt | cyl, mtcars, family = binomial)
+# undebug(cpp_quf_table_sum)
+
+if (tests[1]) {
+  fit <- fixest::feglm(am ~ wt | cyl, mtcars, family = binomial)
   s1 <- summary(fit)
 }
 
 # TRADE ----
 
-if (eval_trade) {
+if (tests[2]) {
   # if (!require("dplyr")) install.packages("dplyr")
   # library(dplyr)
 
@@ -62,7 +58,7 @@ if (eval_trade) {
   s7 <- summary(gravity_pois_fes)
 }
 
-if (eval_quakes) {
+if (tests[3]) {
   fit1 <- feols(depth ~ mag, quakes, "conley")
   fit2 <- feols(depth ~ mag, quakes, conley(200, distance = "spherical"))
   fit3 <- feols(depth ~ mag, quakes, vcov_conley(
@@ -71,7 +67,7 @@ if (eval_quakes) {
   ))
 }
 
-if (eval_did) {
+if (tests[4]) {
   est1 <- feols(y ~ x1, base_did)
   s1 <- summary(est1, newey ~ id + period)
 
@@ -95,7 +91,7 @@ if (eval_did) {
 
 # SMALL SAMPLE CORRECTION ----
 
-if (eval_smallsample) {
+if (tests[5]) {
   est <- feols(y ~ x1 | id, base_did)
   est_up <- feols(y ~ x1 | id, base_did, ssc = ssc(fixef.K = "full"))
   est_down <- feols(y ~ x1 | id, base_did,
@@ -108,7 +104,7 @@ if (eval_smallsample) {
 
 # OTHER VCOVS ----
 
-if (eval_othervcovs) {
+if (tests[6]) {
   est <- feols(y ~ x1 | id, base_did)
   summ <- summary(est, vcov = sandwich::vcovHC, type = "HC1")
   fit <- feols(y ~ x1 | id, base_did, vcov = function(x) sandwich::vcovHC(x, type = "HC1"))
@@ -116,7 +112,7 @@ if (eval_othervcovs) {
 
 # IVS ----
 
-if (eval_ivs) {
+if (tests[7]) {
   base <- iris
   names(base) <- c("y", "x1", "x_endo_1", "x_inst_1", "fe")
   set.seed(2)
@@ -140,7 +136,7 @@ if (eval_ivs) {
 
 # INTERACTION TERMS ----
 
-if (eval_interactions) {
+if (tests[8]) {
   base <- iris
   names(base) <- c("y", paste0("x", 1:3), "fe1")
   base$fe2 <- rep(letters[1:5], 30)
@@ -167,7 +163,7 @@ if (eval_interactions) {
 
 # FORMULAS ----
 
-if (eval_formulas) {
+if (tests[9]) {
   base <- iris
   names(base) <- c("y", "x1", "x2", "x3", "species")
 
@@ -187,7 +183,7 @@ if (eval_formulas) {
 
 # DOT SQUARE ----
 
-if (eval_dotsquare) {
+if (tests[10]) {
   base <- setNames(iris, c("y", "x1", "x2", "x3", "species"))
   i <- 2:3
   z <- "i(species)"

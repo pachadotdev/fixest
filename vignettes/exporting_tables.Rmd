@@ -15,8 +15,8 @@ vignette: >
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, comment = "#>")
 
-is_pander = requireNamespace("pander", quietly = TRUE)
-if(is_pander) library(pander)
+is_pander <- requireNamespace("pander", quietly = TRUE)
+if (is_pander) library(pander)
 
 library(fixest)
 setFixest_notes(FALSE)
@@ -43,9 +43,11 @@ Throughout this document, we will use data from the *airquality* data base. We a
 library(fixest)
 data(airquality)
 
-# Setting a dictionary 
-setFixest_dict(c(Ozone = "Ozone (ppb)", Solar.R = "Solar Radiation (Langleys)",
-                 Wind = "Wind Speed (mph)", Temp = "Temperature"))
+# Setting a dictionary
+setFixest_dict(c(
+  Ozone = "Ozone (ppb)", Solar.R = "Solar Radiation (Langleys)",
+  Wind = "Wind Speed (mph)", Temp = "Temperature"
+))
 ```
 
 
@@ -54,8 +56,10 @@ setFixest_dict(c(Ozone = "Ozone (ppb)", Solar.R = "Solar Radiation (Langleys)",
 Let's estimate the following four models and cluster the standard-errors by `Day`:
 ```{r}
 # On multiple estimations: see the dedicated vignette
-est = feols(Ozone ~ Solar.R + sw0(Wind + Temp) | csw(Month, Day), 
-            airquality, cluster = ~Day)
+est <- feols(Ozone ~ Solar.R + sw0(Wind + Temp) | csw(Month, Day),
+  airquality,
+  cluster = ~Day
+)
 ```
 
 By default, when the argument `file` is missing, the function `etable` returns a `data.frame`. Let's see the output of the previous estimations:
@@ -73,8 +77,10 @@ Starting from this table, two elements are detailed: a) how to change the look o
 You can change many elements of the `data.frame` with the argument `style.df` whose input must come from the function `style.df`. The style monitors many elements of the table, in particular the titles of the sections. Let's have an example:
 
 ```{r}
-etable(est, style.df = style.df(depvar.title = "", fixef.title = "", 
-                                fixef.suffix = " fixed effect", yesNo = "yes"))
+etable(est, style.df = style.df(
+  depvar.title = "", fixef.title = "",
+  fixef.suffix = " fixed effect", yesNo = "yes"
+))
 ```
 
 In the previous example, the dependent variable and fixed-effects (FE) headers have been removed, and this is achieved with the (explicit) arguments `depvar.title` and `fixef.title`. Furthermore the suffix `"fixed effect"` is added to each fixed-effect variable, and the indicator of which FE is included in which model is slightly changed. There are more options that are described in the `style.df` documentation.
@@ -85,7 +91,7 @@ Since the output of `etable` is a `data.frame`, any formatting function handling
 
 ```{r, eval = !is_pander, include = !is_pander}
 # NOTE:
-# The evaluation of the code of this section requires the 
+# The evaluation of the code of this section requires the
 #   package 'pander' which is not installed.
 # The code output is not reported.
 ```
@@ -104,8 +110,10 @@ What did it do? First, it called the function `pandoc.table.return` from within 
 One important feature of `etable` is that you can set the default values of almost all its arguments. This includes the postprocessing function. Let's change the default values of `style.df` and `postprocess.df`:
 
 ```{r, eval = is_pander}
-my_style = style.df(depvar.title = "", fixef.title = "", 
-                    fixef.suffix = " fixed effect", yesNo = "yes")
+my_style <- style.df(
+  depvar.title = "", fixef.title = "",
+  fixef.suffix = " fixed effect", yesNo = "yes"
+)
 setFixest_etable(style.df = my_style, postprocess.df = pandoc.table.return)
 ```
 
@@ -120,7 +128,7 @@ etable(est[rhs = 2], style = "rmarkdown", caption = "New default values")
 We now illustrate the exports to Latex. First, to include all the sections of a table, let's add a fifth estimation to the previous example; this new estimation includes variables with varying slopes:
 
 ```{r}
-est_slopes = feols(Ozone ~ Solar.R + Wind | Day + Month[Temp], airquality)
+est_slopes <- feols(Ozone ~ Solar.R + Wind | Day + Month[Temp], airquality)
 ```
 
 To export to Latex, use the argument `tex = TRUE` (note that this argument is on when the argument `file` is not missing):
@@ -151,8 +159,10 @@ The argument `style.tex` only accepts outputs from the function `style.tex`. Tha
 The function `style.tex` has two starting points (in the argument `main`), either the style of the first table displayed, either a much more compact style named "aer". Let's show the same table with the aer style, without stars beside the coefficients, and different fit statistics:
 
 ```{r, results = 'hide'}
-etable(est, est_slopes, style.tex = style.tex("aer"), 
-       signif.code = NA, fitstat = ~ r2 + n, tex = TRUE)
+etable(est, est_slopes,
+  style.tex = style.tex("aer"),
+  signif.code = NA, fitstat = ~ r2 + n, tex = TRUE
+)
 ```
 
 Which yields the following table:
@@ -167,21 +177,21 @@ When `tex = TRUE` `etable` returns a character vector. It is possible to modify 
 Assume we want to set the rule widths of the table, we could write the following function:
 
 ```{r}
-set_rules = function(x, heavy, light){
+set_rules <- function(x, heavy, light) {
   # x: the character vector returned by etable
-  
-  tex2add = ""
-  if(!missing(heavy)){
-    tex2add = paste0("\\setlength\\heavyrulewidth{", heavy, "}\n")
+
+  tex2add <- ""
+  if (!missing(heavy)) {
+    tex2add <- paste0("\\setlength\\heavyrulewidth{", heavy, "}\n")
   }
-  if(!missing(light)){
-    tex2add = paste0(tex2add, "\\setlength\\lightrulewidth{", light, "}\n")
+  if (!missing(light)) {
+    tex2add <- paste0(tex2add, "\\setlength\\lightrulewidth{", light, "}\n")
   }
-  
-  if(nchar(tex2add) > 0){
-    x[x == "%start:tab\n"] = tex2add
+
+  if (nchar(tex2add) > 0) {
+    x[x == "%start:tab\n"] <- tex2add
   }
-  
+
   x
 }
 ```
@@ -199,8 +209,10 @@ Of course it is even more convenient to set `set_rules` as the default postproce
 To set the default values, like for the data.frame output, use `setFixest_etable`:
 
 ```{r}
-setFixest_etable(style.tex = style.tex("aer", signif.code = NA), postprocess.tex = set_rules, 
-                 fitstat = ~ r2 + n)
+setFixest_etable(
+  style.tex = style.tex("aer", signif.code = NA), postprocess.tex = set_rules,
+  fitstat = ~ r2 + n
+)
 ```
 
 Now we can access directly the arguments of the postprocessing function and the default style is the one of the second table:
@@ -220,17 +232,25 @@ Let's continue with the previous example using the `airquality` data set, and no
 Here is an example that will shortly be explained:
 
 ```{r}
-fitstat_register(type = "p_s", alias = "pvalue (standard)",
-                 fun = function(x) pvalue(x, vcov = "iid")["Solar.R"])
+fitstat_register(
+  type = "p_s", alias = "pvalue (standard)",
+  fun = function(x) pvalue(x, vcov = "iid")["Solar.R"]
+)
 
-fitstat_register(type = "p_h", alias = "pvalue (Heterosk.)",
-                 fun = function(x) pvalue(x, vcov = "hetero")["Solar.R"])
+fitstat_register(
+  type = "p_h", alias = "pvalue (Heterosk.)",
+  fun = function(x) pvalue(x, vcov = "hetero")["Solar.R"]
+)
 
-fitstat_register(type = "p_day", alias = "pvalue (Day)",
-                 fun = function(x) pvalue(x, vcov = ~Day)["Solar.R"])
+fitstat_register(
+  type = "p_day", alias = "pvalue (Day)",
+  fun = function(x) pvalue(x, vcov = ~Day)["Solar.R"]
+)
 
-fitstat_register(type = "p_month", alias = "pvalue (Month)",
-                 fun = function(x) pvalue(x, vcov = ~Month)["Solar.R"])
+fitstat_register(
+  type = "p_month", alias = "pvalue (Month)",
+  fun = function(x) pvalue(x, vcov = ~Month)["Solar.R"]
+)
 
 # We first reset the default values set in the previous sections
 setFixest_etable(reset = TRUE)
@@ -254,7 +274,7 @@ Multiple estimations, like the object `est` in the previous examples, are a bit 
 By default in `fixest` the estimations are separated from the calculation of the VCOV matrices. That's not a problem when using `etable` since, after providing the argument `se` or `cluster`, all VCOVs are calculated at once. Using other tools for exportation requires a call to `summary` for each model to compute the appropriate standard-errors. But this process can also be automatized. The function `.l()` can be used to coerce several `fixest` objects to which `summary` can then be applied, for example: 
 
 ```{r, eval = FALSE}
-summary(.l(est, est_slopes), cluster = ~ Month)
+summary(.l(est, est_slopes), cluster = ~Month)
 ```
 
 The previous code returns a list of the five estimations for which the standard-errors are all clustered at the Month level, and can then be exported with external software.

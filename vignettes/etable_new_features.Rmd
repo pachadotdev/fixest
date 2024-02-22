@@ -29,12 +29,16 @@ library(fixest)
 # Let's define a dictionary and set it globally.
 # We also define notes, not just variable names.
 # (The function 'dsb()' is like 'glue()' and is not important here.)
-dict = c("(Intercept)" = "Constant", 
-         Petal.Length = "Petal length", Petal.Width = "Petal width",
-         Sepal.Length = "Sepal length", Sepal.Width = "Sepal width",
-         note1 = dsb("*Notes*: This is a note that illustrates how to access notes ",
-                     "from the dictionary."),
-         source = "*Sources*: Somewhere from the net.")
+dict <- c(
+  "(Intercept)" = "Constant",
+  Petal.Length = "Petal length", Petal.Width = "Petal width",
+  Sepal.Length = "Sepal length", Sepal.Width = "Sepal width",
+  note1 = dsb(
+    "*Notes*: This is a note that illustrates how to access notes ",
+    "from the dictionary."
+  ),
+  source = "*Sources*: Somewhere from the net."
+)
 setFixest_dict(dict)
 ```
 
@@ -42,7 +46,7 @@ Then let's define a few global options for the table. The philosophy is to set a
 
 ```{r}
 # The style of the table
-my_style = style.tex("aer", model.format = "(i)")
+my_style <- style.tex("aer", model.format = "(i)")
 
 # markdown = TRUE is only useful in Rmarkdown documents
 setFixest_etable(style.tex = my_style, markdown = TRUE, page.width = "a4")
@@ -50,8 +54,8 @@ setFixest_etable(style.tex = my_style, markdown = TRUE, page.width = "a4")
 
 The arguments `markdown` and `page.width` will be explained in the next section. And now the estimation we'll use throughout this document.
 ```{r}
-nm = names(iris)
-est = feols(.[nm[1]] ~ .[nm[2:4]], iris, fsplit = ~Species)
+nm <- names(iris)
+est <- feols(.[nm[1]] ~ .[nm[2:4]], iris, fsplit = ~Species)
 ```
 
 ## Displaying tables as PNG
@@ -95,7 +99,6 @@ Now almost any user-added text supports markdown markup for italics/bold/bold-it
 
 ```{r}
 etable(est, headers = .("\n\n Short header" = 2, "*Very* \n **long** \n ***header***" = 2))
-
 ```
 
 
@@ -103,9 +106,10 @@ etable(est, headers = .("\n\n Short header" = 2, "*Very* \n **long** \n ***heade
 
 There is native support for the Latex package `threeparttable`. This option can be set via the function `style.tex()`. Further (and this is also new), you can access notes via the global dictionary to avoid repetitions:
 ```{r}
-etable(est, 
-       style.tex = style.tex(tpt = TRUE, notes.tpt.intro = "\\footnotesize"),
-       notes = c("note1", "source"))
+etable(est,
+  style.tex = style.tex(tpt = TRUE, notes.tpt.intro = "\\footnotesize"),
+  notes = c("note1", "source")
+)
 ```
 
 The table notes now are adjusted to the table width thanks to `threeparttable` and the notes are accessed directly with their keys. The argument `notes.tpt.intro` inserts Latex code right before the first `\\item` of threeparttable: in this case, it sets the font to `footnotesize`. 
@@ -113,12 +117,14 @@ The table notes now are adjusted to the table width thanks to `threeparttable` a
 In general, it is advised to set the value of `tpt` and the `notes.tpt.intro` globally. Then if one wants to change the value of `notes.tpt.intro`, instead of typing `style.tex = style.tex(notes.tpt.intro = "stuff")`, the first element of `notes` will replace `notes.tpt.intro` if it starts with an `"@"`:
 ```{r}
 # Setting up tpt globally
-my_style = style.tex(tpt = TRUE, 
-                     notes.tpt.intro = "\\footnotesize")
+my_style <- style.tex(
+  tpt = TRUE,
+  notes.tpt.intro = "\\footnotesize"
+)
 setFixest_etable(style.tex = my_style)
 
-# Below is identical to: 
-#  etable(est, 
+# Below is identical to:
+#  etable(est,
 #         style.tex = style.tex(notes.tpt.intro = "\\Large"),
 #         notes = "These notes are large.")
 etable(est, notes = c("@\\Large", "These notes are large."))
@@ -135,7 +141,7 @@ By default if `adjustbox = TRUE`, the `adjustbox` environment is created with th
 Let's have an example with a large table that would otherwise overflow:
 ```{r}
 # mvsw == 'multiverse' stepwise (thanks to Resul Umit's suggestion)
-est_many = feols(.[nm[1]] ~ mvsw(.[, nm[2:4]]), iris)
+est_many <- feols(.[nm[1]] ~ mvsw(.[, nm[2:4]]), iris)
 etable(est_many, adjustbox = 1.1)
 ```
 
@@ -163,10 +169,13 @@ Anyway, back to the argument. The syntax is `"options" = "coefficients location"
  Let's have an example illustrating the three ways to select the coefficients and some options. We also increase the row heights with `arraystretch` to facilitate the highlighting:
  
 ```{r}
-etable(est, arraystretch = 1.5,
-       highlight = .("Sepal@1", 
-                     "cyan4, square" = "Petal.L@3-4",
-                     "thick5, sep8, darkgreen!90, se" = "Petal.W"))
+etable(est,
+  arraystretch = 1.5,
+  highlight = .("Sepal@1",
+    "cyan4, square" = "Petal.L@3-4",
+    "thick5, sep8, darkgreen!90, se" = "Petal.W"
+  )
+)
 ```
 
 
@@ -184,10 +193,14 @@ There are five main options:
 Instead of highlighting coefficients with a frame, row color highlighting can be used. It is monitored with the same argument `highlight` and in fact you only have to add the option `rowcol` to make it work. Let's replicate the previous example with row color:
 
 ```{r}
-etable(est, arraystretch = 1.5,
-       highlight = .(rowcol = "Sepal@1", 
-                     "rowcol, cyan4!70" = "Petal.L@3-4",
-                     "rowcol, darkgreen!40, se" = "Petal.W"))
+etable(est,
+  arraystretch = 1.5,
+  highlight = .(
+    rowcol = "Sepal@1",
+    "rowcol, cyan4!70" = "Petal.L@3-4",
+    "rowcol, darkgreen!40, se" = "Petal.W"
+  )
+)
 ```
 
 As opposed to the previous example, we only have increased the transparency of the colors with the `color!alpha` syntax.
@@ -201,9 +214,11 @@ Using the same syntax as before to *select* the coefficients, it is possible to 
 
 Here is the replication of the previous example with another highlighting:
 ```{r}
-etable(est, coef.style = .(":coef:$\\bigstar$" = "Sepal@1", 
-                           "**:coef:**" = "Petal.L@3-4",
-                           "\\color{BrickRed} :coef_se:" = "Petal.W"))
+etable(est, coef.style = .(
+  ":coef:$\\bigstar$" = "Sepal@1",
+  "**:coef:**" = "Petal.L@3-4",
+  "\\color{BrickRed} :coef_se:" = "Petal.W"
+))
 ```
 
 
@@ -224,8 +239,10 @@ As already said, the image of the table is embedded in a `<div>` container whose
 ```
 
 ```{r}
-etable(est, div.class = "etable_box", page.width = "fit",
-       title = "CSS illustration.")
+etable(est,
+  div.class = "etable_box", page.width = "fit",
+  title = "CSS illustration."
+)
 ```
 
 I'm not sure it should be done, but at least it's possible!

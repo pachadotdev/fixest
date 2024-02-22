@@ -1579,7 +1579,7 @@ void stayIdleCheckingInterrupt(bool *stopnow, vector<int> &jobdone, int n_vars,
 }
 
 // Loop over demean_single
-[[cpp11::register]] list cpp_demean(
+[[cpp11::register]] list cpp_demean_(
     SEXP y, SEXP X_raw, SEXP r_weights, int iterMax, double diffMax,
     SEXP r_nb_id_Q, SEXP fe_id_list, SEXP table_id_I, SEXP slope_flag_Q,
     SEXP slope_vars_list, SEXP r_init, int nthreads, int algo_extraProj,
@@ -1856,7 +1856,7 @@ std::vector<int> set_parallel_scheme_ter(int N, int nthreads) {
   return res;
 }
 
-[[cpp11::register]] list cpp_which_na_inf(SEXP x, int nthreads) {
+[[cpp11::register]] list cpp_which_na_inf_(SEXP x, int nthreads) {
   // x: vector, matrix, data.frame // double or integer
 
   /*
