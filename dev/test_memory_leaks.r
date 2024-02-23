@@ -1,15 +1,36 @@
 if (!require("devtools")) install.packages("devtools")
 devtools::load_all()
 
+out <- readRDS("dev/out.rds")
+
+vars_demean <- cpp_demean(out$y,
+  out$X,
+  out$weights,
+  iterMax = out$iterMax,
+  diffMax = out$diffMax,
+  r_nb_id_Q = out$r_nb_id_Q,
+  fe_id_list = out$fixef_id_list,
+  table_id_I = out$table_id_I,
+  slope_flag_Q = out$slope_flag_Q,
+  slope_vars_list = out$slope_vars_list,
+  r_init = out$r_init,
+  nthreads = out$nthreads,
+  algo_extraProj = out$fixef.algo$extraProj,
+  algo_iter_warmup = out$fixef.algo$iter_warmup,
+  algo_iter_projAfterAcc = out$fixef.algo$iter_projAfterAcc,
+  algo_iter_grandAcc = out$fixef.algo$iter_grandAcc,
+  save_fixef = FALSE
+)
+
 # is_DT <- requireNamespace("data.table", quietly = TRUE)
 # if (is_DT) library(data.table)
 
 # logit, trade, quakes, did, smallsample, othervcovs, ivs, interactions, formulas, dotsquare
-tests <- c(T, rep(F, 9))
+tests <- c(F, rep(F, 9))
 
 # LOGIT ----
 
-debug(cpp_demean)
+debug(fixest_env)
 fit <- feols(mpg ~ wt | cyl, mtcars)
 fml <- mpg ~ wt | cyl
 data <- mtcars
