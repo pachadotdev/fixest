@@ -9,9 +9,11 @@ tests <- c(T, rep(F, 9))
 
 # LOGIT ----
 
-# debug(cpp_quf_table_sum)
-# fit <- feglm(am ~ wt | cyl, mtcars, family = binomial)
-# undebug(cpp_quf_table_sum)
+debug(cpp_demean)
+fit <- feols(mpg ~ wt | cyl, mtcars)
+fml <- mpg ~ wt | cyl
+data <- mtcars
+undebug(cpp_demean)
 
 if (tests[1]) {
   fit <- fixest::feglm(am ~ wt | cyl, mtcars, family = binomial)
