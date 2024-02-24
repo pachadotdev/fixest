@@ -1,9 +1,4 @@
-#include <cpp11.hpp>
-#include <cstring>
-#include <string>
-#include <vector>
-
-using namespace cpp11;
+#include "08_0_strings.hpp"
 
 std::string colon_to_star_single(const char *str) {
   // we change a:b into a*b
@@ -13,7 +8,7 @@ std::string colon_to_star_single(const char *str) {
 
   std::string res = "";
 
-  int n = std::strlen(str);
+  int n = strlen(str);
 
   int i = 0;
   bool in_quote = false;

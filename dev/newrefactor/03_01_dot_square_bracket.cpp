@@ -80,7 +80,8 @@ void extract_operator(const char *str, int &i, int n,
         any_operator = false;
       } else {
         // skip the first whitespaces
-        while (i < n && str[i] == ' ') ++i;
+        while (i < n && str[i] == ' ')
+          ++i;
       }
     }
 
@@ -150,7 +151,8 @@ void extract_operator(const char *str, int &i, int n,
           // nothing, but if NOT after a comma => error
           if (!is_comma) {
             // if the spaces are only trailing, OK
-            while (i < n && str[i] == ' ') ++i;
+            while (i < n && str[i] == ' ')
+              ++i;
             if (is_separator(str, i)) {
               // OK
               break;
@@ -222,7 +224,7 @@ void extract_operator(const char *str, int &i, int n,
 
       if (i < n) {
         // there was one open
-        i += 2;  // we increment i bc the opening string is 2 char long
+        i += 2; // we increment i bc the opening string is 2 char long
         ++n_open;
         string_value = "";
       }
@@ -244,7 +246,8 @@ void extract_operator(const char *str, int &i, int n,
 
       if (is_eval) {
         // we strip all the white spaces
-        while (i < n && str[i] == ' ') ++i;
+        while (i < n && str[i] == ' ')
+          ++i;
 
         if (is_basic_quote(str, i)) {
           // we take verbatim the full quote
@@ -253,7 +256,8 @@ void extract_operator(const char *str, int &i, int n,
           char quote = str[i++];
           dsb_value += quote;
 
-          while (i < n && str[i] != quote) dsb_value += str[i++];
+          while (i < n && str[i] != quote)
+            dsb_value += str[i++];
 
           if (i < n) {
             dsb_value += quote;
@@ -380,7 +384,8 @@ inline bool is_if_separator(const char *str, int i, int n,
           // nothing, but if NOT after a comma => error
           if (!is_comma) {
             // if the spaces are only trailing, OK
-            while (i < n && str[i] == ' ') ++i;
+            while (i < n && str[i] == ' ')
+              ++i;
             if (is_if_separator(str, i, n, semicolon)) {
               // OK
               break;
@@ -405,7 +410,8 @@ inline bool is_if_separator(const char *str, int i, int n,
       return (error);
     }
 
-    while (i < n && (str[i] == ' ' || str[i] == ':')) ++i;
+    while (i < n && (str[i] == ' ' || str[i] == ':'))
+      ++i;
 
     if (operator_tmp.size() > 0) {
       operator_vec.push_back(operator_tmp);

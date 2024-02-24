@@ -264,10 +264,9 @@ void CCC_negbin(int nthreads, int nb_cluster, double theta, double diffMax_NR,
       if (iter == iterMax) {
         keepGoing = false;
         if (omp_get_thread_num() == 0) {
-          Rprintf(
-              "[Getting cluster coefficients nber %i] max iterations "
-              "reached (%i).\n",
-              m, iterMax);
+          Rprintf("[Getting cluster coefficients nber %i] max iterations "
+                  "reached (%i).\n",
+                  m, iterMax);
           Rprintf("Value Sum Deriv (NR) = %f. Difference = %f.\n", value,
                   fabs(x0 - x1));
         }
@@ -390,10 +389,9 @@ void CCC_logit(int nthreads, int nb_cluster, double diffMax_NR,
       // the stopping criteria
       if (iter == iterMax) {
         keepGoing = false;
-        Rprintf(
-            "[Getting cluster coefficients nber %i] max iterations reached "
-            "(%i).\n",
-            m, iterMax);
+        Rprintf("[Getting cluster coefficients nber %i] max iterations reached "
+                "(%i).\n",
+                m, iterMax);
         Rprintf("Value Sum Deriv (NR) = %f. Difference = %f.\n", value,
                 fabs(x0 - x1));
       }

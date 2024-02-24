@@ -180,7 +180,7 @@ struct PARAM_DERIV_COEF {
   double *ll_d2;
 
   // only value that will vary
-  double *deriv_with_coef;  // => vector length n_obs
+  double *deriv_with_coef; // => vector length n_obs
 };
 
 void computeDerivCoef(vector<double *> &pcoef_origin,
@@ -253,7 +253,8 @@ void computeDerivCoef(vector<double *> &pcoef_origin,
       int *my_dum;
       double *my_deriv_coef;
       for (int h = 0; h < K; h++) {
-        if (h == k - 1) continue;
+        if (h == k - 1)
+          continue;
 
         my_dum = pdum[h];
 
@@ -442,7 +443,8 @@ void computeDerivCoef(vector<double *> &pcoef_origin,
       // X ; update of the cluster coefficient
       numconv =
           update_X_IronsTuck(nb_coef_no_K, X, GX, GGX, delta_GX, delta2_X);
-      if (numconv) break;
+      if (numconv)
+        break;
 
       // origin: X, destination: GX
       computeDerivCoef(pX, pGX, my_deriv_init, &args);
@@ -520,10 +522,11 @@ void computeDerivCoef_2(vector<double> &alpha_origin,
   }
 }
 
-[[cpp11::register]] list cpp_derivconv_acc_2_(
-    int iterMax, double diffMax, int n_vars, SEXP nb_cluster_all, int n_cells,
-    SEXP index_i, SEXP index_j, SEXP ll_d2, SEXP order, SEXP jacob_vector,
-    SEXP deriv_init_vector, SEXP dum_vector) {
+[[cpp11::register]] list
+cpp_derivconv_acc_2_(int iterMax, double diffMax, int n_vars,
+                     SEXP nb_cluster_all, int n_cells, SEXP index_i,
+                     SEXP index_j, SEXP ll_d2, SEXP order, SEXP jacob_vector,
+                     SEXP deriv_init_vector, SEXP dum_vector) {
   int n_obs = Rf_length(ll_d2);
 
   int *pcluster = INTEGER(nb_cluster_all);
@@ -698,7 +701,8 @@ void computeDerivCoef_2(vector<double> &alpha_origin,
 
       // X ; update of the cluster coefficient
       numconv = update_X_IronsTuck(n_i, X, GX, GGX, delta_GX, delta2_X);
-      if (numconv) break;
+      if (numconv)
+        break;
 
       // origin: X, destination: GX
       computeDerivCoef_2(X, GX, n_i, n_j, n_cells, a_tilde, mat_row, mat_col,
@@ -755,10 +759,11 @@ void computeDerivCoef_2(vector<double> &alpha_origin,
   return (res);
 }
 
-[[cpp11::register]] list cpp_derivconv_seq_2_(
-    int iterMax, double diffMax, int n_vars, SEXP nb_cluster_all, int n_cells,
-    SEXP index_i, SEXP index_j, SEXP order, SEXP ll_d2, SEXP jacob_vector,
-    SEXP deriv_init_vector, SEXP dum_vector) {
+[[cpp11::register]] list
+cpp_derivconv_seq_2_(int iterMax, double diffMax, int n_vars,
+                     SEXP nb_cluster_all, int n_cells, SEXP index_i,
+                     SEXP index_j, SEXP order, SEXP ll_d2, SEXP jacob_vector,
+                     SEXP deriv_init_vector, SEXP dum_vector) {
   int n_obs = Rf_length(ll_d2);
 
   int *pcluster = INTEGER(nb_cluster_all);
@@ -981,11 +986,9 @@ void computeDerivCoef_2(vector<double> &alpha_origin,
   return (res);
 }
 
-[[cpp11::register]] doubles_matrix<> update_deriv_single_(int n_vars,
-                                                          int nb_coef,
-                                                          SEXP r_ll_d2,
-                                                          SEXP r_jacob_vector,
-                                                          SEXP r_dum_vector) {
+[[cpp11::register]] doubles_matrix<>
+update_deriv_single_(int n_vars, int nb_coef, SEXP r_ll_d2, SEXP r_jacob_vector,
+                     SEXP r_dum_vector) {
   int n_obs = Rf_length(r_ll_d2);
 
   // loading variables
@@ -1008,7 +1011,7 @@ void computeDerivCoef_2(vector<double> &alpha_origin,
   vector<double> coef_deriv(nb_coef);
 
   // the result
-  writable::doubles_matrix<> res(n_obs, n_vars);  // init at 0
+  writable::doubles_matrix<> res(n_obs, n_vars); // init at 0
 
   for (int v = 0; v < n_vars; ++v) {
     double *my_jac = pjac[v];

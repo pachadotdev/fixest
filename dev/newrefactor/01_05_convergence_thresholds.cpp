@@ -1,10 +1,10 @@
 #include "01_0_convergence.hpp"
 
-[[cpp11::register]] list cpp_conv_acc_gnl_(
-    int family, int iterMax, double diffMax, double diffMax_NR, double theta,
-    SEXP nb_cluster_all, SEXP lhs, SEXP mu_init, SEXP dum_vector,
-    SEXP tableCluster_vector, SEXP sum_y_vector, SEXP cumtable_vector,
-    SEXP obsCluster_vector, int nthreads) {
+[[cpp11::register]] list
+cpp_conv_acc_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
+                  double theta, SEXP nb_cluster_all, SEXP lhs, SEXP mu_init,
+                  SEXP dum_vector, SEXP tableCluster_vector, SEXP sum_y_vector,
+                  SEXP cumtable_vector, SEXP obsCluster_vector, int nthreads) {
   // initial variables
   int K = Rf_length(nb_cluster_all);
   int *pcluster = INTEGER(nb_cluster_all);
@@ -68,7 +68,7 @@
   args.K = K;
   args.nthreads = nthreads;
   args.theta =
-      (family == 2 ? theta : 1);  // theta won't be used if family not negbin
+      (family == 2 ? theta : 1); // theta won't be used if family not negbin
   args.diffMax_NR = diffMax_NR;
   args.pdum = pdum;
   args.mu_init = pmu_init;
@@ -172,7 +172,8 @@
 
     // X ; update of the cluster coefficient
     numconv = update_X_IronsTuck(nb_coef_no_K, X, GX, GGX, delta_GX, delta2_X);
-    if (numconv) break;
+    if (numconv)
+      break;
 
     if (family == 1) {
       // We control for possible problems with poisson
@@ -184,7 +185,7 @@
       }
 
       if (any_negative_poisson) {
-        break;  // we quit the loop
+        break; // we quit the loop
         // update of mu is OK, it's only IT iteration that leads to negative
         // values
       }
@@ -219,7 +220,7 @@
     int *my_dum = pdum[k];
     double *my_cluster_coef = pGGX[k];
 
-    if (family == 1) {  // "quick" Poisson case
+    if (family == 1) { // "quick" Poisson case
       for (int i = 0; i < n_obs; ++i) {
         pmu[i] *= my_cluster_coef[my_dum[i]];
       }
@@ -240,11 +241,11 @@
   return (res);
 }
 
-[[cpp11::register]] list cpp_conv_seq_gnl_(
-    int family, int iterMax, double diffMax, double diffMax_NR, double theta,
-    SEXP nb_cluster_all, SEXP lhs, SEXP mu_init, SEXP dum_vector,
-    SEXP tableCluster_vector, SEXP sum_y_vector, SEXP cumtable_vector,
-    SEXP obsCluster_vector, int nthreads) {
+[[cpp11::register]] list
+cpp_conv_seq_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
+                  double theta, SEXP nb_cluster_all, SEXP lhs, SEXP mu_init,
+                  SEXP dum_vector, SEXP tableCluster_vector, SEXP sum_y_vector,
+                  SEXP cumtable_vector, SEXP obsCluster_vector, int nthreads) {
   // initial variables
   int K = Rf_length(nb_cluster_all);
   int *pcluster = INTEGER(nb_cluster_all);
@@ -319,7 +320,7 @@
   //
 
   // initialisation of the cluster coefficients
-  if (family == 1) {  // Poisson
+  if (family == 1) { // Poisson
     for (int i = 0; i < nb_coef; ++i) {
       cluster_coef[i] = 1;
     }
@@ -528,7 +529,8 @@
 
     // X ; update of the cluster coefficient
     numconv = update_X_IronsTuck(n_i, X, GX, GGX, delta_GX, delta2_X);
-    if (numconv) break;
+    if (numconv)
+      break;
 
     // Control for negative values
     for (int i = 0; i < n_i; ++i) {
@@ -539,7 +541,7 @@
     }
 
     if (any_negative_poisson) {
-      break;  // we quit the loop
+      break; // we quit the loop
       // update of mu is OK, it's only IT iteration that leads to negative
       // values
     }
@@ -698,10 +700,11 @@
   return (res);
 }
 
-[[cpp11::register]] list cpp_conv_acc_gau_2_(
-    int n_i, int n_j, int n_cells, SEXP r_mat_row, SEXP r_mat_col,
-    SEXP r_mat_value_Ab, SEXP r_mat_value_Ba, SEXP dum_vector, SEXP lhs,
-    SEXP invTableCluster_vector, int iterMax, double diffMax, SEXP mu_in) {
+[[cpp11::register]] list
+cpp_conv_acc_gau_2_(int n_i, int n_j, int n_cells, SEXP r_mat_row,
+                    SEXP r_mat_col, SEXP r_mat_value_Ab, SEXP r_mat_value_Ba,
+                    SEXP dum_vector, SEXP lhs, SEXP invTableCluster_vector,
+                    int iterMax, double diffMax, SEXP mu_in) {
   //
   // Setting up
   //
@@ -741,7 +744,7 @@
   // values that will be used later
   vector<double> beta(n_j);
 
-  vector<double> a_tilde(const_a);  // init at const_a
+  vector<double> a_tilde(const_a); // init at const_a
 
   for (int obs = 0; obs < n_cells; ++obs) {
     a_tilde[mat_row[obs]] -= mat_value_Ab[obs] * const_b[mat_col[obs]];
@@ -782,7 +785,8 @@
 
     // X ; update of the cluster coefficient
     numconv = update_X_IronsTuck(n_i, X, GX, GGX, delta_GX, delta2_X);
-    if (numconv) break;
+    if (numconv)
+      break;
 
     // GX -- origin: X, destination: GX
     CCC_gaussian_2(X, GX, n_i, n_j, n_cells, mat_row, mat_col, mat_value_Ab,
@@ -828,10 +832,11 @@
   return (res);
 }
 
-[[cpp11::register]] list cpp_conv_seq_gau_2_(
-    int n_i, int n_j, int n_cells, SEXP r_mat_row, SEXP r_mat_col,
-    SEXP r_mat_value_Ab, SEXP r_mat_value_Ba, SEXP dum_vector, SEXP lhs,
-    SEXP invTableCluster_vector, int iterMax, double diffMax, SEXP mu_in) {
+[[cpp11::register]] list
+cpp_conv_seq_gau_2_(int n_i, int n_j, int n_cells, SEXP r_mat_row,
+                    SEXP r_mat_col, SEXP r_mat_value_Ab, SEXP r_mat_value_Ba,
+                    SEXP dum_vector, SEXP lhs, SEXP invTableCluster_vector,
+                    int iterMax, double diffMax, SEXP mu_in) {
   //
   // Setting up
   //

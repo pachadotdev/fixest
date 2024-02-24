@@ -39,7 +39,7 @@ FEClass::FEClass(int n_obs, int Q, SEXP r_weights, SEXP fe_id_list,
   // nb_slopes: number of variables with varying slopes (the FE does not count!)
 
   int nb_slopes = 0;
-  int sf = 0;  // slope flag
+  int sf = 0; // slope flag
   int *p_slope_flag_Q = INTEGER(slope_flag_Q);
   vector<bool> is_slope_Q(Q, false);
   vector<bool> is_slope_fe_Q(Q, false);
@@ -188,7 +188,8 @@ FEClass::FEClass(int n_obs, int Q, SEXP r_weights, SEXP fe_id_list,
     }
 
     for (int q = 0; q < Q; ++q) {
-      if (is_slope_Q[q] == false) continue;
+      if (is_slope_Q[q] == false)
+        continue;
 
       simple_mat_of_vs_vars VS_mat(this, q);
       simple_mat_with_id my_system(p_eq_systems_VS_C[q], nb_vs_Q[q]);
@@ -620,7 +621,8 @@ FEClass::simple_mat_of_vs_vars::simple_mat_of_vs_vars(const FEClass *FE_info,
                                                       int q) {
   // We set up the matrix
   int start = 0;
-  for (int l = 0; l < q; ++l) start += FE_info->nb_vs_noFE_Q[l];
+  for (int l = 0; l < q; ++l)
+    start += FE_info->nb_vs_noFE_Q[l];
 
   int K = FE_info->nb_vs_noFE_Q[q];
   pvars.resize(K);
@@ -677,7 +679,8 @@ void compute_fe_gnl(double *p_fe_coef_origin, double *p_fe_coef_destination,
     std::fill_n(p_sum_other_means, n_obs, 0);
     double *my_fe_coef;
     for (int h = 0; h < Q; h++) {
-      if (h == q) continue;
+      if (h == q)
+        continue;
 
       if (h < q) {
         my_fe_coef = p_fe_coef_origin;

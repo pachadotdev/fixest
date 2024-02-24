@@ -1,9 +1,4 @@
-#include <cpp11.hpp>
-#include <cstring>
-#include <string>
-#include <vector>
-
-using namespace cpp11;
+#include "03_0_dot_square_bracket.hpp"
 
 inline bool is_dsb_open(const char *str, int i, int n) {
   if (i + 2 < n) {
@@ -212,7 +207,7 @@ void extract_operator(const char *str, int &i, int n,
   std::string string_value = "";
   std::string dsb_value = "";
 
-  int n = std::strlen(str);
+  int n = strlen(str);
 
   int i = 0;
   while (i < n) {
@@ -300,7 +295,7 @@ void extract_operator(const char *str, int &i, int n,
 
   const char *str = CHAR(STRING_ELT(Rstr, 0));
 
-  int n = std::strlen(str);
+  int n = strlen(str);
 
   writable::list dsb_element;
   std::vector<std::string> operator_vec;
@@ -338,7 +333,7 @@ inline bool is_if_separator(const char *str, int i, int n,
 
 [[cpp11::register]] list cpp_dsb_if_extract_(SEXP Rstr) {
   const char *str = CHAR(STRING_ELT(Rstr, 0));
-  int n = std::strlen(str);
+  int n = strlen(str);
 
   writable::list if_elements;
   std::vector<std::string> operator_vec;

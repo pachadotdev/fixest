@@ -15,23 +15,23 @@ void computeClusterCoef_single(int family, int n_obs, int nb_cluster,
   // core, there is no reference to openmp at all
 
   switch (family) {
-    case 1:
-      CCC_poisson(n_obs, nb_cluster, cluster_coef, mu, sum_y, dum);
-      break;
-    case 2:  // Negbin
-      CCC_negbin(nthreads, nb_cluster, theta, diffMax_NR, cluster_coef, mu, lhs,
-                 sum_y, obsCluster, table, cumtable);
-      break;
-    case 3:  // logit
-      CCC_logit(nthreads, nb_cluster, diffMax_NR, cluster_coef, mu, sum_y,
-                obsCluster, table, cumtable);
-      break;
-    case 4:  // Gaussian
-      CCC_gaussian(n_obs, nb_cluster, cluster_coef, mu, sum_y, dum, table);
-      break;
-    case 5:  // log poisson
-      CCC_poisson_log(n_obs, nb_cluster, cluster_coef, mu, sum_y, dum);
-      break;
+  case 1:
+    CCC_poisson(n_obs, nb_cluster, cluster_coef, mu, sum_y, dum);
+    break;
+  case 2: // Negbin
+    CCC_negbin(nthreads, nb_cluster, theta, diffMax_NR, cluster_coef, mu, lhs,
+               sum_y, obsCluster, table, cumtable);
+    break;
+  case 3: // logit
+    CCC_logit(nthreads, nb_cluster, diffMax_NR, cluster_coef, mu, sum_y,
+              obsCluster, table, cumtable);
+    break;
+  case 4: // Gaussian
+    CCC_gaussian(n_obs, nb_cluster, cluster_coef, mu, sum_y, dum, table);
+    break;
+  case 5: // log poisson
+    CCC_poisson_log(n_obs, nb_cluster, cluster_coef, mu, sum_y, dum);
+    break;
   }
 }
 
@@ -76,7 +76,7 @@ void computeClusterCoef(vector<double *> &pcluster_origin,
     int *my_dum = pdum[k];
     double *my_cluster_coef = pcluster_origin[k];
 
-    if (family == 1) {  // Poisson
+    if (family == 1) { // Poisson
       for (int i = 0; i < n_obs; ++i) {
         mu_with_coef[i] *= my_cluster_coef[my_dum[i]];
       }
@@ -179,7 +179,8 @@ void computeClusterCoef(vector<double *> &pcluster_origin,
       int *my_dum;
       double *my_cluster_coef;
       for (int h = 0; h < K; h++) {
-        if (h == k - 1) continue;
+        if (h == k - 1)
+          continue;
 
         my_dum = pdum[h];
 
@@ -189,7 +190,7 @@ void computeClusterCoef(vector<double *> &pcluster_origin,
           my_cluster_coef = pcluster_destination[h];
         }
 
-        if (family == 1) {  // Poisson
+        if (family == 1) { // Poisson
           for (int i = 0; i < n_obs; ++i) {
             mu_with_coef[i] *= my_cluster_coef[my_dum[i]];
           }
@@ -205,10 +206,11 @@ void computeClusterCoef(vector<double *> &pcluster_origin,
   // In the end, the array pcluster_coef is fully updated, starting from K to 1
 }
 
-[[cpp11::register]] SEXP update_mu_single_cluster_(
-    int family, int nb_cluster, double theta, double diffMax_NR, SEXP mu_in,
-    SEXP lhs, SEXP sum_y, SEXP dum, SEXP obsCluster, SEXP table, SEXP cumtable,
-    int nthreads) {
+[[cpp11::register]] SEXP
+update_mu_single_cluster_(int family, int nb_cluster, double theta,
+                          double diffMax_NR, SEXP mu_in, SEXP lhs, SEXP sum_y,
+                          SEXP dum, SEXP obsCluster, SEXP table, SEXP cumtable,
+                          int nthreads) {
   // Function used to compute the cluster coefficient for ONE fixed-effect only
   // and then add it to the existing mu
 
