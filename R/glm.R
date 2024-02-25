@@ -240,6 +240,7 @@ feglm <- function(fml, data, family = "gaussian", vcov, offset, weights, subset,
 }
 
 #' @rdname feglm
+#' @export
 feglm.fit <- function(y, X, fixef_df, family = "gaussian", vcov, offset, split,
                       fsplit, split.keep, split.drop, cluster, se, ssc,
                       weights, subset, start = NULL,

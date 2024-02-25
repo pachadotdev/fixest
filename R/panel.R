@@ -225,12 +225,12 @@ panel_setup <- function(data, panel.id, time.step = NULL, duplicate.method = "no
 
 
 #' @describeIn l Forwards a variable (inverse of lagging) in a `fixest` estimation
+#' @export
 f <- function(x, lead = 1, fill = NA) {
   l(x, -lead, fill)
 }
 
 #' @describeIn l Creates differences (i.e. x - lag(x)) in a `fixest` estimation
-#' @export
 d <- function(x, lag = 1, fill = NA) {
   x - l(x, lag, fill)
 }
@@ -290,6 +290,7 @@ d <- function(x, lag = 1, fill = NA) {
 #'   pdat_dt[, c("x1_l1_fill0", "y_f2") := .(l(x1, fill = 0), f(y, 2))]
 #' }
 #'
+#' @export
 l <- function(x, lag = 1, fill = NA) {
   value <- x
 
@@ -777,6 +778,7 @@ lag_fml <- lag.formula
 #'   pdat_dt[, c("x1_l1_fill0", "y_f2") := .(l(x1, fill = 0), f(y, 2))]
 #' }
 #'
+#' @export
 panel <- function(data, panel.id, time.step = NULL, duplicate.method = c("none", "first")) {
   if (missing(data)) {
     stop("You must provide the argument 'data'.")
@@ -845,6 +847,7 @@ panel <- function(data, panel.id, time.step = NULL, duplicate.method = c("none",
 #' class(new_base)
 #' dim(new_base)
 #'
+#' @export
 unpanel <- function(x) {
   if ("data.table" %in% class(x) && requireNamespace("data.table", quietly = TRUE)) {
     data.table::setattr(x, "panel_info", NULL)

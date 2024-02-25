@@ -295,6 +295,7 @@ print.fixest_fitstat <- function(x, na.rm = FALSE, ...) {
 #' # But you can also access the sub elements
 #' fitstat(est, "hc_wald.p")
 #'
+#' @export
 fitstat_register <- function(type, fun, alias = NULL, subtypes = NULL) {
   check_arg(type, "character scalar mbt")
   check_arg(fun, "function mbt")
@@ -561,6 +562,7 @@ fitstat_register <- function(type, fun, alias = NULL, subtypes = NULL) {
 #' # Note that the custom stats we created are can easily lead
 #' # to errors, but that's another story!
 #'
+#' @export
 fitstat <- function(x, type, simplify = FALSE, verbose = TRUE, show_types = FALSE,
                     frame = parent.frame(), ...) {
   r2_types <- c(
@@ -1107,6 +1109,7 @@ fitstat <- function(x, type, simplify = FALSE, verbose = TRUE, show_types = FALS
 #' # regular expressions: e.g. see ?regex.
 #' # Learn it, you won't regret it!
 #'
+#' @export
 wald <- function(x, keep = NULL, drop = NULL, print = TRUE, vcov, se, cluster, ...) {
   # LATER:
   # - keep can be a list
@@ -1263,6 +1266,7 @@ fitstat_validate <- function(x, vector = FALSE) {
 #' # same with full names instead of codes
 #' r2(est, c("cor2", "r2", "pr2", "war2"), full_names = TRUE)
 #'
+#' @export
 r2 <- function(x, type = "all", full_names = FALSE) {
   # p: pseudo
   # w: within

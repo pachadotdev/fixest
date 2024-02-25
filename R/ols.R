@@ -2231,6 +2231,7 @@ check_conv <- function(y, X, fixef_id_list, slope_flag, slope_vars, weights, ful
 
 
 #' @rdname feols
+#' @export
 feols.fit <- function(y, X, fixef_df, vcov, offset, split, fsplit, split.keep, split.drop,
                       cluster, se, ssc, weights,
                       subset, fixef.rm = "perfect", fixef.tol = 1e-6, fixef.iter = 10000,
@@ -2392,6 +2393,7 @@ feols.fit <- function(y, X, fixef_df, vcov, offset, split, fsplit, split.keep, s
 #' coeftable(est)
 #' cbind(coef, std_err)
 #'
+#' @export
 est_env <- function(env, y, X, weights, endo, inst) {
   # No check whatsoever: for advanced users
 

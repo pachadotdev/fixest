@@ -10,6 +10,7 @@ NW <- function(lag = NULL) {
 }
 
 #' @rdname vcov_hac
+#' @export
 newey_west <- function(lag = NULL) {
   extra_args <- list(lag = lag)
   vcov_request <- list(vcov = "NW", extra_args = extra_args)
@@ -27,6 +28,7 @@ DK <- function(lag = NULL) {
 }
 
 #' @rdname vcov_hac
+#' @export
 driscoll_kraay <- function(lag = NULL) {
   extra_args <- list(lag = lag)
   vcov_request <- list(vcov = "DK", extra_args = extra_args)

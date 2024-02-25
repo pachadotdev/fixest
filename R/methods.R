@@ -1421,16 +1421,19 @@ coeftable <- function(object, ...) {
 }
 
 #' @rdname coeftable
+#' @export
 se <- function(object, ...) {
   UseMethod("se")
 }
 
 #' @rdname coeftable
+#' @export
 pvalue <- function(object, ...) {
   UseMethod("pvalue")
 }
 
 #' @rdname coeftable
+#' @export
 tstat <- function(object, ...) {
   UseMethod("tstat")
 }
@@ -1540,6 +1543,7 @@ se.default <- function(object, keep, drop, order, ...) {
 }
 
 #' @describeIn coeftable.default Extracts the standard-errors from an estimation
+#' @export
 tstat.default <- function(object, keep, drop, order, ...) {
   # There is NO GARANTEE that it works
 
@@ -1784,6 +1788,7 @@ se.fixest <- function(object, vcov = NULL, ssc = NULL, cluster = NULL,
 }
 
 #' @describeIn coeftable.fixest Extracts the t-statistics of an estimation
+#' @export
 tstat.fixest <- function(object, vcov = NULL, ssc = NULL, cluster = NULL,
                          keep = NULL, drop = NULL, order = NULL, ...) {
   check_arg(keep, drop, order, "NULL character vector no na")
@@ -4059,6 +4064,7 @@ hatvalues.fixest <- function(model, ...) {
 #' est <- feols(mpg ~ hp, mtcars)
 #' df.residual(est)
 #'
+#' @export 
 df.residual.fixest <- function(object, ...) {
   degrees_freedom_iid(object, type = "resid")
 }

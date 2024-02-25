@@ -609,6 +609,7 @@ collinearity <- function(x, verbose) {
 #' # Selecting all the variables with "."
 #' did_means(. ~ treat | post, base_did, indiv = "id")
 #'
+#' @export
 did_means <- function(fml, base, treat_var, post_var, tex = FALSE, treat_dict,
                       dict = getFixest_dict(), file, replace = FALSE, title,
                       label, raw = FALSE, indiv, treat_first,
@@ -1229,6 +1230,7 @@ did_means <- function(fml, base, treat_var, post_var, tex = FALSE, treat_dict,
 #'
 #' feols(Ozone ~ i(Month, bin = list(summer = 7:9)), airquality)
 #'
+#' @export
 i <- function(factor_var, var, ref, keep, bin, ref2, keep2, bin2, ...) {
   # Used to create interactions
 
@@ -1878,6 +1880,7 @@ i_noref <- function(factor_var, var, ref, bin, keep, ref2, keep2, bin2) {
 #' # same for the auto completion with '..'
 #' lm(xpd(Armed.Forces ~ Population + GN..), longley)
 #'
+#' @export
 xpd <- function(fml, ..., add = NULL, lhs, rhs, data = NULL, frame = parent.frame()) {
   if (MISSNULL(data)) {
     # We "guess" the data
@@ -2290,8 +2293,6 @@ xpd <- function(fml, ..., add = NULL, lhs, rhs, data = NULL, frame = parent.fram
 #'
 #' # only the small sample adj. differ in the SEs
 #' etable(res_vs_1, res_vs_2, res_vs_3, keep = "x1")
-#'
-#' @export
 demean <- function(X, f, slope.vars, slope.flag, data, weights,
                    nthreads = getFixest_nthreads(), notes = getFixest_notes(),
                    iter = 2000, tol = 1e-6,
@@ -2802,6 +2803,7 @@ demean <- function(X, f, slope.vars, slope.flag, data, weights,
 #'
 #' etable(est_split, est_versi)
 #'
+#' @export
 obs <- function(x) {
   check_arg(x, "class(fixest)")
 
@@ -3324,8 +3326,7 @@ fixest_data <- function(x, sample = "original") {
 #' This function returns a list of 4 integers, equal to the arguments passed by the user.
 #' That list is of class `demeaning_algo`.
 #'
-#'
-#'
+#' @export
 demeaning_algo <- function(extraProj = 0, iter_warmup = 15, iter_projAfterAcc = 40,
                            iter_grandAcc = 4, internal = FALSE) {
   if (internal) {
@@ -7177,6 +7178,7 @@ not_too_many_messages <- function(key) {
 #' setFixest_notes(TRUE)
 #' feols(Ozone ~ Solar.R, airquality)
 #'
+#' @export
 setFixest_notes <- function(x) {
   check_arg(x, "mbt logical scalar")
 
@@ -7184,6 +7186,7 @@ setFixest_notes <- function(x) {
 }
 
 #' @rdname setFixest_notes
+#' @export
 getFixest_notes <- function() {
   x <- getOption("fixest_notes")
   if (length(x) != 1 || !is.logical(x) || is.na(x)) {
@@ -7228,6 +7231,7 @@ getFixest_notes <- function() {
 #' # And back to the original value
 #' setFixest_nthreads(nthreads_origin)
 #'
+#' @export
 setFixest_nthreads <- function(nthreads, save = FALSE) {
   # By default, we use only 50% of threads (never use all)
 
@@ -7275,6 +7279,7 @@ setFixest_nthreads <- function(nthreads, save = FALSE) {
 }
 
 #' @rdname setFixest_nthreads
+#' @export
 getFixest_nthreads <- function() {
   x <- getOption("fixest_nthreads")
   if (length(x) != 1 || !is.numeric(x) || is.na(x) || x %% 1 != 0 || x < 0) {
@@ -7409,6 +7414,7 @@ as.dict <- function(x) {
 #' setFixest_dict(reset = TRUE)
 #' etable(est)
 #'
+#' @export
 setFixest_dict <- function(dict = NULL, ..., reset = FALSE) {
   check_arg(dict, "NULL named character vector no na | character scalar")
 
@@ -7442,6 +7448,7 @@ setFixest_dict <- function(dict = NULL, ..., reset = FALSE) {
 }
 
 #' @rdname setFixest_dict
+#' @export
 getFixest_dict <- function() {
   x <- getOption("fixest_dict")
   if (length(x) > 0) {
@@ -7455,6 +7462,7 @@ getFixest_dict <- function() {
 
 
 #' @rdname print.fixest
+#' @export
 setFixest_print <- function(type = "table", fitstat = NULL) {
   check_set_arg(type, "match(coef, table)")
 
@@ -7486,6 +7494,7 @@ setFixest_print <- function(type = "table", fitstat = NULL) {
 
 
 #' @rdname print.fixest
+#' @export
 getFixest_print <- function() {
   x <- getOption("fixest_print")
   if (!(is.null(x) || is.list(x))) {
@@ -7534,8 +7543,7 @@ getFixest_print <- function() {
 #' @seealso
 #' [`xpd`] to make use of formula macros.
 #'
-#'
-#'
+#' @export
 setFixest_fml <- function(..., reset = FALSE) {
   check_arg(reset, get, "logical scalar")
 
@@ -7545,6 +7553,7 @@ setFixest_fml <- function(..., reset = FALSE) {
 }
 
 #' @rdname setFixest_fml
+#' @export
 getFixest_fml <- function() {
   fml_macro <- getOption("fixest_fml_macro")
   if (is.null(fml_macro)) {
@@ -7600,6 +7609,7 @@ getFixest_fml <- function() {
 #' # Resetting the defaults
 #' setFixest_estimation(reset = TRUE)
 #'
+#' @export
 setFixest_estimation <- function(data = NULL, panel.id = NULL, fixef.rm = "perfect",
                                  fixef.tol = 1e-6, fixef.iter = 10000, collin.tol = 1e-10,
                                  lean = FALSE, verbose = 0, warn = TRUE, combine.quick = NULL,
@@ -7644,6 +7654,7 @@ setFixest_estimation <- function(data = NULL, panel.id = NULL, fixef.rm = "perfe
 }
 
 #' @rdname setFixest_estimation
+#' @export
 getFixest_estimation <- function() {
   getOption("fixest_estimation")
 }

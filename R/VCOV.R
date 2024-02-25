@@ -1176,6 +1176,7 @@ vcov.fixest <- function(object, vcov = NULL, se = NULL, cluster, ssc = NULL, att
 #' # Factory default
 #' setFixest_ssc()
 #'
+#' @export
 ssc <- function(adj = TRUE, fixef.K = "nested", cluster.adj = TRUE, cluster.df = "min",
                 t.df = "min", fixef.force_exact = FALSE) {
   check_set_arg(adj, "loose logical scalar conv")
@@ -1194,6 +1195,7 @@ ssc <- function(adj = TRUE, fixef.K = "nested", cluster.adj = TRUE, cluster.df =
 }
 
 #' @describeIn ssc This function is deprecated and will be removed at some point (in 6 months from August 2021). Exactly the same as `ssc`.
+#' @export
 dof <- function(adj = TRUE, fixef.K = "nested", cluster.adj = TRUE, cluster.df = "min",
                 t.df = "min", fixef.force_exact = FALSE) {
   if (is.null(getOption("fixest_warn_dof"))) {
@@ -1277,6 +1279,7 @@ dof <- function(adj = TRUE, fixef.K = "nested", cluster.adj = TRUE, cluster.df =
 #' # so you can feed them with a VCOV-request:
 #' feols(y ~ x1, base, vcov = vcov_cluster(rep(1:5, 30)))
 #'
+#' @export
 vcov_cluster <- function(x, cluster = NULL, ssc = NULL, vcov_fix = TRUE) {
   # User-level function to compute clustered SEs
   # typically we only do checking and reshaping here
@@ -1453,6 +1456,7 @@ vcov_cluster <- function(x, cluster = NULL, ssc = NULL, vcov_fix = TRUE) {
 NULL
 
 #' @rdname vcov_hac
+#' @export
 vcov_DK <- function(x, time = NULL, lag = NULL, ssc = NULL, vcov_fix = TRUE) {
   # unit and time MUST be variables of the data set
   # otherwise: too error prone + extremely complex to set up + very edge case, so not worth it
@@ -1500,6 +1504,7 @@ vcov_DK <- function(x, time = NULL, lag = NULL, ssc = NULL, vcov_fix = TRUE) {
 }
 
 #' @rdname vcov_hac
+#' @export
 vcov_NW <- function(x, unit = NULL, time = NULL, lag = NULL, ssc = NULL, vcov_fix = TRUE) {
   # unit and time MUST be variables of the data set
   # otherwise: too error prone + extremely complex to set up + very edge case, so not worth it
@@ -1614,6 +1619,7 @@ vcov_NW <- function(x, unit = NULL, time = NULL, lag = NULL, ssc = NULL, vcov_fi
 #' est <- feols(depth ~ mag, quakes)
 #' vcov_conley(est, cutoff = 100)
 #'
+#' @export
 vcov_conley <- function(x, lat = NULL, lon = NULL, cutoff = NULL, pixel = 0,
                         distance = "triangular", ssc = NULL, vcov_fix = TRUE) {
   # slide_args allows the implicit allocation of arguments

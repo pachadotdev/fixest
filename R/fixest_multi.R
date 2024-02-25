@@ -309,6 +309,7 @@ rep_df <- function(x, times = 1, each = 1, ...) {
 #' models(est_sub)
 #' models(est_sub, simplify = TRUE)
 #'
+#' @export
 models <- function(x, simplify = FALSE) {
   check_arg(x, "class(fixest_multi)")
 
@@ -367,6 +368,7 @@ models <- function(x, simplify = FALSE) {
 #' n_models(est, rhs = TRUE)
 #' n_models(est, sample = TRUE)
 #'
+#' @export
 n_models <- function(x, lhs = FALSE, rhs = FALSE, sample = FALSE,
                      fixef = FALSE, iv = FALSE) {
   check_arg(x, "class(fixest_multi) mbt")
@@ -1030,6 +1032,7 @@ print.fixest_multi <- function(x, ...) {
 #' # All the results at once
 #' as.list(res)
 #'
+#' @export
 as.list.fixest_multi <- function(x, ...) {
   nm <- names(x)
   attributes(x) <- NULL
@@ -1190,6 +1193,7 @@ coefficients.fixest_multi <- coef.fixest_multi
 #' # long = TRUE, all the information is stacked
 #' coeftable(est_multi, long = TRUE)
 #'
+#' @export
 coeftable.fixest_multi <- function(object, vcov = NULL, keep = NULL, drop = NULL,
                                    order = NULL, long = FALSE, wide = FALSE, ...) {
   check_arg(keep, drop, order, "NULL character vector no na")
@@ -1308,6 +1312,7 @@ se.fixest_multi <- function(object, vcov = NULL, keep = NULL, drop = NULL,
 }
 
 #' @describeIn coeftable.fixest_multi Extracts the t-stats from `fixest_multi` estimations
+#' @export
 tstat.fixest_multi <- function(object, vcov = NULL, keep = NULL, drop = NULL,
                                order = NULL, long = FALSE, ...) {
   # Default is wide format => same as with coef
@@ -1453,6 +1458,7 @@ residuals.fixest_multi <- resid.fixest_multi
 #' # the 'id' provides the index of the estimation
 #' est[c(3, 6)]
 #'
+#' @export
 confint.fixest_multi <- function(object, parm, level = 0.95, vcov = NULL, se = NULL,
                                  cluster = NULL, ssc = NULL, ...) {
   n <- length(object)

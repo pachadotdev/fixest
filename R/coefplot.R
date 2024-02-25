@@ -2462,6 +2462,7 @@ gen_iplot <- function() {
 #' setFixest_coefplot("all", reset = TRUE)
 #' coefplot(est)
 #'
+#' @export
 setFixest_coefplot <- function(style, horiz = FALSE, dict = getFixest_dict(), keep,
                                ci.width = "1%", ci_level = 0.95, pt.pch = 20, pt.bg = NULL,
                                cex = 1, pt.cex = cex, col = 1:8, pt.col = col, ci.col = col,
