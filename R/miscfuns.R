@@ -64,6 +64,7 @@
 #' res_2 <- femlm(dep ~ log(x) + v1 + v2 + v3 + v4, base)
 #' collinearity(res_2)
 #'
+#' @export
 collinearity <- function(x, verbose) {
   # x: fixest estimation
 
@@ -2290,6 +2291,7 @@ xpd <- function(fml, ..., add = NULL, lhs, rhs, data = NULL, frame = parent.fram
 #' # only the small sample adj. differ in the SEs
 #' etable(res_vs_1, res_vs_2, res_vs_3, keep = "x1")
 #'
+#' @export
 demean <- function(X, f, slope.vars, slope.flag, data, weights,
                    nthreads = getFixest_nthreads(), notes = getFixest_notes(),
                    iter = 2000, tol = 1e-6,
@@ -2854,6 +2856,7 @@ obs <- function(x) {
 #'
 #' summary(conv, "detail")
 #'
+#' @export
 check_conv_feols <- function(x) {
   check_arg(x, "class(fixest) mbt")
   if (!identical(x$method, "feols")) {
@@ -2906,6 +2909,7 @@ check_conv_feols <- function(x) {
 }
 
 #' @rdname check_conv_feols
+#' @export
 summary.fixest_check_conv <- function(object, type = "short", ...) {
   check_set_arg(type, "match(short, detail)")
   if (is_user_level_call()) {
@@ -3025,6 +3029,7 @@ summary.fixest_check_conv <- function(object, type = "short", ...) {
 #' # using each
 #' etable(rep(.l(est, est_bis), each = 3, vcov = my_vcov))
 #'
+#' @export
 rep.fixest <- function(x, times = 1, each = 1, vcov, ...) {
   # each is applied first, then times
   # x can be either a list of fixest objects, either a fixest object
@@ -3120,11 +3125,13 @@ rep.fixest <- function(x, times = 1, each = 1, vcov, ...) {
 }
 
 #' @rdname rep.fixest
+#' @export
 rep.fixest_list <- function(x, times = 1, each = 1, vcov, ...) {
   rep.fixest(x, times = times, each = each, vcov = vcov, ...)
 }
 
 #' @rdname rep.fixest
+#' @export
 .l <- function(...) {
   check_arg(..., "mbt class(fixest) | list")
 
@@ -3343,8 +3350,7 @@ demeaning_algo <- function(extraProj = 0, iter_warmup = 15, iter_projAfterAcc = 
 #### Internal Funs ####
 ####
 
-
-
+#' @export
 as.character.formula <- function(x, ...) as.character.default(x, ...)
 
 parse_macros <- function(..., reset = FALSE, from_xpd = FALSE, check = TRUE, frame = NULL) {
@@ -7316,6 +7322,7 @@ getFixest_nthreads <- function() {
 #'
 #' as.dict(x)
 #'
+#' @export
 as.dict <- function(x) {
   check_arg(x, "character scalar")
 

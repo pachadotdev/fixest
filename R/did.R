@@ -497,6 +497,7 @@ sunab_att <- function(cohort, period, ref.c = NULL, ref.p = -1) {
 #' # The total effect for each cohort
 #' aggregate(res_cohort, c("cohort" = "::[^-].*year_treated::([[:digit:]]+)"))
 #'
+#' @export
 aggregate.fixest <- function(x, agg, full = FALSE, use_weights = TRUE, ...) {
   # Aggregates the value of coefficients
 

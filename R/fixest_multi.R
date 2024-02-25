@@ -276,11 +276,7 @@ rep_df <- function(x, times = 1, each = 1, ...) {
   as.data.frame(lapply(x, rep, times = times, each = each))
 }
 
-####
-#### USER LEVEL ####
-####
-
-
+# USER LEVEL ----
 
 #' Extracts the models tree from a `fixest_multi` object
 #'
@@ -398,12 +394,7 @@ n_models <- function(x, lhs = FALSE, rhs = FALSE, sample = FALSE,
   length(unique(tree[[dimension]]))
 }
 
-
-####
-#### METHODS ####
-####
-
-
+# METHODS ----
 
 #' Summary for fixest_multi objects
 #'
@@ -452,6 +443,7 @@ n_models <- function(x, lhs = FALSE, rhs = FALSE, sample = FALSE,
 #'
 #' summary(res, type = "se_long")
 #'
+#' @export
 summary.fixest_multi <- function(object, type = "short", vcov = NULL, se = NULL,
                                  cluster = NULL, ssc = NULL,
                                  .vcov = NULL, stage = 2, lean = FALSE, n = 1000, ...) {
@@ -604,6 +596,7 @@ summary.fixest_multi <- function(object, type = "short", vcov = NULL, se = NULL,
 #' # Let's print all that
 #' res
 #'
+#' @export
 print.fixest_multi <- function(x, ...) {
   if (is_user_level_call()) {
     validate_dots(valid_args = stvec("/type, vcov, se, cluster, ssc, stage, lean, agg, forceCovariance, keepBounded, n, nthreads"))
@@ -712,7 +705,7 @@ print.fixest_multi <- function(x, ...) {
 #'
 #' # The second one, etc
 #' res[[2]]
-#'
+#' @export
 "[[.fixest_multi" <- function(x, i) {
   n <- length(x)
   check_set_arg(i, "evalset integer scalar mbt", .data = list(.N = n))
@@ -804,6 +797,7 @@ print.fixest_multi <- function(x, ...) {
 #' # The first and last estimations
 #' etable(est_split[i = c(1, .N)])
 #'
+#' @export
 "[.fixest_multi" <- function(x, i, sample, lhs, rhs, fixef, iv, I, reorder = TRUE, drop = FALSE) {
   core_args <- c("sample", "lhs", "rhs", "fixef", "iv")
   check_arg(reorder, drop, "logical scalar")
@@ -1093,6 +1087,7 @@ as.list.fixest_multi <- function(x, ...) {
 #' # long but balanced (with NAs then)
 #' coef(est, long = TRUE, na.rm = FALSE)
 #'
+#' @export
 coef.fixest_multi <- function(object, keep, drop, order, collin = FALSE,
                               long = FALSE, na.rm = TRUE, ...) {
   # row: model
@@ -1146,6 +1141,7 @@ coef.fixest_multi <- function(object, keep, drop, order, collin = FALSE,
 }
 
 #' @rdname coef.fixest_multi
+#' @export
 coefficients.fixest_multi <- coef.fixest_multi
 
 #' Extracts the coefficients tables from `fixest_multi` estimations
@@ -1283,6 +1279,7 @@ coeftable.fixest_multi <- function(object, vcov = NULL, keep = NULL, drop = NULL
 
 
 #' @describeIn coeftable.fixest_multi Extracts the standard-errors from `fixest_multi` estimations
+#' @export
 se.fixest_multi <- function(object, vcov = NULL, keep = NULL, drop = NULL,
                             order = NULL, long = FALSE, ...) {
   # Default is wide format => same as with coef
@@ -1339,6 +1336,7 @@ tstat.fixest_multi <- function(object, vcov = NULL, keep = NULL, drop = NULL,
 }
 
 #' @describeIn coeftable.fixest_multi Extracts the p-values from `fixest_multi` estimations
+#' @export
 pvalue.fixest_multi <- function(object, vcov = NULL, keep = NULL, drop = NULL,
                                 order = NULL, long = FALSE, ...) {
   # Default is wide format => same as with coef
@@ -1396,6 +1394,7 @@ pvalue.fixest_multi <- function(object, vcov = NULL, keep = NULL, drop = NULL,
 #' # We can select/order the model using fixest_multi extraction
 #' head(resid(est[rhs = .N:1]))
 #'
+#' @export
 resid.fixest_multi <- function(object, type = c("response", "deviance", "pearson", "working"),
                                na.rm = FALSE, ...) {
   # Je fais un prototype pour le moment, je l'ameliorerai apres (07-04-2021)
@@ -1421,6 +1420,7 @@ resid.fixest_multi <- function(object, type = c("response", "deviance", "pearson
 
 
 #' @rdname resid.fixest_multi
+#' @export
 residuals.fixest_multi <- resid.fixest_multi
 
 

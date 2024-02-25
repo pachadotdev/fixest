@@ -230,6 +230,7 @@ f <- function(x, lead = 1, fill = NA) {
 }
 
 #' @describeIn l Creates differences (i.e. x - lag(x)) in a `fixest` estimation
+#' @export
 d <- function(x, lag = 1, fill = NA) {
   x - l(x, lag, fill)
 }
@@ -585,6 +586,7 @@ d__expand <- function(x, k = 1, fill) {
 #'   base[, x.l1 := lag(x ~ id + year, 1)]
 #' }
 #'
+#' @export
 lag.formula <- function(x, k = 1, data, time.step = NULL, fill = NA,
                         duplicate.method = c("none", "first"), ...) {
   # Arguments:
@@ -920,6 +922,7 @@ unpanel <- function(x) {
 #'   feols(y ~ l(x1, 0:1), pdat_dt[!period %in% c(2, 4)])
 #' }
 #'
+#' @export
 "[.fixest_panel" <- function(x, i, j, ...) {
   # we need to perform proper bookkeeping
 

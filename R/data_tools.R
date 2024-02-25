@@ -188,6 +188,7 @@
 #' # We need to use "x"
 #' table(bin(plen, list("< 2" = ~ x < 2, ">= 2" = ~ x >= 2)))
 #'
+#' @export
 bin <- function(x, bin) {
   check_arg(x, "vector mbt")
 
@@ -1010,6 +1011,7 @@ n_unik <- function(x) {
 }
 
 #' @rdname n_unik
+#' @export
 print.vec_n_unik <- function(x, ...) {
   hash <- "## "
 
@@ -1027,6 +1029,7 @@ print.vec_n_unik <- function(x, ...) {
 }
 
 #' @rdname n_unik
+#' @export
 print.list_n_unik <- function(x, ...) {
   # I can't use #> anymore!!! The auto complete by the new version
   # of Rstudio drives me nuts!!!
@@ -1242,6 +1245,7 @@ osize <- function(x) {
 }
 
 #' @rdname osize
+#' @export
 print.osize <- function(x, ...) {
   cat(x, "\n")
 }

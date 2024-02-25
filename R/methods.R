@@ -89,6 +89,7 @@
 #' # Back to default (NULL == default)
 #' setFixest_print(fitstat = NULL)
 #'
+#' @export
 print.fixest <- function(x, n, type = "table", fitstat = NULL, ...) {
   # checking the arguments
   if (is_user_level_call()) {
@@ -506,6 +507,7 @@ print.fixest <- function(x, n, type = "table", fitstat = NULL, ...) {
 #' library(sandwich)
 #' summary(est_pois, .vcov = vcovCL, cluster = trade[, c("Destination", "Product")])
 #'
+#' @export
 summary.fixest <- function(object, vcov = NULL, cluster = NULL, ssc = NULL, .vcov = NULL,
                            stage = NULL, lean = FALSE, agg = NULL, forceCovariance = FALSE,
                            se = NULL, keepBounded = FALSE, n = 1000, vcov_fix = TRUE,
@@ -754,6 +756,7 @@ summary.fixest <- function(object, vcov = NULL, cluster = NULL, ssc = NULL, .vco
 
 
 #' @rdname summary.fixest
+#' @export
 summary.fixest_list <- function(object, se, cluster, ssc = getFixest_ssc(), .vcov,
                                 stage = 2, lean = FALSE, n, ...) {
   dots <- list(...)
@@ -820,6 +823,7 @@ summary.fixest_list <- function(object, se, cluster, ssc = getFixest_ssc(), .vco
 #' # printing some summary information on the fixed-effects coefficients:
 #' summary(fe_trade)
 #'
+#' @export
 summary.fixest.fixef <- function(object, n = 5, ...) {
   # This function shows some generic information on the fixed-effect coefficients
 
@@ -971,6 +975,7 @@ summary.fixest.fixef <- function(object, n = 5, ...) {
 #' # Plotting them:
 #' plot(fe_trade)
 #'
+#' @export
 fixef.fixest <- function(object, notes = getFixest_notes(), sorted = TRUE,
                          nthreads = getFixest_nthreads(),
                          fixef.tol = 1e-5, fixef.iter = 10000, ...) {
@@ -1354,6 +1359,7 @@ NULL
 #' # plotting them
 #' plot(fe_trade)
 #'
+#' @export
 plot.fixest.fixef <- function(x, n = 5, ...) {
   # Checking the arguments
   if (is_user_level_call()) {
@@ -1409,6 +1415,7 @@ plot.fixest.fixef <- function(x, n = 5, ...) {
 #' est <- lm(mpg ~ cyl, mtcars)
 #' coeftable(est)
 #'
+#' @export
 coeftable <- function(object, ...) {
   UseMethod("coeftable")
 }
@@ -1465,6 +1472,7 @@ tstat <- function(object, ...) {
 #'
 #' se(est)
 #'
+#' @export
 coeftable.default <- function(object, keep, drop, order, ...) {
   # This function is EXTREMELY naive and I don't intend to improve it
   # => there is tidy for that which is much better
@@ -1512,6 +1520,7 @@ coeftable.default <- function(object, keep, drop, order, ...) {
 
 
 #' @describeIn coeftable.default Extracts the standard-errors from an estimation
+#' @export
 se.default <- function(object, keep, drop, order, ...) {
   # There is NO GARANTEE that it works
 
@@ -1553,6 +1562,7 @@ tstat.default <- function(object, keep, drop, order, ...) {
 }
 
 #' @describeIn coeftable.default Extracts the p-values from an estimation
+#' @export
 pvalue.default <- function(object, keep, drop, order, ...) {
   # There is NO GARANTEE that it works
 
@@ -1575,6 +1585,7 @@ pvalue.default <- function(object, keep, drop, order, ...) {
 }
 
 #' @describeIn coeftable.default Extracts the standard-errors from a VCOV matrix
+#' @export
 se.matrix <- function(object, keep, drop, order, ...) {
   # There is NO GARANTEE that it works
 
@@ -1707,6 +1718,7 @@ se.matrix <- function(object, keep, drop, order, ...) {
 #' # pvalue of x1
 #' res$x1$pvalue
 #'
+#' @export
 coeftable.fixest <- function(object, vcov = NULL, ssc = NULL, cluster = NULL,
                              keep = NULL, drop = NULL, order = NULL, list = FALSE, ...) {
   # We don't explicitly refer to the other arguments
@@ -1751,6 +1763,7 @@ coeftable.fixest <- function(object, vcov = NULL, ssc = NULL, cluster = NULL,
 }
 
 #' @describeIn coeftable.fixest Extracts the standard-error of an estimation
+#' @export
 se.fixest <- function(object, vcov = NULL, ssc = NULL, cluster = NULL,
                       keep = NULL, drop = NULL, order = NULL, ...) {
   check_arg(keep, drop, order, "NULL character vector no na")
@@ -1791,6 +1804,7 @@ tstat.fixest <- function(object, vcov = NULL, ssc = NULL, cluster = NULL,
 }
 
 #' @describeIn coeftable.fixest Extracts the p-value of an estimation
+#' @export
 pvalue.fixest <- function(object, vcov = NULL, ssc = NULL, cluster = NULL,
                           keep = NULL, drop = NULL, order = NULL, ...) {
   check_arg(keep, drop, order, "NULL character vector no na")
@@ -1847,6 +1861,7 @@ pvalue.fixest <- function(object, vcov = NULL, ssc = NULL, cluster = NULL,
 #' nobs(res)
 #' logLik(res)
 #'
+#' @export
 nobs.fixest <- function(object, ...) {
   object$nobs
 }
@@ -1888,6 +1903,7 @@ nobs.fixest <- function(object, ...) {
 #' AIC(res1, res2)
 #' BIC(res1, res2)
 #'
+#' @export
 AIC.fixest <- function(object, ..., k = 2) {
   dots <- list(...)
   if (length(dots) > 0) {
@@ -1943,6 +1959,7 @@ AIC.fixest <- function(object, ..., k = 2) {
 #' AIC(res1, res2)
 #' BIC(res1, res2)
 #'
+#' @export
 BIC.fixest <- function(object, ...) {
   dots <- list(...)
   if (length(dots) > 0) {
@@ -1994,6 +2011,7 @@ BIC.fixest <- function(object, ...) {
 #' nobs(res)
 #' logLik(res)
 #'
+#' @export
 logLik.fixest <- function(object, ...) {
   if (object$method_type == "feols") {
     # if the summary is 'lean', then no way we can compute that
@@ -2048,8 +2066,9 @@ logLik.fixest <- function(object, ...) {
 #' # the fixed-effects coefficients:
 #' fixef(res)
 #'
-coef.fixest <- coefficients.fixest <- function(object, keep, drop, order,
-                                               collin = FALSE, agg = TRUE, ...) {
+#' @export
+coef.fixest <- function(object, keep, drop, order,
+                        collin = FALSE, agg = TRUE, ...) {
   check_arg(keep, drop, order, "NULL character vector no na")
   check_arg(collin, agg, "logical scalar")
 
@@ -2105,6 +2124,7 @@ coef.fixest <- coefficients.fixest <- function(object, keep, drop, order,
 }
 
 #' @rdname coef.fixest
+#' @export
 coefficients.fixest <- coef.fixest
 
 
@@ -2162,8 +2182,9 @@ coefficients.fixest <- coef.fixest
 #' plot(iris$Sepal.Length, y_fitted_poisson)
 #' points(iris$Sepal.Length, y_fitted_gaussian, col = 2, pch = 2)
 #'
-fitted.fixest <- fitted.values.fixest <- function(object, type = c("response", "link"),
-                                                  na.rm = TRUE, ...) {
+#' @export
+fitted.fixest <- function(object, type = c("response", "link"),
+                          na.rm = TRUE, ...) {
   # Checking the arguments
   if (is_user_level_call()) {
     validate_dots(suggest_args = "type")
@@ -2202,6 +2223,7 @@ fitted.fixest <- fitted.values.fixest <- function(object, type = c("response", "
 
 #' @rdname fitted.fixest
 #' @method fitted.values fixest
+#' @export
 fitted.values.fixest <- fitted.fixest
 
 #' Extracts residuals from a `fixest` object
@@ -2239,8 +2261,9 @@ fitted.values.fixest <- fitted.fixest
 #' # we plot the residuals
 #' plot(resid(res_poisson))
 #'
-resid.fixest <- residuals.fixest <- function(object, type = c("response", "deviance", "pearson", "working"),
-                                             na.rm = TRUE, ...) {
+#' @export
+resid.fixest <- function(object, type = c("response", "deviance", "pearson", "working"),
+                         na.rm = TRUE, ...) {
   check_set_arg(type, "match")
   check_set_arg(na.rm, "logical scalar")
 
@@ -2335,6 +2358,7 @@ resid.fixest <- residuals.fixest <- function(object, type = c("response", "devia
 }
 
 #' @rdname resid.fixest
+#' @export
 residuals.fixest <- resid.fixest
 
 #' Predict method for `fixest` fits
@@ -2454,6 +2478,7 @@ residuals.fixest <- resid.fixest
 #' # You can change the type of SE on the fly
 #' head(predict(est, interval = "conf", vcov = ~species))
 #'
+#' @export
 predict.fixest <- function(object, newdata, type = c("response", "link"), se.fit = FALSE,
                            interval = "none", level = 0.95, fixef = FALSE,
                            vs.coef = FALSE, sample = c("estimation", "original"),
@@ -2925,6 +2950,7 @@ predict.fixest <- function(object, newdata, type = c("response", "link"), se.fit
 #' # confidence interval with "clustered" VCOV (w.r.t. the Origin factor)
 #' confint(est_pois, se = "cluster")
 #'
+#' @export
 confint.fixest <- function(object, parm, level = 0.95, vcov, se, cluster,
                            ssc = NULL, coef.col = FALSE, ...) {
   # Checking the arguments
@@ -3060,6 +3086,7 @@ confint.fixest <- function(object, parm, level = 0.95, vcov, se, cluster,
 #' # Quick look at the 4 estimations
 #' etable(est_pois, est_2, est_3, est_4)
 #'
+#' @export
 update.fixest <- function(object, fml.update, nframes = 1, evaluate = TRUE, ...) {
   # Update method
   # fml.update: update the formula
@@ -3273,6 +3300,7 @@ update.fixest <- function(object, fml.update, nframes = 1, evaluate = TRUE, ...)
 #' # linear part without the fixed-effects
 #' formula(res, "linear")
 #'
+#' @export
 formula.fixest <- function(x, type = c("full", "linear", "iv", "NL"), ...) {
   # Extract the formula from the object
   # we add the clusters in the formula if needed
@@ -3370,6 +3398,7 @@ formula.fixest <- function(x, type = c("full", "linear", "iv", "NL"), ...) {
 #' # subset => TRUE, only works with data argument!!
 #' head(model.matrix(est, data = base[, "x1", drop = FALSE], subset = TRUE))
 #'
+#' @export
 model.matrix.fixest <- function(object, data, type = "rhs", na.rm = TRUE, subset = FALSE,
                                 as.matrix = FALSE, as.df = FALSE, collin.rm = TRUE, ...) {
   # We evaluate the formula with the past call
@@ -3814,6 +3843,7 @@ model.matrix.fixest <- function(object, data, type = "rhs", na.rm = TRUE, subset
 #' # Terms of the linear part
 #' terms(res)
 #'
+#' @export
 terms.fixest <- function(x, ...) {
   terms(formula(x, type = "linear"))
 }
@@ -3838,6 +3868,7 @@ terms.fixest <- function(x, ...) {
 #' est <- feols(Petal.Length ~ Petal.Width, iris, weights = ~ as.integer(Sepal.Length) - 3.99)
 #' weights(est)
 #'
+#' @export
 weights.fixest <- function(object, ...) {
   w <- object[["weights"]]
 
@@ -3871,6 +3902,7 @@ weights.fixest <- function(object, ...) {
 #' est <- feols(Petal.Length ~ Petal.Width, iris)
 #' sigma(est)
 #'
+#' @export
 sigma.fixest <- function(object, ...) {
   sqrt(deviance(object) / (object$nobs - object$nparams))
 }
@@ -3896,6 +3928,7 @@ sigma.fixest <- function(object, ...) {
 #' est_pois <- fepois(Petal.Length ~ Petal.Width, iris)
 #' deviance(est_pois)
 #'
+#' @export
 deviance.fixest <- function(object, ...) {
   if (isTRUE(object$lean)) {
     # LATER: recompute it
@@ -3964,6 +3997,7 @@ deviance.fixest <- function(object, ...) {
 #' est <- feols(Petal.Length ~ Petal.Width + Sepal.Width, iris)
 #' head(hatvalues(est))
 #'
+#' @export
 hatvalues.fixest <- function(model, ...) {
   # Only works for feglm/feols objects + no fixed-effects
   # When there are fixed-effects the hatvalues of the reduced form is different from
@@ -4051,6 +4085,7 @@ df.residual.fixest <- function(object, ...) {
 #' est <- feols(Petal.Length ~ Petal.Width + Sepal.Width, iris)
 #' head(estfun(est))
 #'
+#' @export
 estfun.fixest <- function(x, ...) {
   # 'scores' is an object always contained in fixest estimations
 
@@ -4101,6 +4136,7 @@ NULL
 #' est <- feols(Petal.Length ~ Petal.Width + Sepal.Width, iris)
 #' bread(est)
 #'
+#' @export
 bread.fixest <- function(x, ...) {
   if (is_user_level_call()) {
     validate_dots()

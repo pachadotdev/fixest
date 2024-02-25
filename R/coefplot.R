@@ -356,6 +356,7 @@
 #' # now we group + clean the beginning of the names using the special character ^^
 #' coefplot(est, group = list(Sepal = "^^Sepal.", Species = "^^Species"))
 #'
+#' @export
 coefplot <- function(object, ..., style = NULL, sd, ci_low, ci_high, df.t = NULL,
                      x, x.shift = 0, horiz = FALSE,
                      dict = getFixest_dict(), keep, drop, order, ci.width = "1%",

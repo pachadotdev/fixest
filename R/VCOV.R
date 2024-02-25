@@ -198,6 +198,7 @@
 #' se(vcov(est, iid ~ ssc(adj = FALSE)))
 #' se(vcov(est, DK ~ period + ssc(adj = FALSE)))
 #'
+#' @export
 vcov.fixest <- function(object, vcov = NULL, se = NULL, cluster, ssc = NULL, attr = FALSE,
                         forceCovariance = FALSE, keepBounded = FALSE,
                         nthreads = getFixest_nthreads(), vcov_fix = TRUE, ...) {

@@ -22,7 +22,7 @@
 #' are not displayed.
 #' @param ... Not currently used.
 #'
-#'
+#' @export
 print.fixest_fitstat <- function(x, na.rm = FALSE, ...) {
   dots <- list(...)
 
@@ -1457,6 +1457,7 @@ r2 <- function(x, type = "all", full_names = FALSE) {
 #' degrees_freedom(est_standard, type = "resid") # => equivalent to the df.residual from lm
 #' degrees_freedom(est_clustered, type = "resid")
 #'
+#' @export
 degrees_freedom <- function(x, type, vars = NULL, vcov = NULL, se = NULL, cluster = NULL, ssc = NULL, stage = 2) {
   check_arg(x, "class(fixest) mbt")
   check_set_arg(type, "match(k, resid, t)")

@@ -96,10 +96,10 @@ cpp_paste_conditional <- function(x, id, n) {
 }
 
 cpp_cholesky <- function(X, tol = 1e-10, nthreads = 1L) {
-  cpp_cholesky_(X, tol, parse_int(nthreads))
+  cpp_cholesky_(X, tol = 1e-10, parse_int(nthreads))
 }
 
-cpp_sparse_products <- function(X, w, y, correct_0w, nthreads = 1L) {
+cpp_sparse_products <- function(X, w, y, correct_0w = FALSE, nthreads = 1L) {
   cpp_sparse_products_(X, w, y, correct_0w, parse_int(nthreads))
 }
 
@@ -143,11 +143,11 @@ cpp_get_fe_gnl <- function(Q, N, sumFE, dumMat, cluster_sizes, obsCluster) {
   cpp_get_fe_gnl_(parse_int(Q), parse_int(N), sumFE, parse_int_mat(dumMat), parse_int(cluster_sizes), parse_int_mat(obsCluster))
 }
 
-cpp_ssr_null <- function(y, w) {
+cpp_ssr_null <- function(y, w = 0) {
   cpp_ssr_null_(y, w)
 }
 
-cpp_ssq <- function(x, w) {
+cpp_ssq <- function(x, w = 0) {
   cpp_ssq_(x, w)
 }
 
@@ -159,7 +159,7 @@ cpp_any_na_null <- function(x) {
   cpp_any_na_null_(x)
 }
 
-cpp_constant_dum <- function(k, x, dum, only_0) {
+cpp_constant_dum <- function(k, x, dum, only_0 = FALSE) {
   cpp_constant_dum_(k, x, parse_int(dum), only_0)
 }
 
@@ -187,7 +187,7 @@ cpp_factor_matrix <- function(fact, is_na_all, who_is_dropped, var, col_names) {
   cpp_factor_matrix_(fact, is_na_all, who_is_dropped, var, col_names)
 }
 
-cpp_add_commas <- function(x, r, whole) {
+cpp_add_commas <- function(x, r = 1L, whole = TRUE) {
   cpp_add_commas_(x, r, whole)
 }
 

@@ -5232,11 +5232,13 @@ extralines_register <- function(type, fun, alias) {
 
 
 #' @rdname etable
+#' @export
 print.etable_tex <- function(x, ...) {
   cat(x, sep = "\n")
 }
 
 #' @rdname etable
+#' @export
 print.etable_df <- function(x, ...) {
   # Almost equivalent to print.data.frame
   # we're more flexible with row names since we use the first column as row names

@@ -1,3 +1,4 @@
+#' @export
 print.dsb <- function(x, ...) {
   cat(x, sep = "\n")
 }
@@ -406,6 +407,7 @@ print.dsb <- function(x, ...) {
 #'   sep = "\n"
 #' )
 #'
+#' @export
 dsb <- function(..., frame = parent.frame(), sep = "", vectorize = FALSE, nest = TRUE,
                 collapse = NULL) {
   check_arg(vectorize, nest, "logical scalar")
@@ -615,10 +617,12 @@ dsb <- function(..., frame = parent.frame(), sep = "", vectorize = FALSE, nest =
   res
 }
 
+#' @export
 .dsb0 <- function(..., frame = parent.frame(), sep = "", vectorize = FALSE, check = FALSE) {
   .dsb(..., frame = frame, nest = FALSE, sep = sep, vectorize = vectorize, check = check)
 }
 
+#' @export
 .dsb <- function(..., frame = parent.frame(), sep = "", vectorize = FALSE,
                  nest = TRUE, collapse = NULL, check = FALSE) {
   if (...length() == 0) {
