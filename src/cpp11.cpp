@@ -285,14 +285,14 @@ extern "C" SEXP _fixest2_cpp_escape_markup_(SEXP Rstr) {
     return cpp11::as_sexp(cpp_escape_markup_(cpp11::as_cpp<cpp11::decay_t<SEXP>>(Rstr)));
   END_CPP11
 }
-// 05_02_misc_linalg.cpp
+// 05_02_misc_linear_algebra.cpp
 doubles_matrix<> cpp_factor_matrix_(integers fact, logicals is_na_all, integers who_is_dropped, SEXP var, strings col_names);
 extern "C" SEXP _fixest2_cpp_factor_matrix_(SEXP fact, SEXP is_na_all, SEXP who_is_dropped, SEXP var, SEXP col_names) {
   BEGIN_CPP11
     return cpp11::as_sexp(cpp_factor_matrix_(cpp11::as_cpp<cpp11::decay_t<integers>>(fact), cpp11::as_cpp<cpp11::decay_t<logicals>>(is_na_all), cpp11::as_cpp<cpp11::decay_t<integers>>(who_is_dropped), cpp11::as_cpp<cpp11::decay_t<SEXP>>(var), cpp11::as_cpp<cpp11::decay_t<strings>>(col_names)));
   END_CPP11
 }
-// 05_02_misc_linalg.cpp
+// 05_02_misc_linear_algebra.cpp
 doubles cpp_diag_XUtX_(doubles_matrix<> X, doubles_matrix<> U);
 extern "C" SEXP _fixest2_cpp_diag_XUtX_(SEXP X, SEXP U) {
   BEGIN_CPP11

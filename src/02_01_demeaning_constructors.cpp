@@ -99,6 +99,23 @@ sMat::sMat(SEXP x, bool single_obs = false) {
   }
 }
 
+FEClass::simple_mat_of_vs_vars::simple_mat_of_vs_vars(const FEClass *FE_info,
+                                                      int q) {
+  // We set up the matrix
+  int start = 0;
+  for (int l = 0; l < q; ++l) {
+    start += FE_info->nb_vs_noFE_Q[l];
+  }
+
+  int K = FE_info->nb_vs_noFE_Q[q];
+  pvars.resize(K);
+  for (int k = 0; k < K; ++k) {
+    pvars[k] = FE_info->p_vs_vars[start + k];
+  }
+
+  K_fe = FE_info->is_slope_fe_Q[q] ? K : -1;
+}
+
 sVec sMat::operator[](int k) { return p_sVec[k]; }
 
 double sMat::operator()(int i, int k) { return p_sVec[k][i]; }
@@ -119,4 +136,12 @@ double &simple_mat_with_id::operator()(int id, int i) {
   }
 
   return px_current[i];
+}
+
+inline double FEClass::simple_mat_of_vs_vars::operator()(int i, int k) {
+  if (k == K_fe) {
+    return 1;
+  }
+
+  return pvars[k][i];
 }

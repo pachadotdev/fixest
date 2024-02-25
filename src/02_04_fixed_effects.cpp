@@ -594,31 +594,6 @@ void FEClass::compute_in_out(int q, double *in_out_C, sVec &in_N,
   }
 }
 
-FEClass::simple_mat_of_vs_vars::simple_mat_of_vs_vars(const FEClass *FE_info,
-                                                      int q) {
-  // We set up the matrix
-  int start = 0;
-  for (int l = 0; l < q; ++l) {
-    start += FE_info->nb_vs_noFE_Q[l];
-  }
-
-  int K = FE_info->nb_vs_noFE_Q[q];
-  pvars.resize(K);
-  for (int k = 0; k < K; ++k) {
-    pvars[k] = FE_info->p_vs_vars[start + k];
-  }
-
-  K_fe = FE_info->is_slope_fe_Q[q] ? K : -1;
-}
-
-inline double FEClass::simple_mat_of_vs_vars::operator()(int i, int k) {
-  if (k == K_fe) {
-    return 1;
-  }
-
-  return pvars[k][i];
-}
-
 void compute_fe_gnl(double *p_fe_coef_origin, double *p_fe_coef_destination,
                     double *p_sum_other_means, double *p_sum_in_out,
                     PARAM_DEMEAN *args) {
