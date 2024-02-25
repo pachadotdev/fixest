@@ -24,12 +24,11 @@ information on the likelihoods in the details of the function \code{\link{femlm}
 \examples{
 
 # simple estimation on iris data with "Species" fixed-effects
-res = femlm(Sepal.Length ~ Sepal.Width + Petal.Length +
-            Petal.Width | Species, iris)
+res <- femlm(Sepal.Length ~ Sepal.Width + Petal.Length +
+  Petal.Width | Species, iris)
 
 nobs(res)
 logLik(res)
-
 
 }
 \seealso{

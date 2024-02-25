@@ -3,6 +3,7 @@
 ^\.Renviron$
 
 ^docs$
+^dev$
 ^vignettes/images$
 ^vignettes/etable_new_features.Rmd
 ^vignettes/.+html$

@@ -36,9 +36,9 @@ the regressors only. (Mostly for internal use.)}
 scalar equal to a VCOV type, either a formula of the form: \code{vcov_type ~ variables}. The
 VCOV types implemented are: "iid", "hetero" (or "HC1"), "cluster", "twoway",
 "NW" (or "newey_west"), "DK" (or "driscoll_kraay"), and "conley". It also accepts
-object from \code{\link{vcov_cluster}}, \code{\link[=vcov_hac]{vcov_NW}}, \code{\link[=vcov_hac]{NW}},
-\code{\link[=vcov_hac]{vcov_DK}}, \code{\link[=vcov_hac]{DK}}, \code{\link{vcov_conley}} and
-\code{\link[=vcov_conley]{conley}}. It also accepts covariance matrices computed externally.
+object from \code{\link{vcov_cluster}}, \code{\link[fixest:vcov_hac]{vcov_NW}}, \code{\link[fixest:vcov_hac]{NW}},
+\code{\link[fixest:vcov_hac]{vcov_DK}}, \code{\link[fixest:vcov_hac]{DK}}, \code{\link{vcov_conley}} and
+\code{\link[fixest:vcov_conley]{conley}}. It also accepts covariance matrices computed externally.
 Finally it accepts functions to compute the covariances. See the \code{vcov} documentation
 in the \href{https://lrberge.github.io/fixest/articles/fixest_walkthrough.html#the-vcov-argument-1}{vignette}.}
 
@@ -85,15 +85,15 @@ Simple utility to extract the degrees of freedom from a \code{fixest} estimation
 
 # First: an estimation
 
-base = iris
-names(base) = c("y", "x1", "x2", "x3", "species")
-est = feols(y ~ x1 + x2 | species, base)
+base <- iris
+names(base) <- c("y", "x1", "x2", "x3", "species")
+est <- feols(y ~ x1 + x2 | species, base)
 
 # "Normal" standard-errors (SE)
-est_standard = summary(est, se = "st")
+est_standard <- summary(est, se = "st")
 
 # Clustered SEs
-est_clustered = summary(est, se = "clu")
+est_clustered <- summary(est, se = "clu")
 
 # The different degrees of freedom
 
@@ -104,7 +104,5 @@ degrees_freedom(est_clustered, type = "k") # fixed-effects are excluded
 # => different type 2 DoF (because of the clustering)
 degrees_freedom(est_standard, type = "resid") # => equivalent to the df.residual from lm
 degrees_freedom(est_clustered, type = "resid")
-
-
 
 }

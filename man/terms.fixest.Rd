@@ -21,11 +21,10 @@ This function extracts the terms of a \code{fixest} estimation, excluding the fi
 \examples{
 
 # simple estimation on iris data, using "Species" fixed-effects
-res = feols(Sepal.Length ~ Sepal.Width*Petal.Length +
-            Petal.Width | Species, iris)
+res <- feols(Sepal.Length ~ Sepal.Width * Petal.Length +
+  Petal.Width | Species, iris)
 
 # Terms of the linear part
 terms(res)
-
 
 }

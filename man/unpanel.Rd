@@ -20,17 +20,17 @@ Transforms a \code{fixest_panel} object into a regular data.frame.
 data(base_did)
 
 # Setting a data set as a panel
-pdat = panel(base_did, ~id+period)
+pdat <- panel(base_did, ~ id + period)
 
 # ... allows you to use leads and lags in estimations
-feols(y~l(x1, 0:1), pdat)
+feols(y ~ l(x1, 0:1), pdat)
 
 # Now unpanel => returns the initial data set
-class(pdat) ; dim(pdat)
-new_base = unpanel(pdat)
-class(new_base) ; dim(new_base)
-
-
+class(pdat)
+dim(pdat)
+new_base <- unpanel(pdat)
+class(new_base)
+dim(new_base)
 
 }
 \seealso{

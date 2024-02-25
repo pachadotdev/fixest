@@ -19,7 +19,7 @@ Returns the residual degrees of freedom for a fitted \code{fixest} object
 }
 \examples{
 
-est = feols(mpg ~ hp, mtcars)
+est <- feols(mpg ~ hp, mtcars)
 df.residual(est)
 
 }

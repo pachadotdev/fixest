@@ -49,8 +49,8 @@ ranging from 1 to the number of unique values. This actually creates an unique i
 }
 \examples{
 
-x1 = iris$Species
-x2 = as.integer(iris$Sepal.Length)
+x1 <- iris$Species
+x2 <- as.integer(iris$Sepal.Length)
 
 # transforms the species vector into integers
 to_integer(x1)
@@ -67,7 +67,7 @@ to_integer(x2, add_items = TRUE)
 to_integer(x2, add_items = TRUE, sorted = TRUE)
 
 # The result can safely be used as an index
-res = to_integer(x2, add_items = TRUE, sorted = TRUE, items.list = TRUE)
+res <- to_integer(x2, add_items = TRUE, sorted = TRUE, items.list = TRUE)
 all(res$items[res$x] == x2)
 
 

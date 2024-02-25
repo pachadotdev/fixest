@@ -59,15 +59,14 @@ Note that if the model has been estimated with fixed-effects, to obtain the fixe
 \examples{
 
 # simple estimation on iris data, using "Species" fixed-effects
-res = femlm(Sepal.Length ~ Sepal.Width + Petal.Length +
-            Petal.Width | Species, iris)
+res <- femlm(Sepal.Length ~ Sepal.Width + Petal.Length +
+  Petal.Width | Species, iris)
 
 # the coefficients of the variables:
 coef(res)
 
 # the fixed-effects coefficients:
 fixef(res)
-
 
 }
 \seealso{

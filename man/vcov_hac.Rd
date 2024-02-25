@@ -95,7 +95,7 @@ feols(y ~ x1, base_did, DK ~ period)
 
 # If the estimation is made with a panel.id, the dimensions are
 # automatically deduced:
-est = feols(y ~ x1, base_did, "NW", panel.id = ~id + period)
+est <- feols(y ~ x1, base_did, "NW", panel.id = ~ id + period)
 est
 
 #
@@ -105,7 +105,6 @@ est
 # If missing, the unit and time are automatically deduced from
 # the panel.id used in the estimation
 vcov_NW(est, lag = 2)
-
 
 }
 \references{

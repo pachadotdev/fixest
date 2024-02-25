@@ -41,8 +41,8 @@ type requested.
 }
 \examples{
 
-base = setNames(iris, c("y", "x1", "x2", "x3", "species"))
-est = feols(y ~ csw(x1, x2, x3), base, fsplit = ~species)
+base <- setNames(iris, c("y", "x1", "x2", "x3", "species"))
+est <- feols(y ~ csw(x1, x2, x3), base, fsplit = ~species)
 
 # there are 3 different RHSs and 4 different samples
 models(est)
@@ -50,7 +50,6 @@ models(est)
 # We can obtain these numbers with n_models
 n_models(est, rhs = TRUE)
 n_models(est, sample = TRUE)
-
 
 }
 \seealso{

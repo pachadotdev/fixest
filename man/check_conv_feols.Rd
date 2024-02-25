@@ -33,20 +33,18 @@ Checks the convergence of a \code{feols} estimation by computing the first-order
 }
 \examples{
 
-base = setNames(iris, c("y", "x1", "x2", "x3", "species"))
-base$FE = rep(1:30, 5)
+base <- setNames(iris, c("y", "x1", "x2", "x3", "species"))
+base$FE <- rep(1:30, 5)
 
 # one estimation with fixed-effects + varying slopes
-est = feols(y ~ x1 | species[x2] + FE[x3], base)
+est <- feols(y ~ x1 | species[x2] + FE[x3], base)
 
 # Checking the convergence
-conv = check_conv_feols(est)
+conv <- check_conv_feols(est)
 
 # We can check that al values are close to 0
 summary(conv)
 
 summary(conv, "detail")
-
-
 
 }

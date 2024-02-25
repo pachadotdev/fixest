@@ -130,24 +130,26 @@ expression.
 # Small examples with airquality data
 data(airquality)
 # we set two macro variables
-setFixest_fml(..ctrl = ~ Temp + Day,
-              ..ctrl_long = ~ poly(Temp, 2) + poly(Day, 2))
+setFixest_fml(
+  ..ctrl = ~ Temp + Day,
+  ..ctrl_long = ~ poly(Temp, 2) + poly(Day, 2)
+)
 
 # Using the macro in lm with xpd:
 lm(xpd(Ozone ~ Wind + ..ctrl), airquality)
 lm(xpd(Ozone ~ Wind + ..ctrl_long), airquality)
 
 # You can use the macros without xpd() in fixest estimations
-a = feols(Ozone ~ Wind + ..ctrl, airquality)
-b = feols(Ozone ~ Wind + ..ctrl_long, airquality)
+a <- feols(Ozone ~ Wind + ..ctrl, airquality)
+b <- feols(Ozone ~ Wind + ..ctrl_long, airquality)
 etable(a, b, keep = "Int|Win")
 
 
 # Using .[]
 
-base = setNames(iris, c("y", "x1", "x2", "x3", "species"))
-i = 2:3
-z = "species"
+base <- setNames(iris, c("y", "x1", "x2", "x3", "species"))
+i <- 2:3
+z <- "species"
 lm(xpd(y ~ x.[2:3] + .[z]), base)
 
 # No xpd() needed in feols
@@ -159,7 +161,7 @@ feols(y ~ x.[2:3] + .[z], base)
 
 # You can trigger variables autocompletion with the '..' suffix
 # You need to provide the argument data
-base = setNames(iris, c("y", "x1", "x2", "x3", "species"))
+base <- setNames(iris, c("y", "x1", "x2", "x3", "species"))
 xpd(y ~ x.., data = base)
 
 # In fixest estimations, this is automatically taken care of
@@ -177,16 +179,16 @@ feols(y ~ x.., data = base)
 # we want to look at the effect of x1 on y
 # controlling for different variables
 
-base = iris
-names(base) = c("y", "x1", "x2", "x3", "species")
+base <- iris
+names(base) <- c("y", "x1", "x2", "x3", "species")
 
 # We first create a matrix with all possible combinations of variables
-my_args = lapply(names(base)[-(1:2)], function(x) c("", x))
-(all_combs = as.matrix(do.call("expand.grid", my_args)))
+my_args <- lapply(names(base)[-(1:2)], function(x) c("", x))
+(all_combs <- as.matrix(do.call("expand.grid", my_args)))
 
-res_all = list()
-for(i in 1:nrow(all_combs)){
-  res_all[[i]] = feols(xpd(y ~ x1 + ..v, ..v = all_combs[i, ]), base)
+res_all <- list()
+for (i in 1:nrow(all_combs)) {
+  res_all[[i]] <- feols(xpd(y ~ x1 + ..v, ..v = all_combs[i, ]), base)
 }
 
 etable(res_all)
@@ -212,7 +214,7 @@ feols(Armed.Forces ~ Population + ..("GNP|ployed"), longley)
 lm(xpd(Armed.Forces ~ Population + regex("GNP|ployed"), data = longley), longley)
 
 # Stepwise estimation with regex: use a comma after the parenthesis
-feols(Armed.Forces ~ Population + sw(regex(,"GNP|ployed")), longley)
+feols(Armed.Forces ~ Population + sw(regex(, "GNP|ployed")), longley)
 
 # Multiple LHS
 etable(feols(..("GNP|ployed") ~ Population, longley))
@@ -223,7 +225,7 @@ etable(feols(..("GNP|ployed") ~ Population, longley))
 #
 
 # to create a one sided formula from a character vector
-vars = letters[1:5]
+vars <- letters[1:5]
 xpd(rhs = vars)
 
 # Alternatively, to replace the RHS
@@ -242,56 +244,56 @@ xpd(~x1, add = ~ x2 + x3)
 xpd(~x1, add = c("x2", "x3"))
 
 # only adds to the RHS
-xpd(y ~ x, add = ~bon + jour)
+xpd(y ~ x, add = ~ bon + jour)
 
 #
 # Dot square bracket operator
 #
 
 # The basic use is to add variables in the formula
-x = c("x1", "x2")
+x <- c("x1", "x2")
 xpd(y ~ .[x])
 
 # Alternatively, one-sided formulas can be used and their content will be inserted verbatim
-x = ~x1 + x2
+x <- ~ x1 + x2
 xpd(y ~ .[x])
 
 # You can create multiple variables at once
 xpd(y ~ x.[1:5] + z.[2:3])
 
 # You can summon variables from the environment to complete variables names
-var = "a"
+var <- "a"
 xpd(y ~ x.[var])
 
 # ... the variables can be multiple
-vars = LETTERS[1:3]
+vars <- LETTERS[1:3]
 xpd(y ~ x.[vars])
 
 # You can have "complex" variable names but they must be nested in character form
 xpd(y ~ .["x.[vars]_sq"])
 
 # DSB can be used within regular expressions
-re = c("GNP", "Pop")
+re <- c("GNP", "Pop")
 xpd(Unemployed ~ regex(".[re]"), data = longley)
 
 # => equivalent to regex("GNP|Pop")
 
 # Use .[,var] (NOTE THE COMMA!) to expand with commas
 # !! can break the formula if missused
-vars = c("wage", "unemp")
-xpd(c(y.[,1:3]) ~ csw(.[,vars]))
+vars <- c("wage", "unemp")
+xpd(c(y.[, 1:3]) ~ csw(.[, vars]))
 
 
 # Example of use of .[] within a loop
-res_all = list()
-for(p in 1:3){
-  res_all[[p]] = feols(Ozone ~ Wind + poly(Temp, .[p]), airquality)
+res_all <- list()
+for (p in 1:3) {
+  res_all[[p]] <- feols(Ozone ~ Wind + poly(Temp, .[p]), airquality)
 }
 
 etable(res_all)
 
 # The former can be compactly estimated with:
-res_compact = feols(Ozone ~ Wind + sw(.[, "poly(Temp, .[1:3])"]), airquality)
+res_compact <- feols(Ozone ~ Wind + sw(.[, "poly(Temp, .[1:3])"]), airquality)
 
 etable(res_compact)
 
@@ -323,7 +325,6 @@ lm(xpd(Armed.Forces ~ Population + ..("GNP|ployed")), longley)
 
 # same for the auto completion with '..'
 lm(xpd(Armed.Forces ~ Population + GN..), longley)
-
 
 }
 \seealso{

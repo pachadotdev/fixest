@@ -20,22 +20,21 @@ Extracts single elements from multiple \code{fixest} estimations.
 }
 \examples{
 
-base = iris
-names(base) = c("y", "x1", "x2", "x3", "species")
+base <- iris
+names(base) <- c("y", "x1", "x2", "x3", "species")
 
 # Multiple estimation
-res = feols(y ~ csw(x1, x2, x3), base, split = ~species)
+res <- feols(y ~ csw(x1, x2, x3), base, split = ~species)
 
 # The first estimation
 res[[1]]
 
 # The second one, etc
 res[[2]]
-
 }
 \seealso{
-The main fixest estimation functions: \code{\link{feols}}, \code{\link[=feglm]{fepois}},
-\code{\link[=femlm]{fenegbin}}, \code{\link{feglm}}, \code{\link{feNmlm}}. Tools for mutliple fixest
+The main fixest estimation functions: \code{\link{feols}}, \code{\link[fixest:feglm]{fepois}},
+\code{\link[fixest:femlm]{fenegbin}}, \code{\link{feglm}}, \code{\link{feNmlm}}. Tools for mutliple fixest
 estimations: \code{\link{summary.fixest_multi}}, \code{\link{print.fixest_multi}}, \code{\link{as.list.fixest_multi}},
 \code{\link[fixest]{sub-sub-.fixest_multi}}, \code{\link[fixest]{sub-.fixest_multi}}.
 }

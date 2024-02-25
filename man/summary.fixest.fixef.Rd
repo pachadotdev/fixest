@@ -31,14 +31,13 @@ data(trade)
 
 # We estimate the effect of distance on trade
 # => we account for 3 fixed-effects effects
-est_pois = femlm(Euros ~ log(dist_km)|Origin+Destination+Product, trade)
+est_pois <- femlm(Euros ~ log(dist_km) | Origin + Destination + Product, trade)
 
 # obtaining the fixed-effects coefficients
-fe_trade = fixef(est_pois)
+fe_trade <- fixef(est_pois)
 
 # printing some summary information on the fixed-effects coefficients:
 summary(fe_trade)
-
 
 }
 \seealso{

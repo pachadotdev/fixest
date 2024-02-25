@@ -100,18 +100,21 @@ identical (since identical row names are forbidden in data.frames).
 \examples{
 
 # Multiple estimations => see details in feols
-aq = airquality
-est = feols(c(Ozone, Solar.R) ~
-                Wind + csw(Temp, Temp^2, Temp^3) | Month + Day,
-            data = aq)
+aq <- airquality
+est <- feols(
+  c(Ozone, Solar.R) ~
+    Wind + csw(Temp, Temp^2, Temp^3) | Month + Day,
+  data = aq
+)
 
 
 # Default result
 etable(est)
 
 # Playing a bit with the styles
-etable(est, style.df = style.df(fixef.title = "", fixef.suffix = " FE",
-                                 stats.line = " ", yesNo = "yes"))
-
+etable(est, style.df = style.df(
+  fixef.title = "", fixef.suffix = " FE",
+  stats.line = " ", yesNo = "yes"
+))
 
 }

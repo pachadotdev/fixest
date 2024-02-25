@@ -29,9 +29,9 @@ parameters are used.}
 scalar equal to a VCOV type, either a formula of the form: \code{vcov_type ~ variables}. The
 VCOV types implemented are: "iid", "hetero" (or "HC1"), "cluster", "twoway",
 "NW" (or "newey_west"), "DK" (or "driscoll_kraay"), and "conley". It also accepts
-object from \code{\link{vcov_cluster}}, \code{\link[=vcov_hac]{vcov_NW}}, \code{\link[=vcov_hac]{NW}},
-\code{\link[=vcov_hac]{vcov_DK}}, \code{\link[=vcov_hac]{DK}}, \code{\link{vcov_conley}} and
-\code{\link[=vcov_conley]{conley}}. It also accepts covariance matrices computed externally.
+object from \code{\link{vcov_cluster}}, \code{\link[fixest:vcov_hac]{vcov_NW}}, \code{\link[fixest:vcov_hac]{NW}},
+\code{\link[fixest:vcov_hac]{vcov_DK}}, \code{\link[fixest:vcov_hac]{DK}}, \code{\link{vcov_conley}} and
+\code{\link[fixest:vcov_conley]{conley}}. It also accepts covariance matrices computed externally.
 Finally it accepts functions to compute the covariances. See the \code{vcov} documentation
 in the \href{https://lrberge.github.io/fixest/articles/fixest_walkthrough.html#the-vcov-argument-1}{vignette}.}
 
@@ -77,15 +77,14 @@ model estimated with \code{\link{femlm}}, \code{\link{feols}} or \code{\link{feg
 data(trade)
 
 # We estimate the effect of distance on trade (with 3 fixed-effects)
-est_pois = femlm(Euros ~ log(dist_km) + log(Year) | Origin + Destination +
-                 Product, trade)
+est_pois <- femlm(Euros ~ log(dist_km) + log(Year) | Origin + Destination +
+  Product, trade)
 
 # confidence interval with "normal" VCOV
 confint(est_pois)
 
 # confidence interval with "clustered" VCOV (w.r.t. the Origin factor)
 confint(est_pois, se = "cluster")
-
 
 }
 \author{

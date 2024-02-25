@@ -92,7 +92,7 @@ value in \code{x} (i.e. it's binning).
 \examples{
 
 data(airquality)
-month_num = airquality$Month
+month_num <- airquality$Month
 table(month_num)
 
 # Grouping the first two values
@@ -121,8 +121,8 @@ table(bin(month_num, .("g1" = 5:6)))
 # with non numeric data
 #
 
-month_lab = c("may", "june", "july", "august", "september")
-month_fact = factor(month_num, labels = month_lab)
+month_lab <- c("may", "june", "july", "august", "september")
+month_fact <- factor(month_num, labels = month_lab)
 
 # Grouping the first two elements
 table(bin(month_fact, c("may", "jun")))
@@ -150,7 +150,7 @@ table(bin(month_fact, .("@", "aug", "july")))
 #
 
 data(iris)
-plen = iris$Petal.Length
+plen <- iris$Petal.Length
 
 # 3 parts of (roughly) equal size
 table(bin(plen, "cut::3"))
@@ -184,11 +184,10 @@ table(bin(plen, c("cut::2[q2]p90]", "<2", "]2; Q2]", NA, ">90\%")))
 #
 
 data(iris)
-plen = iris$Petal.Length
+plen <- iris$Petal.Length
 
 # We need to use "x"
-table(bin(plen, list("< 2" = ~x < 2, ">= 2" = ~x >= 2)))
-
+table(bin(plen, list("< 2" = ~ x < 2, ">= 2" = ~ x >= 2)))
 
 }
 \seealso{

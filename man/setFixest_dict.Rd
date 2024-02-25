@@ -42,12 +42,12 @@ change this default, you need to provide a new definition to \code{"(Intercept)"
 \examples{
 
 data(trade)
-est = feols(log(Euros) ~ log(dist_km)|Origin+Destination+Product, trade)
+est <- feols(log(Euros) ~ log(dist_km) | Origin + Destination + Product, trade)
 # we export the result & rename some variables
-etable(est, dict = c("log(Euros)"="Euros (ln)", Origin="Country of Origin"))
+etable(est, dict = c("log(Euros)" = "Euros (ln)", Origin = "Country of Origin"))
 
 # If you export many tables, it can be more convenient to use setFixest_dict:
-setFixest_dict(c("log(Euros)"="Euros (ln)", Origin="Country of Origin"))
+setFixest_dict(c("log(Euros)" = "Euros (ln)", Origin = "Country of Origin"))
 etable(est) # variables are properly relabeled
 
 # The dictionary only 'grows'
@@ -58,7 +58,7 @@ etable(est)
 
 # Another way to set a dictionary: with a character string:
 # See the help page of as.dict
-dict = "log(dist_km): Distance (ln); Product: Type of Good"
+dict <- "log(dist_km): Distance (ln); Product: Type of Good"
 setFixest_dict(dict)
 etable(est)
 

@@ -35,20 +35,20 @@ Computes the clustered VCOV of \code{fixest} objects.
 }
 \examples{
 
-base = iris
-names(base) = c("y", "x1", "x2", "x3", "species")
-base$clu = rep(1:5, 30)
+base <- iris
+names(base) <- c("y", "x1", "x2", "x3", "species")
+base$clu <- rep(1:5, 30)
 
-est = feols(y ~ x1, base)
+est <- feols(y ~ x1, base)
 
 # VCOV: using a formula giving the name of the clusters
-vcov_cluster(est, ~species + clu)
+vcov_cluster(est, ~ species + clu)
 
 # works as well with a character vector
 vcov_cluster(est, c("species", "clu"))
 
 # you can also combine the two with '^'
-vcov_cluster(est, ~species^clu)
+vcov_cluster(est, ~ species^clu)
 
 #
 # Using VCOV requests
@@ -67,7 +67,6 @@ feols(y ~ x1, base, vcov = ~species)
 # The argument vcov does not accept hard values,
 # so you can feed them with a VCOV-request:
 feols(y ~ x1, base, vcov = vcov_cluster(rep(1:5, 30)))
-
 
 }
 \references{

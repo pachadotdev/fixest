@@ -19,7 +19,7 @@ Computes the hat values for \code{\link{feols}} or \code{\link{feglm}} estimatio
 there are no fixed-effects.
 }
 \details{
-Hat values are not available for \code{\link[=femlm]{fenegbin}}, \code{\link{femlm}}
+Hat values are not available for \code{\link[fixest:femlm]{fenegbin}}, \code{\link{femlm}}
 and \code{\link{feNmlm}} estimations.
 
 When there are fixed-effects, the hat values of the reduced form are different from the
@@ -29,8 +29,7 @@ fixed-effects as regular variables.
 }
 \examples{
 
-est = feols(Petal.Length ~ Petal.Width + Sepal.Width, iris)
+est <- feols(Petal.Length ~ Petal.Width + Sepal.Width, iris)
 head(hatvalues(est))
-
 
 }

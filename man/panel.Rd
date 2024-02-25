@@ -53,46 +53,45 @@ with additional attributes (e.g. \code{pdt[x>0, .(x, y, z)]} would dissolve the 
 meaning only a data.table would be the result of the call).
 
 If the initial data set was also a \code{data.table}, then you can create new variables from lags
-and leads using the functions \code{\link{l}} and \code{\link[=l]{f}}. See the example.
+and leads using the functions \code{\link{l}} and \code{\link[fixest:l]{f}}. See the example.
 }
 \examples{
 
 data(base_did)
 
 # Setting a data set as a panel...
-pdat = panel(base_did, ~id+period)
+pdat <- panel(base_did, ~ id + period)
 
 # ...then using the functions l and f
-est1 = feols(y~l(x1, 0:1), pdat)
-est2 = feols(f(y)~l(x1, -1:1), pdat)
-est3 = feols(l(y)~l(x1, 0:3), pdat)
-etable(est1, est2, est3, order = c("f", "^x"), drop="Int")
+est1 <- feols(y ~ l(x1, 0:1), pdat)
+est2 <- feols(f(y) ~ l(x1, -1:1), pdat)
+est3 <- feols(l(y) ~ l(x1, 0:3), pdat)
+etable(est1, est2, est3, order = c("f", "^x"), drop = "Int")
 
 # or using the argument panel.id
-feols(f(y)~l(x1, -1:1), base_did, panel.id = ~id+period)
+feols(f(y) ~ l(x1, -1:1), base_did, panel.id = ~ id + period)
 
 # You can use panel.id in various ways:
-pdat = panel(base_did, ~id+period)
+pdat <- panel(base_did, ~ id + period)
 # is identical to:
-pdat = panel(base_did, c("id", "period"))
+pdat <- panel(base_did, c("id", "period"))
 # and also to:
-pdat = panel(base_did, "id,period")
+pdat <- panel(base_did, "id,period")
 
 # l() and f() can also be used within a data.table:
-if(require("data.table")){
-  pdat_dt = panel(as.data.table(base_did), ~id+period)
+if (require("data.table")) {
+  pdat_dt <- panel(as.data.table(base_did), ~ id + period)
   # Now since pdat_dt is also a data.table
   #   you can create lags/leads directly
   pdat_dt[, x1_l1 := l(x1)]
   pdat_dt[, c("x1_l1_fill0", "y_f2") := .(l(x1, fill = 0), f(y, 2))]
 }
 
-
 }
 \seealso{
-The estimation methods \code{\link{feols}}, \code{\link[=feglm]{fepois}} and \code{\link{feglm}}.
+The estimation methods \code{\link{feols}}, \code{\link[fixest:feglm]{fepois}} and \code{\link{feglm}}.
 
-The functions \code{\link{l}} and \code{\link[=l]{f}} to create lags and leads within \code{fixest_panel} objects.
+The functions \code{\link{l}} and \code{\link[fixest:l]{f}} to create lags and leads within \code{fixest_panel} objects.
 }
 \author{
 Laurent Berge

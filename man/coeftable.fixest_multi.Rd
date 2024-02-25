@@ -118,8 +118,8 @@ Series of methods to extract the coefficients table or its sub-components from a
 }}
 \examples{
 
-base = setNames(iris, c("y", "x1", "x2", "x3", "species"))
-est_multi = feols(y ~ csw(x.[,1:3]), base, split = ~species)
+base <- setNames(iris, c("y", "x1", "x2", "x3", "species"))
+est_multi <- feols(y ~ csw(x.[, 1:3]), base, split = ~species)
 
 # we get all the coefficient tables at once
 coeftable(est_multi)
@@ -132,7 +132,5 @@ coeftable(est_multi, wide = TRUE)
 
 # long = TRUE, all the information is stacked
 coeftable(est_multi, long = TRUE)
-
-
 
 }

@@ -81,10 +81,8 @@ data(quakes)
 feols(depth ~ mag, quakes, conley(100))
 
 # Post estimation
-est = feols(depth ~ mag, quakes)
+est <- feols(depth ~ mag, quakes)
 vcov_conley(est, cutoff = 100)
-
-
 
 }
 \references{

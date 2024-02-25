@@ -27,7 +27,7 @@ used in the function \code{\link{etable}}.
 }
 \examples{
 
-x = "# Main vars
+x <- "# Main vars
      mpg: Miles per gallon
      hp: Horsepower
 
@@ -35,8 +35,6 @@ x = "# Main vars
      cyl: Number of cylinders; vs: Engine"
 
 as.dict(x)
-
-
 
 }
 \seealso{

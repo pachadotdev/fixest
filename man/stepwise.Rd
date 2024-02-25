@@ -51,7 +51,7 @@ with \code{n} the number of stewise variables)!
 }
 \examples{
 
-base = setNames(iris, c("y", "x1", "x2", "x3", "species"))
+base <- setNames(iris, c("y", "x1", "x2", "x3", "species"))
 
 # Regular stepwise
 feols(y ~ sw(x1, x2, x3), base)

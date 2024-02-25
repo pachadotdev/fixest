@@ -56,10 +56,10 @@ This function creates the left-hand-side or the right-hand-side(s) of a \code{\l
 }
 \examples{
 
-base = iris
-names(base) = c("y", "x1", "x2", "x3", "species")
+base <- iris
+names(base) <- c("y", "x1", "x2", "x3", "species")
 
-est = feols(y ~ poly(x1, 2) + x2, base)
+est <- feols(y ~ poly(x1, 2) + x2, base)
 head(model.matrix(est))
 
 # Illustration of subset
@@ -69,8 +69,6 @@ head(model.matrix(est, subset = "x1"))
 
 # subset => TRUE, only works with data argument!!
 head(model.matrix(est, data = base[, "x1", drop = FALSE], subset = TRUE))
-
-
 
 }
 \seealso{

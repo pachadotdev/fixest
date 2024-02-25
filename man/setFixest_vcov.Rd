@@ -42,7 +42,7 @@ estimations i) without, ii) with one, or iii) with two or more fixed-effects.
 }
 \description{
 This functions defines or extracts the default type of standard-errors to computed in
-\code{fixest} \code{\link[=summary.fixest]{summary}}, and \code{\link[=vcov.fixest]{vcov}}.
+\code{fixest} \code{\link[fixest:summary.fixest]{summary}}, and \code{\link[fixest:vcov.fixest]{vcov}}.
 }
 \examples{
 
@@ -52,20 +52,21 @@ This functions defines or extracts the default type of standard-errors to comput
 # - panel: cluster on panel id
 
 data(base_did)
-est_no_FE  = feols(y ~ x1, base_did)
-est_one_FE = feols(y ~ x1 | id, base_did)
-est_two_FE = feols(y ~ x1 | id + period, base_did)
-est_panel = feols(y ~ x1 | id + period, base_did, panel.id = ~id + period)
+est_no_FE <- feols(y ~ x1, base_did)
+est_one_FE <- feols(y ~ x1 | id, base_did)
+est_two_FE <- feols(y ~ x1 | id + period, base_did)
+est_panel <- feols(y ~ x1 | id + period, base_did, panel.id = ~ id + period)
 
 etable(est_no_FE, est_one_FE, est_two_FE)
 
 # Changing the default standard-errors
-setFixest_vcov(no_FE = "hetero", one_FE = "iid",
-               two_FE = "twoway", panel = "drisc")
+setFixest_vcov(
+  no_FE = "hetero", one_FE = "iid",
+  two_FE = "twoway", panel = "drisc"
+)
 etable(est_no_FE, est_one_FE, est_two_FE, est_panel)
 
 # Resetting the defaults
 setFixest_vcov(reset = TRUE)
-
 
 }

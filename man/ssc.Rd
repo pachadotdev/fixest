@@ -96,21 +96,21 @@ replicate standard-errors from other software.
 # In the absence of fixed-effects,
 # by default, the standard-errors are computed in the same way
 
-res = feols(Petal.Length ~ Petal.Width + Species, iris)
-res_lm = lm(Petal.Length ~ Petal.Width + Species, iris)
+res <- feols(Petal.Length ~ Petal.Width + Species, iris)
+res_lm <- lm(Petal.Length ~ Petal.Width + Species, iris)
 vcov(res) / vcov(res_lm)
 
 # GLM
 # By default, there is no small sample adjustment in glm, as opposed to feglm.
 # To get the same SEs, we need to use ssc(adj = FALSE)
 
-res_pois = fepois(round(Petal.Length) ~ Petal.Width + Species, iris)
-res_glm = glm(round(Petal.Length) ~ Petal.Width + Species, iris, family = poisson())
+res_pois <- fepois(round(Petal.Length) ~ Petal.Width + Species, iris)
+res_glm <- glm(round(Petal.Length) ~ Petal.Width + Species, iris, family = poisson())
 vcov(res_pois, ssc = ssc(adj = FALSE)) / vcov(res_glm)
 
 # Same example with the Gamma
-res_gamma = feglm(round(Petal.Length) ~ Petal.Width + Species, iris, family = Gamma())
-res_glm_gamma = glm(round(Petal.Length) ~ Petal.Width + Species, iris, family = Gamma())
+res_gamma <- feglm(round(Petal.Length) ~ Petal.Width + Species, iris, family = Gamma())
+res_glm_gamma <- glm(round(Petal.Length) ~ Petal.Width + Species, iris, family = Gamma())
 vcov(res_gamma, ssc = ssc(adj = FALSE)) / vcov(res_glm_gamma)
 
 #
@@ -118,12 +118,12 @@ vcov(res_gamma, ssc = ssc(adj = FALSE)) / vcov(res_glm_gamma)
 #
 
 # We create "irregular" FEs
-base = data.frame(x = rnorm(10))
-base$y = base$x + rnorm(10)
-base$fe1 = rep(1:3, c(4, 3, 3))
-base$fe2 = rep(1:5, each = 2)
+base <- data.frame(x = rnorm(10))
+base$y <- base$x + rnorm(10)
+base$fe1 <- rep(1:3, c(4, 3, 3))
+base$fe2 <- rep(1:5, each = 2)
 
-est = feols(y ~ x | fe1 + fe2, base)
+est <- feols(y ~ x | fe1 + fe2, base)
 
 # fe1: 3 FEs
 # fe2: 5 FEs

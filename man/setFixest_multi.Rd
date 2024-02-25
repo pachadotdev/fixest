@@ -22,8 +22,8 @@ Use this function to change the default behavior of \code{fixest_multi} objects.
 \examples{
 
 # 1) let's run a multiple estimation
-base = setNames(iris, c("y", "x1", "x2", "x3", "species"))
-est = feols(y ~ csw(x1, x2, x3), base)
+base <- setNames(iris, c("y", "x1", "x2", "x3", "species"))
+est <- feols(y ~ csw(x1, x2, x3), base)
 
 # 2) let's pick a single estimation => by default we have a `fixest_multi` object
 class(est[rhs = 2])
@@ -34,6 +34,5 @@ class(est[rhs = 2, drop = TRUE])
 # 3) change the default behavior
 setFixest_multi(drop = TRUE)
 class(est[rhs = 2])
-
 
 }

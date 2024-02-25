@@ -29,15 +29,14 @@ linear in parameters part, then this will be added in the formula in between \co
 \examples{
 
 # simple estimation on iris data, using "Species" fixed-effects
-res = femlm(Sepal.Length ~ Sepal.Width + Petal.Length +
-            Petal.Width | Species, iris)
+res <- femlm(Sepal.Length ~ Sepal.Width + Petal.Length +
+  Petal.Width | Species, iris)
 
 # formula with the fixed-effect variable
 formula(res)
 
 # linear part without the fixed-effects
 formula(res, "linear")
-
 
 }
 \seealso{

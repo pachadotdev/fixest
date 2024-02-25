@@ -42,9 +42,9 @@
 scalar equal to a VCOV type, either a formula of the form: \code{vcov_type ~ variables}. The
 VCOV types implemented are: "iid", "hetero" (or "HC1"), "cluster", "twoway",
 "NW" (or "newey_west"), "DK" (or "driscoll_kraay"), and "conley". It also accepts
-object from \code{\link{vcov_cluster}}, \code{\link[=vcov_hac]{vcov_NW}}, \code{\link[=vcov_hac]{NW}},
-\code{\link[=vcov_hac]{vcov_DK}}, \code{\link[=vcov_hac]{DK}}, \code{\link{vcov_conley}} and
-\code{\link[=vcov_conley]{conley}}. It also accepts covariance matrices computed externally.
+object from \code{\link{vcov_cluster}}, \code{\link[fixest:vcov_hac]{vcov_NW}}, \code{\link[fixest:vcov_hac]{NW}},
+\code{\link[fixest:vcov_hac]{vcov_DK}}, \code{\link[fixest:vcov_hac]{DK}}, \code{\link{vcov_conley}} and
+\code{\link[fixest:vcov_conley]{conley}}. It also accepts covariance matrices computed externally.
 Finally it accepts functions to compute the covariances. See the \code{vcov} documentation
 in the \href{https://lrberge.github.io/fixest/articles/fixest_walkthrough.html#the-vcov-argument-1}{vignette}.}
 
@@ -148,23 +148,23 @@ warning can pop up if you used several non-numeric fixed-effects in the estimati
 data(trade)
 
 # We estimate the effect of distance on trade (with 3 fixed-effects)
-est_pois = fepois(Euros ~ log(dist_km)|Origin+Destination+Product, trade)
+est_pois <- fepois(Euros ~ log(dist_km) | Origin + Destination + Product, trade)
 
 # Comparing different types of standard errors
-sum_standard = summary(est_pois, vcov = "iid")
-sum_hetero   = summary(est_pois, vcov = "hetero")
-sum_oneway   = summary(est_pois, vcov = "cluster")
-sum_twoway   = summary(est_pois, vcov = "twoway")
+sum_standard <- summary(est_pois, vcov = "iid")
+sum_hetero <- summary(est_pois, vcov = "hetero")
+sum_oneway <- summary(est_pois, vcov = "cluster")
+sum_twoway <- summary(est_pois, vcov = "twoway")
 
 etable(sum_standard, sum_hetero, sum_oneway, sum_twoway)
 
 # Alternative ways to cluster the SE:
 summary(est_pois, vcov = cluster ~ Product + Origin)
-summary(est_pois, vcov = ~Product + Origin)
-summary(est_pois, cluster = ~Product + Origin)
+summary(est_pois, vcov = ~ Product + Origin)
+summary(est_pois, cluster = ~ Product + Origin)
 
 # You can interact the clustering variables "live" using the var1 ^ var2 syntax.#'
-summary(est_pois, vcov = ~Destination^Product)
+summary(est_pois, vcov = ~ Destination^Product)
 
 #
 # Newey-West and Driscoll-Kraay SEs
@@ -172,7 +172,7 @@ summary(est_pois, vcov = ~Destination^Product)
 
 data(base_did)
 # Simple estimation on a panel
-est = feols(y ~ x1, base_did)
+est <- feols(y ~ x1, base_did)
 
 # --
 # Newey-West
@@ -195,7 +195,7 @@ summary(est, DK(3) ~ period)
 # When the estimation is done with a panel.id, you don't need to
 # specify these values.
 
-est_panel = feols(y ~ x1, base_did, panel.id = ~id + period)
+est_panel <- feols(y ~ x1, base_did, panel.id = ~ id + period)
 
 # Both methods, NM and DK, now work automatically
 summary(est_panel, "NW")
@@ -206,7 +206,7 @@ summary(est_panel, "DK")
 #
 
 data(quakes)
-est_geo = feols(depth ~ mag, quakes)
+est_geo <- feols(depth ~ mag, quakes)
 
 # --
 # Conley
@@ -235,7 +235,6 @@ summary(est_geo, "conley")
 # You can use the VCOVs from sandwich by using the argument .vcov:
 library(sandwich)
 summary(est_pois, .vcov = vcovCL, cluster = trade[, c("Destination", "Product")])
-
 
 }
 \seealso{

@@ -28,7 +28,7 @@ Sets/gets the default number of threads to used in \code{fixest} estimation func
 \examples{
 
 # Gets the current number of threads
-(nthreads_origin = getFixest_nthreads())
+(nthreads_origin <- getFixest_nthreads())
 
 # To set multi-threading off:
 setFixest_nthreads(1)
@@ -38,7 +38,6 @@ setFixest_nthreads()
 
 # And back to the original value
 setFixest_nthreads(nthreads_origin)
-
 
 }
 \author{

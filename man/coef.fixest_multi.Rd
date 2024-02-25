@@ -71,11 +71,11 @@ Utility to extract the coefficients of multiple estimations and rearrange them i
 }
 \examples{
 
-base = iris
-names(base) = c("y", "x1", "x2", "x3", "species")
+base <- iris
+names(base) <- c("y", "x1", "x2", "x3", "species")
 
 # A multiple estimation
-est = feols(y ~ x1 + csw0(x2, x3), base)
+est <- feols(y ~ x1 + csw0(x2, x3), base)
 
 # Getting all the coefficients at once,
 # each row is a model
@@ -90,8 +90,8 @@ coef(est, keep = "Int|x1", order = "x1")
 coef(est[rhs = .N:1])
 
 # collin + long + na.rm
-base$x1_bis = base$x1 # => collinear
-est = feols(y ~ x1_bis + csw0(x1, x2, x3), base, split = ~species)
+base$x1_bis <- base$x1 # => collinear
+est <- feols(y ~ x1_bis + csw0(x1, x2, x3), base, split = ~species)
 
 # does not display x1 since it is always collinear
 coef(est)
@@ -103,6 +103,5 @@ coef(est, long = TRUE)
 
 # long but balanced (with NAs then)
 coef(est, long = TRUE, na.rm = FALSE)
-
 
 }

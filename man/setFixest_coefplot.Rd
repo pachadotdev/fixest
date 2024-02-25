@@ -113,8 +113,8 @@ the other argument \code{lwd}.}
 \item{grid}{Logical, default is \code{TRUE}. Whether a grid should be displayed. You
 can set the display of the grid with the argument \code{grid.par}.}
 
-\item{grid.par}{List. Parameters of the grid. The default values are: \code{lty =  3} and \code{col = "gray"}. You can add any graphical parameter that will be passed
-to \code{\link[graphics:abline]{graphics::abline}}. You also have two additional arguments: use \code{horiz =  FALSE} to disable the horizontal lines, and use \code{vert = FALSE} to disable the
+\item{grid.par}{List. Parameters of the grid. The default values are: \code{lty = 3} and \code{col = "gray"}. You can add any graphical parameter that will be passed
+to \code{\link[graphics:abline]{graphics::abline}}. You also have two additional arguments: use \code{horiz = FALSE} to disable the horizontal lines, and use \code{vert = FALSE} to disable the
 vertical lines. Eg: \code{grid.par = list(vert = FALSE, col = "red", lwd = 2)}.}
 
 \item{zero}{Logical, default is \code{TRUE}. Whether the 0-line should be emphasized.
@@ -216,9 +216,9 @@ plot default with \code{\link{setFixest_coefplot}}).}
 appears on the x-axis. The default is equal to \code{"Estimate and __ci__ Conf. Int."},
 with \verb{__ci__} a special variable giving the value of the confidence interval.}
 
-\item{ylab}{The label of the y-axis, default is \code{NULL}. Note that if \code{horiz =  FALSE}, it overrides the value of the argument \code{value.lab}.}
+\item{ylab}{The label of the y-axis, default is \code{NULL}. Note that if \code{horiz = FALSE}, it overrides the value of the argument \code{value.lab}.}
 
-\item{xlab}{The label of the x-axis, default is \code{NULL}. Note that if \code{horiz =  TRUE}, it overrides the value of the argument \code{value.lab}.}
+\item{xlab}{The label of the x-axis, default is \code{NULL}. Note that if \code{horiz = TRUE}, it overrides the value of the argument \code{value.lab}.}
 
 \item{sub}{A subtitle, default is \code{NULL}.}
 
@@ -238,18 +238,22 @@ You can set the default values of most arguments of \code{\link{coefplot}} with 
 # setFixest_coefplot()
 
 # Estimation
-est = feols(Petal.Length ~ Petal.Width + Sepal.Length +
-                Sepal.Width | Species, iris)
+est <- feols(Petal.Length ~ Petal.Width + Sepal.Length +
+  Sepal.Width | Species, iris)
 
 # Plot with default style
 coefplot(est)
 
 # Now we permanently change some arguments
-dict = c("Petal.Length"="Length (Petal)", "Petal.Width"="Width (Petal)",
-         "Sepal.Length"="Length (Sepal)", "Sepal.Width"="Width (Sepal)")
+dict <- c(
+  "Petal.Length" = "Length (Petal)", "Petal.Width" = "Width (Petal)",
+  "Sepal.Length" = "Length (Sepal)", "Sepal.Width" = "Width (Sepal)"
+)
 
-setFixest_coefplot(ci.col = 2, pt.col = "darkblue", ci.lwd = 3,
-                   pt.cex = 2, pt.pch = 15, ci.width = 0, dict = dict)
+setFixest_coefplot(
+  ci.col = 2, pt.col = "darkblue", ci.lwd = 3,
+  pt.cex = 2, pt.pch = 15, ci.width = 0, dict = dict
+)
 
 # Tadaaa!
 coefplot(est)

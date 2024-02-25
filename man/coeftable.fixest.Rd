@@ -137,7 +137,7 @@ This set of tiny functions is primarily constructed for \code{fixest} estimation
 
 # Some data and estimation
 data(trade)
-est = fepois(Euros ~ log(dist_km) | Origin^Product + Year, trade)
+est <- fepois(Euros ~ log(dist_km) | Origin^Product + Year, trade)
 
 #
 # Coeftable/se/tstat/pvalue
@@ -152,13 +152,13 @@ pvalue(est)
 # Now with two-way clustered standard-errors
 #  and using coeftable()
 
-coeftable(est, cluster = ~Origin + Product)
-se(est, cluster = ~Origin + Product)
-pvalue(est, cluster = ~Origin + Product)
-tstat(est, cluster = ~Origin + Product)
+coeftable(est, cluster = ~ Origin + Product)
+se(est, cluster = ~ Origin + Product)
+pvalue(est, cluster = ~ Origin + Product)
+tstat(est, cluster = ~ Origin + Product)
 
 # Or you can cluster only once:
-est_sum = summary(est, cluster = ~Origin + Product)
+est_sum <- summary(est, cluster = ~ Origin + Product)
 coeftable(est_sum)
 se(est_sum)
 tstat(est_sum)
@@ -167,10 +167,10 @@ pvalue(est_sum)
 # You can use the arguments keep, drop, order
 # to rearrange the results
 
-base = iris
-names(base) = c("y", "x1", "x2", "x3", "species")
+base <- iris
+names(base) <- c("y", "x1", "x2", "x3", "species")
 
-est_iv = feols(y ~ x1 | x2 ~ x3, base)
+est_iv <- feols(y ~ x1 | x2 ~ x3, base)
 
 tstat(est_iv, keep = "x1")
 coeftable(est_iv, keep = "x1|Int")
@@ -185,14 +185,12 @@ coeftable(est_iv, order = "!Int")
 # reference in markdown documents.
 # Note that the "(Intercept)" is renamed into "constant"
 
-res = coeftable(est_iv, list = TRUE)
+res <- coeftable(est_iv, list = TRUE)
 
 # coefficient of the constant:
 res$constant$coef
 
 # pvalue of x1
 res$x1$pvalue
-
-
 
 }

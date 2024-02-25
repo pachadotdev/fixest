@@ -49,7 +49,7 @@ data(trade)
 
 # We estimate the effect of distance on trade
 #   => we account for 3 fixed-effects (FEs)
-est_pois = fepois(Euros ~ log(dist_km)|Origin+Destination+Product, trade)
+est_pois <- fepois(Euros ~ log(dist_km) | Origin + Destination + Product, trade)
 
 # displaying the results
 #  (by default SEs are clustered if FEs are used)
@@ -83,7 +83,6 @@ est_pois
 
 # Back to default (NULL == default)
 setFixest_print(fitstat = NULL)
-
 
 }
 \seealso{

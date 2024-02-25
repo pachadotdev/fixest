@@ -24,7 +24,7 @@ lags/leads properly bookkeeped.
 }
 \description{
 Subselection from a \code{fixest_panel} which has been created with the function \code{\link{panel}}.
-Also allows to create lag/lead variables with functions \code{\link{l}}/\code{\link[=l]{f}} if
+Also allows to create lag/lead variables with functions \code{\link{l}}/\code{\link[fixest:l]{f}} if
 the \code{fixest_panel} is also a \code{\link[data.table:data.table]{data.table::data.table}}.
 }
 \details{
@@ -37,21 +37,21 @@ subselections with additional arguments. If so, a note is displayed on the conso
 data(base_did)
 
 # Creating a fixest_panel object
-pdat = panel(base_did, ~id+period)
+pdat <- panel(base_did, ~ id + period)
 
 # Subselections of fixest_panel objects bookkeeps the leads/lags engine
-pdat_small = pdat[!pdat$period \%in\% c(2, 4), ]
-a = feols(y~l(x1, 0:1), pdat_small)
+pdat_small <- pdat[!pdat$period \%in\% c(2, 4), ]
+a <- feols(y ~ l(x1, 0:1), pdat_small)
 
 # we obtain the same results, had we created the lags "on the fly"
-base_small = base_did[!base_did$period \%in\% c(2, 4), ]
-b = feols(y~l(x1, 0:1), base_small, panel.id = ~id+period)
+base_small <- base_did[!base_did$period \%in\% c(2, 4), ]
+b <- feols(y ~ l(x1, 0:1), base_small, panel.id = ~ id + period)
 etable(a, b)
 
 
 # Using data.table to create new lead/lag variables
-if(require("data.table")){
-  pdat_dt = panel(as.data.table(base_did), ~id+period)
+if (require("data.table")) {
+  pdat_dt <- panel(as.data.table(base_did), ~ id + period)
 
   # Variable creation
   pdat_dt[, x_l1 := l(x1)]
@@ -59,9 +59,8 @@ if(require("data.table")){
 
   # Estimation on a subset of the data
   #  (the lead/lags work appropriately)
-  feols(y~l(x1, 0:1), pdat_dt[!period \%in\% c(2, 4)])
+  feols(y ~ l(x1, 0:1), pdat_dt[!period \%in\% c(2, 4)])
 }
-
 
 }
 \seealso{

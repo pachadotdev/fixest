@@ -19,7 +19,7 @@ Extracts the bread matrix from fixest objects to be used to compute sandwich var
 }
 \examples{
 
-est = feols(Petal.Length ~ Petal.Width + Sepal.Width, iris)
+est <- feols(Petal.Length ~ Petal.Width + Sepal.Width, iris)
 bread(est)
 
 }

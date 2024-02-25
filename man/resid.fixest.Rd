@@ -43,8 +43,8 @@ This function extracts residuals from a fitted model estimated with \code{\link{
 \examples{
 
 # simple estimation on iris data, using "Species" fixed-effects
-res_poisson = femlm(Sepal.Length ~ Sepal.Width + Petal.Length +
-                    Petal.Width | Species, iris)
+res_poisson <- femlm(Sepal.Length ~ Sepal.Width + Petal.Length +
+  Petal.Width | Species, iris)
 
 # we plot the residuals
 plot(resid(res_poisson))

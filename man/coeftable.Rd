@@ -28,7 +28,7 @@ Methods to extracts the coefficients table and its sub-components from an estima
 }
 \examples{
 
-est = lm(mpg ~ cyl, mtcars)
+est <- lm(mpg ~ cyl, mtcars)
 coeftable(est)
 
 }

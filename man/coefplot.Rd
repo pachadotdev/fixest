@@ -234,8 +234,8 @@ the other argument \code{lwd}.}
 \item{grid}{Logical, default is \code{TRUE}. Whether a grid should be displayed. You
 can set the display of the grid with the argument \code{grid.par}.}
 
-\item{grid.par}{List. Parameters of the grid. The default values are: \code{lty =  3} and \code{col = "gray"}. You can add any graphical parameter that will be passed
-to \code{\link[graphics:abline]{graphics::abline}}. You also have two additional arguments: use \code{horiz =  FALSE} to disable the horizontal lines, and use \code{vert = FALSE} to disable the
+\item{grid.par}{List. Parameters of the grid. The default values are: \code{lty = 3} and \code{col = "gray"}. You can add any graphical parameter that will be passed
+to \code{\link[graphics:abline]{graphics::abline}}. You also have two additional arguments: use \code{horiz = FALSE} to disable the horizontal lines, and use \code{vert = FALSE} to disable the
 vertical lines. Eg: \code{grid.par = list(vert = FALSE, col = "red", lwd = 2)}.}
 
 \item{zero}{Logical, default is \code{TRUE}. Whether the 0-line should be emphasized.
@@ -355,9 +355,9 @@ plot default with \code{\link{setFixest_coefplot}}).}
 appears on the x-axis. The default is equal to \code{"Estimate and __ci__ Conf. Int."},
 with \verb{__ci__} a special variable giving the value of the confidence interval.}
 
-\item{ylab}{The label of the y-axis, default is \code{NULL}. Note that if \code{horiz =  FALSE}, it overrides the value of the argument \code{value.lab}.}
+\item{ylab}{The label of the y-axis, default is \code{NULL}. Note that if \code{horiz = FALSE}, it overrides the value of the argument \code{value.lab}.}
 
-\item{xlab}{The label of the x-axis, default is \code{NULL}. Note that if \code{horiz =  TRUE}, it overrides the value of the argument \code{value.lab}.}
+\item{xlab}{The label of the x-axis, default is \code{NULL}. Note that if \code{horiz = TRUE}, it overrides the value of the argument \code{value.lab}.}
 
 \item{sub}{A subtitle, default is \code{NULL}.}
 
@@ -443,14 +443,14 @@ would end up with the following order: Wind, Temp:Wind, Temp, (Intercept).
 #
 
 # Estimation on Iris data with one fixed-effect (Species)
-est = feols(Petal.Length ~ Petal.Width + Sepal.Length +
-            Sepal.Width | Species, iris)
+est <- feols(Petal.Length ~ Petal.Width + Sepal.Length +
+  Sepal.Width | Species, iris)
 
 # Estimation results with clustered standard-errors
 # (the default when fixed-effects are present)
-est_clu = summary(est)
+est_clu <- summary(est)
 # Now with "regular" standard-errors
-est_std = summary(est, se = "iid")
+est_std <- summary(est, se = "iid")
 
 # You can plot the two results at once
 coefplot(list(est_clu, est_std))
@@ -466,14 +466,18 @@ coefplot(est, x.shift = -.2)
 
 # Second set of results: this time with
 #  standard-errors that are not clustered.
-coefplot(est, se = "iid", x.shift = .2,
-         add = TRUE, col = 2, ci.lty = 2, pch=15)
+coefplot(est,
+  se = "iid", x.shift = .2,
+  add = TRUE, col = 2, ci.lty = 2, pch = 15
+)
 
- # Note that we used 'se', an argument that will
- #  be passed to summary.fixest
+# Note that we used 'se', an argument that will
+#  be passed to summary.fixest
 
-legend("topright", col = 1:2, pch = 20, lwd = 1, lty = 1:2,
-       legend = c("Clustered", "IID"), title = "Standard-Errors")
+legend("topright",
+  col = 1:2, pch = 20, lwd = 1, lty = 1:2,
+  legend = c("Clustered", "IID"), title = "Standard-Errors"
+)
 
 
 #
@@ -484,10 +488,10 @@ legend("topright", col = 1:2, pch = 20, lwd = 1, lty = 1:2,
 # Now we estimate and plot the "yearly" treatment effects
 
 data(base_did)
-base_inter = base_did
+base_inter <- base_did
 
 # We interact the variable 'period' with the variable 'treat'
-est_did = feols(y ~ x1 + i(period, treat, 5) | id+period, base_inter)
+est_did <- feols(y ~ x1 + i(period, treat, 5) | id + period, base_inter)
 
 # In the estimation, the variable treat is interacted
 #  with each value of period but 5, set as a reference
@@ -518,18 +522,20 @@ iplot(est_did, ref.line = FALSE, pt.join = TRUE)
 # What if the interacted variable is not numeric?
 
 # Let's create a "month" variable
-all_months = c("aug", "sept", "oct", "nov", "dec", "jan",
-               "feb", "mar", "apr", "may", "jun", "jul")
-base_inter$period_month = all_months[base_inter$period]
+all_months <- c(
+  "aug", "sept", "oct", "nov", "dec", "jan",
+  "feb", "mar", "apr", "may", "jun", "jul"
+)
+base_inter$period_month <- all_months[base_inter$period]
 
 # The new estimation
-est = feols(y ~ x1 + i(period_month, treat, "oct") | id+period, base_inter)
+est <- feols(y ~ x1 + i(period_month, treat, "oct") | id + period, base_inter)
 # Since 'period_month' of type character, coefplot sorts it
 iplot(est)
 
 # To respect a plotting order, use a factor
-base_inter$month_factor = factor(base_inter$period_month, levels = all_months)
-est = feols(y ~ x1 + i(month_factor, treat, "oct") | id+period, base_inter)
+base_inter$month_factor <- factor(base_inter$period_month, levels = all_months)
+est <- feols(y ~ x1 + i(month_factor, treat, "oct") | id + period, base_inter)
 iplot(est)
 
 
@@ -542,14 +548,18 @@ iplot(est)
 # you can set *your* default by using the function
 # setFixest_coefplot()
 
-dict = c("Petal.Length"="Length (Petal)", "Petal.Width"="Width (Petal)",
-         "Sepal.Length"="Length (Sepal)", "Sepal.Width"="Width (Sepal)")
+dict <- c(
+  "Petal.Length" = "Length (Petal)", "Petal.Width" = "Width (Petal)",
+  "Sepal.Length" = "Length (Sepal)", "Sepal.Width" = "Width (Sepal)"
+)
 
-setFixest_coefplot(ci.col = 2, pt.col = "darkblue", ci.lwd = 3,
-                   pt.cex = 2, pt.pch = 15, ci.width = 0, dict = dict)
+setFixest_coefplot(
+  ci.col = 2, pt.col = "darkblue", ci.lwd = 3,
+  pt.cex = 2, pt.pch = 15, ci.width = 0, dict = dict
+)
 
-est = feols(Petal.Length ~ Petal.Width + Sepal.Length +
-                Sepal.Width + i(Species), iris)
+est <- feols(Petal.Length ~ Petal.Width + Sepal.Length +
+  Sepal.Width + i(Species), iris)
 
 # And that's it
 coefplot(est)
@@ -570,8 +580,8 @@ coefplot(est)
 # You can further use the special character "^^" to clean
 #  the beginning of the coef. name: particularly useful for factors
 
-est = feols(Petal.Length ~ Petal.Width + Sepal.Length +
-                Sepal.Width + Species, iris)
+est <- feols(Petal.Length ~ Petal.Width + Sepal.Length +
+  Sepal.Width + Species, iris)
 
 # No grouping:
 coefplot(est)
@@ -582,11 +592,10 @@ coefplot(est, group = list(Sepal = "Sepal", Species = "Species"))
 # now we group + clean the beginning of the names using the special character ^^
 coefplot(est, group = list(Sepal = "^^Sepal.", Species = "^^Species"))
 
-
 }
 \seealso{
 See \code{\link{setFixest_coefplot}} to set the default values of \code{coefplot}, and the estimation
-functions: e.g. \code{\link{feols}}, \code{\link[=feglm]{fepois}}, \code{\link{feglm}}, \code{\link[=femlm]{fenegbin}}.
+functions: e.g. \code{\link{feols}}, \code{\link[fixest:feglm]{fepois}}, \code{\link{feglm}}, \code{\link[fixest:femlm]{fenegbin}}.
 }
 \author{
 Laurent Berge

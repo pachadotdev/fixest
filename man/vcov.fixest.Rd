@@ -25,9 +25,9 @@
 scalar equal to a VCOV type, either a formula of the form: \code{vcov_type ~ variables}. The
 VCOV types implemented are: "iid", "hetero" (or "HC1"), "cluster", "twoway",
 "NW" (or "newey_west"), "DK" (or "driscoll_kraay"), and "conley". It also accepts
-object from \code{\link{vcov_cluster}}, \code{\link[=vcov_hac]{vcov_NW}}, \code{\link[=vcov_hac]{NW}},
-\code{\link[=vcov_hac]{vcov_DK}}, \code{\link[=vcov_hac]{DK}}, \code{\link{vcov_conley}} and
-\code{\link[=vcov_conley]{conley}}. It also accepts covariance matrices computed externally.
+object from \code{\link{vcov_cluster}}, \code{\link[fixest:vcov_hac]{vcov_NW}}, \code{\link[fixest:vcov_hac]{NW}},
+\code{\link[fixest:vcov_hac]{vcov_DK}}, \code{\link[fixest:vcov_hac]{DK}}, \code{\link{vcov_conley}} and
+\code{\link[fixest:vcov_conley]{conley}}. It also accepts covariance matrices computed externally.
 Finally it accepts functions to compute the covariances. See the \code{vcov} documentation
 in the \href{https://lrberge.github.io/fixest/articles/fixest_walkthrough.html#the-vcov-argument-1}{vignette}.}
 
@@ -102,7 +102,7 @@ the arguments, please have a look at the dedicated vignette:
 data(base_did)
 
 # Simple estimation on a panel
-est = feols(y ~ x1, base_did)
+est <- feols(y ~ x1, base_did)
 
 # ======== #
 # IID VCOV #
@@ -134,10 +134,10 @@ se(vcov(est, cluster ~ id))
 # Alternative ways:
 
 # -> cluster is implicitly assumed when a one-sided formula is provided
-se(vcov(est, ~ id))
+se(vcov(est, ~id))
 
 # -> using the argument cluster instead of vcov
-se(vcov(est, cluster = ~ id))
+se(vcov(est, cluster = ~id))
 
 # For two-/three- way clustering, just add more variables:
 se(vcov(est, ~ id + period))
@@ -149,7 +149,7 @@ se(vcov(est, ~ id + period))
 # is directly inferred from the FEs used in the estimation, so you don't need
 # to explicitly add them.
 
-est_fe = feols(y ~ x1 | id + period, base_did)
+est_fe <- feols(y ~ x1 | id + period, base_did)
 
 # Clustered along "id"
 se(vcov(est_fe, "cluster"))
@@ -197,7 +197,7 @@ se(vcov(est, vcov_DK(time = "period", lag = 3)))
 # When the estimation contains a panel identifier, you don't need
 # to re-write them later on
 
-est_panel = feols(y ~ x1, base_did, panel.id = ~id + period)
+est_panel <- feols(y ~ x1, base_did, panel.id = ~ id + period)
 
 # Both methods, NM and DK, now work automatically
 se(vcov(est_panel, "NW"))
@@ -209,7 +209,7 @@ se(vcov(est_panel, "DK"))
 # =================================== #
 
 data(quakes)
-est_geo = feols(depth ~ mag, quakes)
+est_geo <- feols(depth ~ mag, quakes)
 
 # ------------|
 # Conley VCOV |
@@ -246,8 +246,6 @@ se(vcov(est, ssc = ssc(adj = FALSE)))
 # You need to add it like a variable:
 se(vcov(est, iid ~ ssc(adj = FALSE)))
 se(vcov(est, DK ~ period + ssc(adj = FALSE)))
-
-
 
 }
 \seealso{

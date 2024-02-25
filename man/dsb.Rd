@@ -42,14 +42,16 @@ Compactly performs many low level string operations. Advanced support for plural
 # BASIC USAGE ####
 #
 
-x = c("Romeo", "Juliet")
+x <- c("Romeo", "Juliet")
 
 # .[x] inserts x
 dsb("Hello .[x]!")
 
 # elements in ... are collapsed with "" (default)
-dsb("Hello .[x[1]], ",
-    "how is .[x[2]] doing?")
+dsb(
+  "Hello .[x[1]], ",
+  "how is .[x[2]] doing?"
+)
 
 # Splitting a comma separated string
 # The mechanism is explained later
@@ -79,7 +81,7 @@ dsb("', *'S !J. Mills, David, Agnes, Dr Strong")
 # operation: usually 'arg'op with op an operation code.
 
 # Example: splitting
-x = "hello dear"
+x <- "hello dear"
 dsb(".[' 's ? x]")
 # x is split by ' '
 
@@ -150,7 +152,7 @@ dsb("', || or 'c?1:4")
 # syntax: 'pattern'x
 # Default is '[[:alnum:]]+'
 
-x = "This years is... 2020"
+x <- "This years is... 2020"
 dsb("x ? x")
 dsb("X ? x")
 
@@ -187,8 +189,8 @@ dsb("S, Q, C!Julia, David, Wilkins")
 # f, F: formats the string to fit the same length
 
 
-score = c(-10, 2050)
-nm = c("Wilkins", "David")
+score <- c(-10, 2050)
+nm <- c("Wilkins", "David")
 dsb("Monopoly scores:\n.['\n'c ! - .[f ? nm]: .[F ? score] US$]")
 
 # OK that example may have been a bit too complex,
@@ -221,14 +223,14 @@ dsb("pi = .['.2f'\% ? pi]")
 dsb("'[|]'a, ' + 'c!x.[1:4]")
 
 # Enumerations
-acad = dsb("/you like admin, you enjoy working on weekends, you really love emails")
+acad <- dsb("/you like admin, you enjoy working on weekends, you really love emails")
 dsb("Main reasons to pursue an academic career:\n .[':i:) 'a, C ? acad].")
 
 #
 # A: same as 'a' but adds at the begging/end of the full string (not on the elements)
 # special values: :n:, :N:, give the number of elements
 
-characters = dsb("/David, Wilkins, Dora, Agnes")
+characters <- dsb("/David, Wilkins, Dora, Agnes")
 dsb("There are .[':N: characters: 'A, C ? characters].")
 
 
@@ -244,7 +246,7 @@ dsb("stop, w!It is a tale told by an idiot, full of sound and fury, signifying n
 #         'n|s'k: same + adds 's' at the end of shortened strings
 #         'n||s'k: same but 's' counts in the n characters kept
 
-words = dsb("/short, constitutional")
+words <- dsb("/short, constitutional")
 dsb("5k ? words")
 
 dsb("'5|..'k ? words")
@@ -259,7 +261,7 @@ dsb("'5||..'k ? words")
 #
 # Special values :rest: and :REST:, give the number of items dropped
 
-bx = dsb("/Pessac Leognan, Saint Emilion, Marguaux, Saint Julien, Pauillac")
+bx <- dsb("/Pessac Leognan, Saint Emilion, Marguaux, Saint Julien, Pauillac")
 dsb("Bordeaux wines I like: .[3K, ', 'C ? bx].")
 
 dsb("Bordeaux wines I like: .['3|etc..'K, ', 'C ? bx].")
@@ -314,7 +316,7 @@ dsb("d!I am going to be annihilated")
 # D: deletes all elements
 # -> useful in conditions
 
-x = dsb("/I'll, be, deleted")
+x <- dsb("/I'll, be, deleted")
 dsb("D ? x")
 
 #
@@ -322,7 +324,7 @@ dsb("D ? x")
 # syntax: 's1|s2'i: inserts s1 first and s2 last
 # I: is the same as i but is 'invisibly' included
 
-characters = dsb("/David, Wilkins, Dora, Agnes, Trotwood")
+characters <- dsb("/David, Wilkins, Dora, Agnes, Trotwood")
 dsb("'Heep|Spenlow'i, C ? characters")
 
 dsb("'Heep|Spenlow'I, C ? characters")
@@ -337,7 +339,7 @@ dsb("'Heep|Spenlow'I, C ? characters")
 #
 # *s, *s_: adds 's' or 's ' depending on the number of elements
 
-nb = 1:5
+nb <- 1:5
 dsb("Number.[*s, D ? nb]: .[C ? nb]")
 dsb("Number.[*s, D ? 2 ]: .[C ? 2 ]")
 
@@ -350,11 +352,11 @@ dsb("Number.[*s, ': 'A, C ? nb]")
 # syntax: 'verb'v
 
 # Unpopular opinion?
-brand = c("Apple", "Samsung")
+brand <- c("Apple", "Samsung")
 dsb(".[V, C ? brand] overrated.")
 dsb(".[V, C ? brand[1]] overrated.")
 
-win = dsb("/Peggoty, Agnes, Emily")
+win <- dsb("/Peggoty, Agnes, Emily")
 dsb("The winner.[*s_, v, C ? win].")
 dsb("The winner.[*s_, v, C ? win[1]].")
 
@@ -371,7 +373,7 @@ dsb(".[' was'V, C ? win[1]] unable to come.")
 #         if length == 1: applies 's1|s2'A
 #         if length >  1: applies 's3|s4'A
 
-win = dsb("/Barkis, Micawber, Murdstone")
+win <- dsb("/Barkis, Micawber, Murdstone")
 dsb("The winner.[' is /s are '*A, C ? win].")
 dsb("The winner.[' is /s are '*A, C ? win[1]].")
 
@@ -395,7 +397,7 @@ dsb("The winner.[' is /s are '*A, C ? win[1]].")
 
 dsb("'char <= 2'if('(|)'a : '[|]'a), ' + 'c ? c(1, 12, 123)")
 
-sentence = "This is a sentence with some longish words."
+sentence <- "This is a sentence with some longish words."
 dsb("s, 'char<=4'if(D), c ? sentence")
 
 dsb("s, 'fixed == e'if(:D), c ! Only words with an e are selected.")
@@ -407,13 +409,10 @@ dsb("s, 'fixed == e'if(:D), c ! Only words with an e are selected.")
 # Arguments can be evaluated from the calling frame.
 # Simply use backticks instead of quotes.
 
-dollar = 6
-reason = "glory"
+dollar <- 6
+reason <- "glory"
 dsb("Why do you develop packages? For .[`dollar`*c!$]?",
-    "For money? No... for .[U,''s, c?reason]!", sep = "\n")
-
-
-
-
-
+  "For money? No... for .[U,''s, c?reason]!",
+  sep = "\n"
+)
 }

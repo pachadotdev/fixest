@@ -20,7 +20,7 @@ Displays a brief summary of selected fit statistics from the function \code{\lin
 \examples{
 
 data(trade)
-gravity = feols(log(Euros) ~ log(dist_km) | Destination + Origin, trade)
+gravity <- feols(log(Euros) ~ log(dist_km) | Destination + Origin, trade)
 
 # Extracting the 'working' number of observations used to compute the pvalues
 fitstat(gravity, "g", simplify = TRUE)
@@ -50,6 +50,5 @@ etable(gravity, fitstat = ~ . + tstand + thc + t1w + t2w)
 
 # Note that the custom stats we created are can easily lead
 # to errors, but that's another story!
-
 
 }

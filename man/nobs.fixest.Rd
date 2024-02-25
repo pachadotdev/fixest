@@ -21,12 +21,11 @@ obtained using the functions \code{\link{femlm}}, \code{\link{feols}} or \code{\
 \examples{
 
 # simple estimation on iris data with "Species" fixed-effects
-res = femlm(Sepal.Length ~ Sepal.Width + Petal.Length +
-            Petal.Width | Species, iris)
+res <- femlm(Sepal.Length ~ Sepal.Width + Petal.Length +
+  Petal.Width | Species, iris)
 
 nobs(res)
 logLik(res)
-
 
 }
 \seealso{

@@ -28,16 +28,15 @@ Note that this is the original data set and not the data used for the estimation
 }
 \examples{
 
-base = setNames(iris, c("y", "x1", "x2", "x3", "species"))
-base$y[1:5] = NA
+base <- setNames(iris, c("y", "x1", "x2", "x3", "species"))
+base$y[1:5] <- NA
 
-est = feols(y ~ x1 + x2, base)
+est <- feols(y ~ x1 + x2, base)
 
 # the original data set
 head(fixest_data(est))
 
 # the data set, with only the lines used for the estimation
 head(fixest_data(est, sample = "est"))
-
 
 }

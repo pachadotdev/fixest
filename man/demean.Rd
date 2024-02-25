@@ -131,18 +131,20 @@ avoid using only the variable with varying slope (i.e. use single square bracket
 # Illustration of the FWL theorem
 data(trade)
 
-base = trade
-base$ln_dist = log(base$dist_km)
-base$ln_euros = log(base$Euros)
+base <- trade
+base$ln_dist <- log(base$dist_km)
+base$ln_euros <- log(base$Euros)
 
 # We center the two variables ln_dist and ln_euros
 #  on the factors Origin and Destination
-X_demean = demean(X = base[, c("ln_dist", "ln_euros")],
-                  f = base[, c("Origin", "Destination")])
-base[, c("ln_dist_dm", "ln_euros_dm")] = X_demean
+X_demean <- demean(
+  X = base[, c("ln_dist", "ln_euros")],
+  f = base[, c("Origin", "Destination")]
+)
+base[, c("ln_dist_dm", "ln_euros_dm")] <- X_demean
 
-est = feols(ln_euros_dm ~ ln_dist_dm, base)
-est_fe = feols(ln_euros ~ ln_dist | Origin + Destination, base)
+est <- feols(ln_euros_dm ~ ln_dist_dm, base)
+est_fe <- feols(ln_euros ~ ln_dist | Origin + Destination, base)
 
 # The results are the same as if we used the two factors
 # as fixed-effects
@@ -155,23 +157,25 @@ etable(est, est_fe, se = "st")
 # You can center on factors but also on variables with varying slopes
 
 # Let's have an illustration
-base = iris
-names(base) = c("y", "x1", "x2", "x3", "species")
+base <- iris
+names(base) <- c("y", "x1", "x2", "x3", "species")
 
 #
 # We center y and x1 on species and x2 * species
 
 # using a formula
-base_dm = demean(y + x1 ~ species[x2], data = base)
+base_dm <- demean(y + x1 ~ species[x2], data = base)
 
 # using vectors
-base_dm_bis = demean(X = base[, c("y", "x1")], f = base$species,
-                     slope.vars = base$x2, slope.flag = 1)
+base_dm_bis <- demean(
+  X = base[, c("y", "x1")], f = base$species,
+  slope.vars = base$x2, slope.flag = 1
+)
 
 # Let's look at the equivalences
-res_vs_1 = feols(y ~ x1 + species + x2:species, base)
-res_vs_2 = feols(y ~ x1, base_dm)
-res_vs_3 = feols(y ~ x1, base_dm_bis)
+res_vs_1 <- feols(y ~ x1 + species + x2:species, base)
+res_vs_2 <- feols(y ~ x1, base_dm)
+res_vs_3 <- feols(y ~ x1, base_dm_bis)
 
 # only the small sample adj. differ in the SEs
 etable(res_vs_1, res_vs_2, res_vs_3, keep = "x1")
@@ -179,14 +183,16 @@ etable(res_vs_1, res_vs_2, res_vs_3, keep = "x1")
 #
 # center on x2 * species and on another FE
 
-base$fe = rep(1:5, 10)
+base$fe <- rep(1:5, 10)
 
 # using a formula => double square brackets!
-base_dm = demean(y + x1 ~ fe + species[[x2]], data = base)
+base_dm <- demean(y + x1 ~ fe + species[[x2]], data = base)
 
 # using vectors => note slope.flag!
-base_dm_bis = demean(X = base[, c("y", "x1")], f = base[, c("fe", "species")],
-                     slope.vars = base$x2, slope.flag = c(0, -1))
+base_dm_bis <- demean(
+  X = base[, c("y", "x1")], f = base[, c("fe", "species")],
+  slope.vars = base$x2, slope.flag = c(0, -1)
+)
 
 # Explanations slope.flag = c(0, -1):
 # - the first 0: the first factor (fe) is associated to no variable
@@ -195,14 +201,10 @@ base_dm_bis = demean(X = base[, c("y", "x1")], f = base[, c("fe", "species")],
 #    *   -1 < 0: the second factor should not be included as such
 
 # Let's look at the equivalences
-res_vs_1 = feols(y ~ x1 + i(fe) + x2:species, base)
-res_vs_2 = feols(y ~ x1, base_dm)
-res_vs_3 = feols(y ~ x1, base_dm_bis)
+res_vs_1 <- feols(y ~ x1 + i(fe) + x2:species, base)
+res_vs_2 <- feols(y ~ x1, base_dm)
+res_vs_3 <- feols(y ~ x1, base_dm_bis)
 
 # only the small sample adj. differ in the SEs
 etable(res_vs_1, res_vs_2, res_vs_3, keep = "x1")
-
-
-
-
 }

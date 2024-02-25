@@ -42,22 +42,21 @@ are detailed in \code{\link{femlm}} help page.
 \examples{
 
 # simple estimation on iris data, using "Species" fixed-effects
-res_poisson = femlm(Sepal.Length ~ Sepal.Width + Petal.Length +
-                    Petal.Width | Species, iris)
+res_poisson <- femlm(Sepal.Length ~ Sepal.Width + Petal.Length +
+  Petal.Width | Species, iris)
 
 # we extract the fitted values
-y_fitted_poisson = fitted(res_poisson)
+y_fitted_poisson <- fitted(res_poisson)
 
 # Same estimation but in OLS (Gaussian family)
-res_gaussian = femlm(Sepal.Length ~ Sepal.Width + Petal.Length +
-                    Petal.Width | Species, iris, family = "gaussian")
+res_gaussian <- femlm(Sepal.Length ~ Sepal.Width + Petal.Length +
+  Petal.Width | Species, iris, family = "gaussian")
 
-y_fitted_gaussian = fitted(res_gaussian)
+y_fitted_gaussian <- fitted(res_gaussian)
 
 # comparison of the fit for the two families
 plot(iris$Sepal.Length, y_fitted_poisson)
 points(iris$Sepal.Length, y_fitted_gaussian, col = 2, pch = 2)
-
 
 }
 \seealso{

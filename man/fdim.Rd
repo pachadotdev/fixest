@@ -21,8 +21,6 @@ fdim(iris)
 
 fdim(iris$Species)
 
-
-
 }
 \author{
 Laurent Berge

@@ -62,9 +62,9 @@ with NAs).}
 scalar equal to a VCOV type, either a formula of the form: \code{vcov_type ~ variables}. The
 VCOV types implemented are: "iid", "hetero" (or "HC1"), "cluster", "twoway",
 "NW" (or "newey_west"), "DK" (or "driscoll_kraay"), and "conley". It also accepts
-object from \code{\link{vcov_cluster}}, \code{\link[=vcov_hac]{vcov_NW}}, \code{\link[=vcov_hac]{NW}},
-\code{\link[=vcov_hac]{vcov_DK}}, \code{\link[=vcov_hac]{DK}}, \code{\link{vcov_conley}} and
-\code{\link[=vcov_conley]{conley}}. It also accepts covariance matrices computed externally.
+object from \code{\link{vcov_cluster}}, \code{\link[fixest:vcov_hac]{vcov_NW}}, \code{\link[fixest:vcov_hac]{NW}},
+\code{\link[fixest:vcov_hac]{vcov_DK}}, \code{\link[fixest:vcov_hac]{DK}}, \code{\link{vcov_conley}} and
+\code{\link[fixest:vcov_conley]{conley}}. It also accepts covariance matrices computed externally.
 Finally it accepts functions to compute the covariances. See the \code{vcov} documentation
 in the \href{https://lrberge.github.io/fixest/articles/fixest_walkthrough.html#the-vcov-argument-1}{vignette}.}
 
@@ -92,27 +92,29 @@ This function obtains prediction from a fitted model estimated with \code{\link{
 \examples{
 
 # Estimation on iris data
-res = fepois(Sepal.Length ~ Petal.Length | Species, iris)
+res <- fepois(Sepal.Length ~ Petal.Length | Species, iris)
 
 # what would be the prediction if the data was all setosa?
-newdata = data.frame(Petal.Length = iris$Petal.Length, Species = "setosa")
-pred_setosa = predict(res, newdata = newdata)
+newdata <- data.frame(Petal.Length = iris$Petal.Length, Species = "setosa")
+pred_setosa <- predict(res, newdata = newdata)
 
 # Let's look at it graphically
-plot(c(1, 7), c(3, 11), type = "n", xlab = "Petal.Length",
-     ylab = "Sepal.Length")
+plot(c(1, 7), c(3, 11),
+  type = "n", xlab = "Petal.Length",
+  ylab = "Sepal.Length"
+)
 
-newdata = iris[order(iris$Petal.Length), ]
-newdata$Species = "setosa"
+newdata <- iris[order(iris$Petal.Length), ]
+newdata$Species <- "setosa"
 lines(newdata$Petal.Length, predict(res, newdata))
 
 # versicolor
-newdata$Species = "versicolor"
-lines(newdata$Petal.Length, predict(res, newdata), col=2)
+newdata$Species <- "versicolor"
+lines(newdata$Petal.Length, predict(res, newdata), col = 2)
 
 # virginica
-newdata$Species = "virginica"
-lines(newdata$Petal.Length, predict(res, newdata), col=3)
+newdata$Species <- "virginica"
+lines(newdata$Petal.Length, predict(res, newdata), col = 3)
 
 # The original data
 points(iris$Petal.Length, iris$Sepal.Length, col = iris$Species, pch = 18)
@@ -124,9 +126,9 @@ legend("topleft", lty = 1, col = 1:3, legend = levels(iris$Species))
 #
 
 data(trade)
-est_trade = fepois(Euros ~ log(dist_km) | Destination^Product +
-                                           Origin^Product + Year, trade)
-obs_fe = predict(est_trade, fixef = TRUE)
+est_trade <- fepois(Euros ~ log(dist_km) | Destination^Product +
+  Origin^Product + Year, trade)
+obs_fe <- predict(est_trade, fixef = TRUE)
 head(obs_fe)
 
 # can we check we get the right sum of fixed-effects
@@ -137,9 +139,9 @@ head(cbind(rowSums(obs_fe), est_trade$sumFE))
 # Standard-error of the prediction
 #
 
-base = setNames(iris, c("y", "x1", "x2", "x3", "species"))
+base <- setNames(iris, c("y", "x1", "x2", "x3", "species"))
 
-est = feols(y ~ x1 + species, base)
+est <- feols(y ~ x1 + species, base)
 
 head(predict(est, se.fit = TRUE))
 
@@ -151,8 +153,6 @@ head(predict(est, interval = "predi"))
 
 # You can change the type of SE on the fly
 head(predict(est, interval = "conf", vcov = ~species))
-
-
 
 }
 \seealso{

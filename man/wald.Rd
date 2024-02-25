@@ -34,9 +34,9 @@ is returned.}
 scalar equal to a VCOV type, either a formula of the form: \code{vcov_type ~ variables}. The
 VCOV types implemented are: "iid", "hetero" (or "HC1"), "cluster", "twoway",
 "NW" (or "newey_west"), "DK" (or "driscoll_kraay"), and "conley". It also accepts
-object from \code{\link{vcov_cluster}}, \code{\link[=vcov_hac]{vcov_NW}}, \code{\link[=vcov_hac]{NW}},
-\code{\link[=vcov_hac]{vcov_DK}}, \code{\link[=vcov_hac]{DK}}, \code{\link{vcov_conley}} and
-\code{\link[=vcov_conley]{conley}}. It also accepts covariance matrices computed externally.
+object from \code{\link{vcov_cluster}}, \code{\link[fixest:vcov_hac]{vcov_NW}}, \code{\link[fixest:vcov_hac]{NW}},
+\code{\link[fixest:vcov_hac]{vcov_DK}}, \code{\link[fixest:vcov_hac]{DK}}, \code{\link{vcov_conley}} and
+\code{\link[fixest:vcov_conley]{conley}}. It also accepts covariance matrices computed externally.
 Finally it accepts functions to compute the covariances. See the \code{vcov} documentation
 in the \href{https://lrberge.github.io/fixest/articles/fixest_walkthrough.html#the-vcov-argument-1}{vignette}.}
 
@@ -77,7 +77,7 @@ The type of VCOV matrix plays a crucial role in this test. Use the arguments \co
 
 data(airquality)
 
-est = feols(Ozone ~ Solar.R + Wind + poly(Temp, 3), airquality)
+est <- feols(Ozone ~ Solar.R + Wind + poly(Temp, 3), airquality)
 
 # Testing the joint nullity of the Temp polynomial
 wald(est, "poly")
@@ -94,7 +94,7 @@ wald(est, drop = "Inte|poly")
 
 data(base_did)
 
-est_did = feols(y ~ x1 + i(period, treat, 5) | id + period, base_did)
+est_did <- feols(y ~ x1 + i(period, treat, 5) | id + period, base_did)
 
 # The graph of the coefficients
 coefplot(est_did)
@@ -105,6 +105,5 @@ wald(est_did, "period::[1234]$")
 # If "period::[1234]$" looks weird to you, check out
 # regular expressions: e.g. see ?regex.
 # Learn it, you won't regret it!
-
 
 }

@@ -39,18 +39,18 @@ other built-in statistic (and there are too many edge cases impeding automatic d
 \examples{
 
 # An estimation
-base = iris
-names(base) = c("y", "x1", "x2", "x3", "species")
-est = feols(y ~ x1 + x2 | species, base)
+base <- iris
+names(base) <- c("y", "x1", "x2", "x3", "species")
+est <- feols(y ~ x1 + x2 | species, base)
 
 #
 # single valued tests
 #
 
 # say you want to add the coefficient of variation of the dependent variable
-cv = function(est){
-  y = model.matrix(est, type = "lhs")
-  sd(y)/mean(y)
+cv <- function(est) {
+  y <- model.matrix(est, type = "lhs")
+  sd(y) / mean(y)
 }
 
 # Now we register the routine
@@ -66,8 +66,8 @@ fitstat(est, "cvy")
 # Let's say you want a Wald test with an heteroskedasticiy robust variance
 
 # First we create the function
-hc_wald = function(est){
-  w = wald(est, keep = "!Intercept", print = FALSE, se = "hetero")
+hc_wald <- function(est) {
+  w <- wald(est, keep = "!Intercept", print = FALSE, se = "hetero")
   head(w, 4)
 }
 # This test returns a vector of 4 elements: stat, p, df1 and df2

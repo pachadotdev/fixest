@@ -73,9 +73,11 @@ you keep all estimations.
 \examples{
 
 # Estimation with multiple samples/LHS/RHS
-aq = airquality[airquality$Month \%in\% 5:6, ]
-est_split = feols(c(Ozone, Solar.R) ~ sw(poly(Wind, 2), poly(Temp, 2)),
-                  aq, split = ~ Month)
+aq <- airquality[airquality$Month \%in\% 5:6, ]
+est_split <- feols(c(Ozone, Solar.R) ~ sw(poly(Wind, 2), poly(Temp, 2)),
+  aq,
+  split = ~Month
+)
 
 # By default: sample is the root
 etable(est_split)
@@ -94,8 +96,8 @@ etable(est_split[i = c(1, .N)])
 
 }
 \seealso{
-The main fixest estimation functions: \code{\link{feols}}, \code{\link[=feglm]{fepois}},
-\code{\link[=femlm]{fenegbin}}, \code{\link{feglm}}, \code{\link{feNmlm}}. Tools for mutliple fixest
+The main fixest estimation functions: \code{\link{feols}}, \code{\link[fixest:feglm]{fepois}},
+\code{\link[fixest:femlm]{fenegbin}}, \code{\link{feglm}}, \code{\link{feNmlm}}. Tools for mutliple fixest
 estimations: \code{\link{summary.fixest_multi}}, \code{\link{print.fixest_multi}}, \code{\link{as.list.fixest_multi}},
 \code{\link[fixest]{sub-sub-.fixest_multi}}, \code{\link[fixest]{sub-.fixest_multi}}.
 }

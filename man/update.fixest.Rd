@@ -35,16 +35,16 @@ This function updates the formulas and use previous starting values to estimate 
 data(trade)
 
 # main estimation
-est_pois = fepois(Euros ~ log(dist_km) | Origin + Destination, trade)
+est_pois <- fepois(Euros ~ log(dist_km) | Origin + Destination, trade)
 
 # we add the variable log(Year)
-est_2 = update(est_pois, . ~ . + log(Year))
+est_2 <- update(est_pois, . ~ . + log(Year))
 
 # we add another fixed-effect: "Product"
-est_3 = update(est_2, . ~ . | . + Product)
+est_3 <- update(est_2, . ~ . | . + Product)
 
 # we remove the fixed-effect "Origin" and the variable log(dist_km)
-est_4 = update(est_3, . ~ . - log(dist_km) | . - Origin)
+est_4 <- update(est_3, . ~ . - log(dist_km) | . - Origin)
 
 # Quick look at the 4 estimations
 etable(est_pois, est_2, est_3, est_4)

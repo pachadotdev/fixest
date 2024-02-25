@@ -90,8 +90,8 @@ examples in the help page of \code{\link{feols}}.
 # Simple illustration
 #
 
-x = rep(letters[1:4], 3)[1:10]
-y = rep(1:4, c(1, 2, 3, 4))
+x <- rep(letters[1:4], 3)[1:10]
+y <- rep(1:4, c(1, 2, 3, 4))
 
 # interaction
 data.frame(x, y, i(x, y, ref = TRUE))
@@ -100,7 +100,7 @@ data.frame(x, y, i(x, y, ref = TRUE))
 data.frame(x, i(x, "b"))
 
 # you can interact factors too
-z = rep(c("e", "f", "g"), c(5, 3, 2))
+z <- rep(c("e", "f", "g"), c(5, 3, 2))
 data.frame(x, z, i(x, z))
 
 # to force a numeric variable to be treated as a factor: use i.
@@ -119,13 +119,13 @@ data.frame(x, i(x, bin = .(ab = "@a|b")))
 
 data(base_did)
 # We interact the variable 'period' with the variable 'treat'
-est_did = feols(y ~ x1 + i(period, treat, 5) | id + period, base_did)
+est_did <- feols(y ~ x1 + i(period, treat, 5) | id + period, base_did)
 
 # => plot only interactions with iplot
 iplot(est_did)
 
 # Using i() for factors
-est_bis = feols(y ~ x1 + i(period, keep = 3:6) + i(period, treat, 5) | id, base_did)
+est_bis <- feols(y ~ x1 + i(period, keep = 3:6) + i(period, treat, 5) | id, base_did)
 
 # we plot the second set of variables created with i()
 # => we need to use keep (otherwise only the first one is represented)
@@ -140,14 +140,14 @@ etable(est_bis, dict = c("6" = "six"))
 
 # We use the i. prefix to consider week as a factor
 data(airquality)
-aq = airquality
-aq$week = aq$Day \%/\% 7 + 1
+aq <- airquality
+aq$week <- aq$Day \%/\% 7 + 1
 
 # Interacting Month and week:
-res_2F = feols(Ozone ~ Solar.R + i(Month, i.week), aq)
+res_2F <- feols(Ozone ~ Solar.R + i(Month, i.week), aq)
 
 # Same but dropping the 5th Month and 1st week
-res_2F_bis = feols(Ozone ~ Solar.R + i(Month, i.week, ref = 5, ref2 = 1), aq)
+res_2F_bis <- feols(Ozone ~ Solar.R + i(Month, i.week, ref = 5, ref2 = 1), aq)
 
 etable(res_2F, res_2F_bis)
 
@@ -161,11 +161,9 @@ feols(Ozone ~ i(Month, bin = "bin::2"), airquality)
 
 feols(Ozone ~ i(Month, bin = list(summer = 7:9)), airquality)
 
-
-
 }
 \seealso{
-\code{\link[=coefplot]{iplot}} to plot interactions or factors created with \code{i()}, \code{\link{feols}} for
+\code{\link[fixest:coefplot]{iplot}} to plot interactions or factors created with \code{i()}, \code{\link{feols}} for
 OLS estimation with multiple fixed-effects.
 
 See the function \code{\link{bin}} for binning variables.

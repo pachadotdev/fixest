@@ -35,9 +35,9 @@ long format instead of wide.}
 scalar equal to a VCOV type, either a formula of the form: \code{vcov_type ~ variables}. The
 VCOV types implemented are: "iid", "hetero" (or "HC1"), "cluster", "twoway",
 "NW" (or "newey_west"), "DK" (or "driscoll_kraay"), and "conley". It also accepts
-object from \code{\link{vcov_cluster}}, \code{\link[=vcov_hac]{vcov_NW}}, \code{\link[=vcov_hac]{NW}},
-\code{\link[=vcov_hac]{vcov_DK}}, \code{\link[=vcov_hac]{DK}}, \code{\link{vcov_conley}} and
-\code{\link[=vcov_conley]{conley}}. It also accepts covariance matrices computed externally.
+object from \code{\link{vcov_cluster}}, \code{\link[fixest:vcov_hac]{vcov_NW}}, \code{\link[fixest:vcov_hac]{NW}},
+\code{\link[fixest:vcov_hac]{vcov_DK}}, \code{\link[fixest:vcov_hac]{DK}}, \code{\link{vcov_conley}} and
+\code{\link[fixest:vcov_conley]{conley}}. It also accepts covariance matrices computed externally.
 Finally it accepts functions to compute the covariances. See the \code{vcov} documentation
 in the \href{https://lrberge.github.io/fixest/articles/fixest_walkthrough.html#the-vcov-argument-1}{vignette}.}
 
@@ -89,11 +89,11 @@ type of standard-errors to be computed.
 }
 \examples{
 
-base = iris
-names(base) = c("y", "x1", "x2", "x3", "species")
+base <- iris
+names(base) <- c("y", "x1", "x2", "x3", "species")
 
 # Multiple estimation
-res = feols(y ~ csw(x1, x2, x3), base, split = ~species)
+res <- feols(y ~ csw(x1, x2, x3), base, split = ~species)
 
 # By default, the type is "short"
 # You can still use the arguments from summary.fixest
@@ -107,11 +107,10 @@ summary(res, type = "se_compact")
 
 summary(res, type = "se_long")
 
-
 }
 \seealso{
-The main fixest estimation functions: \code{\link{feols}}, \code{\link[=feglm]{fepois}},
-\code{\link[=femlm]{fenegbin}}, \code{\link{feglm}}, \code{\link{feNmlm}}. Tools for mutliple fixest
+The main fixest estimation functions: \code{\link{feols}}, \code{\link[fixest:feglm]{fepois}},
+\code{\link[fixest:femlm]{fenegbin}}, \code{\link{feglm}}, \code{\link{feNmlm}}. Tools for mutliple fixest
 estimations: \code{\link{summary.fixest_multi}}, \code{\link{print.fixest_multi}}, \code{\link{as.list.fixest_multi}},
 \code{\link[fixest]{sub-sub-.fixest_multi}}, \code{\link[fixest]{sub-.fixest_multi}}.
 }

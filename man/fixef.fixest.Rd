@@ -63,10 +63,10 @@ If this is the case, then a warning is raised.
 data(trade)
 
 # We estimate the effect of distance on trade => we account for 3 fixed-effects
-est_pois = femlm(Euros ~ log(dist_km)|Origin+Destination+Product, trade)
+est_pois <- femlm(Euros ~ log(dist_km) | Origin + Destination + Product, trade)
 
 # Obtaining the fixed-effects coefficients:
-fe_trade = fixef(est_pois)
+fe_trade <- fixef(est_pois)
 
 # The fixed-effects of the first fixed-effect dimension:
 head(fe_trade$Origin)

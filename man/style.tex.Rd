@@ -203,20 +203,23 @@ must be valid Latex expressions.
 \examples{
 
 # Multiple estimations => see details in feols
-aq = airquality
-est = feols(c(Ozone, Solar.R) ~
-                Wind + csw(Temp, Temp^2, Temp^3) | Month + Day,
-            data = aq)
+aq <- airquality
+est <- feols(
+  c(Ozone, Solar.R) ~
+    Wind + csw(Temp, Temp^2, Temp^3) | Month + Day,
+  data = aq
+)
 
 # Playing a bit with the styles
 etable(est, tex = TRUE)
 etable(est, tex = TRUE, style.tex = style.tex("aer"))
 
 etable(est, tex = TRUE, style.tex = style.tex("aer",
-                                      var.title = "\\\\emph{Expl. Vars.}",
-                                      model.format = "[i]",
-                                      yesNo = "x",
-                                      tabular = "*"))
+  var.title = "\\\\emph{Expl. Vars.}",
+  model.format = "[i]",
+  yesNo = "x",
+  tabular = "*"
+))
 
 }
 \seealso{

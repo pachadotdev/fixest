@@ -19,13 +19,13 @@ Returns the deviance from a \code{fixest} estimation.
 }
 \examples{
 
-est = feols(Petal.Length ~ Petal.Width, iris)
+est <- feols(Petal.Length ~ Petal.Width, iris)
 deviance(est)
 
-est_pois = fepois(Petal.Length ~ Petal.Width, iris)
+est_pois <- fepois(Petal.Length ~ Petal.Width, iris)
 deviance(est_pois)
 
 }
 \seealso{
-\code{\link{feols}}, \code{\link[=feglm]{fepois}}, \code{\link{feglm}}, \code{\link[=femlm]{fenegbin}}, \code{\link{feNmlm}}.
+\code{\link{feols}}, \code{\link[fixest:feglm]{fepois}}, \code{\link{feglm}}, \code{\link[fixest:femlm]{fenegbin}}, \code{\link{feNmlm}}.
 }

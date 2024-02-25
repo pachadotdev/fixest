@@ -21,7 +21,7 @@ Extracts the scores from a fixest estimation.
 \examples{
 
 data(iris)
-est = feols(Petal.Length ~ Petal.Width + Sepal.Width, iris)
+est <- feols(Petal.Length ~ Petal.Width + Sepal.Width, iris)
 head(estfun(est))
 
 }
