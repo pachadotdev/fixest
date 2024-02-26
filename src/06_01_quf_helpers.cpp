@@ -1,13 +1,13 @@
 #include "06_0_quf.hpp"
 
-inline unsigned long long float_to_ull(void *u, int i) {
+unsigned long long float_to_ull(void *u, int i) {
   unsigned long long *pu_ll = reinterpret_cast<unsigned long long *>(u);
   unsigned long long u_ull = pu_ll[i];
   unsigned long long mask = -(u_ull >> 63) | 0x8000000000000000;
   return (u_ull ^ mask);
 }
 
-inline double ull_to_float(unsigned long long u_ull) {
+double ull_to_float(unsigned long long u_ull) {
   unsigned long long mask = ((u_ull >> 63) - 1) | 0x8000000000000000;
   unsigned long long res_ull = u_ull ^ mask;
   unsigned long long *pres_ull = &res_ull;
@@ -292,7 +292,6 @@ void quf_int(int n, int *x_uf, void *px, std::vector<double> &x_unik, int x_min,
 
   int n = Rf_length(x);
 
-  // std::vector<int> x_uf(n);
   SEXP r_x_uf = PROTECT(Rf_allocVector(INTSXP, n));
   int *x_uf = INTEGER(r_x_uf);
   std::vector<double> x_unik;
@@ -324,8 +323,6 @@ void quf_int(int n, int *x_uf, void *px, std::vector<double> &x_unik, int x_min,
       xi_uintptr = reinterpret_cast<std::uintptr_t>(pxi);
 
       x_ull.push_back(static_cast<unsigned long long>(xi_uintptr));
-
-      // Rcout << xi_uintptr << "  ----  " << xi_ull << "\n";
     }
   } else {
     IS_INT = true;
@@ -386,7 +383,6 @@ void quf_int(int n, int *x_uf, void *px, std::vector<double> &x_unik, int x_min,
         quf_double(n, x_uf, x_dble.data(), x_unik);
       }
     }
-
   } else if (IS_STR) {
     // string -- beforehand transformed as ULL
     quf_double(n, x_uf, x_ull.data(), x_unik, true);

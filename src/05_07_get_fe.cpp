@@ -69,7 +69,7 @@ void updateId2do(int nb2do, writable::integers &id2do,
   int iter_loop = 0, iterMax_loop = 10000;
 
   // Creation of the indices to put all the cluster values into a single vector
-  int nb_coef = accumulate(cluster_sizes.begin(), cluster_sizes.end(), 0);
+  int nb_coef = std::accumulate(cluster_sizes.begin(), cluster_sizes.end(), 0);
   writable::integers nb_ref(Q);  // nb_ref takes the nb of elements set as ref
   for (int q = 0; q < Q; q++) {
     nb_ref[q] = 0;
@@ -118,13 +118,13 @@ void updateId2do(int nb2do, writable::integers &id2do,
   // vector of elements to loop over
   writable::integers id2do(N);
   writable::integers id2do_next(N);
+  int nb2do = N, nb2do_next = N;
   for (int i = 0; i < nb2do; i++) {
     id2do[i] = i;
     id2do_next[i] = i;
   }
 
   // Other indices and variables
-  int nb2do = N, nb2do_next = N;
   int qui_max, obs;
   int rs, rs_max;  // rs: row sum
   int id_cluster;

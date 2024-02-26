@@ -112,7 +112,6 @@ void quf_refactor(int *px_in, int x_size, integers &obs2keep, int n, int *x_uf,
       }
       x_uf[i] = id_new[val];
     }
-
   } else {
     // We just create the table and the unique
     x_table.resize(x_size);
@@ -173,7 +172,6 @@ void quf_refactor_table_sum_single(
 
     // we recompute the table and sum_y
     std::fill(x_table.begin(), x_table.end(), 0);
-    // std::fill(sum_y.begin(), sum_y.end(), 0);
 
     if (do_sum_y) {
       std::fill(sum_y.begin(), sum_y.end(), 0);
@@ -205,7 +203,6 @@ void quf_refactor_table_sum_single(
 
     int sum_problems =
         std::accumulate(id_pblm_check.begin(), id_pblm_check.end(), 0);
-    // Rcout << "sum_problems = " << sum_problems << "\n";
     *pstop_now = sum_problems == D;
   }
 

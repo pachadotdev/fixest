@@ -23,9 +23,6 @@ void quf_table_sum_single(void *px_in, std::string &x_type, int n, int q,
     if (obs2keep[0] != 0) {
       n = obs2keep.size();
     }
-    // Rcout << "new n = " << n << "\n";
-    // return;
-
   } else {
     quf_single(px_in, x_type, n, x_quf, x_unik);
   }
@@ -87,9 +84,6 @@ void quf_table_sum_single(void *px_in, std::string &x_type, int n, int q,
           id_pblm[d] = true;
         }
       }
-
-      // int sum_problems = std::accumulate(id_pblm.begin(), id_pblm.end(), 0);
-      // Rcout << ", sum_problems = " << sum_problems;
     }
   }
 
@@ -367,19 +361,17 @@ void quf_table_sum_single(void *px_in, std::string &x_type, int n, int q,
   }
   res.push_back({"sum_y"_nm = copy_sum_y_all});
 
-  //
   // IF PROBLEM ONLY
-  //
 
   if (is_pblm) {
-    // The removed observations
+    // removed observations
     std::vector<bool> obs_removed_tmp;
     for (int i = 0; i < n; i++) {
       obs_removed_tmp.push_back(obs_removed[i]);
     }
     res.push_back({"obs_removed"_nm = obs_removed_tmp});
 
-    // The removed clusters
+    // removed clusters
     writable::list res_tmp4;
     for (int q = 0; q < Q; ++q) {
       res_tmp4.push_back(doubles(x_removed_all[q]));
