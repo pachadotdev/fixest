@@ -6,11 +6,9 @@ simple_vec_double::simple_vec_double(SEXP x) {
   if (TYPEOF(x) == REALSXP) {
     px_double = REAL(x);
     is_real = true;
-
   } else if (TYPEOF(x) == INTSXP) {
     px_int = INTEGER(x);
     is_real = false;
-
   } else {
     stop("Error: Wrong argument type in cpp_factor_matrix.");
   }
@@ -26,9 +24,11 @@ double simple_vec_double::operator[](int i) {
   }
 }
 
-[[cpp11::register]] doubles_matrix<>
-cpp_factor_matrix_(integers fact, logicals is_na_all, integers who_is_dropped,
-                   SEXP var, strings col_names) {
+[[cpp11::register]] doubles_matrix<> cpp_factor_matrix_(integers fact,
+                                                        logicals is_na_all,
+                                                        integers who_is_dropped,
+                                                        SEXP var,
+                                                        strings col_names) {
   // fact: integer vector from 1 (!) to K, can contain NAs
   // Checking Na is cheap as opposed to populating the matrix, but having an
   // argument avoids creating a new object
@@ -72,6 +72,12 @@ cpp_factor_matrix_(integers fact, logicals is_na_all, integers who_is_dropped,
 
   writable::doubles_matrix<> res(n, K);
 
+  for (int i = 0; i < n; ++i) {
+    for (int k = 0; k < K; ++k) {
+      res(i, k) = 0;
+    }
+  }
+
   // The interacted var
   simple_vec_double my_var(var);
 
@@ -82,12 +88,10 @@ cpp_factor_matrix_(integers fact, logicals is_na_all, integers who_is_dropped,
       for (int k = 0; k < K; ++k) {
         res(i, k) += NA_REAL;
       }
-
     } else if (IS_REMOVAL) {
       if (mapping[fact[i] - 1] != -1) {
         res(i, mapping[fact[i] - 1]) = my_var[i];
       }
-
     } else {
       res(i, fact[i] - 1) = my_var[i];
     }
@@ -106,6 +110,10 @@ cpp_factor_matrix_(integers fact, logicals is_na_all, integers who_is_dropped,
   int K = X.ncol();
 
   writable::doubles res(n);
+
+  for (int i = 0; i < n; ++i) {
+    res[i] = 0;
+  }
 
   for (int i = 0; i < n; ++i) {
     double res_i = 0;

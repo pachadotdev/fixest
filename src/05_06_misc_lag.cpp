@@ -26,13 +26,13 @@
       // check_user_interrupt(); // this is (too) costly
       id_current = id[i];
       time_current = time[i];
-      obs = i + 1; // observation, R style
+      obs = i + 1;  // observation, R style
       j = i + 1;
       while (j < nobs) {
         diff_time = time[j] - time_current;
         if (id[j] != id_current) {
           // we start someone else
-          i = j - 1; // minus 1 because after we indent i
+          i = j - 1;  // minus 1 because after we indent i
           break;
         } else if (diff_time > nlag) {
           // we are too far => stop
@@ -53,7 +53,7 @@
     }
   } else if (nlag < 0) {
     /**************************************************************************
-     * NOTA: I could have tweaked the previous if() to get rid of the condition
+     * NOTE: I could have tweaked the previous if() to get rid of the condition
      *       but the code would have lost in clarity.
      *       For the lead: opposite to what is done before
      ***************************************************************************/
@@ -63,13 +63,13 @@
       // check_user_interrupt(); // this is (too) costly
       id_current = id[i];
       time_current = time[i];
-      obs = i + 1; // observation, R style
+      obs = i + 1;  // observation, R style
       j = i - 1;
       while (j >= 0) {
         diff_time = time_current - time[j];
         if (id[j] != id_current) {
           // we start someone else
-          i = j + 1; // plus 1 because after we dedent i
+          i = j + 1;  // plus 1 because after we dedent i
           break;
         } else if (diff_time > nlead) {
           // we are too far => stop

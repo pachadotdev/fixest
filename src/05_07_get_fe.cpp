@@ -69,16 +69,10 @@ void updateId2do(int nb2do, writable::integers &id2do,
   int iter_loop = 0, iterMax_loop = 10000;
 
   // Creation of the indices to put all the cluster values into a single vector
-  int nb_coef = 0;
+  int nb_coef = accumulate(cluster_sizes.begin(), cluster_sizes.end(), 0);
   writable::integers nb_ref(Q);  // nb_ref takes the nb of elements set as ref
   for (int q = 0; q < Q; q++) {
     nb_ref[q] = 0;
-  }
-
-  for (int q = 0; q < Q; q++) {
-    // the total number of clusters (eg if c1: man/woman and c2: 10 countries:
-    // total of 12 cases)
-    nb_coef += cluster_sizes[q];
   }
 
   writable::doubles cluster_values(nb_coef);
@@ -86,20 +80,19 @@ void updateId2do(int nb2do, writable::integers &id2do,
     cluster_values[i] = 0;
   }
 
-  // writable::integers cluster_visited(
-  //     nb_coef);  // whether a value has been already assigned
-
   // index of the cluster
   std::vector<int *> pindex_cluster(Q);
   std::vector<int> index_cluster(nb_coef);
-  for (int i = 0; i < nb_coef; i++) {
-    index_cluster[i] = i;
-  }
+  iota(index_cluster.begin(), index_cluster.end(), 0);
   initializePindexCluster(pindex_cluster, index_cluster, cluster_sizes, Q);
 
   // Now we create the vector of observations for each cluster
   // we need a strating and an end vector as well
   writable::integers start_cluster(nb_coef), end_cluster(nb_coef);
+  for (int i = 0; i < nb_coef; i++) {
+    start_cluster[i] = 0;
+    end_cluster[i] = 0;
+  }
 
   int index;
 
@@ -111,6 +104,11 @@ void updateId2do(int nb2do, writable::integers &id2do,
 
   // matrix of the clusters that have been computed
   writable::integers_matrix<> mat_done(N, Q);
+  for (int i = 0; i < N; i++) {
+    for (int q = 0; q < Q; q++) {
+      mat_done(i, q) = 0;
+    }
+  }
 
   writable::integers rowsums(N);
   for (int i = 0; i < N; i++) {
@@ -120,29 +118,25 @@ void updateId2do(int nb2do, writable::integers &id2do,
   // vector of elements to loop over
   writable::integers id2do(N);
   writable::integers id2do_next(N);
-  int nb2do = N, nb2do_next = N;
   for (int i = 0; i < nb2do; i++) {
     id2do[i] = i;
     id2do_next[i] = i;
   }
 
   // Other indices and variables
+  int nb2do = N, nb2do_next = N;
   int qui_max, obs;
   int rs, rs_max;  // rs: row sum
   int id_cluster;
   double other_value;
   bool first;
 
-  //
-  // THE MAIN LOOP
-  //
+  // MAIN LOOP
 
   while (iter < iterMax) {
     iter++;
 
-    //
     // Finding the row where to put the 0s
-    //
 
     if (iter == 1) {
       // 1st iter, we select the first element
@@ -172,11 +166,7 @@ void updateId2do(int nb2do, writable::integers &id2do,
       }
     }
 
-    // Rprintf("Obs selected: %i\n", qui_max);
-
-    //
     // Putting the 0s, ie setting the references
-    //
 
     // the first element is spared
     first = true;
@@ -189,7 +179,6 @@ void updateId2do(int nb2do, writable::integers &id2do,
           // we set the cluster to 0
           // 1) we find the cluster
           id_cluster = dumMat(qui_max, q);
-          // Rprintf("Cluster: %i\n", id_cluster + 1);
           // 2) we get the index of the cluster vector
           int *pindex = pindex_cluster[q];
           index = pindex[id_cluster];
@@ -208,23 +197,17 @@ void updateId2do(int nb2do, writable::integers &id2do,
       }
     }
 
-    //
     // LOOP OF ALL OTHER UPDATES (CRITICAL)
-    //
 
     iter_loop = 0;
     while (iter_loop < iterMax_loop) {
       iter_loop++;
 
-      // Rprintf("nb2do_next: %i -- nb2do: %i\n", nb2do_next, nb2do);
-
       check_user_interrupt();
 
-      //
       // Selection of indexes (new way) to be updated
-      //
 
-      // initialisation of the observations to cover (before first loop the two
+      // initialization of the observations to cover (before first loop the two
       // are identical)
       if (iter_loop != 1) {
         nb2do = nb2do_next;
@@ -234,7 +217,7 @@ void updateId2do(int nb2do, writable::integers &id2do,
       nb2do_next = 0;
 
       for (int i = 0; i < nb2do; i++) {
-        // we compute the rowsum of the obs that still needs to be done
+        // compute the rowsum of the obs that still needs to be done
         obs = id2do[i];
 
         rs = rowsums[obs];
@@ -308,7 +291,6 @@ void updateId2do(int nb2do, writable::integers &id2do,
     }
     res[q] = quoi;
   }
-
   res[Q] = nb_ref;
 
   return (res);

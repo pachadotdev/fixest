@@ -87,7 +87,7 @@
         }
       }
 
-      // on ajoute la derivee a S:
+      // add the derivative to S
       for (i = 0; i < N; i++) {
         index = start[q] + dumMat(i, q);
         S[i] += clusterDeriv[index];
@@ -95,11 +95,10 @@
     }
   }
 
-  // Rprintf("other, nb iter=%i\n", iter);
   if (iter == iterMax) {
     Rprintf("[Getting cluster deriv. other] Max iterations reached (%i)\n",
             iterMax);
   }
 
-  return (S);
+  return S;
 }

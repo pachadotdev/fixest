@@ -1,6 +1,6 @@
 #include "05_0_misc.hpp"
 
-// similar a table but faster
+// similar to table but faster
 [[cpp11::register]] doubles cpp_table_(int Q, integers dum) {
   // Q: nber of classes
   // dum: the N vector of clusters
@@ -11,7 +11,7 @@
   int i, q;
 
   for (i = 0; i < N; i++) {
-    q = dum[i] - 1; // we take 1 off => different indexation in C
+    q = dum[i] - 1;  // we take 1 off => different indexation in C
     res[q]++;
   }
 
@@ -100,7 +100,6 @@
 
       ref = x[i];
       found_different = only_0 ? ref != 0 : false;
-
     } else if (!found_different) {
       if (x[i] != ref) {
         found_different = true;

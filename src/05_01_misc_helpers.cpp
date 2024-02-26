@@ -17,7 +17,6 @@
 
   if (xr < 1000) {
     res.insert(res.size(), x_str);
-
   } else {
     int n = x_str.size();
     int e = n;  // e: exponent
@@ -116,6 +115,9 @@
 
   int n = x.size();
   writable::integers res(n_items);
+  for (int i = 0; i < n_items; ++i) {
+    res[i] = 0;
+  }
 
   for (int i = 0; i < n; ++i) {
     if (res[x[i] - 1] == 0) {
@@ -229,7 +231,6 @@
 
       x_int[i] = index + 1;
       ++i;
-
     } else {
       // we increment index
       // bins can be empty
@@ -459,9 +460,6 @@ inline int find_id_markup(const char *x, int i, int n) {
 }
 
 std::string apply_escape_markup(const char *x) {
-  //
-  //
-  //
   // element 0 is the main character vector: it is never closed
 
   int n = strlen(x);
@@ -499,7 +497,6 @@ std::string apply_escape_markup(const char *x) {
           // => we come back, escape it and continue
           tmp_all[id_mkp] += "\\$";
           i = i_save;
-
         } else {
           tmp_all[id_mkp] += tmp + "$";
         }
@@ -513,7 +510,6 @@ std::string apply_escape_markup(const char *x) {
         tmp_all[id_mkp] += "\\";
         tmp_all[id_mkp] += x[i];
       }
-
     } else if (x[i] == '\\') {
       if (i + 1 < n && x[i + 1] == '*') {
         // escape of MD markup
@@ -546,7 +542,6 @@ std::string apply_escape_markup(const char *x) {
             tmp_all[id_mkp] = "";
             id_mkp = id_prev;
             break;
-
           } else {
             // we flush: the markup is invalid
             // example:  "** bonjour * les gens **"
@@ -559,12 +554,10 @@ std::string apply_escape_markup(const char *x) {
             id_open.pop_back();
           }
         }
-
       } else {
         is_open[id_mkp] = true;
         id_open.push_back(id_mkp);
       }
-
     } else {
       tmp_all[id_mkp] += x[i];
     }

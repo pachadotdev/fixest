@@ -12,10 +12,16 @@
   int K = x.ncol();
 
   writable::doubles_matrix<> res(Q, K);
+
+  for (int q = 0; q < Q; q++) {
+    for (int k = 0; k < K; k++) {
+      res(q, k) = 0;
+    }
+  }
   int i, q, k;
 
   for (i = 0; i < N; i++) {
-    q = dum[i] - 1; // we take 1 off => different indexation in C
+    q = dum[i] - 1;  // we take 1 off => different indexation in C
 
     for (k = 0; k < K; k++) {
       res(q, k) += x(i, k);
@@ -37,7 +43,7 @@
   int i, q;
 
   for (i = 0; i < N; i++) {
-    q = dum[i] - 1; // we take 1 off => different indexation in C
+    q = dum[i] - 1;  // we take 1 off => different indexation in C
     res[q] += x[i];
   }
 
