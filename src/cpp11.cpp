@@ -461,6 +461,13 @@ extern "C" SEXP _fixest2_cpp_trigamma_(SEXP x, SEXP nthreads) {
   END_CPP11
 }
 // 07_03_parallel_exp_family.cpp
+doubles cpp_poisson_linkinv_(doubles x, int nthreads);
+extern "C" SEXP _fixest2_cpp_poisson_linkinv_(SEXP x, SEXP nthreads) {
+  BEGIN_CPP11
+    return cpp11::as_sexp(cpp_poisson_linkinv_(cpp11::as_cpp<cpp11::decay_t<doubles>>(x), cpp11::as_cpp<cpp11::decay_t<int>>(nthreads)));
+  END_CPP11
+}
+// 07_03_parallel_exp_family.cpp
 bool cpp_poisson_validmu_(SEXP x, int nthreads);
 extern "C" SEXP _fixest2_cpp_poisson_validmu_(SEXP x, SEXP nthreads) {
   BEGIN_CPP11
@@ -612,6 +619,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_fixest2_cpp_partialDerivative_other_",   (DL_FUNC) &_fixest2_cpp_partialDerivative_other_,    9},
     {"_fixest2_cpp_paste_conditional_",         (DL_FUNC) &_fixest2_cpp_paste_conditional_,          3},
     {"_fixest2_cpp_pgcd_",                      (DL_FUNC) &_fixest2_cpp_pgcd_,                       1},
+    {"_fixest2_cpp_poisson_linkinv_",           (DL_FUNC) &_fixest2_cpp_poisson_linkinv_,            2},
     {"_fixest2_cpp_poisson_validmu_",           (DL_FUNC) &_fixest2_cpp_poisson_validmu_,            2},
     {"_fixest2_cpp_quf_gnl_",                   (DL_FUNC) &_fixest2_cpp_quf_gnl_,                    1},
     {"_fixest2_cpp_quf_table_sum_",             (DL_FUNC) &_fixest2_cpp_quf_table_sum_,             11},

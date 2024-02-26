@@ -46,6 +46,18 @@ inline double poisson_linkinv(double x) {
   return x < -36 ? DBL_EPSILON : exp(x);
 }
 
+[[cpp11::register]] doubles cpp_poisson_linkinv_(doubles x, int nthreads) {
+  int n = x.size();
+  writable::doubles res(n);
+
+#pragma omp parallel for num_threads(nthreads)
+  for (int i = 0; i < n; ++i) {
+    res[i] = poisson_linkinv(x[i]);
+  }
+
+  return res;
+}
+
 [[cpp11::register]] bool cpp_poisson_validmu_(SEXP x, int nthreads) {
   int n = Rf_length(x);
   double *px = REAL(x);
@@ -140,8 +152,7 @@ inline double logit_mueta(double x) {
                     (1 - y[i]) * log((1 - y[i]) / (1 - mu[i])));
     }
 
-    if (isWeight)
-      res[i] *= wt[i];
+    if (isWeight) res[i] *= wt[i];
   }
 
   return (res);

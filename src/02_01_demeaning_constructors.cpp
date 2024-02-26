@@ -138,7 +138,7 @@ double &simple_mat_with_id::operator()(int id, int i) {
   return px_current[i];
 }
 
-inline double FEClass::simple_mat_of_vs_vars::operator()(int i, int k) {
+double FEClass::simple_mat_of_vs_vars::operator()(int i, int k) {
   if (k == K_fe) {
     return 1;
   }

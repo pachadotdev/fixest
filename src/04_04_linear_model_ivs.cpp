@@ -28,17 +28,12 @@
 
   writable::doubles_matrix<> wZ(Z);
   if (isWeight) {
-    // wZ = Rcpp::clone(Z);
     for (int k = 0; k < K1; ++k) {
       for (int i = 0; i < N; ++i) {
         wZ(i, k) *= w[i];
       }
     }
   }
-  // else {
-  //   // shallow copy
-  //   wZ = Z;
-  // }
 
   if (sparse_check(X) == false) {
     // NOT SPARSE
@@ -46,17 +41,12 @@
     writable::list res;
     writable::doubles_matrix<> wX(X);
     if (isWeight) {
-      // wX = Rcpp::clone(X);
       for (int k = 0; k < K2; ++k) {
         for (int i = 0; i < N; ++i) {
           wX(i, k) *= w[i];
         }
       }
     }
-    // else {
-    //   // shallow copy
-    //   wX = X;
-    // }
 
     // XtX
     mp_XtX(XtX, X, wX, nthreads);
@@ -103,9 +93,7 @@
     return res;
   }
 
-  //
   // SPARSE case
-  //
 
   std::vector<int> n_j(K2 + !isX, 0);
   std::vector<int> start_j(K2 + !isX + 1, 0);
@@ -162,10 +150,9 @@
   return res;
 }
 
-[[cpp11::register]] list
-cpp_iv_product_completion_(doubles_matrix<> XtX, doubles Xty,
-                           doubles_matrix<> X, doubles y, doubles_matrix<> U,
-                           doubles w, int nthreads) {
+[[cpp11::register]] list cpp_iv_product_completion_(
+    doubles_matrix<> XtX, doubles Xty, doubles_matrix<> X, doubles y,
+    doubles_matrix<> U, doubles w, int nthreads) {
   // We compute the following
   // - (UX)'(UX)
   // - (UX)'y
@@ -183,17 +170,12 @@ cpp_iv_product_completion_(doubles_matrix<> XtX, doubles Xty,
 
   writable::doubles_matrix<> wU(U);
   if (isWeight) {
-    // wU = Rcpp::clone(U);
     for (int k = 0; k < K1; ++k) {
       for (int i = 0; i < N; ++i) {
         wU(i, k) *= w[i];
       }
     }
   }
-  // else {
-  //   // shallow copy
-  //   wU = U;
-  // }
 
   writable::list res;
 
@@ -252,7 +234,6 @@ cpp_iv_product_completion_(doubles_matrix<> XtX, doubles Xty,
         iv_resid[i] -= coef[0 + is_int] * p_r[i];
       }
     }
-
   } else {
     std::vector<double *> p_p_r(K);
     for (int k = 0; k < K; ++k) {

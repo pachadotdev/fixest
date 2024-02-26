@@ -27,8 +27,7 @@ void mp_sparse_XtX(writable::doubles_matrix<> &XtX, const std::vector<int> &n_j,
         value += X(all_i[index], k) * x[index];
       }
 
-      if (value == 0)
-        continue;
+      if (value == 0) continue;
 
       XtX(j1, j2) = value;
       XtX(j2, j1) = value;
@@ -51,8 +50,7 @@ void mp_sparse_Xty(writable::doubles &Xty, const std::vector<int> &start_j,
       value += y[all_i[index]] * x[index];
     }
 
-    if (value == 0)
-      continue;
+    if (value == 0) continue;
 
     Xty[j] = value;
   }
@@ -83,7 +81,6 @@ void mp_XtX(writable::doubles_matrix<> &XtX, const doubles_matrix<> &X,
     }
 
     XtX(0, 0) = value;
-
   } else {
     // We use this trick to even out the load on the threads
     int nValues = K * (K + 1) / 2;
@@ -167,6 +164,14 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y,
 
     writable::doubles_matrix<> wX(X);
 
+    // Always copy X to wX
+    for (int k = 0; k < K; ++k) {
+      for (int i = 0; i < N; ++i) {
+        wX(i, k) = X(i, k);
+      }
+    }
+
+    // If isWeight is true, multiply wX by w
     if (isWeight) {
       for (int k = 0; k < K; ++k) {
         for (int i = 0; i < N; ++i) {
@@ -200,9 +205,7 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y,
     return res;
   }
 
-  //
   // SPARSE case
-  //
 
   std::vector<int> n_j(K, 0);
   std::vector<int> start_j(K + 1, 0);
@@ -262,7 +265,7 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y,
 
       for (int k = 0; k < K; ++k) {
         for (int i = 0; i < N; ++i) {
-          wX(i, k) *= w[i];
+          wX(i, k) = X(i, k) * w[i];
         }
       }
 
@@ -270,8 +273,7 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y,
       mp_XtX(XtX, X, wX, nthreads);
 
     } else {
-      // Identique, mais pas besoin de faire une copie de X ni de y qui peuvent
-      // etre couteuses
+      // Identical, but no need to make a copy of X or y which can be expensive
 
       // XtX
       mp_XtX(XtX, X, X, nthreads);
@@ -280,9 +282,7 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y,
     return XtX;
   }
 
-  //
   // SPARSE case
-  //
 
   std::vector<int> n_j(K, 0);
   std::vector<int> start_j(K + 1, 0);
@@ -306,14 +306,12 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y,
 
   int n_col_excl = 0;
   for (int j = 0; j < K_small; ++j) {
-    while (id_excl[j + n_col_excl])
-      ++n_col_excl;
+    while (id_excl[j + n_col_excl]) ++n_col_excl;
 
     int col = j + n_col_excl;
     int n_row_excl = 0;
     for (int i = 0; i < K_small; ++i) {
-      while (id_excl[i + n_row_excl])
-        ++n_row_excl;
+      while (id_excl[i + n_row_excl]) ++n_row_excl;
       res(i + n_row_excl, col) += X(i, j);
     }
   }

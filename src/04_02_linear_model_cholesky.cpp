@@ -1,12 +1,11 @@
 #include "04_0_linear_model.hpp"
 
 void invert_tri(writable::doubles_matrix<> &R, int K, int nthreads = 1) {
-  // Startegy: we invert by bands (b) => better for parallelization
+  // Strategy: we invert by bands (b) => better for parallelization
 
   // initialization of R prime
   for (int i = 0; i < K; ++i) {
     for (int j = i + 1; j < K; ++j) {
-      // R(j, i) = R(i, j);
       double temp = R(i, j);
       R(j, i) = temp;
     }
@@ -20,11 +19,10 @@ void invert_tri(writable::doubles_matrix<> &R, int K, int nthreads = 1) {
   // Check for interrupts
   // number of computations is (K - b) * (b + 1) => max is (K + 1)**2 / 2
   double flop = (K + 1) * (K + 1) / 2.0;
-  int iterSecond = ceil(2000000000 / flop / 5); // nber iter per 1/5 second
+  int iterSecond = ceil(2000000000 / flop / 5);  // nber iter per 1/5 second
 
   for (int b = 1; b < K; ++b) {
     if (b % iterSecond == 0) {
-      // Rprintf("check\n");
       check_user_interrupt();
     }
 
@@ -47,7 +45,6 @@ void tproduct_tri(writable::doubles_matrix<> &RRt,
   // initialization of R prime
   for (int i = 0; i < K; ++i) {
     for (int j = i + 1; j < K; ++j) {
-      // R(j, i) = R(i, j);
       double temp = R(i, j);
       R(j, i) = temp;
     }
@@ -56,13 +53,12 @@ void tproduct_tri(writable::doubles_matrix<> &RRt,
   // Check for interrupts
   // we do the same as for the invert_tri
   double flop = (K + 1) * (K + 1) / 2.0;
-  int iterSecond = ceil(2000000000 / flop / 5); // nber iter per 1/5 second
+  int iterSecond = ceil(2000000000 / flop / 5);  // nber iter per 1/5 second
   int n_iter_main = 0;
 
 #pragma omp parallel for num_threads(nthreads) schedule(static, 1)
   for (int i = 0; i < K; ++i) {
     if (omp_get_thread_num() == 0 && n_iter_main % iterSecond == 0) {
-      // Rprintf("check\n");
       check_user_interrupt();
       ++n_iter_main;
     }
@@ -81,7 +77,7 @@ void tproduct_tri(writable::doubles_matrix<> &RRt,
 
 [[cpp11::register]] list cpp_cholesky_(doubles_matrix<> X, double tol,
                                        int nthreads) {
-  // X est symetrique, semi definie positive
+  // X is symmetric and semi-definite positive
   // rank-revealing on-the-fly
 
   writable::list res;
@@ -101,12 +97,11 @@ void tproduct_tri(writable::doubles_matrix<> &RRt,
   // intensive at each iteration we have K * (j+1) - j**2 - 2*j - 1
   // multiplications max => K**2/4
   double flop = K * K / 4.0;
-  int iterSecond = ceil(2000000000 / flop / 5); // nber iter per 1/5 second
+  int iterSecond = ceil(2000000000 / flop / 5);  // nber iter per 1/5 second
   double min_norm = X(0, 0);
 
   for (int j = 0; j < K; ++j) {
     if (j % iterSecond == 0) {
-      // Rprintf("check\n");
       check_user_interrupt();
     }
 
@@ -123,8 +118,6 @@ void tproduct_tri(writable::doubles_matrix<> &RRt,
     if (R_jj < tol) {
       n_excl++;
       id_excl[j] = true;
-
-      // Rcout << "excluded: " << j << ", L_jj: " << L_jj << "\n";
 
       // Corner case, may happen:
       if (n_excl == K) {

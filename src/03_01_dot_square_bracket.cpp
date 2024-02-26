@@ -66,7 +66,6 @@ void extract_operator(const char *str, int &i, int n,
     operator_tmp = "/";
     operator_vec.push_back(operator_tmp);
     ++i;
-
   } else {
     // normal case
 
@@ -112,7 +111,6 @@ void extract_operator(const char *str, int &i, int n,
             any_operator = false;
             break;
           }
-
         } else {
           // Otherwise => problem
           any_operator = false;
@@ -130,14 +128,12 @@ void extract_operator(const char *str, int &i, int n,
 
         // we get the full quoted value
         extract_quote(str, i, n, operator_tmp);
-
       } else if (is_dsb_bound(str, i, n)) {
         // there should be no dsb bound in the operator
         // if so, this is an error
 
         any_operator = false;
         break;
-
       } else {
         // comma: separation between operations
         if (str[i] == ',') {
@@ -159,7 +155,6 @@ void extract_operator(const char *str, int &i, int n,
               break;
             }
           }
-
         } else {
           is_comma = false;
           operator_tmp += str[i];
@@ -226,7 +221,6 @@ void extract_operator(const char *str, int &i, int n,
         ++n_open;
         string_value = "";
       }
-
     } else {
       writable::list dsb_element;
       std::vector<std::string> operator_vec;
@@ -389,7 +383,6 @@ inline bool is_if_separator(const char *str, int i, int n,
               break;
             }
           }
-
         } else {
           is_comma = false;
           operator_tmp += str[i];
