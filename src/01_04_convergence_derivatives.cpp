@@ -136,6 +136,13 @@
 
   writable::doubles_matrix<> dxi_dbeta(n_obs, n_vars);
 
+  // fill with 0s
+  // for (int i = 0; i < n_obs; ++i) {
+  //   for (int v = 0; v < n_vars; ++v) {
+  //     dxi_dbeta(i, v) = 0.0;
+  //   }
+  // }
+
   for (int v = 0; v < n_vars; ++v) {
     double *my_deriv = pderiv[v];
     for (int i = 0; i < n_obs; ++i) {
@@ -366,6 +373,13 @@ void computeDerivCoef(std::vector<double *> &pcoef_origin,
 
   writable::doubles_matrix<> dxi_dbeta(n_obs, n_vars);
 
+  // fill with 0s
+  // for (int i = 0; i < n_obs; ++i) {
+  //   for (int v = 0; v < n_vars; ++v) {
+  //     dxi_dbeta(i, v) = 0.0;
+  //   }
+  // }
+
   bool keepGoing = true;
   int iter = 0, iter_all_max = 0;
 
@@ -592,6 +606,13 @@ void computeDerivCoef_2(
 
   writable::doubles_matrix<> dxi_dbeta(n_obs, n_vars);
 
+  // fill with 0s
+  // for (int i = 0; i < n_obs; ++i) {
+  //   for (int v = 0; v < n_vars; ++v) {
+  //     dxi_dbeta(i, v) = 0.0;
+  //   }
+  // }
+
   bool keepGoing = true;
   int iter = 0, iter_all_max = 0;
 
@@ -817,6 +838,13 @@ void computeDerivCoef_2(
 
   writable::doubles_matrix<> dxi_dbeta(n_obs, n_vars);
 
+  // fill with 0s
+  // for (int i = 0; i < n_obs; ++i) {
+  //   for (int v = 0; v < n_vars; ++v) {
+  //     dxi_dbeta(i, v) = 0.0;
+  //   }
+  // }
+
   bool keepGoing = true;
   int iter = 0, iter_all_max = 0;
 
@@ -955,6 +983,13 @@ void computeDerivCoef_2(
 
   // the result
   writable::doubles_matrix<> res(n_obs, n_vars);  // init at 0
+
+  // fill with 0s
+  // for (int i = 0; i < n_obs; ++i) {
+  //   for (int v = 0; v < n_vars; ++v) {
+  //     res(i, v) = 0.0;
+  //   }
+  // }
 
   for (int v = 0; v < n_vars; ++v) {
     double *my_jac = pjac[v];

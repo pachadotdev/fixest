@@ -87,10 +87,11 @@ std::vector<int> set_parallel_scheme_ter(int N, int nthreads) {
 
   // object to return: is_na_inf
   writable::logicals is_na_inf(anyNAInf ? nobs : 1);
+  for (int i = 0; i < nobs; ++i) {
+    is_na_inf[i] = false;
+  }
 
   if (anyNAInf) {
-    std::fill(is_na_inf.begin(), is_na_inf.end(), false);
-
 #pragma omp parallel for num_threads(nthreads)
     for (int i = 0; i < nobs; ++i) {
       double x_tmp = 0;
