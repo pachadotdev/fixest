@@ -28,18 +28,13 @@ bool update_X_IronsTuck(int nb_coef_no_K, vector<double> &X,
     double GX_tmp = GX[i];
     delta_GX[i] = GGX[i] - GX_tmp;
     delta2_X[i] = delta_GX[i] - GX_tmp + X[i];
-    // delta_GX[i] = GGX[i] - GX[i];
-    // delta2_X[i] = delta_GX[i] - GX[i] + X[i];
   }
 
-  // delta_GX %*% delta2_X and crossprod(delta2_X)
   double vprod = 0, ssq = 0;
   for (int i = 0; i < nb_coef_no_K; ++i) {
     double delta2_X_tmp = delta2_X[i];
     vprod += delta_GX[i] * delta2_X_tmp;
     ssq += delta2_X_tmp * delta2_X_tmp;
-    // vprod += delta_GX[i] * delta2_X[i];
-    // ssq += delta2_X[i] * delta2_X[i];
   }
 
   bool res = false;
@@ -55,7 +50,7 @@ bool update_X_IronsTuck(int nb_coef_no_K, vector<double> &X,
     }
   }
 
-  return (res);
+  return res;
 }
 
 std::vector<int> set_parallel_scheme_bis(int N, int nthreads) {

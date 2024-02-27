@@ -1,26 +1,23 @@
 #include "01_0_convergence.hpp"
 
-[[cpp11::register]] list
-cpp_conv_acc_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
-                  double theta, SEXP nb_cluster_all, SEXP lhs, SEXP mu_init,
-                  SEXP dum_vector, SEXP tableCluster_vector, SEXP sum_y_vector,
-                  SEXP cumtable_vector, SEXP obsCluster_vector, int nthreads) {
+[[cpp11::register]] list cpp_conv_acc_gnl_(
+    int family, int iterMax, double diffMax, double diffMax_NR, double theta,
+    SEXP nb_cluster_all, SEXP lhs, SEXP mu_init, SEXP dum_vector,
+    SEXP tableCluster_vector, SEXP sum_y_vector, SEXP cumtable_vector,
+    SEXP obsCluster_vector, int nthreads) {
   // initial variables
   int K = Rf_length(nb_cluster_all);
   int *pcluster = INTEGER(nb_cluster_all);
   int n_obs = Rf_length(mu_init);
   double *pmu_init = REAL(mu_init);
 
-  int nb_coef = 0;
-  for (int k = 0; k < K; ++k) {
-    nb_coef += pcluster[k];
-  }
+  int nb_coef = accumulate(pcluster, pcluster + K, 0);
 
   // setting the pointers
   // table, coef, sum_y: length nb_coef
   // dum_all: length K*n_obs
-  vector<int *> ptable(K);
-  vector<double *> psum_y(K);
+  std::vector<int *> ptable(K);
+  std::vector<double *> psum_y(K);
   ptable[0] = INTEGER(tableCluster_vector);
   psum_y[0] = REAL(sum_y_vector);
 
@@ -30,7 +27,7 @@ cpp_conv_acc_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
   }
 
   // cumtable (points to nothing for non negbin/logit families)
-  vector<int *> pcumtable(K);
+  std::vector<int *> pcumtable(K);
   if (family == 2 || family == 3) {
     pcumtable[0] = INTEGER(cumtable_vector);
     for (int k = 1; k < K; ++k) {
@@ -39,7 +36,7 @@ cpp_conv_acc_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
   }
 
   // obsCluster (points to nothing for non negbin/logit families)
-  vector<int *> pobsCluster(K);
+  std::vector<int *> pobsCluster(K);
   if (family == 2 || family == 3) {
     pobsCluster[0] = INTEGER(obsCluster_vector);
     for (int k = 1; k < K; ++k) {
@@ -48,7 +45,7 @@ cpp_conv_acc_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
   }
 
   // cluster of each observation
-  vector<int *> pdum(K);
+  std::vector<int *> pdum(K);
   pdum[0] = INTEGER(dum_vector);
   for (int k = 1; k < K; ++k) {
     pdum[k] = pdum[k - 1] + n_obs;
@@ -68,7 +65,7 @@ cpp_conv_acc_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
   args.K = K;
   args.nthreads = nthreads;
   args.theta =
-      (family == 2 ? theta : 1); // theta won't be used if family not negbin
+      (family == 2 ? theta : 1);  // theta won't be used if family not negbin
   args.diffMax_NR = diffMax_NR;
   args.pdum = pdum;
   args.mu_init = pmu_init;
@@ -80,21 +77,19 @@ cpp_conv_acc_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
   args.lhs = plhs;
 
   // value that will be modified
-  vector<double> mu_with_coef(n_obs);
+  std::vector<double> mu_with_coef(n_obs);
   args.mu_with_coef = mu_with_coef.data();
 
-  //
   // IT iteration (preparation)
-  //
 
   // variables on 1:K
-  vector<double> X(nb_coef);
-  vector<double> GX(nb_coef);
-  vector<double> GGX(nb_coef);
-  // pointers:
-  vector<double *> pX(K);
-  vector<double *> pGX(K);
-  vector<double *> pGGX(K);
+  std::vector<double> X(nb_coef);
+  std::vector<double> GX(nb_coef);
+  std::vector<double> GGX(nb_coef);
+  // pointers
+  std::vector<double *> pX(K);
+  std::vector<double *> pGX(K);
+  std::vector<double *> pGGX(K);
   pX[0] = X.data();
   pGX[0] = GX.data();
   pGGX[0] = GGX.data();
@@ -106,38 +101,21 @@ cpp_conv_acc_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
   }
 
   // variables on 1:(K-1)
-  int nb_coef_no_K = 0;
-  for (int k = 0; k < (K - 1); ++k) {
-    nb_coef_no_K += pcluster[k];
-  }
-  vector<double> delta_GX(nb_coef_no_K);
-  vector<double> delta2_X(nb_coef_no_K);
+  int nb_coef_no_K = accumulate(pcluster, pcluster + K - 1, 0);
+  std::vector<double> delta_GX(nb_coef_no_K);
+  std::vector<double> delta2_X(nb_coef_no_K);
 
-  //
-  // the main loop
-  //
+  // main loop
 
   // initialisation of X and then pGX
   if (family == 1) {
-    for (int i = 0; i < nb_coef; ++i) {
-      X[i] = 1;
-    }
+    fill(X.begin(), X.end(), 1);
   } else {
-    for (int i = 0; i < nb_coef; ++i) {
-      X[i] = 0;
-    }
+    fill(X.begin(), X.end(), 0);
   }
 
   // first iteration
   computeClusterCoef(pX, pGX, &args);
-
-  // Rprintf("init: ");
-  // for(int i=0 ; i<5 ; ++i){
-  // 	Rprintf("%f -- ", GX[i]);
-  // }
-  // Rprintf("\n");
-
-  // stop("kkk");
 
   // flag for problem with poisson
   bool any_negative_poisson = false;
@@ -145,7 +123,6 @@ cpp_conv_acc_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
   // check whether we should go into the loop
   bool keepGoing = false;
   for (int i = 0; i < nb_coef; ++i) {
-    // if(fabs(X[i] - GX[i]) / (0.1 + fabs(GX[i])) > diffMax){
     if (continue_criterion(X[i], GX[i], diffMax)) {
       keepGoing = true;
       break;
@@ -160,32 +137,16 @@ cpp_conv_acc_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
     // GGX -- origin: GX, destination: GGX
     computeClusterCoef(pGX, pGGX, &args);
 
-    // Rprintf("iter: %i ; ", iter);
-    //
-    // if(iter >= iterMax - 3){
-    // 	Rprintf("GGX: ");
-    // 	for(int i=0 ; i<8 ; ++i){
-    // 		Rprintf("%2.7f ", GGX[i]);
-    // 	}
-    // 	Rprintf("\n");
-    // }
-
     // X ; update of the cluster coefficient
     numconv = update_X_IronsTuck(nb_coef_no_K, X, GX, GGX, delta_GX, delta2_X);
-    if (numconv)
-      break;
+    if (numconv) break;
 
     if (family == 1) {
       // We control for possible problems with poisson
-      for (int i = 0; i < nb_coef_no_K; ++i) {
-        if (X[i] <= 0) {
-          any_negative_poisson = true;
-          break;
-        }
-      }
-
+      any_negative_poisson =
+          any_of(X.begin(), X.end(), [](double val) { return val <= 0; });
       if (any_negative_poisson) {
-        break; // we quit the loop
+        break;  // we quit the loop
         // update of mu is OK, it's only IT iteration that leads to negative
         // values
       }
@@ -196,7 +157,6 @@ cpp_conv_acc_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
 
     keepGoing = false;
     for (int i = 0; i < nb_coef_no_K; ++i) {
-      // if(fabs(X[i] - GX[i]) / (0.1 + fabs(GX[i])) > diffMax){
       if (continue_criterion(X[i], GX[i], diffMax)) {
         keepGoing = true;
         break;
@@ -204,15 +164,11 @@ cpp_conv_acc_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
     }
   }
 
-  //
-  // We update mu => result
-  //
+  // update mu => result
 
   SEXP mu = PROTECT(Rf_allocVector(REALSXP, n_obs));
   double *pmu = REAL(mu);
-  for (int i = 0; i < n_obs; ++i) {
-    pmu[i] = pmu_init[i];
-  }
+  copy(pmu_init, pmu_init + n_obs, pmu);
 
   // To obtain stg identical to the R code:
   computeClusterCoef(pGX, pGGX, &args);
@@ -220,7 +176,7 @@ cpp_conv_acc_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
     int *my_dum = pdum[k];
     double *my_cluster_coef = pGGX[k];
 
-    if (family == 1) { // "quick" Poisson case
+    if (family == 1) {  // "quick" Poisson case
       for (int i = 0; i < n_obs; ++i) {
         pmu[i] *= my_cluster_coef[my_dum[i]];
       }
@@ -241,11 +197,11 @@ cpp_conv_acc_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
   return (res);
 }
 
-[[cpp11::register]] list
-cpp_conv_seq_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
-                  double theta, SEXP nb_cluster_all, SEXP lhs, SEXP mu_init,
-                  SEXP dum_vector, SEXP tableCluster_vector, SEXP sum_y_vector,
-                  SEXP cumtable_vector, SEXP obsCluster_vector, int nthreads) {
+[[cpp11::register]] list cpp_conv_seq_gnl_(
+    int family, int iterMax, double diffMax, double diffMax_NR, double theta,
+    SEXP nb_cluster_all, SEXP lhs, SEXP mu_init, SEXP dum_vector,
+    SEXP tableCluster_vector, SEXP sum_y_vector, SEXP cumtable_vector,
+    SEXP obsCluster_vector, int nthreads) {
   // initial variables
   int K = Rf_length(nb_cluster_all);
   int *pcluster = INTEGER(nb_cluster_all);
@@ -260,8 +216,8 @@ cpp_conv_seq_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
   // setting the pointers
   // table, coef, sum_y: length nb_coef
   // dum_all: length K*n_obs
-  vector<int *> ptable(K);
-  vector<double *> psum_y(K);
+  std::vector<int *> ptable(K);
+  std::vector<double *> psum_y(K);
   ptable[0] = INTEGER(tableCluster_vector);
   psum_y[0] = REAL(sum_y_vector);
 
@@ -271,7 +227,7 @@ cpp_conv_seq_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
   }
 
   // cumtable (points to nothing for non negbin/logit families)
-  vector<int *> pcumtable(K);
+  std::vector<int *> pcumtable(K);
   if (family == 2 || family == 3) {
     pcumtable[0] = INTEGER(cumtable_vector);
     for (int k = 1; k < K; ++k) {
@@ -280,7 +236,7 @@ cpp_conv_seq_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
   }
 
   // obsCluster (points to nothing for non negbin/logit families)
-  vector<int *> pobsCluster(K);
+  std::vector<int *> pobsCluster(K);
   if (family == 2 || family == 3) {
     pobsCluster[0] = INTEGER(obsCluster_vector);
     for (int k = 1; k < K; ++k) {
@@ -289,7 +245,7 @@ cpp_conv_seq_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
   }
 
   // cluster of each observation
-  vector<int *> pdum(K);
+  std::vector<int *> pdum(K);
   pdum[0] = INTEGER(dum_vector);
   for (int k = 1; k < K; ++k) {
     pdum[k] = pdum[k - 1] + n_obs;
@@ -299,28 +255,26 @@ cpp_conv_seq_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
   double *plhs = REAL(lhs);
 
   // the variable with the value of mu
-  vector<double> mu_with_coef(n_obs);
+  std::vector<double> mu_with_coef(n_obs);
   // initialization of mu_with_coef
   for (int i = 0; i < n_obs; ++i) {
     mu_with_coef[i] = pmu_init[i];
   }
 
-  // The cluster coefficients
+  // cluster coefficients
   // variables on 1:K
-  vector<double> cluster_coef(nb_coef);
+  std::vector<double> cluster_coef(nb_coef);
   // pointers:
-  vector<double *> pcluster_coef(K);
+  std::vector<double *> pcluster_coef(K);
   pcluster_coef[0] = cluster_coef.data();
   for (int k = 1; k < K; ++k) {
     pcluster_coef[k] = pcluster_coef[k - 1] + pcluster[k - 1];
   }
 
-  //
-  // the main loop
-  //
+  // main loop
 
   // initialisation of the cluster coefficients
-  if (family == 1) { // Poisson
+  if (family == 1) {  // Poisson
     for (int i = 0; i < nb_coef; ++i) {
       cluster_coef[i] = 1;
     }
@@ -334,18 +288,14 @@ cpp_conv_seq_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
   bool keepGoing = true;
   int iter = 1;
   while (keepGoing && iter <= iterMax) {
-    // Rprintf("\n%i.", iter);
     ++iter;
     keepGoing = false;
 
     /// we loop over all clusters => from K to 1
     for (int k = (K - 1); k >= 0; k--) {
-      // Rprintf("k=%i ", k);
       check_user_interrupt();
 
-      //
       // 1) computing the cluster coefficient
-      //
 
       // computing the optimal cluster coef -- given mu_with_coef
       double *my_cluster_coef = pcluster_coef[k];
@@ -362,9 +312,7 @@ cpp_conv_seq_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
                                 my_sum_y, my_dum, my_obsCluster, my_table,
                                 my_cumtable, nthreads);
 
-      //
       // 2) Updating the value of mu
-      //
 
       // we add the computed value
       if (family == 1) {
@@ -379,10 +327,6 @@ cpp_conv_seq_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
 
       // Stopping criterion
       if (keepGoing == false) {
-        // Rprintf("nb: %i ", nb_cluster);
-        // Rprintf("value: %f", my_cluster_coef[nb_cluster]);
-        // stop("hhhh");
-
         if (family == 1) {
           for (int m = 0; m < nb_cluster; ++m) {
             if (fabs(my_cluster_coef[m] - 1) > diffMax) {
@@ -402,9 +346,7 @@ cpp_conv_seq_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
     }
   }
 
-  //
-  // We update mu => result
-  //
+  // update mu => result
 
   SEXP mu = PROTECT(Rf_allocVector(REALSXP, n_obs));
   double *pmu = REAL(mu);
@@ -427,13 +369,13 @@ cpp_conv_seq_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
                                              int iterMax, double diffMax,
                                              SEXP exp_mu_in, SEXP order) {
   // values that will be used later
-  vector<double> alpha(n_i);
+  std::vector<double> alpha(n_i);
 
   // We compute the matrix Ab
   int index_current = 0;
-  vector<int> mat_row(n_cells);
-  vector<int> mat_col(n_cells);
-  vector<double> mat_value(n_cells);
+  std::vector<int> mat_row(n_cells);
+  std::vector<int> mat_col(n_cells);
+  std::vector<double> mat_value(n_cells);
 
   int *pindex_i = INTEGER(index_i);
   int *pindex_j = INTEGER(index_j);
@@ -467,19 +409,15 @@ cpp_conv_seq_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
   mat_col[index_current] = pindex_j[n_obs - 1];
   mat_value[index_current] = value;
 
-  //
   // IT iteration (preparation)
-  //
 
-  vector<double> X(n_i + n_j);
-  vector<double> GX(n_i + n_j);
-  vector<double> GGX(n_i + n_j);
-  vector<double> delta_GX(n_i);
-  vector<double> delta2_X(n_i);
+  std::vector<double> X(n_i + n_j);
+  std::vector<double> GX(n_i + n_j);
+  std::vector<double> GGX(n_i + n_j);
+  std::vector<double> delta_GX(n_i);
+  std::vector<double> delta2_X(n_i);
 
-  //
   // the main loop
-  //
 
   // initialisation of X and then GX
   for (int i = 0; i < n_i; ++i) {
@@ -489,8 +427,8 @@ cpp_conv_seq_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
   // ca and cb
   double *psum_y = REAL(sum_y_vector);
 
-  vector<double> ca(n_i);
-  vector<double> cb(n_j);
+  std::vector<double> ca(n_i);
+  std::vector<double> cb(n_j);
   for (int i = 0; i < n_i; ++i) {
     ca[i] = psum_y[i];
   }
@@ -510,7 +448,6 @@ cpp_conv_seq_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
   // check whether we should go into the loop => always 1 iter
   bool keepGoing = true;
   for (int i = 0; i < n_i; ++i) {
-    // if(fabs(X[i] - GX[i]) / (0.1 + fabs(GX[i])) > diffMax){
     if (continue_criterion(X[i], GX[i], diffMax)) {
       keepGoing = true;
       break;
@@ -520,7 +457,6 @@ cpp_conv_seq_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
   bool numconv = false;
   int iter = 0;
   while (keepGoing && iter < iterMax) {
-    // Rprintf("%i.", iter);
     ++iter;
 
     // GGX -- origin: GX, destination: GGX
@@ -529,10 +465,9 @@ cpp_conv_seq_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
 
     // X ; update of the cluster coefficient
     numconv = update_X_IronsTuck(n_i, X, GX, GGX, delta_GX, delta2_X);
-    if (numconv)
-      break;
+    if (numconv) break;
 
-    // Control for negative values
+    // control for negative values
     for (int i = 0; i < n_i; ++i) {
       if (X[i] <= 0) {
         any_negative_poisson = true;
@@ -541,7 +476,7 @@ cpp_conv_seq_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
     }
 
     if (any_negative_poisson) {
-      break; // we quit the loop
+      break;  // we quit the loop
       // update of mu is OK, it's only IT iteration that leads to negative
       // values
     }
@@ -552,7 +487,6 @@ cpp_conv_seq_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
 
     keepGoing = false;
     for (int i = 0; i < n_i; ++i) {
-      // if(fabs(X[i] - GX[i]) / (0.1 + fabs(GX[i])) > diffMax){
       if (continue_criterion(X[i], GX[i], diffMax)) {
         keepGoing = true;
         break;
@@ -565,7 +499,7 @@ cpp_conv_seq_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
   int *dum_i = INTEGER(dum_vector);
   int *dum_j = dum_i + n_obs;
 
-  // pour avoir identique a acc_pois
+  // to be identical to acc_pois
   CCC_poisson_2(GX, X, n_i, n_j, n_cells, mat_row, mat_col, mat_value, ca, cb,
                 alpha);
   double *beta = X.data() + n_i;
@@ -589,13 +523,13 @@ cpp_conv_seq_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
                                              int iterMax, double diffMax,
                                              SEXP exp_mu_in, SEXP order) {
   // values that will be used later
-  vector<double> alpha(n_i);
+  std::vector<double> alpha(n_i);
 
-  // We compute the matrix Ab
+  // compute the matrix Ab
   int index_current = 0;
-  vector<int> mat_row(n_cells);
-  vector<int> mat_col(n_cells);
-  vector<double> mat_value(n_cells);
+  std::vector<int> mat_row(n_cells);
+  std::vector<int> mat_col(n_cells);
+  std::vector<double> mat_value(n_cells);
 
   int *pindex_i = INTEGER(index_i);
   int *pindex_j = INTEGER(index_j);
@@ -604,7 +538,6 @@ cpp_conv_seq_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
 
   int *new_order = INTEGER(order);
   double *pexp_mu_in = REAL(exp_mu_in);
-  // double value = pexp_mu_in[0];
   double value = pexp_mu_in[new_order[0]];
 
   for (int i = 1; i < n_obs; ++i) {
@@ -630,12 +563,10 @@ cpp_conv_seq_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
   mat_value[index_current] = value;
 
   // X, X_new => the vector of coefficients
-  vector<double> X_new(n_i + n_j);
-  vector<double> X(n_i + n_j);
+  std::vector<double> X_new(n_i + n_j);
+  std::vector<double> X(n_i + n_j);
 
-  //
-  // the main loop
-  //
+  // main loop
 
   // initialisation of X and then GX
   for (int i = 0; i < n_i; ++i) {
@@ -645,8 +576,8 @@ cpp_conv_seq_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
   // ca and cb
   double *psum_y = REAL(sum_y_vector);
 
-  vector<double> ca(n_i);
-  vector<double> cb(n_j);
+  std::vector<double> ca(n_i);
+  std::vector<double> cb(n_j);
   for (int i = 0; i < n_i; ++i) {
     ca[i] = psum_y[i];
   }
@@ -661,7 +592,7 @@ cpp_conv_seq_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
   while (keepGoing && iter < iterMax) {
     ++iter;
 
-    // This way I don't need to update the values of X with a loop
+    // no need to update the values of X with a loop
     if (iter % 2 == 1) {
       CCC_poisson_2(X, X_new, n_i, n_j, n_cells, mat_row, mat_col, mat_value,
                     ca, cb, alpha);
@@ -700,14 +631,11 @@ cpp_conv_seq_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
   return (res);
 }
 
-[[cpp11::register]] list
-cpp_conv_acc_gau_2_(int n_i, int n_j, int n_cells, SEXP r_mat_row,
-                    SEXP r_mat_col, SEXP r_mat_value_Ab, SEXP r_mat_value_Ba,
-                    SEXP dum_vector, SEXP lhs, SEXP invTableCluster_vector,
-                    int iterMax, double diffMax, SEXP mu_in) {
-  //
-  // Setting up
-  //
+[[cpp11::register]] list cpp_conv_acc_gau_2_(
+    int n_i, int n_j, int n_cells, SEXP r_mat_row, SEXP r_mat_col,
+    SEXP r_mat_value_Ab, SEXP r_mat_value_Ba, SEXP dum_vector, SEXP lhs,
+    SEXP invTableCluster_vector, int iterMax, double diffMax, SEXP mu_in) {
+  // set up
 
   int n_obs = Rf_length(mu_in);
 
@@ -716,16 +644,15 @@ cpp_conv_acc_gau_2_(int n_i, int n_j, int n_cells, SEXP r_mat_row,
   double *mat_value_Ab = REAL(r_mat_value_Ab);
   double *mat_value_Ba = REAL(r_mat_value_Ba);
 
-  vector<double> resid(n_obs);
+  std::vector<double> resid(n_obs);
   double *plhs = REAL(lhs), *pmu_in = REAL(mu_in);
   for (int obs = 0; obs < n_obs; ++obs) {
     resid[obs] = plhs[obs] - pmu_in[obs];
   }
 
-  //
   // const_a and const_b
-  vector<double> const_a(n_i, 0);
-  vector<double> const_b(n_j, 0);
+  std::vector<double> const_a(n_i, 0);
+  std::vector<double> const_b(n_j, 0);
   int *dum_i = INTEGER(dum_vector);
   int *dum_j = dum_i + n_obs;
   double *invTable_i = REAL(invTableCluster_vector);
@@ -742,27 +669,23 @@ cpp_conv_acc_gau_2_(int n_i, int n_j, int n_cells, SEXP r_mat_row,
   }
 
   // values that will be used later
-  vector<double> beta(n_j);
+  std::vector<double> beta(n_j);
 
-  vector<double> a_tilde(const_a); // init at const_a
+  std::vector<double> a_tilde(const_a);  // init at const_a
 
   for (int obs = 0; obs < n_cells; ++obs) {
     a_tilde[mat_row[obs]] -= mat_value_Ab[obs] * const_b[mat_col[obs]];
   }
 
-  //
   // IT iteration (preparation)
-  //
 
-  vector<double> X(n_i);
-  vector<double> GX(n_i);
-  vector<double> GGX(n_i);
-  vector<double> delta_GX(n_i);
-  vector<double> delta2_X(n_i);
+  std::vector<double> X(n_i);
+  std::vector<double> GX(n_i);
+  std::vector<double> GGX(n_i);
+  std::vector<double> delta_GX(n_i);
+  std::vector<double> delta2_X(n_i);
 
-  //
-  // the main loop
-  //
+  // main loop
 
   // initialisation of X and then GX
   for (int i = 0; i < n_i; ++i) {
@@ -785,8 +708,7 @@ cpp_conv_acc_gau_2_(int n_i, int n_j, int n_cells, SEXP r_mat_row,
 
     // X ; update of the cluster coefficient
     numconv = update_X_IronsTuck(n_i, X, GX, GGX, delta_GX, delta2_X);
-    if (numconv)
-      break;
+    if (numconv) break;
 
     // GX -- origin: X, destination: GX
     CCC_gaussian_2(X, GX, n_i, n_j, n_cells, mat_row, mat_col, mat_value_Ab,
@@ -804,15 +726,15 @@ cpp_conv_acc_gau_2_(int n_i, int n_j, int n_cells, SEXP r_mat_row,
   SEXP mu = PROTECT(Rf_allocVector(REALSXP, n_obs));
   double *pmu = REAL(mu);
 
-  // we need to compute beta, and then alpha
+  // compute beta, and then alpha
 
-  vector<double> beta_final(const_b);
+  std::vector<double> beta_final(const_b);
 
   for (int obs = 0; obs < n_cells; ++obs) {
     beta_final[mat_col[obs]] -= mat_value_Ba[obs] * GX[mat_row[obs]];
   }
 
-  vector<double> alpha_final(const_a);
+  std::vector<double> alpha_final(const_a);
 
   for (int obs = 0; obs < n_cells; ++obs) {
     alpha_final[mat_row[obs]] -= mat_value_Ab[obs] * beta_final[mat_col[obs]];
@@ -832,14 +754,11 @@ cpp_conv_acc_gau_2_(int n_i, int n_j, int n_cells, SEXP r_mat_row,
   return (res);
 }
 
-[[cpp11::register]] list
-cpp_conv_seq_gau_2_(int n_i, int n_j, int n_cells, SEXP r_mat_row,
-                    SEXP r_mat_col, SEXP r_mat_value_Ab, SEXP r_mat_value_Ba,
-                    SEXP dum_vector, SEXP lhs, SEXP invTableCluster_vector,
-                    int iterMax, double diffMax, SEXP mu_in) {
-  //
-  // Setting up
-  //
+[[cpp11::register]] list cpp_conv_seq_gau_2_(
+    int n_i, int n_j, int n_cells, SEXP r_mat_row, SEXP r_mat_col,
+    SEXP r_mat_value_Ab, SEXP r_mat_value_Ba, SEXP dum_vector, SEXP lhs,
+    SEXP invTableCluster_vector, int iterMax, double diffMax, SEXP mu_in) {
+  // set up
 
   int n_obs = Rf_length(mu_in);
 
@@ -848,16 +767,15 @@ cpp_conv_seq_gau_2_(int n_i, int n_j, int n_cells, SEXP r_mat_row,
   double *mat_value_Ab = REAL(r_mat_value_Ab);
   double *mat_value_Ba = REAL(r_mat_value_Ba);
 
-  vector<double> resid(n_obs);
+  std::vector<double> resid(n_obs);
   double *plhs = REAL(lhs), *pmu_in = REAL(mu_in);
   for (int obs = 0; obs < n_obs; ++obs) {
     resid[obs] = plhs[obs] - pmu_in[obs];
   }
 
-  //
   // const_a and const_b
-  vector<double> const_a(n_i, 0);
-  vector<double> const_b(n_j, 0);
+  std::vector<double> const_a(n_i, 0);
+  std::vector<double> const_b(n_j, 0);
   int *dum_i = INTEGER(dum_vector);
   int *dum_j = dum_i + n_obs;
   double *invTable_i = REAL(invTableCluster_vector);
@@ -874,21 +792,19 @@ cpp_conv_seq_gau_2_(int n_i, int n_j, int n_cells, SEXP r_mat_row,
   }
 
   // values that will be used later
-  vector<double> beta(n_j);
+  std::vector<double> beta(n_j);
 
-  vector<double> a_tilde(const_a);
+  std::vector<double> a_tilde(const_a);
 
   for (int obs = 0; obs < n_cells; ++obs) {
     a_tilde[mat_row[obs]] -= mat_value_Ab[obs] * const_b[mat_col[obs]];
   }
 
-  //
-  // the main loop
-  //
+  // main loop
 
   // X, X_new => the vector of coefficients
-  vector<double> X(n_i);
-  vector<double> X_new(n_i);
+  std::vector<double> X(n_i);
+  std::vector<double> X_new(n_i);
 
   // initialisation of X
   for (int i = 0; i < n_i; ++i) {
@@ -900,7 +816,7 @@ cpp_conv_seq_gau_2_(int n_i, int n_j, int n_cells, SEXP r_mat_row,
   while (keepGoing && iter < iterMax) {
     ++iter;
 
-    // This way I don't need to update the values of X with a loop
+    // no need to update the values of X with a loop
     if (iter % 2 == 1) {
       CCC_gaussian_2(X, X_new, n_i, n_j, n_cells, mat_row, mat_col,
                      mat_value_Ab, mat_value_Ba, a_tilde, beta);
@@ -911,7 +827,6 @@ cpp_conv_seq_gau_2_(int n_i, int n_j, int n_cells, SEXP r_mat_row,
 
     keepGoing = false;
     for (int i = 0; i < n_i; ++i) {
-      // if(fabs(X[i] - X_new[i]) / (0.1 + fabs(X_new[i])) > diffMax){
       if (continue_criterion(X[i], X_new[i], diffMax)) {
         keepGoing = true;
         break;
@@ -924,15 +839,15 @@ cpp_conv_seq_gau_2_(int n_i, int n_j, int n_cells, SEXP r_mat_row,
   SEXP mu = PROTECT(Rf_allocVector(REALSXP, n_obs));
   double *pmu = REAL(mu);
 
-  // we need to compute beta, and then alpha
+  // compute beta, and then alpha
 
-  vector<double> beta_final(const_b);
+  std::vector<double> beta_final(const_b);
 
   for (int obs = 0; obs < n_cells; ++obs) {
     beta_final[mat_col[obs]] -= mat_value_Ba[obs] * X_final[mat_row[obs]];
   }
 
-  vector<double> alpha_final(const_a);
+  std::vector<double> alpha_final(const_a);
 
   for (int obs = 0; obs < n_cells; ++obs) {
     alpha_final[mat_row[obs]] -= mat_value_Ab[obs] * beta_final[mat_col[obs]];

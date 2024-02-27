@@ -15,20 +15,17 @@
   int *pcluster = INTEGER(nb_cluster_all);
   double *pll_d2 = REAL(ll_d2);
 
-  int nb_coef = 0;
-  for (int k = 0; k < K; ++k) {
-    nb_coef += pcluster[k];
-  }
+  int nb_coef = accumulate(pcluster, pcluster + K, 0);
 
   // Setting up the vectors on variables
-  vector<double *> pjac(n_vars);
+  std::vector<double *> pjac(n_vars);
   pjac[0] = REAL(jacob_vector);
   for (int v = 1; v < n_vars; ++v) {
     pjac[v] = pjac[v - 1] + n_obs;
   }
 
   // setting up the vectors on clusters
-  vector<int *> pdum(K);
+  std::vector<int *> pdum(K);
   pdum[0] = INTEGER(dum_vector);
 
   for (int k = 1; k < K; ++k) {
@@ -36,24 +33,22 @@
   }
 
   // Setting up the target => deriv
-  vector<double> deriv(n_obs * n_vars);
+  std::vector<double> deriv(n_obs * n_vars);
   double *my_init = REAL(deriv_init_vector);
-  for (int i = 0; i < n_obs * n_vars; ++i) {
-    deriv[i] = my_init[i];
-  }
+  copy(my_init, my_init + n_obs * n_vars, deriv.begin());
   // pointers to deriv
-  vector<double *> pderiv(n_vars);
+  std::vector<double *> pderiv(n_vars);
   pderiv[0] = deriv.data();
   for (int v = 1; v < n_vars; ++v) {
     pderiv[v] = pderiv[v - 1] + n_obs;
   }
 
   // the deriv coefficients & sum_ll_d2
-  vector<double> deriv_coef(nb_coef);
-  vector<double> sum_ll_d2(nb_coef);
+  std::vector<double> deriv_coef(nb_coef);
+  std::vector<double> sum_ll_d2(nb_coef);
 
-  vector<double *> pderiv_coef(K);
-  vector<double *> psum_ll_d2(K);
+  std::vector<double *> pderiv_coef(K);
+  std::vector<double *> psum_ll_d2(K);
 
   pderiv_coef[0] = deriv_coef.data();
   psum_ll_d2[0] = sum_ll_d2.data();
@@ -63,10 +58,7 @@
   }
 
   // computing the sum_ll_d2
-  for (int m = 0; m < nb_coef; ++m) {
-    // init
-    sum_ll_d2[m] = 0;
-  }
+  fill(sum_ll_d2.begin(), sum_ll_d2.end(), 0.0);
 
   for (int k = 0; k < K; ++k) {
     double *my_sum_ll_d2 = psum_ll_d2[k];
@@ -76,9 +68,7 @@
     }
   }
 
-  //
   // Loop
-  //
 
   bool keepGoing = true;
   int iter = 0, iter_all_max = 0;
@@ -96,10 +86,9 @@
       ++iter;
       keepGoing = false;
 
-      // we update the clusters sequentially
-      // we loop over all clusters => from K to 1
+      // update the clusters sequentially
+      // loop over all clusters => from K to 1
       for (int k = (K - 1); k >= 0; k--) {
-        // Rprintf("k=%i ", k);
         check_user_interrupt();
 
         // loading the required info
@@ -109,9 +98,7 @@
         int nb_cluster = pcluster[k];
 
         // init the deriv coef
-        for (int m = 0; m < nb_cluster; ++m) {
-          my_deriv_coef[m] = 0;
-        }
+        fill(my_deriv_coef, my_deriv_coef + nb_cluster, 0.0);
 
         // sum the jac and deriv
         for (int i = 0; i < n_obs; ++i) {
@@ -123,12 +110,12 @@
           my_deriv_coef[m] /= -my_sum_ll_d2[m];
         }
 
-        // we update deriv
+        // update deriv
         for (int i = 0; i < n_obs; ++i) {
           my_deriv[i] += my_deriv_coef[my_dum[i]];
         }
 
-        // the stopping criterion
+        // stopping criterion
         if (keepGoing == false) {
           for (int m = 0; m < nb_cluster; ++m) {
             if (fabs(my_deriv_coef[m]) > diffMax) {
@@ -145,9 +132,7 @@
     }
   }
 
-  //
-  // The result
-  //
+  // Result
 
   writable::doubles_matrix<> dxi_dbeta(n_obs, n_vars);
 
@@ -171,30 +156,28 @@ struct PARAM_DERIV_COEF {
   int K;
 
   // vectors of pointers (length K)
-  vector<int *> pdum;
-  vector<double *> psum_ll_d2;
-  vector<double *> psum_jac_lld2;
+  std::vector<int *> pdum;
+  std::vector<double *> psum_ll_d2;
+  std::vector<double *> psum_jac_lld2;
 
   // simple vectors using pointers
   int *pcluster;
   double *ll_d2;
 
   // only value that will vary
-  double *deriv_with_coef; // => vector length n_obs
+  double *deriv_with_coef;  // => vector length n_obs
 };
 
-void computeDerivCoef(vector<double *> &pcoef_origin,
-                      vector<double *> &pcoef_destination,
+void computeDerivCoef(std::vector<double *> &pcoef_origin,
+                      std::vector<double *> &pcoef_destination,
                       double *my_deriv_init, PARAM_DERIV_COEF *args) {
-  //
   // Loading the arguments
-  //
 
   int n_obs = args->n_obs;
   int K = args->K;
-  vector<int *> &pdum = args->pdum;
-  vector<double *> &psum_ll_d2 = args->psum_ll_d2;
-  vector<double *> &psum_jac_lld2 = args->psum_jac_lld2;
+  std::vector<int *> &pdum = args->pdum;
+  std::vector<double *> &psum_ll_d2 = args->psum_ll_d2;
+  std::vector<double *> &psum_jac_lld2 = args->psum_jac_lld2;
   int *pcluster = args->pcluster;
   double *ll_d2 = args->ll_d2;
   double *deriv_with_coef = args->deriv_with_coef;
@@ -218,16 +201,14 @@ void computeDerivCoef(vector<double *> &pcoef_origin,
   for (int k = K - 1; k >= 0; k--) {
     check_user_interrupt();
 
-    // computing the optimal cluster coef -- given mu_with_coef
+    // computing the optimal cluster coef given mu_with_coef
     double *my_deriv_coef = pcoef_destination[k];
     double *my_sum_ll_d2 = psum_ll_d2[k];
     double *my_sum_jac_lld2 = psum_jac_lld2[k];
     int *my_dum = pdum[k];
     int nb_cluster = pcluster[k];
 
-    //
     // update of the deriv coefficients
-    //
 
     // init the deriv coef
     for (int m = 0; m < nb_cluster; ++m) {
@@ -253,8 +234,7 @@ void computeDerivCoef(vector<double *> &pcoef_origin,
       int *my_dum;
       double *my_deriv_coef;
       for (int h = 0; h < K; h++) {
-        if (h == k - 1)
-          continue;
+        if (h == k - 1) continue;
 
         my_dum = pdum[h];
 
@@ -289,33 +269,33 @@ void computeDerivCoef(vector<double *> &pcoef_origin,
   }
 
   // Setting up the vectors on variables
-  vector<double *> pjac(n_vars);
+  std::vector<double *> pjac(n_vars);
   pjac[0] = REAL(jacob_vector);
   for (int v = 1; v < n_vars; ++v) {
     pjac[v] = pjac[v - 1] + n_obs;
   }
 
   // setting up the vectors on clusters
-  vector<int *> pdum(K);
+  std::vector<int *> pdum(K);
   pdum[0] = INTEGER(dum_vector);
   for (int k = 1; k < K; ++k) {
     pdum[k] = pdum[k - 1] + n_obs;
   }
 
   // pointers to deriv_init_vector (length n_vars*n_obs)
-  vector<double *> pderiv_init(n_vars);
+  std::vector<double *> pderiv_init(n_vars);
   pderiv_init[0] = REAL(deriv_init_vector);
   for (int v = 1; v < n_vars; ++v) {
     pderiv_init[v] = pderiv_init[v - 1] + n_obs;
   }
 
   // the deriv coefficients & sum_ll_d2 & sum_jac_lld2
-  vector<double> deriv_coef(nb_coef);
-  vector<double> sum_ll_d2(nb_coef);
-  vector<double> sum_jac_lld2(nb_coef);
-  vector<double *> pderiv_coef(K);
-  vector<double *> psum_ll_d2(K);
-  vector<double *> psum_jac_lld2(K);
+  std::vector<double> deriv_coef(nb_coef);
+  std::vector<double> sum_ll_d2(nb_coef);
+  std::vector<double> sum_jac_lld2(nb_coef);
+  std::vector<double *> pderiv_coef(K);
+  std::vector<double *> psum_ll_d2(K);
+  std::vector<double *> psum_jac_lld2(K);
   pderiv_coef[0] = deriv_coef.data();
   psum_ll_d2[0] = sum_ll_d2.data();
   psum_jac_lld2[0] = sum_jac_lld2.data();
@@ -339,11 +319,9 @@ void computeDerivCoef(vector<double *> &pcoef_origin,
     }
   }
 
-  vector<double> deriv_with_coef(n_obs);
+  std::vector<double> deriv_with_coef(n_obs);
 
-  //
-  // Sending the information
-  //
+  // Sending the data to the struct
 
   PARAM_DERIV_COEF args;
   args.n_obs = n_obs;
@@ -355,18 +333,16 @@ void computeDerivCoef(vector<double *> &pcoef_origin,
   args.ll_d2 = pll_d2;
   args.deriv_with_coef = deriv_with_coef.data();
 
-  //
   // IT iteration (preparation)
-  //
 
   // variables on 1:K
-  vector<double> X(nb_coef);
-  vector<double> GX(nb_coef);
-  vector<double> GGX(nb_coef);
-  // pointers:
-  vector<double *> pX(K);
-  vector<double *> pGX(K);
-  vector<double *> pGGX(K);
+  std::vector<double> X(nb_coef);
+  std::vector<double> GX(nb_coef);
+  std::vector<double> GGX(nb_coef);
+  // pointers
+  std::vector<double *> pX(K);
+  std::vector<double *> pGX(K);
+  std::vector<double *> pGGX(K);
 
   pX[0] = X.data();
   pGX[0] = GX.data();
@@ -383,12 +359,10 @@ void computeDerivCoef(vector<double *> &pcoef_origin,
   for (int k = 0; k < (K - 1); ++k) {
     nb_coef_no_K += pcluster[k];
   }
-  vector<double> delta_GX(nb_coef_no_K);
-  vector<double> delta2_X(nb_coef_no_K);
+  std::vector<double> delta_GX(nb_coef_no_K);
+  std::vector<double> delta2_X(nb_coef_no_K);
 
-  //
   // Loop
-  //
 
   writable::doubles_matrix<> dxi_dbeta(n_obs, n_vars);
 
@@ -401,9 +375,7 @@ void computeDerivCoef(vector<double *> &pcoef_origin,
     double *my_deriv_init = pderiv_init[v];
     double *my_jac = pjac[v];
 
-    //
-    // we update the values of sum_jac_lld2
-    //
+    // update the values of sum_jac_lld2
 
     for (int k = 0; k < K; ++k) {
       int *my_dum = pdum[k];
@@ -419,11 +391,9 @@ void computeDerivCoef(vector<double *> &pcoef_origin,
       }
     }
 
-    //
-    // The IT loop
-    //
+    // IT loop
 
-    // we initialize the deriv coefficients
+    // initialize the deriv coefficients
     for (int m = 0; m < nb_coef; ++m) {
       X[m] = 0;
     }
@@ -443,8 +413,7 @@ void computeDerivCoef(vector<double *> &pcoef_origin,
       // X ; update of the cluster coefficient
       numconv =
           update_X_IronsTuck(nb_coef_no_K, X, GX, GGX, delta_GX, delta2_X);
-      if (numconv)
-        break;
+      if (numconv) break;
 
       // origin: X, destination: GX
       computeDerivCoef(pX, pGX, my_deriv_init, &args);
@@ -466,9 +435,7 @@ void computeDerivCoef(vector<double *> &pcoef_origin,
       iter_all_max = iter;
     }
 
-    //
     // Save the deriv into res
-    //
 
     // we compute the deriv based on the cluster coefs
     for (int i = 0; i < n_obs; ++i) {
@@ -496,13 +463,12 @@ void computeDerivCoef(vector<double *> &pcoef_origin,
   return (res);
 }
 
-void computeDerivCoef_2(vector<double> &alpha_origin,
-                        vector<double> &alpha_destination, int n_i, int n_j,
-                        int n_cells, const vector<double> &a_tilde,
-                        const vector<int> &mat_row, const vector<int> &mat_col,
-                        const vector<double> &mat_value_Ab,
-                        const vector<double> &mat_value_Ba,
-                        vector<double> &beta) {
+void computeDerivCoef_2(
+    std::vector<double> &alpha_origin, std::vector<double> &alpha_destination,
+    int n_i, int n_j, int n_cells, const std::vector<double> &a_tilde,
+    const std::vector<int> &mat_row, const std::vector<int> &mat_col,
+    const std::vector<double> &mat_value_Ab,
+    const std::vector<double> &mat_value_Ba, std::vector<double> &beta) {
   // a_tile + Ab * Ba * alpha
 
   for (int m = 0; m < n_i; ++m) {
@@ -522,11 +488,10 @@ void computeDerivCoef_2(vector<double> &alpha_origin,
   }
 }
 
-[[cpp11::register]] list
-cpp_derivconv_acc_2_(int iterMax, double diffMax, int n_vars,
-                     SEXP nb_cluster_all, int n_cells, SEXP index_i,
-                     SEXP index_j, SEXP ll_d2, SEXP order, SEXP jacob_vector,
-                     SEXP deriv_init_vector, SEXP dum_vector) {
+[[cpp11::register]] list cpp_derivconv_acc_2_(
+    int iterMax, double diffMax, int n_vars, SEXP nb_cluster_all, int n_cells,
+    SEXP index_i, SEXP index_j, SEXP ll_d2, SEXP order, SEXP jacob_vector,
+    SEXP deriv_init_vector, SEXP dum_vector) {
   int n_obs = Rf_length(ll_d2);
 
   int *pcluster = INTEGER(nb_cluster_all);
@@ -534,7 +499,7 @@ cpp_derivconv_acc_2_(int iterMax, double diffMax, int n_vars,
   int n_i = pcluster[0], n_j = pcluster[1];
 
   // Setting up the vectors on variables
-  vector<double *> pjac(n_vars);
+  std::vector<double *> pjac(n_vars);
   pjac[0] = REAL(jacob_vector);
   for (int v = 1; v < n_vars; ++v) {
     pjac[v] = pjac[v - 1] + n_obs;
@@ -545,15 +510,15 @@ cpp_derivconv_acc_2_(int iterMax, double diffMax, int n_vars,
   int *dum_j = dum_i + n_obs;
 
   // pointers to deriv_init_vector (length n_vars*n_obs)
-  vector<double *> pderiv_init(n_vars);
+  std::vector<double *> pderiv_init(n_vars);
   pderiv_init[0] = REAL(deriv_init_vector);
   for (int v = 1; v < n_vars; ++v) {
     pderiv_init[v] = pderiv_init[v - 1] + n_obs;
   }
 
   // the sum_ll_d2
-  vector<double> sum_ll_d2_i(n_i);
-  vector<double> sum_ll_d2_j(n_j);
+  std::vector<double> sum_ll_d2_i(n_i);
+  std::vector<double> sum_ll_d2_j(n_j);
 
   // computing the sum_ll_d2
   for (int m = 0; m < n_i; ++m) {
@@ -569,14 +534,12 @@ cpp_derivconv_acc_2_(int iterMax, double diffMax, int n_vars,
     sum_ll_d2_j[dum_j[obs]] += pll_d2[obs];
   }
 
-  //
   // Setting up the matrices A and B, and vector a_tilde
-  //
 
-  vector<int> mat_row(n_cells);
-  vector<int> mat_col(n_cells);
-  vector<double> mat_value_Ab(n_cells);
-  vector<double> mat_value_Ba(n_cells);
+  std::vector<int> mat_row(n_cells);
+  std::vector<int> mat_col(n_cells);
+  std::vector<double> mat_value_Ab(n_cells);
+  std::vector<double> mat_value_Ba(n_cells);
 
   int *pindex_i = INTEGER(index_i);
   int *pindex_j = INTEGER(index_j);
@@ -614,22 +577,18 @@ cpp_derivconv_acc_2_(int iterMax, double diffMax, int n_vars,
   mat_value_Ab[index_current] = value_Ab / -sum_ll_d2_i[pindex_i[n_obs - 1]];
   mat_value_Ba[index_current] = value_Ba / -sum_ll_d2_j[pindex_j[n_obs - 1]];
 
-  //
   // IT iteration (preparation)
-  //
 
-  vector<double> X(n_i);
-  vector<double> GX(n_i);
-  vector<double> GGX(n_i);
-  vector<double> delta_GX(n_i);
-  vector<double> delta2_X(n_i);
-  vector<double> beta(n_j);
-  vector<double> alpha_final(n_i);
-  vector<double> beta_final(n_j);
+  std::vector<double> X(n_i);
+  std::vector<double> GX(n_i);
+  std::vector<double> GGX(n_i);
+  std::vector<double> delta_GX(n_i);
+  std::vector<double> delta2_X(n_i);
+  std::vector<double> beta(n_j);
+  std::vector<double> alpha_final(n_i);
+  std::vector<double> beta_final(n_j);
 
-  //
   // Loop
-  //
 
   writable::doubles_matrix<> dxi_dbeta(n_obs, n_vars);
 
@@ -642,13 +601,11 @@ cpp_derivconv_acc_2_(int iterMax, double diffMax, int n_vars,
     double *my_deriv_init = pderiv_init[v];
     double *my_jac = pjac[v];
 
-    //
-    // we update the constants and then alpha tilde
-    //
+    // update the constants and then alpha tilde
 
-    // we compute the constants
-    vector<double> a(n_i);
-    vector<double> b(n_j);
+    // compute the constants
+    std::vector<double> a(n_i);
+    std::vector<double> b(n_j);
 
     for (int m = 0; m < n_i; ++m) {
       a[m] = 0;
@@ -668,7 +625,7 @@ cpp_derivconv_acc_2_(int iterMax, double diffMax, int n_vars,
     }
 
     // a_tilde: a_tilde = a + (Ab %m% b)
-    vector<double> a_tilde(n_i);
+    std::vector<double> a_tilde(n_i);
     for (int m = 0; m < n_i; ++m) {
       a_tilde[m] = a[m];
     }
@@ -676,9 +633,7 @@ cpp_derivconv_acc_2_(int iterMax, double diffMax, int n_vars,
       a_tilde[mat_row[i]] += mat_value_Ab[i] * b[mat_col[i]];
     }
 
-    //
-    // The IT loop
-    //
+    // IT loop
 
     // we initialize the deriv coefficients
     for (int m = 0; m < n_i; ++m) {
@@ -701,8 +656,7 @@ cpp_derivconv_acc_2_(int iterMax, double diffMax, int n_vars,
 
       // X ; update of the cluster coefficient
       numconv = update_X_IronsTuck(n_i, X, GX, GGX, delta_GX, delta2_X);
-      if (numconv)
-        break;
+      if (numconv) break;
 
       // origin: X, destination: GX
       computeDerivCoef_2(X, GX, n_i, n_j, n_cells, a_tilde, mat_row, mat_col,
@@ -724,11 +678,9 @@ cpp_derivconv_acc_2_(int iterMax, double diffMax, int n_vars,
       iter_all_max = iter;
     }
 
-    //
     // Save the deriv into res
-    //
 
-    // we compute the last alpha and beta
+    // compute the last alpha and beta
     for (int m = 0; m < n_i; ++m) {
       alpha_final[m] = a[m];
     }
@@ -759,11 +711,10 @@ cpp_derivconv_acc_2_(int iterMax, double diffMax, int n_vars,
   return (res);
 }
 
-[[cpp11::register]] list
-cpp_derivconv_seq_2_(int iterMax, double diffMax, int n_vars,
-                     SEXP nb_cluster_all, int n_cells, SEXP index_i,
-                     SEXP index_j, SEXP order, SEXP ll_d2, SEXP jacob_vector,
-                     SEXP deriv_init_vector, SEXP dum_vector) {
+[[cpp11::register]] list cpp_derivconv_seq_2_(
+    int iterMax, double diffMax, int n_vars, SEXP nb_cluster_all, int n_cells,
+    SEXP index_i, SEXP index_j, SEXP order, SEXP ll_d2, SEXP jacob_vector,
+    SEXP deriv_init_vector, SEXP dum_vector) {
   int n_obs = Rf_length(ll_d2);
 
   int *pcluster = INTEGER(nb_cluster_all);
@@ -774,7 +725,7 @@ cpp_derivconv_seq_2_(int iterMax, double diffMax, int n_vars,
   // n_obs, n_cells);
 
   // Setting up the vectors on variables
-  vector<double *> pjac(n_vars);
+  std::vector<double *> pjac(n_vars);
   pjac[0] = REAL(jacob_vector);
   for (int v = 1; v < n_vars; ++v) {
     pjac[v] = pjac[v - 1] + n_obs;
@@ -785,15 +736,15 @@ cpp_derivconv_seq_2_(int iterMax, double diffMax, int n_vars,
   int *dum_j = dum_i + n_obs;
 
   // pointers to deriv_init_vector (length n_vars*n_obs)
-  vector<double *> pderiv_init(n_vars);
+  std::vector<double *> pderiv_init(n_vars);
   pderiv_init[0] = REAL(deriv_init_vector);
   for (int v = 1; v < n_vars; ++v) {
     pderiv_init[v] = pderiv_init[v - 1] + n_obs;
   }
 
   // the sum_ll_d2
-  vector<double> sum_ll_d2_i(n_i);
-  vector<double> sum_ll_d2_j(n_j);
+  std::vector<double> sum_ll_d2_i(n_i);
+  std::vector<double> sum_ll_d2_j(n_j);
 
   // computing the sum_ll_d2
   for (int m = 0; m < n_i; ++m) {
@@ -809,14 +760,12 @@ cpp_derivconv_seq_2_(int iterMax, double diffMax, int n_vars,
     sum_ll_d2_j[dum_j[obs]] += pll_d2[obs];
   }
 
-  //
   // Setting up the matrices A and B, and vector a_tilde
-  //
 
-  vector<int> mat_row(n_cells);
-  vector<int> mat_col(n_cells);
-  vector<double> mat_value_Ab(n_cells);
-  vector<double> mat_value_Ba(n_cells);
+  std::vector<int> mat_row(n_cells);
+  std::vector<int> mat_col(n_cells);
+  std::vector<double> mat_value_Ab(n_cells);
+  std::vector<double> mat_value_Ba(n_cells);
 
   int *pindex_i = INTEGER(index_i);
   int *pindex_j = INTEGER(index_j);
@@ -855,20 +804,16 @@ cpp_derivconv_seq_2_(int iterMax, double diffMax, int n_vars,
   mat_value_Ba[index_current] =
       value_current / -sum_ll_d2_j[pindex_j[n_obs - 1]];
 
-  //
   // IT iteration (preparation)
-  //
 
-  vector<double> X(n_i);
-  vector<double> X_new(n_i);
+  std::vector<double> X(n_i);
+  std::vector<double> X_new(n_i);
   double *X_final;
-  vector<double> beta(n_j);
-  vector<double> alpha_final(n_i);
-  vector<double> beta_final(n_j);
+  std::vector<double> beta(n_j);
+  std::vector<double> alpha_final(n_i);
+  std::vector<double> beta_final(n_j);
 
-  //
   // Loop
-  //
 
   writable::doubles_matrix<> dxi_dbeta(n_obs, n_vars);
 
@@ -881,13 +826,11 @@ cpp_derivconv_seq_2_(int iterMax, double diffMax, int n_vars,
     double *my_deriv_init = pderiv_init[v];
     double *my_jac = pjac[v];
 
-    //
-    // we update the constants and then alpha tilde
-    //
+    // update the constants and then alpha tilde
 
-    // we compute the constants
-    vector<double> a(n_i);
-    vector<double> b(n_j);
+    // compute the constants
+    std::vector<double> a(n_i);
+    std::vector<double> b(n_j);
     for (int m = 0; m < n_i; ++m) {
       a[m] = 0;
     }
@@ -906,7 +849,7 @@ cpp_derivconv_seq_2_(int iterMax, double diffMax, int n_vars,
     }
 
     // a_tilde: a_tilde = a + (Ab %m% b)
-    vector<double> a_tilde(n_i);
+    std::vector<double> a_tilde(n_i);
     for (int m = 0; m < n_i; ++m) {
       a_tilde[m] = a[m];
     }
@@ -949,13 +892,11 @@ cpp_derivconv_seq_2_(int iterMax, double diffMax, int n_vars,
       iter_all_max = iter;
     }
 
-    //
     // Save the deriv into res
-    //
 
     X_final = (iter % 2 == 1) ? X_new.data() : X.data();
 
-    // we compute the last alpha and beta
+    // compute the last alpha and beta
     for (int m = 0; m < n_i; ++m) {
       alpha_final[m] = a[m];
     }
@@ -986,39 +927,39 @@ cpp_derivconv_seq_2_(int iterMax, double diffMax, int n_vars,
   return (res);
 }
 
-[[cpp11::register]] doubles_matrix<>
-update_deriv_single_(int n_vars, int nb_coef, SEXP r_ll_d2, SEXP r_jacob_vector,
-                     SEXP r_dum_vector) {
+[[cpp11::register]] doubles_matrix<> update_deriv_single_(int n_vars,
+                                                          int nb_coef,
+                                                          SEXP r_ll_d2,
+                                                          SEXP r_jacob_vector,
+                                                          SEXP r_dum_vector) {
   int n_obs = Rf_length(r_ll_d2);
 
   // loading variables
   double *ll_d2 = REAL(r_ll_d2);
   int *dum = INTEGER(r_dum_vector);
 
-  vector<double *> pjac(n_vars);
+  std::vector<double *> pjac(n_vars);
   pjac[0] = REAL(r_jacob_vector);
   for (int v = 1; v < n_vars; ++v) {
     pjac[v] = pjac[v - 1] + n_obs;
   }
 
   // vector sum_ll_d2
-  vector<double> sum_ll_d2(nb_coef, 0);
+  std::vector<double> sum_ll_d2(nb_coef, 0);
   for (int obs = 0; obs < n_obs; ++obs) {
     sum_ll_d2[dum[obs]] += ll_d2[obs];
   }
 
   // the vector of coefficients
-  vector<double> coef_deriv(nb_coef);
+  std::vector<double> coef_deriv(nb_coef);
 
   // the result
-  writable::doubles_matrix<> res(n_obs, n_vars); // init at 0
+  writable::doubles_matrix<> res(n_obs, n_vars);  // init at 0
 
   for (int v = 0; v < n_vars; ++v) {
     double *my_jac = pjac[v];
 
-    //
-    // 1) we compute the coef
-    //
+    // 1) compute the coef
 
     for (int m = 0; m < nb_coef; ++m) {
       coef_deriv[m] = 0;
@@ -1033,9 +974,7 @@ update_deriv_single_(int n_vars, int nb_coef, SEXP r_ll_d2, SEXP r_jacob_vector,
       coef_deriv[m] /= -sum_ll_d2[m];
     }
 
-    //
-    // 2) We save the value in res
-    //
+    // 2) save the value in res
 
     for (int obs = 0; obs < n_obs; ++obs) {
       res(obs, v) = coef_deriv[dum[obs]];

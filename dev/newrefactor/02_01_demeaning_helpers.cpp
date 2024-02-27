@@ -11,22 +11,11 @@ void stayIdleCheckingInterrupt(bool *stopnow, vector<int> &jobdone, int n_vars,
     ++iter;
 
     if (iter % 500000000 == 0) {
-      // if (pending_interrupt()) {
-      //   (*counterInside)++;
-      //   *stopnow = true;
-      //   break;
-      // } else {
-      //   // to avoid int overflow:
-      //   iter = 0;
-      // }
       iter = 0;
     }
 
     if (iter % 1000000 == 0) {
-      nbDone = 0;
-      for (int v = 0; v < n_vars; v++) {
-        nbDone += jobdone[v];
-      }
+      nbDone = accumulate(jobdone.begin(), jobdone.end(), 0);
     }
   }
 }
@@ -41,7 +30,7 @@ std::vector<int> set_parallel_scheme_ter(int N, int nthreads) {
   double N_rest = N;
 
   for (int i = 0; i < nthreads; ++i) {
-    res[i + 1] = ceil(N_rest / (nthreads - i));
+    res[i + 1] = std::ceil(N_rest / (nthreads - i));
     N_rest -= res[i + 1];
     res[i + 1] += res[i];
   }
@@ -66,8 +55,8 @@ std::vector<int> set_parallel_scheme_ter(int N, int nthreads) {
   int nobs = mat.nrow();
   int K = mat.ncol();
   bool anyNAInf = false;
-  bool any_na = false;  // return value
-  bool any_inf = false; // return value
+  bool any_na = false;   // return value
+  bool any_inf = false;  // return value
 
   /*
    we make parallel the anyNAInf loop

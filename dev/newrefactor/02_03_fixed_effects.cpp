@@ -19,9 +19,7 @@ FEClass::FEClass(int n_obs, int Q, SEXP r_weights, SEXP fe_id_list,
   this->n_obs = n_obs;
   this->Q = Q;
 
-  //
-  // Step 0: General information
-  //
+  // Step 1: General information
 
   // fixed-effect id for each observation
   p_fe_id.resize(Q);
@@ -32,14 +30,12 @@ FEClass::FEClass(int n_obs, int Q, SEXP r_weights, SEXP fe_id_list,
 
   nb_id_Q = INTEGER(r_nb_id_Q);
 
-  //
-  // Step 1: we check if slopes are needed
-  //
+  // Step 2: we check if slopes are needed
 
   // nb_slopes: number of variables with varying slopes (the FE does not count!)
 
   int nb_slopes = 0;
-  int sf = 0; // slope flag
+  int sf = 0;  // slope flag
   int *p_slope_flag_Q = INTEGER(slope_flag_Q);
   vector<bool> is_slope_Q(Q, false);
   vector<bool> is_slope_fe_Q(Q, false);
@@ -79,8 +75,8 @@ FEClass::FEClass(int n_obs, int Q, SEXP r_weights, SEXP fe_id_list,
 
   // where to start the coefficients
   vector<int> coef_start_Q(Q, 0);
-  for (int q = 1; q < Q; ++q)
-    coef_start_Q[q] = coef_start_Q[q - 1] + nb_coef_Q[q - 1];
+  std::partial_sum(nb_coef_Q.begin(), nb_coef_Q.end() - 1,
+                   coef_start_Q.begin() + 1);
 
   // Copying (tiny objects)
   this->is_slope_Q = is_slope_Q;
@@ -91,9 +87,7 @@ FEClass::FEClass(int n_obs, int Q, SEXP r_weights, SEXP fe_id_list,
   this->nb_coef_T = nb_coef_T;
   this->coef_start_Q = coef_start_Q;
 
-  //
-  // Step 2: precomputed stuff for non slopes and slopes
-  //
+  // Step 3: precomputed stuff for non slopes and slopes
 
   // Weights
   bool is_weight = Rf_length(r_weights) != 1;
@@ -152,11 +146,7 @@ FEClass::FEClass(int n_obs, int Q, SEXP r_weights, SEXP fe_id_list,
 
   if (is_weight && nb_coef_noVS_T > 0) {
     // Checking the 0-weights => we set them to 1 to wavoid division by 0
-    for (int c = 0; c < nb_coef_noVS_T; ++c) {
-      if (sum_weights_noVS_C[c] == 0) {
-        sum_weights_noVS_C[c] = 1;
-      }
-    }
+    std::replace(sum_weights_noVS_C.begin(), sum_weights_noVS_C.end(), 0, 1);
   }
 
   // Then the slopes
@@ -188,8 +178,9 @@ FEClass::FEClass(int n_obs, int Q, SEXP r_weights, SEXP fe_id_list,
     }
 
     for (int q = 0; q < Q; ++q) {
-      if (is_slope_Q[q] == false)
+      if (is_slope_Q[q] == false) {
         continue;
+      }
 
       simple_mat_of_vs_vars VS_mat(this, q);
       simple_mat_with_id my_system(p_eq_systems_VS_C[q], nb_vs_Q[q]);
@@ -296,9 +287,7 @@ void FEClass::compute_fe_coef_internal(int q, double *fe_coef_C, bool is_single,
       const double *sum_in_out = in_out_C + coef_start_Q[q];
 
       // initialize cluster coef
-      for (int m = 0; m < nb_coef; ++m) {
-        my_fe_coef[m] = sum_in_out[m];
-      }
+      std::copy(sum_in_out, sum_in_out + nb_coef, my_fe_coef);
 
       // looping sequentially over the sum of other coefficients
       for (int i = 0; i < n_obs; ++i) {
@@ -309,7 +298,6 @@ void FEClass::compute_fe_coef_internal(int q, double *fe_coef_C, bool is_single,
     for (int m = 0; m < nb_coef; ++m) {
       my_fe_coef[m] /= my_SW[m];
     }
-
   } else {
     // Setting up => computing the raw coefficient of the last column
     simple_mat_of_vs_vars VS_mat(this, q);
@@ -328,13 +316,10 @@ void FEClass::compute_fe_coef_internal(int q, double *fe_coef_C, bool is_single,
           }
         }
       }
-
     } else {
       // initialization
       const double *sum_in_out = in_out_C + coef_start_Q[q];
-      for (int m = 0; m < nb_coef; ++m) {
-        my_fe_coef[m] = sum_in_out[m];
-      }
+      std::copy(sum_in_out, sum_in_out + nb_coef, my_fe_coef);
 
       for (int i = 0; i < n_obs; ++i) {
         for (int v = 0; v < V; ++v) {
@@ -452,7 +437,6 @@ void FEClass::compute_fe_coef_2_internal(double *fe_coef_in_out_C,
     for (int m = 0; m < nb_coef_b; ++m) {
       my_fe_coef_b[m] /= my_SW[m];
     }
-
   } else {
     simple_mat_with_id my_system_b(p_eq_systems_VS_C[index_b], V_b);
     simple_mat_with_id rhs_b(my_fe_coef_b, V_b, 1);
@@ -465,7 +449,6 @@ void FEClass::compute_fe_coef_2_internal(double *fe_coef_in_out_C,
         for (int v = 0; v < V_a; ++v) {
           tmp += my_vs_coef_a(my_fe_a[i] - 1, v) * VS_mat_a(i, v);
         }
-
       } else {
         tmp = my_fe_coef_a[my_fe_a[i] - 1];
       }
@@ -513,15 +496,11 @@ void FEClass::compute_fe_coef_2(double *fe_coef_in_C, double *fe_coef_out_C,
   // Specific to the 2-FEs case
   // This way we avoid creating and using a temp object of length N
 
-  //
   // Step 1: Updating b
-  //
 
   compute_fe_coef_2_internal(fe_coef_in_C, fe_coef_tmp, in_out_C);
 
-  //
   // Step 2: Updating a
-  //
 
   compute_fe_coef_2_internal(fe_coef_out_C, fe_coef_tmp, in_out_C, true);
 }
@@ -559,7 +538,6 @@ void FEClass::add_wfe_coef_to_mu_internal(int q, double *fe_coef_C,
         out_N[i] += my_fe_coef[my_fe[i] - 1];
       }
     }
-
   } else {
     simple_mat_of_vs_vars VS_mat(this, q);
     simple_mat_with_id my_vs_coef(my_fe_coef, nb_vs_Q[q], 1);
@@ -598,7 +576,6 @@ void FEClass::compute_in_out(int q, double *in_out_C, sVec &in_N,
         sum_in_out[my_fe[i] - 1] += (in_N[i] - out_N[i]);
       }
     }
-
   } else {
     simple_mat_of_vs_vars VS_mat(this, q);
     simple_mat_with_id my_vs_sum_in_out(sum_in_out, nb_vs_Q[q], 1);
@@ -621,8 +598,9 @@ FEClass::simple_mat_of_vs_vars::simple_mat_of_vs_vars(const FEClass *FE_info,
                                                       int q) {
   // We set up the matrix
   int start = 0;
-  for (int l = 0; l < q; ++l)
+  for (int l = 0; l < q; ++l) {
     start += FE_info->nb_vs_noFE_Q[l];
+  }
 
   int K = FE_info->nb_vs_noFE_Q[q];
   pvars.resize(K);
@@ -630,11 +608,7 @@ FEClass::simple_mat_of_vs_vars::simple_mat_of_vs_vars(const FEClass *FE_info,
     pvars[k] = FE_info->p_vs_vars[start + k];
   }
 
-  if (FE_info->is_slope_fe_Q[q]) {
-    K_fe = K;
-  } else {
-    K_fe = -1;
-  }
+  K_fe = FE_info->is_slope_fe_Q[q] ? K : -1;
 }
 
 inline double FEClass::simple_mat_of_vs_vars::operator()(int i, int k) {
@@ -660,9 +634,7 @@ void compute_fe_gnl(double *p_fe_coef_origin, double *p_fe_coef_destination,
   //
   // first we update mu, then we update the cluster coefficicents
 
-  //
-  // Loading the variables
-  //
+  // Loading the variables  //
 
   int n_obs = args->n_obs;
   int Q = args->Q;
@@ -679,8 +651,7 @@ void compute_fe_gnl(double *p_fe_coef_origin, double *p_fe_coef_destination,
     std::fill_n(p_sum_other_means, n_obs, 0);
     double *my_fe_coef;
     for (int h = 0; h < Q; h++) {
-      if (h == q)
-        continue;
+      if (h == q) continue;
 
       if (h < q) {
         my_fe_coef = p_fe_coef_origin;

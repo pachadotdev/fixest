@@ -17,17 +17,13 @@ void FEClass::add_2_fe_coef_to_mu(double *fe_coef_a, double *fe_coef_b,
                                   bool update_beta = true) {
   // We add the value of the FE coefficients to each observation
 
-  //
   // Step 1: we update the coefficients of b
-  //
 
   if (update_beta) {
     compute_fe_coef_2_internal(fe_coef_a, fe_coef_b, in_out_C, out_N);
   }
 
-  //
   // Step 2: we add the value of each coef
-  //
 
   for (int q = 0; q < 2; ++q) {
     double *my_fe_coef = q == 0 ? fe_coef_a : fe_coef_b;
@@ -240,8 +236,7 @@ bool demean_acc_gnl(int v, int iterMax, PARAM_DEMEAN *args,
     // X: outcome of the acceleration
     numconv =
         dm_update_X_IronsTuck(nb_coef_no_Q, X, GX, GGX, delta_GX, delta2_X);
-    if (numconv)
-      break;
+    if (numconv) break;
 
     if (iter >= iter_projAfterAcc) {
       memcpy(p_Y, p_X, nb_coef_T * sizeof(double));
@@ -269,8 +264,7 @@ bool demean_acc_gnl(int v, int iterMax, PARAM_DEMEAN *args,
         memcpy(p_GGY, p_GX, nb_coef_T * sizeof(double));
         numconv =
             dm_update_X_IronsTuck(nb_coef_no_Q, Y, GY, GGY, delta_GX, delta2_X);
-        if (numconv)
-          break;
+        if (numconv) break;
         compute_fe(Q, p_Y, p_GX, p_sum_other_means, p_sum_in_out, args);
         grand_acc = 0;
       }
@@ -398,12 +392,12 @@ void demean_single_gnl(int v, PARAM_DEMEAN *args) {
 }
 
 // Loop over demean_single
-[[cpp11::register]] list
-cpp_demean_(SEXP y, SEXP X_raw, SEXP r_weights, int iterMax, double diffMax,
-            SEXP r_nb_id_Q, SEXP fe_id_list, SEXP table_id_I, SEXP slope_flag_Q,
-            SEXP slope_vars_list, SEXP r_init, int nthreads, int algo_extraProj,
-            int algo_iter_warmup, int algo_iter_projAfterAcc,
-            int algo_iter_grandAcc, bool save_fixef) {
+[[cpp11::register]] list cpp_demean_(
+    SEXP y, SEXP X_raw, SEXP r_weights, int iterMax, double diffMax,
+    SEXP r_nb_id_Q, SEXP fe_id_list, SEXP table_id_I, SEXP slope_flag_Q,
+    SEXP slope_vars_list, SEXP r_init, int nthreads, int algo_extraProj,
+    int algo_iter_warmup, int algo_iter_projAfterAcc, int algo_iter_grandAcc,
+    bool save_fixef) {
   // main fun that calls demean_single
   // preformats all the information needed on the fixed-effects
   // y: the dependent variable
@@ -469,9 +463,7 @@ cpp_demean_(SEXP y, SEXP X_raw, SEXP r_weights, int iterMax, double diffMax,
     std::fill_n(p_output_origin, n_total, 0);
   }
 
-  //
   // vector of pointers: input/output
-  //
 
   vector<double *> p_output(n_vars);
   p_output[0] = p_output_origin;
@@ -501,9 +493,7 @@ cpp_demean_(SEXP y, SEXP X_raw, SEXP r_weights, int iterMax, double diffMax,
   vector<double> fixef_values(save_fixef ? nb_coef_T : 1, 0);
   double *p_fixef_values = fixef_values.data();
 
-  //
   // Sending variables to envir
-  //
 
   PARAM_DEMEAN args;
 
@@ -539,13 +529,10 @@ cpp_demean_(SEXP y, SEXP X_raw, SEXP r_weights, int iterMax, double diffMax,
   int counter = 0;
   int *pcounter = &counter;
 
-  //
-  // the main loop
-  //
+  // main loop
 
   int nthreads_current = nthreads > n_vars ? n_vars : nthreads;
 
-// enlever les rprintf dans les nthreads jobs
 #pragma omp parallel for num_threads(nthreads_current) schedule(static, 1)
   for (int v = 0; v < (n_vars + nthreads_current); ++v) {
     // demean_single is the workhorse
@@ -569,17 +556,19 @@ cpp_demean_(SEXP y, SEXP X_raw, SEXP r_weights, int iterMax, double diffMax,
     stop("cpp_demean: User interrupt.");
   }
 
-  // Rprintf("Master checking: %i\n", *pcounter);
-
-  //
   // save
-  //
 
-  writable::list res; // a vector and a matrix
+  writable::list res;  // a vector and a matrix
 
   int nrow = useX ? n_obs : 1;
   int ncol = useX ? n_vars_X : 1;
   writable::doubles_matrix<> X_demean(nrow, ncol);
+  // TODO: check if I really need to fill with 0s
+  for (int i = 0; i < nrow; ++i) {
+    for (int j = 0; j < ncol; ++j) {
+      X_demean(i, j) = 0;
+    }
+  }
 
   sVec p_input_tmp;
   double *p_output_tmp;

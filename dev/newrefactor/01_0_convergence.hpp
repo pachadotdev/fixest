@@ -120,8 +120,6 @@ void computeClusterCoef_single(int family, int n_obs, int nb_cluster,
                                double *sum_y, int *dum, int *obsCluster,
                                int *table, int *cumtable, int nthreads);
 
-void computeClusterCoef_single(int family, int n_obs, int nb_cluster,
-                               double theta, double diffMax_NR,
-                               double *cluster_coef, double *mu, double *lhs,
-                               double *sum_y, int *dum, int *obsCluster,
-                               int *table, int *cumtable, int nthreads);
+void computeClusterCoef(vector<double *> &pcluster_origin,
+                        vector<double *> &pcluster_destination,
+                        PARAM_CCC *args);
