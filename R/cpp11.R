@@ -260,6 +260,10 @@ cpp_trigamma_ <- function(x, nthreads) {
   .Call(`_fixest2_cpp_trigamma_`, x, nthreads)
 }
 
+cpp_poisson_linkinv_ <- function(x, nthreads) {
+  .Call(`_fixest2_cpp_poisson_linkinv_`, x, nthreads)
+}
+
 cpp_poisson_validmu_ <- function(x, nthreads) {
   .Call(`_fixest2_cpp_poisson_validmu_`, x, nthreads)
 }

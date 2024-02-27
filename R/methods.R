@@ -3166,6 +3166,7 @@ update.fixest <- function(object, fml.update, nframes = 1, evaluate = TRUE, ...)
 
     # I use it as text to catch the var1^var2 FEs (update does not work)
     if (is.null(fixef_old)) {
+      fixef_old <- 1
       fixef_old_text <- "~ 1"
     } else {
       fixef_old_text <- deparse_long(fixef_old)
@@ -4064,7 +4065,7 @@ hatvalues.fixest <- function(model, ...) {
 #' est <- feols(mpg ~ hp, mtcars)
 #' df.residual(est)
 #'
-#' @export 
+#' @export
 df.residual.fixest <- function(object, ...) {
   degrees_freedom_iid(object, type = "resid")
 }
