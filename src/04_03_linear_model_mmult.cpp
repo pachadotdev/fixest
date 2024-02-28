@@ -162,11 +162,11 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y,
 
     writable::list res;
 
-    writable::doubles_matrix<> wX(X);
+    writable::doubles_matrix<> wX(N, K);
 
     // Always copy X to wX
-    for (int k = 0; k < K; ++k) {
-      for (int i = 0; i < N; ++i) {
+    for (int i = 0; i < N; ++i) {
+      for (int k = 0; k < K; ++k) {
         wX(i, k) = X(i, k);
       }
     }
@@ -261,7 +261,7 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y,
       // I don't use the sqrt, because I use the function when weights are
       // negative too (ll_d2 used as 'weight')
 
-      writable::doubles_matrix<> wX(X);
+      writable::doubles_matrix<> wX(N, K);
 
       for (int k = 0; k < K; ++k) {
         for (int i = 0; i < N; ++i) {
@@ -271,7 +271,6 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y,
 
       // XtX
       mp_XtX(XtX, X, wX, nthreads);
-
     } else {
       // Identical, but no need to make a copy of X or y which can be expensive
 

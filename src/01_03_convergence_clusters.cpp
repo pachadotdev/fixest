@@ -35,6 +35,16 @@ void computeClusterCoef_single(int family, int n_obs, int nb_cluster,
   }
 }
 
+void updateMuWithCoef(int family, int n_obs, double *mu_with_coef,
+                      double *my_cluster_coef, int *my_dum) {
+  auto operation = (family == 1) ? [](double &mu, double coef) { mu *= coef; }
+                                 : [](double &mu, double coef) { mu += coef; };
+
+  for (int i = 0; i < n_obs; ++i) {
+    operation(mu_with_coef[i], my_cluster_coef[my_dum[i]]);
+  }
+}
+
 void computeClusterCoef(std::vector<double *> &pcluster_origin,
                         std::vector<double *> &pcluster_destination,
                         PARAM_CCC *args) {
@@ -68,23 +78,11 @@ void computeClusterCoef(std::vector<double *> &pcluster_origin,
   // We update each cluster coefficient, starting from K
 
   // we first set the value of mu_with_coef
-  for (int i = 0; i < n_obs; ++i) {
-    mu_with_coef[i] = mu_init[i];
-  }
+  memcpy(mu_with_coef, mu_init, n_obs * sizeof(double));
 
   for (int k = 0; k < (K - 1); ++k) {
-    int *my_dum = pdum[k];
-    double *my_cluster_coef = pcluster_origin[k];
-
-    if (family == 1) {  // Poisson
-      for (int i = 0; i < n_obs; ++i) {
-        mu_with_coef[i] *= my_cluster_coef[my_dum[i]];
-      }
-    } else {
-      for (int i = 0; i < n_obs; ++i) {
-        mu_with_coef[i] += my_cluster_coef[my_dum[i]];
-      }
-    }
+    updateMuWithCoef(family, n_obs, mu_with_coef, pcluster_origin[k],
+                     args->pdum[k]);
   }
 
   for (int k = K - 1; k >= 0; k--) {
@@ -107,32 +105,15 @@ void computeClusterCoef(std::vector<double *> &pcluster_origin,
 
     // updating the value of mu_with_coef (only if necessary)
     if (k != 0) {
-      for (int i = 0; i < n_obs; ++i) {
-        mu_with_coef[i] = mu_init[i];
-      }
+      memcpy(mu_with_coef, mu_init, n_obs * sizeof(double));
 
-      int *my_dum;
-      double *my_cluster_coef;
       for (int h = 0; h < K; h++) {
         if (h == k - 1) continue;
 
-        my_dum = pdum[h];
-
-        if (h < k - 1) {
-          my_cluster_coef = pcluster_origin[h];
-        } else {
-          my_cluster_coef = pcluster_destination[h];
-        }
-
-        if (family == 1) {  // Poisson
-          for (int i = 0; i < n_obs; ++i) {
-            mu_with_coef[i] *= my_cluster_coef[my_dum[i]];
-          }
-        } else {
-          for (int i = 0; i < n_obs; ++i) {
-            mu_with_coef[i] += my_cluster_coef[my_dum[i]];
-          }
-        }
+        double *my_cluster_coef =
+            (h < k - 1) ? pcluster_origin[h] : pcluster_destination[h];
+        updateMuWithCoef(family, n_obs, mu_with_coef, my_cluster_coef,
+                         args->pdum[h]);
       }
     }
   }
@@ -182,7 +163,7 @@ void computeClusterCoef(std::vector<double *> &pcluster_origin,
 
   UNPROTECT(1);
 
-  return (mu);
+  return mu;
 }
 
 [[cpp11::register]] int get_n_cells_(integers index_i, integers index_j) {
@@ -200,5 +181,5 @@ void computeClusterCoef(std::vector<double *> &pcluster_origin,
 
   index_current++;
 
-  return (index_current);
+  return index_current;
 }

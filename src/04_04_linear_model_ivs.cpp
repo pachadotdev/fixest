@@ -26,11 +26,11 @@
   writable::doubles_matrix<> XtX(K2, K2);
   writable::doubles_matrix<> ZXtZX(K2 + K1, K2 + K1);
 
-  writable::doubles_matrix<> wZ(Z);
+  writable::doubles_matrix<> wZ(N, K1);
   if (isWeight) {
-    for (int k = 0; k < K1; ++k) {
-      for (int i = 0; i < N; ++i) {
-        wZ(i, k) *= w[i];
+    for (int i = 0; i < N; ++i) {
+      for (int k = 0; k < K1; ++k) {
+        wZ(i, k) = Z(i, k) * w[i];
       }
     }
   }
@@ -39,11 +39,11 @@
     // NOT SPARSE
 
     writable::list res;
-    writable::doubles_matrix<> wX(X);
+    writable::doubles_matrix<> wX(N, K2);
     if (isWeight) {
-      for (int k = 0; k < K2; ++k) {
-        for (int i = 0; i < N; ++i) {
-          wX(i, k) *= w[i];
+      for (int i = 0; i < N; ++i) {
+        for (int k = 0; k < K2; ++k) {
+          wX(i, k) = X(i, k) * w[i];
         }
       }
     }
@@ -168,11 +168,11 @@
   writable::doubles_matrix<> UXtUX(K2 + K1, K2 + K1);
   writable::doubles UXty(K2 + K1);
 
-  writable::doubles_matrix<> wU(U);
+  writable::doubles_matrix<> wU(N, K1);
   if (isWeight) {
-    for (int k = 0; k < K1; ++k) {
-      for (int i = 0; i < N; ++i) {
-        wU(i, k) *= w[i];
+    for (int i = 0; i < N; ++i) {
+      for (int k = 0; k < K1; ++k) {
+        wU(i, k) = U(i, k) * w[i];
       }
     }
   }
