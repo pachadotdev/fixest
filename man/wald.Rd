@@ -7,7 +7,7 @@
 wald(x, keep = NULL, drop = NULL, print = TRUE, vcov, se, cluster, ...)
 }
 \arguments{
-\item{x}{A \code{fixest} object. Obtained using the methods
+\item{x}{A \code{fixest2} object. Obtained using the methods
 \code{\link{femlm}}, \code{\link{feols}} or \code{\link{feglm}}.}
 
 \item{keep}{Character vector. This element is used to display only a subset of variables. This
@@ -34,11 +34,11 @@ is returned.}
 scalar equal to a VCOV type, either a formula of the form: \code{vcov_type ~ variables}. The
 VCOV types implemented are: "iid", "hetero" (or "HC1"), "cluster", "twoway",
 "NW" (or "newey_west"), "DK" (or "driscoll_kraay"), and "conley". It also accepts
-object from \code{\link{vcov_cluster}}, \code{\link[fixest:vcov_hac]{vcov_NW}}, \code{\link[fixest:vcov_hac]{NW}},
-\code{\link[fixest:vcov_hac]{vcov_DK}}, \code{\link[fixest:vcov_hac]{DK}}, \code{\link{vcov_conley}} and
-\code{\link[fixest:vcov_conley]{conley}}. It also accepts covariance matrices computed externally.
+object from \code{\link{vcov_cluster}}, \code{\link[=vcov_hac]{vcov_NW}}, \code{\link[=vcov_hac]{NW}},
+\code{\link[=vcov_hac]{vcov_DK}}, \code{\link[=vcov_hac]{DK}}, \code{\link{vcov_conley}} and
+\code{\link[=vcov_conley]{conley}}. It also accepts covariance matrices computed externally.
 Finally it accepts functions to compute the covariances. See the \code{vcov} documentation
-in the \href{https://lrberge.github.io/fixest/articles/fixest_walkthrough.html#the-vcov-argument-1}{vignette}.}
+in the \href{https://lrberge.github.io/fixest2/articles/fixest2_walkthrough.html#the-vcov-argument-1}{vignette}.}
 
 \item{se}{Character scalar. Which kind of standard error should be computed:
 \dQuote{standard}, \dQuote{hetero}, \dQuote{cluster}, \dQuote{twoway}, \dQuote{threeway}
@@ -57,7 +57,7 @@ blank with \code{vcov = "twoway"} (assuming \code{var1} [resp. \code{var2}] was
 the 1st [resp. 2nd] fixed-effect). You can interact two variables using \code{^} with
 the following syntax: \code{cluster = ~var1^var2} or \code{cluster = "var1^var2"}.}
 
-\item{...}{Any other element to be passed to \code{\link{summary.fixest}}.}
+\item{...}{Any other element to be passed to \code{\link{summary.fixest2}}.}
 }
 \value{
 A named vector containing the following elements is returned: \code{stat}, \code{p}, \code{df1},

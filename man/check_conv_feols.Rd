@@ -2,12 +2,12 @@
 % Please edit documentation in R/miscfuns.R
 \name{check_conv_feols}
 \alias{check_conv_feols}
-\alias{summary.fixest_check_conv}
+\alias{summary.fixest2_check_conv}
 \title{Check the fixed-effects convergence of a \code{feols} estimation}
 \usage{
 check_conv_feols(x)
 
-\method{summary}{fixest_check_conv}(object, type = "short", ...)
+\method{summary}{fixest2_check_conv}(object, type = "short", ...)
 }
 \arguments{
 \item{x}{A \code{\link{feols}} estimation that should contain fixed-effects.}

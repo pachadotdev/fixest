@@ -15,7 +15,7 @@
     res[q]++;
   }
 
-  return (res);
+  return res;
 }
 
 // simple fun to compute the ssr of the null ols model
@@ -53,7 +53,7 @@
     }
   }
 
-  return (res);
+  return res;
 }
 
 // simple fun to compute the sum of the square of the elt of a vector

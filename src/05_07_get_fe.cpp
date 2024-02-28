@@ -293,5 +293,5 @@ void updateId2do(int nb2do, writable::integers &id2do,
   }
   res[Q] = nb_ref;
 
-  return (res);
+  return res;
 }

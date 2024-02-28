@@ -109,7 +109,7 @@ cpp_iv_resid <- function(resid_2nd, coef, resid_1st, is_int, nthreads = 1L) {
 }
 
 cpp_add_commas <- function(x, r = 1L, whole = TRUE) {
-  cpp_add_commas_(x, r, whole)
+  cpp_add_commas_(x, parse_int(r), whole)
 }
 
 cpp_find_never_always_treated <- function(cohort, period) {

@@ -7,7 +7,7 @@
 vcov_cluster(x, cluster = NULL, ssc = NULL, vcov_fix = TRUE)
 }
 \arguments{
-\item{x}{A \code{fixest} object.}
+\item{x}{A \code{fixest2} object.}
 
 \item{cluster}{Either i) a character vector giving the names of the variables onto which to
 cluster, or ii) a formula giving those names, or iii) a vector/list/data.frame giving the hard
@@ -22,16 +22,16 @@ positive definite, whether to "fix" it using an eigenvalue decomposition
 (a la Cameron, Gelbach & Miller 2011).}
 }
 \value{
-If the first argument is a \code{fixest} object, then a VCOV is returned (i.e. a symmetric matrix).
+If the first argument is a \code{fixest2} object, then a VCOV is returned (i.e. a symmetric matrix).
 
-If the first argument is not a \code{fixest} object, then a) implicitly the arguments are shifted to
+If the first argument is not a \code{fixest2} object, then a) implicitly the arguments are shifted to
 the left (i.e. \code{vcov_cluster(~var1 + var2)} is equivalent to
 \code{vcov_cluster(cluster = ~var1 + var2)}) and b) a VCOV-\emph{request} is returned and NOT a VCOV.
-That VCOV-request can then be used in the argument \code{vcov} of various \code{fixest}
-functions (e.g. \code{\link{vcov.fixest}} or even in the estimation calls).
+That VCOV-request can then be used in the argument \code{vcov} of various \code{fixest2}
+functions (e.g. \code{\link{vcov.fixest2}} or even in the estimation calls).
 }
 \description{
-Computes the clustered VCOV of \code{fixest} objects.
+Computes the clustered VCOV of \code{fixest2} objects.
 }
 \examples{
 

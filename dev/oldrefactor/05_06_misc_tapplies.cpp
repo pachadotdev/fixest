@@ -30,7 +30,7 @@
     }
   }
 
-  return (res);
+  return res;
 }
 
 // Function to get the conditional sum of a vector
@@ -49,5 +49,5 @@
     res[q] += x[i];
   }
 
-  return (res);
+  return res;
 }

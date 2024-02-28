@@ -33,7 +33,7 @@ is_DT <- requireNamespace("data.table", quietly = TRUE)
 
 if (is_DT) library(data.table)
 
-library(fixest)
+library(fixest2)
 setFixest_nthreads(1)
 ```
 
@@ -56,7 +56,7 @@ The main features of the package are illustrated in this vignette. The theory us
 This example deals with international trade, which is a setup that usually requires performing estimations with many fixed-effects. We estimate a very simple gravity model in which we are interested in finding out the negative effect of geographic distance on trade. The sample data consists of European trade extracted from Eurostat. Let's load the data contained in the package:
 
 ```{r echo=TRUE}
-library(fixest)
+library(fixest2)
 data(trade)
 ```
 

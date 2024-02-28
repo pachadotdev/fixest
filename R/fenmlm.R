@@ -5,7 +5,7 @@
 #' If you do not use non-linear in parameters right-hand-side, use [`femlm`] or [`feglm`]
 #' instead (their design is simpler).
 #'
-#' @inheritParams summary.fixest
+#' @inheritParams summary.fixest2
 #' @inheritParams panel
 #' @inheritSection feols Lagging variables
 #' @inheritSection feols Interactions
@@ -171,7 +171,7 @@
 #' use many methods. It is recommended to use the arguments `se` or `cluster` to
 #' obtain the appropriate standard-errors at estimation time, since obtaining different
 #' SEs won't be possible afterwards.
-#' @param env (Advanced users.) A `fixest` environment created by a `fixest` estimation
+#' @param env (Advanced users.) A `fixest2` environment created by a `fixest2` estimation
 #' with `only.env = TRUE`. Default is missing. If provided, the data from this environment
 #' will be used to perform the estimation.
 #' @param only.coef Logical, default is `FALSE`. If `TRUE`, then only the estimated
@@ -223,9 +223,9 @@
 #' is capped at 10,000. If theta reaches this high value, it means that there is no overdispersion.
 #'
 #' @return
-#' A `fixest` object. Note that `fixest` objects contain many elements and most of them
+#' A `fixest2` object. Note that `fixest2` objects contain many elements and most of them
 #' are for internal use, they are presented here only for information. To access them,
-#' it is safer to use the user-level methods (e.g. [`vcov.fixest`], [`resid.fixest`],
+#' it is safer to use the user-level methods (e.g. [`vcov.fixest2`], [`resid.fixest2`],
 #' etc) or functions (like for instance [`fitstat`] to access any fit statistic).
 #' \item{coefficients}{The named vector of coefficients.}
 #' \item{coeftable}{The table of the coefficients with their standard errors,
@@ -276,12 +276,12 @@
 #' \item{theta}{In the case of a negative binomial estimation: the overdispersion parameter.}
 #'
 #'  @seealso
-#' See also [`summary.fixest`] to see the results with the appropriate standard-errors,
-#' [`fixef.fixest`] to extract the fixed-effects coefficients, and the function [`etable`]
+#' See also [`summary.fixest2`] to see the results with the appropriate standard-errors,
+#' [`fixef.fixest2`] to extract the fixed-effects coefficients, and the function [`etable`]
 #' to visualize the results of multiple estimations.
 #'
 #' And other estimation methods: [`feols`], [`femlm`], [`feglm`],
-#' [`fepois`][fixest::feglm], [`fenegbin`][fixest::femlm].
+#' [`fepois`][fixest2::feglm], [`fenegbin`][fixest2::femlm].
 #'
 #' @author
 #' Laurent Berge
@@ -290,7 +290,7 @@
 #'
 #' Berge, Laurent, 2018, "Efficient estimation of maximum likelihood models with
 #' multiple fixed-effects: the R package FENmlm." CREA Discussion Papers,
-#' 13 ([](https://github.com/lrberge/fixest/blob/master/_DOCS/FENmlm_paper.pdf)).
+#' 13 ([](https://github.com/lrberge/fixest2/blob/master/_DOCS/FENmlm_paper.pdf)).
 #'
 #' For models with multiple fixed-effects:
 #'
@@ -357,10 +357,10 @@ feNmlm <- function(fml, data, family = c("poisson", "negbin", "logit", "gaussian
   time_start <- proc.time()
 
   if (missing(env)) {
-    set_defaults("fixest_estimation")
+    set_defaults("fixest2_estimation")
     call_env <- new.env(parent = parent.frame())
 
-    env <- try(fixest_env(
+    env <- try(fixest2_env(
       fml = fml, data = data, family = family, NL.fml = NL.fml,
       fixef = fixef, fixef.rm = fixef.rm, NL.start = NL.start,
       lower = lower, upper = upper, NL.start.init = NL.start.init,
@@ -377,10 +377,10 @@ feNmlm <- function(fml, data, family = c("poisson", "negbin", "logit", "gaussian
       mc_origin = match.call(),
       call_env = call_env, computeModel0 = TRUE, ...
     ), silent = TRUE)
-  } else if ((r <- !is.environment(env)) || !isTRUE(env$fixest_env)) {
+  } else if ((r <- !is.environment(env)) || !isTRUE(env$fixest2_env)) {
     stopi(
-      "Argument 'env' must be an environment created by a fixest estimation. ",
-      "Currently it is not {&r ; an ; a `fixest`} environment."
+      "Argument 'env' must be an environment created by a fixest2 estimation. ",
+      "Currently it is not {&r ; an ; a `fixest2`} environment."
     )
   }
 
@@ -529,7 +529,7 @@ feNmlm <- function(fml, data, family = c("poisson", "negbin", "logit", "gaussian
     )
     if (IN_MULTI) {
       stack_multi_notes(warning_msg)
-      return(fixest_NA_results(env))
+      return(fixest2_NA_results(env))
     } else if (!"coef_evaluated" %in% names(env)) {
       # big problem right from the start
       stop(warning_msg)
@@ -637,7 +637,7 @@ feNmlm <- function(fml, data, family = c("poisson", "negbin", "logit", "gaussian
         stack_multi_notes(warning_msg)
       } else {
         warning("[femlm]:", warning_msg, call. = FALSE)
-        options("fixest_last_warning" = proc.time())
+        options("fixest2_last_warning" = proc.time())
       }
     }
   }
@@ -814,7 +814,7 @@ feNmlm <- function(fml, data, family = c("poisson", "negbin", "logit", "gaussian
     }
   }
 
-  class(res) <- "fixest"
+  class(res) <- "fixest2"
 
   if (verbose > 0) {
     cat("\n")

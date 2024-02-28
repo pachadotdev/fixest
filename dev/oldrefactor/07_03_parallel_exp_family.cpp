@@ -11,7 +11,7 @@
     res[i] = lgamma(x[i]);
   }
 
-  return (res);
+  return res;
 }
 
 [[cpp11::register]] doubles cpppar_digamma_(doubles x, int nthreads = 1) {
@@ -25,7 +25,7 @@
     res[i] = Rf_digamma(x[i]);
   }
 
-  return (res);
+  return res;
 }
 
 [[cpp11::register]] doubles cpppar_trigamma_(doubles x, int nthreads = 1) {
@@ -39,7 +39,7 @@
     res[i] = Rf_trigamma(x[i]);
   }
 
-  return (res);
+  return res;
 }
 
 inline double poisson_linkinv(double x) {
@@ -56,7 +56,7 @@ inline double poisson_linkinv(double x) {
     res[i] = poisson_linkinv(x[i]);
   }
 
-  return (res);
+  return res;
 }
 
 [[cpp11::register]] bool cpppar_poisson_validmu_(SEXP x, int nthreads = 1) {
@@ -87,7 +87,7 @@ inline double poisson_linkinv(double x) {
     res[i] = log(x_tmp) - log(1 - x_tmp);
   }
 
-  return (res);
+  return res;
 }
 
 inline double logit_linkinv(double x) {
@@ -108,7 +108,7 @@ inline double logit_linkinv(double x) {
     res[i] = logit_linkinv(x[i]);
   }
 
-  return (res);
+  return res;
 }
 
 inline double logit_mueta(double x) {
@@ -133,11 +133,12 @@ inline double logit_mueta(double x) {
     res[i] = logit_mueta(x[i]);
   }
 
-  return (res);
+  return res;
 }
 
-[[cpp11::register]] doubles
-cpppar_logit_devresids_(doubles y, doubles mu, doubles wt, int nthreads = 1) {
+[[cpp11::register]] doubles cpppar_logit_devresids_(doubles y, doubles mu,
+                                                    doubles wt,
+                                                    int nthreads = 1) {
   int n = mu.size();
   writable::doubles res(n);
   bool isWeight = wt.size() != 1;
@@ -158,5 +159,5 @@ cpppar_logit_devresids_(doubles y, doubles mu, doubles wt, int nthreads = 1) {
     }
   }
 
-  return (res);
+  return res;
 }

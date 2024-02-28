@@ -2,18 +2,18 @@
 % Please edit documentation in R/panel.R
 \name{unpanel}
 \alias{unpanel}
-\title{Dissolves a \code{fixest} panel}
+\title{Dissolves a \code{fixest2} panel}
 \usage{
 unpanel(x)
 }
 \arguments{
-\item{x}{A \code{fixest_panel} object (obtained from function \code{\link{panel}}).}
+\item{x}{A \code{fixest2_panel} object (obtained from function \code{\link{panel}}).}
 }
 \value{
 Returns a data set of the exact same dimension. Only the attribute 'panel_info' is erased.
 }
 \description{
-Transforms a \code{fixest_panel} object into a regular data.frame.
+Transforms a \code{fixest2_panel} object into a regular data.frame.
 }
 \examples{
 

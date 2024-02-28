@@ -11,7 +11,7 @@
     res[i] = lgamma(x[i]);
   }
 
-  return (res);
+  return res;
 }
 
 [[cpp11::register]] doubles cpp_digamma_(doubles x, int nthreads) {
@@ -25,7 +25,7 @@
     res[i] = Rf_digamma(x[i]);
   }
 
-  return (res);
+  return res;
 }
 
 [[cpp11::register]] doubles cpp_trigamma_(doubles x, int nthreads) {
@@ -39,7 +39,7 @@
     res[i] = Rf_trigamma(x[i]);
   }
 
-  return (res);
+  return res;
 }
 
 inline double poisson_linkinv(double x) {
@@ -86,7 +86,7 @@ inline double poisson_linkinv(double x) {
     res[i] = log(x_tmp) - log(1 - x_tmp);
   }
 
-  return (res);
+  return res;
 }
 
 inline double logit_linkinv(double x) {
@@ -107,7 +107,7 @@ inline double logit_linkinv(double x) {
     res[i] = logit_linkinv(x[i]);
   }
 
-  return (res);
+  return res;
 }
 
 inline double logit_mueta(double x) {
@@ -132,7 +132,7 @@ inline double logit_mueta(double x) {
     res[i] = logit_mueta(x[i]);
   }
 
-  return (res);
+  return res;
 }
 
 [[cpp11::register]] doubles cpp_logit_devresids_(doubles y, doubles mu,
@@ -155,5 +155,5 @@ inline double logit_mueta(double x) {
     if (isWeight) res[i] *= wt[i];
   }
 
-  return (res);
+  return res;
 }

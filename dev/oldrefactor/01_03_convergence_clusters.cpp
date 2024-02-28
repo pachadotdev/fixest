@@ -14,23 +14,23 @@ void computeClusterCoef_single(int family, int n_obs, int nb_cluster,
   // core, there is no reference to openmp at all
 
   switch (family) {
-  case 1:
-    CCC_poisson(n_obs, nb_cluster, cluster_coef, mu, sum_y, dum);
-    break;
-  case 2: // Negbin
-    CCC_negbin(nthreads, nb_cluster, theta, diffMax_NR, cluster_coef, mu, lhs,
-               sum_y, obsCluster, table, cumtable);
-    break;
-  case 3: // logit
-    CCC_logit(nthreads, nb_cluster, diffMax_NR, cluster_coef, mu, sum_y,
-              obsCluster, table, cumtable);
-    break;
-  case 4: // Gaussian
-    CCC_gaussian(n_obs, nb_cluster, cluster_coef, mu, sum_y, dum, table);
-    break;
-  case 5: // log poisson
-    CCC_poisson_log(n_obs, nb_cluster, cluster_coef, mu, sum_y, dum);
-    break;
+    case 1:
+      CCC_poisson(n_obs, nb_cluster, cluster_coef, mu, sum_y, dum);
+      break;
+    case 2:  // Negbin
+      CCC_negbin(nthreads, nb_cluster, theta, diffMax_NR, cluster_coef, mu, lhs,
+                 sum_y, obsCluster, table, cumtable);
+      break;
+    case 3:  // logit
+      CCC_logit(nthreads, nb_cluster, diffMax_NR, cluster_coef, mu, sum_y,
+                obsCluster, table, cumtable);
+      break;
+    case 4:  // Gaussian
+      CCC_gaussian(n_obs, nb_cluster, cluster_coef, mu, sum_y, dum, table);
+      break;
+    case 5:  // log poisson
+      CCC_poisson_log(n_obs, nb_cluster, cluster_coef, mu, sum_y, dum);
+      break;
   }
 }
 
@@ -77,8 +77,7 @@ void computeClusterCoef(vector<double *> &pcluster_origin,
       memcpy(mu_with_coef, mu_init, n_obs * sizeof(double));
 
       for (int h = 0; h < K; h++) {
-        if (h == k - 1)
-          continue;
+        if (h == k - 1) continue;
 
         double *my_cluster_coef =
             (h < k - 1) ? pcluster_origin[h] : pcluster_destination[h];
@@ -99,11 +98,10 @@ struct ClusterData {
   int *cumtable;
 };
 
-[[cpp11::register]] SEXP
-compute_cluster_coef_r_(int family, int nb_coef, double theta,
-                        double diffMax_NR, SEXP r_mu, SEXP r_lhs, SEXP r_sum_y,
-                        SEXP r_dum, SEXP r_obsCluster, SEXP r_table,
-                        SEXP r_cumtable, int nthreads = 1) {
+[[cpp11::register]] SEXP compute_cluster_coef_r_(
+    int family, int nb_coef, double theta, double diffMax_NR, SEXP r_mu,
+    SEXP r_lhs, SEXP r_sum_y, SEXP r_dum, SEXP r_obsCluster, SEXP r_table,
+    SEXP r_cumtable, int nthreads = 1) {
   int n_obs = Rf_length(r_mu);
 
   ClusterData data = {
@@ -124,11 +122,10 @@ compute_cluster_coef_r_(int family, int nb_coef, double theta,
   return res;
 }
 
-[[cpp11::register]] SEXP
-update_mu_single_cluster_(int family, int nb_cluster, double theta,
-                          double diffMax_NR, SEXP mu_in, SEXP lhs, SEXP sum_y,
-                          SEXP dum, SEXP obsCluster, SEXP table, SEXP cumtable,
-                          int nthreads = 1) {
+[[cpp11::register]] SEXP update_mu_single_cluster_(
+    int family, int nb_cluster, double theta, double diffMax_NR, SEXP mu_in,
+    SEXP lhs, SEXP sum_y, SEXP dum, SEXP obsCluster, SEXP table, SEXP cumtable,
+    int nthreads = 1) {
   // Function used to compute the cluster coefficient for ONE fixed-effect only
   // and then add it to the existing mu
 

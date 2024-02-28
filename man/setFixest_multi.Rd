@@ -3,7 +3,7 @@
 \name{setFixest_multi}
 \alias{setFixest_multi}
 \alias{getFixest_multi}
-\title{Sets properties of \code{fixest_multi} objects}
+\title{Sets properties of \code{fixest2_multi} objects}
 \usage{
 setFixest_multi(drop = FALSE)
 
@@ -11,13 +11,13 @@ getFixest_multi()
 }
 \arguments{
 \item{drop}{Logical scalar, default is \code{FALSE}. Provides the default value of the argument
-\code{drop} when subsetting \code{fixest_multi} objects.}
+\code{drop} when subsetting \code{fixest2_multi} objects.}
 }
 \value{
 The function \code{getFixest_multi()} returns the list of settings.
 }
 \description{
-Use this function to change the default behavior of \code{fixest_multi} objects.
+Use this function to change the default behavior of \code{fixest2_multi} objects.
 }
 \examples{
 
@@ -25,10 +25,10 @@ Use this function to change the default behavior of \code{fixest_multi} objects.
 base <- setNames(iris, c("y", "x1", "x2", "x3", "species"))
 est <- feols(y ~ csw(x1, x2, x3), base)
 
-# 2) let's pick a single estimation => by default we have a `fixest_multi` object
+# 2) let's pick a single estimation => by default we have a `fixest2_multi` object
 class(est[rhs = 2])
 
-# `drop = TRUE` would have led to a `fixest` object
+# `drop = TRUE` would have led to a `fixest2` object
 class(est[rhs = 2, drop = TRUE])
 
 # 3) change the default behavior

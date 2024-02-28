@@ -154,7 +154,7 @@
   res.push_back({"dxi_dbeta"_nm = dxi_dbeta});
   res.push_back({"iter"_nm = iter_all_max});
 
-  return (res);
+  return res;
 }
 
 // easier to handle in the acceleration
@@ -474,7 +474,7 @@ void computeDerivCoef(std::vector<double *> &pcoef_origin,
   res.push_back({"dxi_dbeta"_nm = dxi_dbeta});
   res.push_back({"iter"_nm = iter_all_max});
 
-  return (res);
+  return res;
 }
 
 void computeDerivCoef_2(
@@ -729,7 +729,7 @@ void computeDerivCoef_2(
   res.push_back({"dxi_dbeta"_nm = dxi_dbeta});
   res.push_back({"iter"_nm = iter_all_max});
 
-  return (res);
+  return res;
 }
 
 [[cpp11::register]] list cpp_derivconv_seq_2_(
@@ -952,7 +952,7 @@ void computeDerivCoef_2(
   res.push_back({"dxi_dbeta"_nm = dxi_dbeta});
   res.push_back({"iter"_nm = iter_all_max});
 
-  return (res);
+  return res;
 }
 
 [[cpp11::register]] doubles_matrix<> update_deriv_single_(int n_vars,
@@ -1016,5 +1016,5 @@ void computeDerivCoef_2(
     }
   }
 
-  return (res);
+  return res;
 }

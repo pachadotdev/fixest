@@ -12,7 +12,7 @@
     res[i] = exp(x[i]);
   }
 
-  return (res);
+  return res;
 }
 
 [[cpp11::register]] doubles cpppar_log_(doubles x, int nthreads = 1) {
@@ -26,7 +26,7 @@
     res[i] = log(x[i]);
   }
 
-  return (res);
+  return res;
 }
 
 [[cpp11::register]] doubles cpppar_log_a_exp_(int nthreads, double a,
@@ -45,7 +45,7 @@
     }
   }
 
-  return (res);
+  return res;
 }
 
 [[cpp11::register]] list cpppar_cond_means_(doubles_matrix<> mat_vars,

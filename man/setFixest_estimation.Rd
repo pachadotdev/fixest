@@ -3,7 +3,7 @@
 \name{setFixest_estimation}
 \alias{setFixest_estimation}
 \alias{getFixest_estimation}
-\title{Default arguments for fixest estimations}
+\title{Default arguments for fixest2 estimations}
 \usage{
 setFixest_estimation(
   data = NULL,
@@ -106,7 +106,7 @@ at each iteration, such that postprocessing can be done outside the loop without
 The function \code{getFixest_estimation} returns the currently set global defaults.
 }
 \description{
-This function sets globally the default arguments of fixest estimations.
+This function sets globally the default arguments of fixest2 estimations.
 }
 \examples{
 

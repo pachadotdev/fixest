@@ -2,12 +2,12 @@
 % Please edit documentation in R/feols_internals.R
 \name{est_env}
 \alias{est_env}
-\title{Estimates a \code{fixest} estimation from a \code{fixest} environment}
+\title{Estimates a \code{fixest2} estimation from a \code{fixest2} environment}
 \usage{
 est_env(env, y, X, weights, endo, inst)
 }
 \arguments{
-\item{env}{An environment obtained from a \code{fixest} estimation with \code{only.env = TRUE}. This is
+\item{env}{An environment obtained from a \code{fixest2} estimation with \code{only.env = TRUE}. This is
 intended for advanced users so there is no error handling: any other kind of input will
 fail with a poor error message.}
 
@@ -28,16 +28,16 @@ be of the same dimension as the original endogenous regressors.}
 the same dimension as the original instruments.}
 }
 \value{
-It returns the results of a \code{fixest} estimation: the one that was summoned when
+It returns the results of a \code{fixest2} estimation: the one that was summoned when
 obtaining the environment.
 }
 \description{
-This is a function advanced users which allows to estimate any \code{fixest} estimation from a
-\code{fixest} environment obtained with \code{only.env = TRUE} in a \code{fixest} estimation.
+This is a function advanced users which allows to estimate any \code{fixest2} estimation from a
+\code{fixest2} environment obtained with \code{only.env = TRUE} in a \code{fixest2} estimation.
 }
 \details{
 This function has been created for advanced users, mostly to avoid overheads
-when making simulations with \code{fixest}.
+when making simulations with \code{fixest2}.
 
 How can it help you make simulations? First make a core estimation with \code{only.env = TRUE},
 and usually with \code{only.coef = TRUE} (to avoid having extra things that take time to compute).
@@ -46,7 +46,7 @@ if you make a mistake here (typically giving stuff of the wrong length),
 then you can make the R session crash because there is no more error-handling!
 Finally estimate with \code{est_env(env = core_env)} and store the results.
 
-Instead of \code{est_env}, you could use directly \code{fixest} estimations too, like \code{feols},
+Instead of \code{est_env}, you could use directly \code{fixest2} estimations too, like \code{feols},
 since they accept the \code{env} argument. The function \code{est_env} is only here to add a
 bit of generality to avoid the trouble to the user to write conditions
 (look at the source, it's just a one liner).
@@ -84,7 +84,7 @@ Hence this function will be less useful for these models.
 bboot <- function(x, n_sim = 100) {
   # We bootstrap on the weights
   # Works with fixed-effects/IVs
-  #  and with any fixest function that accepts weights
+  #  and with any fixest2 function that accepts weights
 
   core_env <- update(x, only.coef = TRUE, only.env = TRUE)
   n_obs <- x$nobs

@@ -1285,7 +1285,7 @@ sample_df <- function(x, n = 10, previous = FALSE) {
     if (is.null(x)) stop("The argument `x` must be a vector, matrix or data.frame. Currently it is NULL.")
   }
 
-  all_draws <- getOption("fixest_sample_df")
+  all_draws <- getOption("fixest2_sample_df")
   x_dp <- deparse_long(substitute(x))
 
   make_draw <- TRUE
@@ -1311,7 +1311,7 @@ sample_df <- function(x, n = 10, previous = FALSE) {
 
   # saving
   all_draws[[x_dp]] <- draw__
-  options(fixest_sample_df = all_draws)
+  options(fixest2_sample_df = all_draws)
 
   # returning
   if (is_unidim) {

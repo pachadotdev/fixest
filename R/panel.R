@@ -6,7 +6,7 @@
 
 # -------------------------------------------------------------- #
 # Contains all functions to ensure the easy lagging of variables
-# within fixest estimations.
+# within fixest2 estimations.
 #
 # -------------------------------------------------------------- #
 
@@ -15,9 +15,9 @@
 
 
 panel_setup <- function(data, panel.id, time.step = NULL, duplicate.method = "none",
-                        DATA_MISSING = FALSE, from_fixest = FALSE) {
+                        DATA_MISSING = FALSE, from_fixest2 = FALSE) {
   # Function to setup the panel.
-  # Used in lag.formula, panel, and fixest_env (with argument panel.id and panel.args)
+  # Used in lag.formula, panel, and fixest2_env (with argument panel.id and panel.args)
   # DATA_MISSING: arg used in lag.formula
 
   set_up(1)
@@ -110,7 +110,7 @@ panel_setup <- function(data, panel.id, time.step = NULL, duplicate.method = "no
       time_new <- tryCatch(as.numeric(time), warning = function(x) x)
 
       if (!is.numeric(time_new)) {
-        if (from_fixest) {
+        if (from_fixest2) {
           stop_up("The time variable must be numeric or at least convertible to numeric. So far the conversion has failed (time variable's class is currently {enum.bq?class(time)}). Alternatively, you can have more options to set up the panel using the function panel().")
         } else {
           stop_up("To use the 'unitary' time.step, the time variable must be numeric or at least convertible to numeric. So far the conversion has failed (time variable's class is currently {enum.bq?class(time)}).")
@@ -121,7 +121,7 @@ panel_setup <- function(data, panel.id, time.step = NULL, duplicate.method = "no
     }
 
     if (any(time %% 1 != 0)) {
-      if (from_fixest) {
+      if (from_fixest2) {
         stop_up("The time variable{&time_conversion; (which has been converted to numeric)} must be made of integers. So far this is not the case. Alternatively, you can have more options to set up the panel using the function panel().")
       } else {
         stop_up("To use the 'unitary' time.step, the time variable{&time_conversion; (which has been converted to numeric)} must be made of integers. So far this is not the case. Alternatively, you can give a number in time.step.")
@@ -224,38 +224,38 @@ panel_setup <- function(data, panel.id, time.step = NULL, duplicate.method = "no
 }
 
 
-#' @describeIn l Forwards a variable (inverse of lagging) in a `fixest` estimation
+#' @describeIn l Forwards a variable (inverse of lagging) in a `fixest2` estimation
 #' @export
 f <- function(x, lead = 1, fill = NA) {
   l(x, -lead, fill)
 }
 
-#' @describeIn l Creates differences (i.e. x - lag(x)) in a `fixest` estimation
+#' @describeIn l Creates differences (i.e. x - lag(x)) in a `fixest2` estimation
 d <- function(x, lag = 1, fill = NA) {
   x - l(x, lag, fill)
 }
 
 
-#' Lags a variable in a `fixest` estimation
+#' Lags a variable in a `fixest2` estimation
 #'
-#' Produce lags or leads in the formulas of `fixest` estimations or when creating variables in
+#' Produce lags or leads in the formulas of `fixest2` estimations or when creating variables in
 #' a [`data.table::data.table`]. The data must be set as a panel beforehand (either with
 #' the function [`panel`] or with the argument `panel.id` in the estimation).
 #'
 #' @param x The variable.
 #' @param lag A vector of integers giving the number of lags. Negative values lead to leads.
-#' This argument can be a vector when using it in fixest estimations. When creating variables in
+#' This argument can be a vector when using it in fixest2 estimations. When creating variables in
 #' a [`data.table::data.table`], it **must** be of length one.
 #' @param lead A vector of integers giving the number of leads. Negative values lead to lags.
-#' This argument can be a vector when using it in fixest estimations. When creating variables in
+#' This argument can be a vector when using it in fixest2 estimations. When creating variables in
 #' a [`data.table::data.table`], it **must** be of length one.
 #' @param fill A scalar, default is `NA`. How to fill the missing values due to the lag/lead?
-#' Note that in a `fixest` estimation, 'fill' must be numeric (not required when
+#' Note that in a `fixest2` estimation, 'fill' must be numeric (not required when
 #' creating new variables).
 #'
 #' @return
-#' These functions can only be used i) in a formula of a `fixest` estimation, or ii) when
-#' creating variables within a `fixest_panel` object (obtained with function [`panel`]) which
+#' These functions can only be used i) in a formula of a `fixest2` estimation, or ii) when
+#' creating variables within a `fixest2_panel` object (obtained with function [`panel`]) which
 #' is alaos a [`data.table::data.table`].
 #'
 #' @seealso
@@ -297,19 +297,19 @@ l <- function(x, lag = 1, fill = NA) {
   sys_calls <- rev(sys.calls())
 
   # To improve => you don't wanna check all frames, only the relevant ones
-  from_fixest <- FALSE
+  from_fixest2 <- FALSE
   for (where in 1:min(22, sys.nframe())) {
     if (exists("panel__meta__info", parent.frame(where))) {
-      from_fixest <- TRUE
+      from_fixest2 <- TRUE
       meta_info <- get("panel__meta__info", parent.frame(where))
       break
     }
   }
 
-  if (from_fixest == FALSE) {
+  if (from_fixest2 == FALSE) {
     # Using l/f within data.table
 
-    fl_authorized <- getOption("fixest_fl_authorized")
+    fl_authorized <- getOption("fixest2_fl_authorized")
 
     if (fl_authorized) {
       # Further control
@@ -341,8 +341,8 @@ l <- function(x, lag = 1, fill = NA) {
       }
 
       if (sysEval == 0) {
-        options(fixest_fl_authorized = FALSE)
-        stop("Unknown error when trying to create a lag (or lead) with function l() (or f()) within data.table. This is a 'fixest' error, may be worth reporting if needed.")
+        options(fixest2_fl_authorized = FALSE)
+        stop("Unknown error when trying to create a lag (or lead) with function l() (or f()) within data.table. This is a 'fixest2' error, may be worth reporting if needed.")
       }
 
       # Bug #76
@@ -359,16 +359,16 @@ l <- function(x, lag = 1, fill = NA) {
       }
 
       if (sys.parent(i + up - 1) == 0) {
-        stop("We tried to lag a variable but the data set could not be fetched. This is an internal error to 'fixest'. It could be interesting to report this bug.")
+        stop("We tried to lag a variable but the data set could not be fetched. This is an internal error to 'fixest2'. It could be interesting to report this bug.")
       }
 
-      if (!"fixest_panel" %in% class(m)) {
-        stop("You can use l() or f() only when the data set is of class 'fixest_panel', you can use function panel() to set it.")
+      if (!"fixest2_panel" %in% class(m)) {
+        stop("You can use l() or f() only when the data set is of class 'fixest2_panel', you can use function panel() to set it.")
       }
 
       meta_info <- attr(m, "panel_info")
     } else {
-      stop("Function l() (or f()) is only callable within 'fixest' estimations or within a variable creation with data.table (i.e. using ':=') where the data set is a 'fixest_panel' (obtained from panel()). Alternatively, you can use lag.formula().")
+      stop("Function l() (or f()) is only callable within 'fixest2' estimations or within a variable creation with data.table (i.e. using ':=') where the data set is a 'fixest2_panel' (obtained from panel()). Alternatively, you can use lag.formula().")
     }
   }
 
@@ -691,10 +691,10 @@ lag_fml <- lag.formula
 
 
 
-#' Constructs a `fixest` panel data base
+#' Constructs a `fixest2` panel data base
 #'
-#' Constructs a `fixest` panel data base out of a data.frame which allows to use leads and lags
-#' in `fixest` estimations and to create new variables from leads and lags if the data.frame
+#' Constructs a `fixest2` panel data base out of a data.frame which allows to use leads and lags
+#' in `fixest2` estimations and to create new variables from leads and lags if the data.frame
 #' was also a [`data.table::data.table`].
 #'
 #' @param data A data.frame.
@@ -719,17 +719,17 @@ lag_fml <- lag.formula
 #' observations will be used as lag.
 #'
 #' @details
-#' This function allows you to use leads and lags in a `fixest` estimation without having to
+#' This function allows you to use leads and lags in a `fixest2` estimation without having to
 #' provide the argument `panel.id`. It also offers more options on how to set the panel
 #' (with the additional arguments 'time.step' and 'duplicate.method').
 #'
 #' When the initial data set was also a `data.table`, not all operations are supported and some may
-#' dissolve the `fixest_panel`. This is the case when creating subselections of the initial data
-#' with additional attributes (e.g. `pdt[x>0, .(x, y, z)]` would dissolve the `fixest_panel`,
+#' dissolve the `fixest2_panel`. This is the case when creating subselections of the initial data
+#' with additional attributes (e.g. `pdt[x>0, .(x, y, z)]` would dissolve the `fixest2_panel`,
 #' meaning only a data.table would be the result of the call).
 #'
 #' If the initial data set was also a `data.table`, then you can create new variables from lags
-#' and leads using the functions [`l`] and [`f`][fixest::l]. See the example.
+#' and leads using the functions [`l`] and [`f`][fixest2::l]. See the example.
 #'
 #'
 #' @return
@@ -742,9 +742,9 @@ lag_fml <- lag.formula
 #' Laurent Berge
 #'
 #' @seealso
-#' The estimation methods [`feols`], [`fepois`][fixest::feglm] and [`feglm`].
+#' The estimation methods [`feols`], [`fepois`][fixest2::feglm] and [`feglm`].
 #'
-#' The functions [`l`] and [`f`][fixest::l] to create lags and leads within `fixest_panel` objects.
+#' The functions [`l`] and [`f`][fixest2::l] to create lags and leads within `fixest2_panel` objects.
 #'
 #' @examples
 #'
@@ -801,22 +801,22 @@ panel <- function(data, panel.id, time.step = NULL, duplicate.method = c("none",
   if ("data.table" %in% class(data) && requireNamespace("data.table", quietly = TRUE)) {
     res <- data.table::copy(data)
     data.table::setattr(res, "panel_info", meta_info)
-    data.table::setattr(res, "class", c("fixest_panel", "data.table", "data.frame"))
+    data.table::setattr(res, "class", c("fixest2_panel", "data.table", "data.frame"))
   } else {
     res <- data
     attr(res, "panel_info") <- meta_info
-    class(res) <- unique(c("fixest_panel", class(res)))
+    class(res) <- unique(c("fixest2_panel", class(res)))
   }
 
   res
 }
 
 
-#' Dissolves a `fixest` panel
+#' Dissolves a `fixest2` panel
 #'
-#' Transforms a `fixest_panel` object into a regular data.frame.
+#' Transforms a `fixest2_panel` object into a regular data.frame.
 #'
-#' @param x A `fixest_panel` object (obtained from function [`panel`]).
+#' @param x A `fixest2_panel` object (obtained from function [`panel`]).
 #'
 #' @return
 #' Returns a data set of the exact same dimension. Only the attribute 'panel_info' is erased.
@@ -851,25 +851,25 @@ panel <- function(data, panel.id, time.step = NULL, duplicate.method = c("none",
 unpanel <- function(x) {
   if ("data.table" %in% class(x) && requireNamespace("data.table", quietly = TRUE)) {
     data.table::setattr(x, "panel_info", NULL)
-    data.table::setattr(x, "class", setdiff(class(x), "fixest_panel"))
+    data.table::setattr(x, "class", setdiff(class(x), "fixest2_panel"))
 
     return(invisible(x))
   } else {
     attr(x, "panel_info") <- NULL
-    class(x) <- setdiff(class(x), "fixest_panel")
+    class(x) <- setdiff(class(x), "fixest2_panel")
   }
 
   x
 }
 
 
-#' Method to subselect from a `fixest_panel`
+#' Method to subselect from a `fixest2_panel`
 #'
-#' Subselection from a `fixest_panel` which has been created with the function [`panel`].
-#' Also allows to create lag/lead variables with functions [`l`]/[`f`][fixest::l] if
-#' the `fixest_panel` is also a [`data.table::data.table`].
+#' Subselection from a `fixest2_panel` which has been created with the function [`panel`].
+#' Also allows to create lag/lead variables with functions [`l`]/[`f`][fixest2::l] if
+#' the `fixest2_panel` is also a [`data.table::data.table`].
 #'
-#' @param x A `fixest_panel` object, created with the function [`panel`].
+#' @param x A `fixest2_panel` object, created with the function [`panel`].
 #' @param i Row subselection. Allows [`data.table::data.table`] style selection (provided the
 #' data is also a data.table).
 #' @param j Variable selection. Allows [`data.table::data.table`] style selection/variable
@@ -878,12 +878,12 @@ unpanel <- function(x) {
 #' (or whatever the class of the initial data).
 #'
 #' @details
-#' If the original data was also a data.table, some calls to `[.fixest_panel` may dissolve
-#' the `fixest_panel` object and return a regular data.table. This is the case for
+#' If the original data was also a data.table, some calls to `[.fixest2_panel` may dissolve
+#' the `fixest2_panel` object and return a regular data.table. This is the case for
 #' subselections with additional arguments. If so, a note is displayed on the console.
 #'
 #' @return
-#' It returns a `fixest_panel` data base, with the attributes allowing to create
+#' It returns a `fixest2_panel` data base, with the attributes allowing to create
 #' lags/leads properly bookkeeped.
 #'
 #' @author
@@ -899,10 +899,10 @@ unpanel <- function(x) {
 #'
 #' data(base_did)
 #'
-#' # Creating a fixest_panel object
+#' # Creating a fixest2_panel object
 #' pdat <- panel(base_did, ~ id + period)
 #'
-#' # Subselections of fixest_panel objects bookkeeps the leads/lags engine
+#' # Subselections of fixest2_panel objects bookkeeps the leads/lags engine
 #' pdat_small <- pdat[!pdat$period %in% c(2, 4), ]
 #' a <- feols(y ~ l(x1, 0:1), pdat_small)
 #'
@@ -926,7 +926,7 @@ unpanel <- function(x) {
 #' }
 #'
 #' @export
-"[.fixest_panel" <- function(x, i, j, ...) {
+"[.fixest2_panel" <- function(x, i, j, ...) {
   # we need to perform proper bookkeeping
 
   info <- attr(x, "panel_info")
@@ -955,8 +955,8 @@ unpanel <- function(x) {
           # We don't allow i either
           stop("When creating lags (resp. leads or diffs) with the function l() (resp. f() or d()) within a data.table, only the argument 'j' is allowed.\nExample: 'data[, x_lag := l(x)]' is OK, while 'data[x>0, x_lag := l(x)]' is NOT ok.")
         }
-        options(fixest_fl_authorized = TRUE)
-        on.exit(options(fixest_fl_authorized = FALSE))
+        options(fixest2_fl_authorized = TRUE)
+        on.exit(options(fixest2_fl_authorized = FALSE))
       }
 
       # I have to do it that way... really not elegant...
@@ -968,17 +968,17 @@ unpanel <- function(x) {
       return(invisible(TRUE))
     } else {
       x_dt <- data.table::copy(x)
-      data.table::setattr(x_dt, "class", setdiff(class(x), "fixest_panel"))
+      data.table::setattr(x_dt, "class", setdiff(class(x), "fixest2_panel"))
       mc_new$x <- as.name("x_dt")
 
       res <- eval(mc_new)
 
       if (any(!names(mc) %in% c("", "x", "i"))) {
-        # If any argument other than i is used => we dissolve the fixest panel
-        message("NOTE: The fixest panel is dissolved.")
+        # If any argument other than i is used => we dissolve the fixest2 panel
+        message("NOTE: The fixest2 panel is dissolved.")
         return(res)
       } else {
-        data.table::setattr(res, "class", c("fixest_panel", class(res)))
+        data.table::setattr(res, "class", c("fixest2_panel", class(res)))
       }
     }
   } else {
@@ -1232,15 +1232,15 @@ set_panel_meta_info <- function(object, newdata) {
         # We try to recreate the panel
         if (any(!names(object$panel.info) %in% c("", "data", "panel.id"))) {
           # This was NOT a standard panel creation
-          stop("The estimation contained lags/leads and the original data was a 'fixest_panel' while the new data is not. Please set the new data as a panel first with the function panel(). NOTA: the original call to panel was:\n", deparse_long(object$panel.info))
+          stop("The estimation contained lags/leads and the original data was a 'fixest2_panel' while the new data is not. Please set the new data as a panel first with the function panel(). NOTA: the original call to panel was:\n", deparse_long(object$panel.info))
         } else {
-          panel__meta__info <- panel_setup(newdata, object$panel.id, from_fixest = TRUE)
+          panel__meta__info <- panel_setup(newdata, object$panel.id, from_fixest2 = TRUE)
         }
       } else {
         panel__meta__info <- attr(newdata, "panel_info")
       }
     } else {
-      panel__meta__info <- panel_setup(newdata, object$panel.id, from_fixest = TRUE)
+      panel__meta__info <- panel_setup(newdata, object$panel.id, from_fixest2 = TRUE)
     }
   }
 

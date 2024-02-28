@@ -37,7 +37,7 @@
 #' variables will be removed (if there is presence of collinearity). One signal of presence of
 #' collinearity is t-stats that are extremely low (for instance when t-stats < 1e-3).
 #' @param y Numeric vector/matrix/data.frame of the dependent variable(s). Multiple dependent
-#' variables will return a `fixest_multi` object.
+#' variables will return a `fixest2_multi` object.
 #' @param X Numeric matrix of the regressors.
 #' @param fixef_df Matrix/data.frame of the fixed-effects.
 #' @param fixef.algo `NULL` (default) or an object of class `demeaning_algo` obtained with
@@ -63,7 +63,7 @@
 #' that the identity of each observation is lost (i.e. they are now equal to a meaningless
 #' number instead of being equal to `paste0(fe_1, "_", fe_2)`). These \dQuote{identities}
 #' are useful only if you're interested in the value of the fixed-effects (that you can
-#' extract with [`fixef.fixest`]). If you're only interested in coefficients of the variables,
+#' extract with [`fixef.fixest2`]). If you're only interested in coefficients of the variables,
 #' it doesn't matter. Anyway, you can use `combine.quick = FALSE` to tell the internal
 #' algorithm to use `paste` instead of the numerical trick. By default, the numerical
 #' trick is performed only for large data sets.
@@ -88,7 +88,7 @@
 #'
 #' To use leads/lags of variables in the estimation, you can: i) either provide the argument
 #' `panel.id`, ii) either set your data set as a panel with the function
-#' [`panel`], [`f`][fixest::l] and [`d`][fixest::l].
+#' [`panel`], [`f`][fixest2::l] and [`d`][fixest2::l].
 #'
 #' You can provide several leads/lags/differences at once: e.g. if your formula is equal to
 #' `f(y) ~ l(x, -1:1)`, it means that the dependent variable is equal to the lead of `y`,
@@ -115,13 +115,13 @@
 #' @section On standard-errors:
 #'
 #' Standard-errors can be computed in different ways, you can use the arguments `se` and `ssc`
-#' in [`summary.fixest`] to define how to compute them. By default, in the presence
+#' in [`summary.fixest2`] to define how to compute them. By default, in the presence
 #' of fixed-effects, standard-errors are automatically clustered.
 #'
-#' The following vignette: [On standard-errors](https://lrberge.github.io/fixest/articles/standard_errors.html) describes in details how the standard-errors are computed in
-#' `fixest` and how you can replicate standard-errors from other software.
+#' The following vignette: [On standard-errors](https://lrberge.github.io/fixest2/articles/standard_errors.html) describes in details how the standard-errors are computed in
+#' `fixest2` and how you can replicate standard-errors from other software.
 #'
-#' You can use the functions [`setFixest_vcov`] and [`setFixest_ssc`][fixest::ssc] to
+#' You can use the functions [`setFixest_vcov`] and [`setFixest_ssc`][fixest2::ssc] to
 #' permanently set the way the standard-errors are computed.
 #'
 #' @section Instrumental variables:
@@ -143,7 +143,7 @@
 #'
 #' By default, the second stage regression is returned. You can access the first stage(s)
 #' regressions either directly in the slot `iv_first_stage` (not recommended),
-#'  or using the argument `stage = 1` from the function [`summary.fixest`].
+#'  or using the argument `stage = 1` from the function [`summary.fixest2`].
 #' For example `summary(iv_est, stage = 1)` will give the first stage(s).
 #' Note that using summary you can display both the second and first stages at
 #' the same time using, e.g., `stage = 1:2` (using `2:1` would reverse the order).
@@ -151,10 +151,10 @@
 #' @section Multiple estimations:
 #'
 #' Multiple estimations can be performed at once, they just have to be specified in the formula.
-#'  Multiple estimations yield a `fixest_multi` object which is \sQuote{kind of} a list of
+#'  Multiple estimations yield a `fixest2_multi` object which is \sQuote{kind of} a list of
 #' all the results but includes specific methods to access the results in a handy way.
 #' Please have a look at the dedicated vignette:
-#' [Multiple estimations](https://lrberge.github.io/fixest/articles/multiple_estimations.html).
+#' [Multiple estimations](https://lrberge.github.io/fixest2/articles/multiple_estimations.html).
 #'
 #' To include multiple dependent variables, wrap them in `c()` (`list()` also works).
 #' For instance `fml = c(y1, y2) ~ x1` would estimate the model `fml = y1 ~ x1` and
@@ -197,21 +197,21 @@
 #'
 #' @section Tricks to estimate multiple LHS:
 #'
-#' To use multiple dependent variables in `fixest` estimations, you need to include them
+#' To use multiple dependent variables in `fixest2` estimations, you need to include them
 #' in a vector: like in `c(y1, y2, y3)`.
 #'
 #' First, if names are stored in a vector, they can readily be inserted in a formula to
 #' perform multiple estimations using the dot square bracket operator. For instance if
-#' `my_lhs = c("y1", "y2")`, calling `fixest` with, say `feols(.[my_lhs] ~ x1, etc)` is
+#' `my_lhs = c("y1", "y2")`, calling `fixest2` with, say `feols(.[my_lhs] ~ x1, etc)` is
 #' equivalent to using `feols(c(y1, y2) ~ x1, etc)`. Beware that this is a special feature
-#' unique to the *left-hand-side* of `fixest` estimations (the default behavior of the DSB
+#' unique to the *left-hand-side* of `fixest2` estimations (the default behavior of the DSB
 #' operator is to aggregate with sums, see [`xpd`]).
 #'
 #' Second, you can use a regular expression to grep the left-hand-sides on the fly. When the
 #' `..("regex")` feature is used naked on the LHS, the variables grepped are inserted into
 #' `c()`. For example `..("Pe") ~ Sepal.Length, iris` is equivalent to
 #' `c(Petal.Length, Petal.Width) ~ Sepal.Length, iris`. Beware that this is a
-#' special feature unique to the *left-hand-side* of `fixest` estimations
+#' special feature unique to the *left-hand-side* of `fixest2` estimations
 #' (the default behavior of `..("regex")` is to aggregate with sums, see [`xpd`]).
 #'
 #' @section Argument sliding:
@@ -229,9 +229,9 @@
 #' `feols(mpg ~ cyl, mtcars)`.
 #'
 #' @return
-#' A `fixest` object. Note that `fixest` objects contain many elements and most of them are
+#' A `fixest2` object. Note that `fixest2` objects contain many elements and most of them are
 #' for internal use, they are presented here only for information. To access them, it is safer
-#' to use the user-level methods (e.g. [`vcov.fixest`], [`resid.fixest`], etc) or functions
+#' to use the user-level methods (e.g. [`vcov.fixest2`], [`resid.fixest2`], etc) or functions
 #' (like for instance [`fitstat`] to access any fit statistic).
 #' \item{nobs}{The number of observations.}
 #' \item{fml}{The linear formula of the call.}
@@ -271,8 +271,8 @@
 #' \item{X_demeaned}{Only when `demeaned = TRUE`: the centered explanatory variable.}
 #'
 #' @seealso
-#' See also [`summary.fixest`] to see the results with the appropriate standard-errors,
-#' [`fixef.fixest`] to extract the fixed-effects coefficients, and the function [`etable`]
+#' See also [`summary.fixest2`] to see the results with the appropriate standard-errors,
+#' [`fixef.fixest2`] to extract the fixed-effects coefficients, and the function [`etable`]
 #' to visualize the results of multiple estimations. For plotting coefficients: see [`coefplot`].
 #'
 #' And other estimation methods: [`femlm`], [`feglm`], [`fepois`], [`fenegbin`], [`feNmlm`].
@@ -283,7 +283,7 @@
 #' @references
 #'
 #' Berge, Laurent, 2018, "Efficient estimation of maximum likelihood models with
-#' multiple fixed-effects: the R package FENmlm." CREA Discussion Papers, 13 ([](https://github.com/lrberge/fixest/blob/master/_DOCS/FENmlm_paper.pdf)).
+#' multiple fixed-effects: the R package FENmlm." CREA Discussion Papers, 13 ([](https://github.com/lrberge/fixest2/blob/master/_DOCS/FENmlm_paper.pdf)).
 #'
 #' For models with multiple fixed-effects:
 #'
@@ -379,7 +379,7 @@
 #' # With two endogenous regressors
 #' res_iv2 <- feols(y ~ x1 + x2 | x_endo1 + x_endo2 ~ x_inst1 + x_inst2, base)
 #'
-#' # Now there's two first stages => a fixest_multi object is returned
+#' # Now there's two first stages => a fixest2_multi object is returned
 #' sum_res_iv2 <- summary(res_iv2, stage = 1)
 #'
 #' # You can navigate through it by subsetting:
@@ -471,7 +471,7 @@
 #' #
 #'
 #' # By default, the features of the xpd function are enabled in
-#' # all fixest estimations
+#' # all fixest2 estimations
 #' # Here's a few examples
 #'
 #' base <- setNames(iris, c("y", "x1", "x2", "x3", "species"))
@@ -543,13 +543,13 @@ feols <- function(fml, data, vcov, weights, offset, subset, split, fsplit, split
     }
     t0 <- proc.time()
 
-    # we use fixest_env for appropriate controls and data handling
+    # we use fixest2_env for appropriate controls and data handling
 
     if (missing(env)) {
-      set_defaults("fixest_estimation")
+      set_defaults("fixest2_estimation")
       call_env <- new.env(parent = parent.frame())
 
-      env <- try(fixest_env(
+      env <- try(fixest2_env(
         fml = fml, data = data, weights = weights, offset = offset,
         subset = subset, split = split, fsplit = fsplit,
         split.keep = split.keep, split.drop = split.drop,
@@ -563,8 +563,8 @@ feols <- function(fml, data, vcov, weights, offset, subset, split, fsplit, split
         mem.clean = mem.clean, origin = "feols", mc_origin = match.call(),
         call_env = call_env, ...
       ), silent = TRUE)
-    } else if ((r <- !is.environment(env)) || !isTRUE(env$fixest_env)) {
-      stop("Argument 'env' must be an environment created by a fixest estimation. Currently it is not ", ifelse(r, "an", "a 'fixest'"), " environment.")
+    } else if ((r <- !is.environment(env)) || !isTRUE(env$fixest2_env)) {
+      stop("Argument 'env' must be an environment created by a fixest2 estimation. Currently it is not ", ifelse(r, "an", "a 'fixest2'"), " environment.")
     }
 
     if ("try-error" %in% class(env)) {
@@ -1157,7 +1157,7 @@ feols <- function(fml, data, vcov, weights, offset, subset, split, fsplit, split
       }
     }
 
-    # Meta information for fixest_multi
+    # Meta information for fixest2_multi
     values <- list(
       lhs = rep(lhs_names, each = n_rhs),
       rhs = rep(rhs_names, n_lhs)
@@ -1829,7 +1829,7 @@ feols <- function(fml, data, vcov, weights, offset, subset, split, fsplit, split
           }
         }
 
-        return(fixest_NA_results(env))
+        return(fixest2_NA_results(env))
       } else {
         stop_up(msg, up = 1 * fromGLM)
       }
@@ -2040,7 +2040,7 @@ feols <- function(fml, data, vcov, weights, offset, subset, split, fsplit, split
 
   if (verbose >= 3) gt("Post-processing")
 
-  class(res) <- "fixest"
+  class(res) <- "fixest2"
 
   do_summary <- get("do_summary", env)
   if (do_summary) {

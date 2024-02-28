@@ -2,12 +2,12 @@
 % Please edit documentation in R/fixest_multi.R
 \name{models}
 \alias{models}
-\title{Extracts the models tree from a \code{fixest_multi} object}
+\title{Extracts the models tree from a \code{fixest2_multi} object}
 \usage{
 models(x, simplify = FALSE)
 }
 \arguments{
-\item{x}{A \code{fixest_multi} object, obtained from a \code{fixest} estimation leading to
+\item{x}{A \code{fixest2_multi} object, obtained from a \code{fixest2} estimation leading to
 multiple results.}
 
 \item{simplify}{Logical, default is \code{FALSE}. The default behavior is to display all the meta
@@ -20,7 +20,7 @@ the other columns contain the information specific to each model (e.g. which sam
 which RHS,  which dependent variable, etc).
 }
 \description{
-Extracts the meta information on all the models contained in a \code{fixest_multi} estimation.
+Extracts the meta information on all the models contained in a \code{fixest2_multi} estimation.
 }
 \examples{
 

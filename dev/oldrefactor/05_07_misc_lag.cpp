@@ -99,5 +99,5 @@
     }
   }
 
-  return (res);
+  return res;
 }

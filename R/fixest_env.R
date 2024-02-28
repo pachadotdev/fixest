@@ -6,7 +6,7 @@
 #----------------------------------------------#
 
 
-fixest_env <- function(fml, data, family = c("poisson", "negbin", "logit", "gaussian"),
+fixest2_env <- function(fml, data, family = c("poisson", "negbin", "logit", "gaussian"),
                        NL.fml = NULL,
                        fixef, NL.start, lower, upper, NL.start.init, offset = NULL,
                        subset = NULL, split = NULL, fsplit = NULL,
@@ -422,18 +422,18 @@ fixest_env <- function(fml, data, family = c("poisson", "negbin", "logit", "gaus
       # BEWARE:
       # - we allow argument sliding only when the value in data is
       # unambiguously a vcov!
-      # - ie: formula // character scalar // fixest_vcov_request // function (without args!)
+      # - ie: formula // character scalar // fixest2_vcov_request // function (without args!)
       #       list of length 1 with a function inside
       #
 
-      opts <- getOption("fixest_estimation")
+      opts <- getOption("fixest2_estimation")
       if ("data" %in% names(opts)) {
         # To report evaluation problems
         error_sender(data)
 
         # We check 'data' can really be a vcov
         if (inherits(data, "formula") || isSingleChar(data) ||
-          inherits(data, "fixest_vcov_request") ||
+          inherits(data, "fixest2_vcov_request") ||
           is.function(data) || (is.list(data) && length(data) == 1 && is.function(data[[1]]))) {
           # OK, let's slide
 
@@ -613,7 +613,7 @@ fixest_env <- function(fml, data, family = c("poisson", "negbin", "logit", "gaus
       for (i in 1:n_pblm) {
         var <- var_pblm[i]
         # assumption of numeric value is too strong,
-        # see https://github.com/lrberge/fixest/issues/426
+        # see https://github.com/lrberge/fixest2/issues/426
         if (exists(var, envir = call_env)) {
           var_value <- eval(str2lang(var), call_env)
           if (is.atomic(var_value) && length(var_value) < 5) {
@@ -723,7 +723,7 @@ fixest_env <- function(fml, data, family = c("poisson", "negbin", "logit", "gaus
           msg_builder <- function(var_pblm, type, qui) {
             msg <- ""
             if (any(type[qui] == "var")) {
-              msg <- " Note that fixest does not accept variables from the global enviroment, they must be in the data set"
+              msg <- " Note that fixest2 does not accept variables from the global enviroment, they must be in the data set"
               extra <- "."
               if (!all(type[qui] == "var")) {
                 extra <- paste0(" (it concerns ", enumerate_items(var_pblm[qui][type[qui] == "var"]), ").")
@@ -775,7 +775,7 @@ fixest_env <- function(fml, data, family = c("poisson", "negbin", "logit", "gaus
 
     if (debug) cat(" ---> Panel setup\n")
 
-    info <- fixest_fml_rewriter(fml)
+    info <- fixest2_fml_rewriter(fml)
     isPanel <- info$isPanel
     fml <- info$fml
 
@@ -783,7 +783,7 @@ fixest_env <- function(fml, data, family = c("poisson", "negbin", "logit", "gaus
       panel.info <- NULL
       if (!is.null(attr(data, "panel_info"))) {
         if (!missnull(panel.id)) {
-          warning("The argument 'panel.id' is provided but argument 'data' is already a 'fixest_panel' object. Thus the argument 'panel.id' is ignored.", immediate. = TRUE)
+          warning("The argument 'panel.id' is provided but argument 'data' is already a 'fixest2_panel' object. Thus the argument 'panel.id' is ignored.", immediate. = TRUE)
         }
 
         panel__meta__info <- attr(data, "panel_info")
@@ -794,7 +794,7 @@ fixest_env <- function(fml, data, family = c("poisson", "negbin", "logit", "gaus
         if (missnull(panel.id)) {
           stop("To use lag/leads (with l()/f()): either provide the argument 'panel.id' with the panel identifiers OR set your data as a panel with function panel().")
         }
-        panel__meta__info <- panel_setup(data, panel.id, from_fixest = TRUE)
+        panel__meta__info <- panel_setup(data, panel.id, from_fixest2 = TRUE)
       }
       class(data) <- "data.frame"
     } else if (!missnull(panel.id)) {
@@ -931,7 +931,7 @@ fixest_env <- function(fml, data, family = c("poisson", "negbin", "logit", "gaus
 
 
     vcov_varnames <- error_sender(
-      vcov.fixest(
+      vcov.fixest2(
         only_varnames = TRUE, vcov = vcov,
         data_names = data_names,
         panel.id = panel.id, fixef_vars = fe_vars
@@ -1272,8 +1272,8 @@ fixest_env <- function(fml, data, family = c("poisson", "negbin", "logit", "gaus
 
   interaction.info <- NULL
   agg <- NULL
-  # This variables will be set globally from within fixest_model_matrix!
-  GLOBAL_fixest_mm_info <- list()
+  # This variables will be set globally from within fixest2_model_matrix!
+  GLOBAL_fixest2_mm_info <- list()
   multi_rhs <- FALSE
   if (isFit) {
     isLinear <- FALSE
@@ -1412,19 +1412,19 @@ fixest_env <- function(fml, data, family = c("poisson", "negbin", "logit", "gaus
 
         linear_core <- list()
         linear_core$left <- error_sender(
-          fixest_model_matrix(fml_core_left, data, fake_intercept),
+          fixest2_model_matrix(fml_core_left, data, fake_intercept),
           "Evaluation of the right-hand-side of the formula raises an error: "
         )
 
         linear_core$right <- error_sender(
-          fixest_model_matrix(fml_core_right, data, TRUE),
+          fixest2_model_matrix(fml_core_right, data, TRUE),
           "Evaluation of the right-hand-side of the formula raises an error: "
         )
 
         rhs_sw <- list()
         for (i in seq_along(fml_all_sw)) {
           rhs_sw[[i]] <- error_sender(
-            fixest_model_matrix(fml_all_sw[[i]], data, TRUE),
+            fixest2_model_matrix(fml_all_sw[[i]], data, TRUE),
             "Evaluation of the right-hand-side of the formula raises an error: "
           )
         }
@@ -1434,7 +1434,7 @@ fixest_env <- function(fml, data, family = c("poisson", "negbin", "logit", "gaus
         fml_linear <- rhs_info_stepwise$fml
 
         linear.mat <- error_sender(
-          fixest_model_matrix(fml_linear, data, fake_intercept),
+          fixest2_model_matrix(fml_linear, data, fake_intercept),
           "Evaluation of the right-hand-side of the formula raises an error: "
         )
 
@@ -1444,8 +1444,8 @@ fixest_env <- function(fml, data, family = c("poisson", "negbin", "logit", "gaus
       }
     }
 
-    if ("sunab" %in% names(GLOBAL_fixest_mm_info)) {
-      agg <- GLOBAL_fixest_mm_info$sunab$agg
+    if ("sunab" %in% names(GLOBAL_fixest2_mm_info)) {
+      agg <- GLOBAL_fixest2_mm_info$sunab$agg
       do_summary <- TRUE
     }
   }
@@ -1958,7 +1958,7 @@ fixest_env <- function(fml, data, family = c("poisson", "negbin", "logit", "gaus
     # Now LHS evaluated as a regular formula
     iv_endo_fml <- .xpd(lhs = 1, rhs = iv_fml_parts[[1]])
     iv_lhs_mat <- error_sender(
-      fixest_model_matrix(iv_endo_fml, data, TRUE),
+      fixest2_model_matrix(iv_endo_fml, data, TRUE),
       "Evaluation of the left-hand-side of the IV part (equal to ",
       deparse_long(iv_fml_parts[[1]]), ") raises an error: \n"
     )
@@ -1993,7 +1993,7 @@ fixest_env <- function(fml, data, family = c("poisson", "negbin", "logit", "gaus
     }
 
     iv.mat <- error_sender(
-      fixest_model_matrix(fml_iv, data, fake_intercept = TRUE),
+      fixest2_model_matrix(fml_iv, data, fake_intercept = TRUE),
       "Problem in the IV part. Evaluation of the right-hand-side ",
       "raises an error: "
     )
@@ -2049,7 +2049,7 @@ fixest_env <- function(fml, data, family = c("poisson", "negbin", "logit", "gaus
       }
     }
 
-    if (inherits(vcov, "fixest_vcov_request")) {
+    if (inherits(vcov, "fixest2_vcov_request")) {
       # We check the variables used in the VCOV
       if (!is.null(vcov$vcov_vars)) {
         # basic check
@@ -3074,8 +3074,8 @@ fixest_env <- function(fml, data, family = c("poisson", "negbin", "logit", "gaus
     assign("split.name", split.name, env)
   }
 
-  # fixest tag
-  assign("fixest_env", TRUE, env)
+  # fixest2 tag
+  assign("fixest2_env", TRUE, env)
 
   #
   # Res ####
@@ -3206,9 +3206,9 @@ fixest_env <- function(fml, data, family = c("poisson", "negbin", "logit", "gaus
   }
 
   # Interaction information
-  if (length(GLOBAL_fixest_mm_info) > 0) {
-    res$model_matrix_info <- GLOBAL_fixest_mm_info
-    if ("sunab" %in% names(GLOBAL_fixest_mm_info)) {
+  if (length(GLOBAL_fixest2_mm_info) > 0) {
+    res$model_matrix_info <- GLOBAL_fixest2_mm_info
+    if ("sunab" %in% names(GLOBAL_fixest2_mm_info)) {
       res$is_sunab <- TRUE
     }
   }
@@ -3358,7 +3358,7 @@ setup_fixef <- function(fixef_df, lhs, fixef_vars, fixef.rm, family, isSplit, sp
 
     # update of the lhs
     # if multi_lhs, only reason we're here is because of rm_single, which is performed
-    # only in main fixest_env
+    # only in main fixest2_env
     if (!identical(lhs, list(0))) {
       # list(0): should be unnecessary, when assign_lhs = FALSE
       # (singletons shouldn't be there any more, so no reason to be here with a list)
@@ -3989,7 +3989,7 @@ reshape_env <- function(env, obs2keep = NULL, lhs = NULL, rhs = NULL, assign_lhs
     res$fml_all$iv <- NULL
   }
 
-  assign("fixest_env", TRUE, new_env)
+  assign("fixest2_env", TRUE, new_env)
   assign("res", res, new_env)
 
   return(new_env)
@@ -3998,7 +3998,7 @@ reshape_env <- function(env, obs2keep = NULL, lhs = NULL, rhs = NULL, assign_lhs
 
 #' Stepwise estimation tools
 #'
-#' Functions to perform stepwise estimations in `fixest` models.
+#' Functions to perform stepwise estimations in `fixest2` models.
 #'
 #' @param ... Represents formula variables to be added in a stepwise fashion to an estimation.
 #'
@@ -4365,7 +4365,7 @@ collect_vars <- function(...) {
   unique(vars)
 }
 
-fixest_NA_results <- function(env) {
+fixest2_NA_results <- function(env) {
   # Container for NA results
   # so far the non-linear part is not covered
 
@@ -4400,7 +4400,7 @@ fixest_NA_results <- function(env) {
   res$ssr <- res$ssr_null <- res$ssr_fe_only <- res$sigma2 <- res$loglik <- res$ll_null <- res$ll_fe_only <- res$pseudo_r2 <- res$deviance <- res$sq.cor <- NA_real_
 
   res$NA_model <- TRUE
-  class(res) <- "fixest"
+  class(res) <- "fixest2"
 
   res
 }

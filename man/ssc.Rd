@@ -5,7 +5,7 @@
 \alias{dof}
 \alias{setFixest_ssc}
 \alias{getFixest_ssc}
-\title{Governs the small sample correction in \code{fixest} VCOVs}
+\title{Governs the small sample correction in \code{fixest2} VCOVs}
 \usage{
 ssc(
   adj = TRUE,
@@ -64,7 +64,7 @@ manually specify the DoF of the t-distribution.}
 \item{fixef.force_exact}{Logical, default is \code{FALSE}. If there are 2 or more fixed-effects,
 these fixed-effects they can be irregular, meaning they can provide the same information.
 If so, the "real" number of parameters should be lower than the total number of
-fixed-effects. If \code{fixef.force_exact = TRUE}, then \code{\link{fixef.fixest}} is first run to
+fixed-effects. If \code{fixef.force_exact = TRUE}, then \code{\link{fixef.fixest2}} is first run to
 determine the exact number of parameters among the fixed-effects. Mostly, panels of
 the type individual-firm require \code{fixef.force_exact = TRUE} (but it adds computational costs).}
 
@@ -74,11 +74,11 @@ the type individual-firm require \code{fixef.force_exact = TRUE} (but it adds co
 It returns a \code{ssc.type} object.
 }
 \description{
-Provides how the small sample correction should be calculated in \code{\link{vcov.fixest}}/\code{\link{summary.fixest}}.
+Provides how the small sample correction should be calculated in \code{\link{vcov.fixest2}}/\code{\link{summary.fixest2}}.
 }
 \details{
-The following vignette: \href{https://lrberge.github.io/fixest/articles/standard_errors.html}{On standard-errors},
-describes in details how the standard-errors are computed in \code{fixest} and how you can
+The following vignette: \href{https://lrberge.github.io/fixest2/articles/standard_errors.html}{On standard-errors},
+describes in details how the standard-errors are computed in \code{fixest2} and how you can
 replicate standard-errors from other software.
 }
 \section{Functions}{
@@ -170,7 +170,7 @@ setFixest_ssc()
 
 }
 \seealso{
-\code{\link{summary.fixest}}, \code{\link{vcov.fixest}}
+\code{\link{summary.fixest2}}, \code{\link{vcov.fixest2}}
 }
 \author{
 Laurent Berge

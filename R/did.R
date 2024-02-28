@@ -60,9 +60,9 @@
 #'
 #' @details
 #' This function creates a matrix of `cohort x relative_period` interactions, and if used within
-#' a `fixest` estimation, the coefficients will automatically be aggregated to obtain the ATT
+#' a `fixest2` estimation, the coefficients will automatically be aggregated to obtain the ATT
 #' for each relative period. In practice, the coefficients are aggregated with the
-#' [`aggregate.fixest`] function whose argument `agg` is automatically set to the appropriate
+#' [`aggregate.fixest2`] function whose argument `agg` is automatically set to the appropriate
 #' value.
 #'
 #' The SA method requires relative periods (negative/positive for before/after the treatment).
@@ -105,7 +105,7 @@
 #' Laurent Berge
 #'
 #' @return
-#' If not used within a `fixest` estimation, this function will return a matrix of
+#' If not used within a `fixest2` estimation, this function will return a matrix of
 #' interacted coefficients.
 #'
 #' @examples
@@ -343,12 +343,12 @@ sunab <- function(cohort, period, ref.c = NULL, ref.p = -1, bin, bin.rel,
   }
 
 
-  # We add the agg argument to GLOBAL_fixest_mm_info
+  # We add the agg argument to GLOBAL_fixest2_mm_info
   if (!no_agg) {
     is_GLOBAL <- FALSE
     for (where in 1:min(8, sys.nframe())) {
-      if (exists("GLOBAL_fixest_mm_info", parent.frame(where))) {
-        GLOBAL_fixest_mm_info <- get("GLOBAL_fixest_mm_info", parent.frame(where))
+      if (exists("GLOBAL_fixest2_mm_info", parent.frame(where))) {
+        GLOBAL_fixest2_mm_info <- get("GLOBAL_fixest2_mm_info", parent.frame(where))
         is_GLOBAL <- TRUE
         break
       }
@@ -382,12 +382,12 @@ sunab <- function(cohort, period, ref.c = NULL, ref.p = -1, bin, bin.rel,
         attr(agg, "model_matrix_info") <- info
       }
 
-      GLOBAL_fixest_mm_info$sunab <- list(
+      GLOBAL_fixest2_mm_info$sunab <- list(
         agg = agg, agg_att = agg_att,
         agg_period = agg_period, ref.p = ref.p
       )
       # re assignment
-      assign("GLOBAL_fixest_mm_info", GLOBAL_fixest_mm_info, parent.frame(where))
+      assign("GLOBAL_fixest2_mm_info", GLOBAL_fixest2_mm_info, parent.frame(where))
     }
   }
 
@@ -406,7 +406,7 @@ sunab_att <- function(cohort, period, ref.c = NULL, ref.p = -1) {
 #' Simple tool that aggregates the value of CATT coefficients in staggered
 #' difference-in-difference setups (see details).
 #'
-#' @param x A `fixest` object.
+#' @param x A `fixest2` object.
 #' @param agg A character scalar describing the variable names to be aggregated,
 #' it is pattern-based. For [`sunab`] estimations, the following keywords work: "att",
 #' "period", "cohort" and `FALSE` (to have full disaggregation). All variables that
@@ -421,7 +421,7 @@ sunab_att <- function(cohort, period, ref.c = NULL, ref.p = -1) {
 #' @param use_weights Logical, default is `TRUE`. If the estimation was weighted,
 #' whether the aggregation should take into account the weights. Basically if the
 #' weights reflected frequency it should be `TRUE`.
-#' @param ... Arguments to be passed to [`summary.fixest`].
+#' @param ... Arguments to be passed to [`summary.fixest2`].
 #'
 #' @details
 #' This is a function helping to replicate the estimator from Sun and Abraham (2021).
@@ -498,10 +498,10 @@ sunab_att <- function(cohort, period, ref.c = NULL, ref.p = -1) {
 #' aggregate(res_cohort, c("cohort" = "::[^-].*year_treated::([[:digit:]]+)"))
 #'
 #' @export
-aggregate.fixest <- function(x, agg, full = FALSE, use_weights = TRUE, ...) {
+aggregate.fixest2 <- function(x, agg, full = FALSE, use_weights = TRUE, ...) {
   # Aggregates the value of coefficients
 
-  check_arg(x, "class(fixest) mbt")
+  check_arg(x, "class(fixest2) mbt")
   if (isTRUE(x$is_sunab)) {
     check_arg(agg, "scalar(character, logical)")
   } else {
@@ -611,7 +611,7 @@ aggregate.fixest <- function(x, agg, full = FALSE, use_weights = TRUE, ...) {
 
   # th z & p values
   zvalue <- c_all / se_all
-  pvalue <- fixest_pvalue(x, zvalue, V)
+  pvalue <- fixest2_pvalue(x, zvalue, V)
 
   res <- cbind(c_all, se_all, zvalue, pvalue)
   if (max(nchar(val)) == 0) {
@@ -675,7 +675,7 @@ aggregate.fixest <- function(x, agg, full = FALSE, use_weights = TRUE, ...) {
 #' Sample data for difference in difference
 #'
 #' This data has been generated to illustrate the use of difference in difference functions in
-#' package \pkg{fixest}. This is a balanced panel of 104 individuals and 10 periods.
+#' package \pkg{fixest2}. This is a balanced panel of 104 individuals and 10 periods.
 #' About half the individuals are treated, the treatment having a positive effect on
 #' the dependent variable `y` after the 5th period. The effect of the treatment on `y` is gradual.
 #'

@@ -25,7 +25,7 @@ However, it requires that the following software are installed and work properly
 Now we're good to start. Let's first define a global dictionary: it will rename the variables and will also include pre-defined notes that can be fetched from `etable`.
 
 ```{r}
-library(fixest)
+library(fixest2)
 # Let's define a dictionary and set it globally.
 # We also define notes, not just variable names.
 # (The function 'dsb()' is like 'glue()' and is not important here.)

@@ -104,7 +104,7 @@ femlm_only_clusters <- function(env) {
 
   res$convStatus <- TRUE
 
-  class(res) <- "fixest"
+  class(res) <- "fixest2"
 
   return(res)
 }

@@ -1,11 +1,10 @@
 #include "01_0_convergence.hpp"
 
-[[cpp11::register]] list
-cpp_conv_acc_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
-                  double theta, SEXP nb_cluster_all, SEXP lhs, SEXP mu_init,
-                  SEXP dum_vector, SEXP tableCluster_vector, SEXP sum_y_vector,
-                  SEXP cumtable_vector, SEXP obsCluster_vector,
-                  int nthreads = 1) {
+[[cpp11::register]] list cpp_conv_acc_gnl_(
+    int family, int iterMax, double diffMax, double diffMax_NR, double theta,
+    SEXP nb_cluster_all, SEXP lhs, SEXP mu_init, SEXP dum_vector,
+    SEXP tableCluster_vector, SEXP sum_y_vector, SEXP cumtable_vector,
+    SEXP obsCluster_vector, int nthreads = 1) {
   // initial variables
   int K = Rf_length(nb_cluster_all);
   int *pcluster = INTEGER(nb_cluster_all);
@@ -115,8 +114,7 @@ cpp_conv_acc_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
     computeClusterCoef(pGX, pGGX, &args);
 
     numconv = update_X_IronsTuck(nb_coef_no_K, X, GX, GGX, delta_GX, delta2_X);
-    if (numconv)
-      break;
+    if (numconv) break;
 
     if (family == 1) {
       any_negative_poisson =
@@ -171,12 +169,11 @@ cpp_conv_acc_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
   return res;
 }
 
-[[cpp11::register]] list
-cpp_conv_seq_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
-                  double theta, SEXP nb_cluster_all, SEXP lhs, SEXP mu_init,
-                  SEXP dum_vector, SEXP tableCluster_vector, SEXP sum_y_vector,
-                  SEXP cumtable_vector, SEXP obsCluster_vector,
-                  int nthreads = 1) {
+[[cpp11::register]] list cpp_conv_seq_gnl_(
+    int family, int iterMax, double diffMax, double diffMax_NR, double theta,
+    SEXP nb_cluster_all, SEXP lhs, SEXP mu_init, SEXP dum_vector,
+    SEXP tableCluster_vector, SEXP sum_y_vector, SEXP cumtable_vector,
+    SEXP obsCluster_vector, int nthreads = 1) {
   // initial variables
   int K = Rf_length(nb_cluster_all);
   int *pcluster = INTEGER(nb_cluster_all);
@@ -249,7 +246,7 @@ cpp_conv_seq_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
   // the main loop
 
   // initialisation of the cluster coefficients
-  if (family == 1) { // Poisson
+  if (family == 1) {  // Poisson
     for (int i = 0; i < nb_coef; ++i) {
       cluster_coef[i] = 1;
     }
@@ -335,7 +332,7 @@ cpp_conv_seq_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
   res.push_back({"mu_new"_nm = mu});
   res.push_back({"iter"_nm = iter});
 
-  return (res);
+  return res;
 }
 
 [[cpp11::register]] list cpp_conv_acc_poi_2_(int n_i, int n_j, int n_cells,
@@ -440,8 +437,7 @@ cpp_conv_seq_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
 
     // X: update the cluster coefficient
     numconv = update_X_IronsTuck(n_i, X, GX, GGX, delta_GX, delta2_X);
-    if (numconv)
-      break;
+    if (numconv) break;
 
     // control for negative values
     for (int i = 0; i < n_i; ++i) {
@@ -492,7 +488,7 @@ cpp_conv_seq_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
   res.push_back({"iter"_nm = iter});
   res.push_back({"any_negative_poisson"_nm = any_negative_poisson});
 
-  return (res);
+  return res;
 }
 
 [[cpp11::register]] list cpp_conv_seq_poi_2_(int n_i, int n_j, int n_cells,
@@ -606,14 +602,13 @@ cpp_conv_seq_gnl_(int family, int iterMax, double diffMax, double diffMax_NR,
   res.push_back({"mu_new"_nm = exp_mu});
   res.push_back({"iter"_nm = iter});
 
-  return (res);
+  return res;
 }
 
-[[cpp11::register]] list
-cpp_conv_acc_gau_2_(int n_i, int n_j, int n_cells, SEXP r_mat_row,
-                    SEXP r_mat_col, SEXP r_mat_value_Ab, SEXP r_mat_value_Ba,
-                    SEXP dum_vector, SEXP lhs, SEXP invTableCluster_vector,
-                    int iterMax, double diffMax, SEXP mu_in) {
+[[cpp11::register]] list cpp_conv_acc_gau_2_(
+    int n_i, int n_j, int n_cells, SEXP r_mat_row, SEXP r_mat_col,
+    SEXP r_mat_value_Ab, SEXP r_mat_value_Ba, SEXP dum_vector, SEXP lhs,
+    SEXP invTableCluster_vector, int iterMax, double diffMax, SEXP mu_in) {
   // set up
   int n_obs = Rf_length(mu_in);
 
@@ -649,7 +644,7 @@ cpp_conv_acc_gau_2_(int n_i, int n_j, int n_cells, SEXP r_mat_row,
   // values that will be used later
   std::vector<double> beta(n_j);
 
-  std::vector<double> a_tilde(const_a); // init at const_a
+  std::vector<double> a_tilde(const_a);  // init at const_a
 
   for (int obs = 0; obs < n_cells; ++obs) {
     a_tilde[mat_row[obs]] -= mat_value_Ab[obs] * const_b[mat_col[obs]];
@@ -686,8 +681,7 @@ cpp_conv_acc_gau_2_(int n_i, int n_j, int n_cells, SEXP r_mat_row,
 
     // X: update the cluster coefficient
     numconv = update_X_IronsTuck(n_i, X, GX, GGX, delta_GX, delta2_X);
-    if (numconv)
-      break;
+    if (numconv) break;
 
     // GX: origin = X, destination = GX
     CCC_gaussian_2(X, GX, n_i, n_j, n_cells, mat_row, mat_col, mat_value_Ab,
@@ -730,14 +724,13 @@ cpp_conv_acc_gau_2_(int n_i, int n_j, int n_cells, SEXP r_mat_row,
   res.push_back({"mu_new"_nm = mu});
   res.push_back({"iter"_nm = iter});
 
-  return (res);
+  return res;
 }
 
-[[cpp11::register]] list
-cpp_conv_seq_gau_2_(int n_i, int n_j, int n_cells, SEXP r_mat_row,
-                    SEXP r_mat_col, SEXP r_mat_value_Ab, SEXP r_mat_value_Ba,
-                    SEXP dum_vector, SEXP lhs, SEXP invTableCluster_vector,
-                    int iterMax, double diffMax, SEXP mu_in) {
+[[cpp11::register]] list cpp_conv_seq_gau_2_(
+    int n_i, int n_j, int n_cells, SEXP r_mat_row, SEXP r_mat_col,
+    SEXP r_mat_value_Ab, SEXP r_mat_value_Ba, SEXP dum_vector, SEXP lhs,
+    SEXP invTableCluster_vector, int iterMax, double diffMax, SEXP mu_in) {
   // set up
 
   int n_obs = Rf_length(mu_in);
@@ -844,5 +837,5 @@ cpp_conv_seq_gau_2_(int n_i, int n_j, int n_cells, SEXP r_mat_row,
   res.push_back({"mu_new"_nm = mu});
   res.push_back({"iter"_nm = iter});
 
-  return (res);
+  return res;
 }

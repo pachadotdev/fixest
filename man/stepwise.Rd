@@ -23,7 +23,7 @@ mvsw(...)
 \item{...}{Represents formula variables to be added in a stepwise fashion to an estimation.}
 }
 \description{
-Functions to perform stepwise estimations in \code{fixest} models.
+Functions to perform stepwise estimations in \code{fixest2} models.
 }
 \details{
 To include multiple independent variables, you need to use the stepwise functions.

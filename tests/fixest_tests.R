@@ -8,11 +8,11 @@
 
 # Some functions are not trivial to test properly though
 
-library(fixest)
+library(fixest2)
 
-test <- fixest:::test
-chunk <- fixest:::chunk
-vcovClust <- fixest:::vcovClust
+test <- fixest2:::test
+chunk <- fixest2:::chunk
+vcovClust <- fixest2:::vcovClust
 stvec <- stringmagic::string_vec_alias()
 
 setFixest_notes(FALSE)

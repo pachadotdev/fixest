@@ -76,7 +76,7 @@ effect for the treated is computed (instead of the ATT for each relative period)
 leading to the estimation of all \verb{cohort x time to treatment} coefficients.}
 }
 \value{
-If not used within a \code{fixest} estimation, this function will return a matrix of
+If not used within a \code{fixest2} estimation, this function will return a matrix of
 interacted coefficients.
 }
 \description{
@@ -85,9 +85,9 @@ and Abraham (Journal of Econometrics, 2021).
 }
 \details{
 This function creates a matrix of \verb{cohort x relative_period} interactions, and if used within
-a \code{fixest} estimation, the coefficients will automatically be aggregated to obtain the ATT
+a \code{fixest2} estimation, the coefficients will automatically be aggregated to obtain the ATT
 for each relative period. In practice, the coefficients are aggregated with the
-\code{\link{aggregate.fixest}} function whose argument \code{agg} is automatically set to the appropriate
+\code{\link{aggregate.fixest2}} function whose argument \code{agg} is automatically set to the appropriate
 value.
 
 The SA method requires relative periods (negative/positive for before/after the treatment).

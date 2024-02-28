@@ -2,16 +2,16 @@
 
 setup_multi_notes <- function() {
   # We reset all the notes
-  options("fixest_multi_notes" = NULL)
+  options("fixest2_multi_notes" = NULL)
 }
 
 stack_multi_notes <- function(note) {
-  all_notes <- getOption("fixest_multi_notes")
-  options("fixest_multi_notes" = c(all_notes, note))
+  all_notes <- getOption("fixest2_multi_notes")
+  options("fixest2_multi_notes" = c(all_notes, note))
 }
 
 release_multi_notes <- function() {
-  notes <- getOption("fixest_multi_notes")
+  notes <- getOption("fixest2_multi_notes")
 
   if (length(notes) > 0) {
     dict <- c(
@@ -44,7 +44,7 @@ release_multi_notes <- function() {
     )
   }
 
-  options("fixest_multi_notes" = NULL)
+  options("fixest2_multi_notes" = NULL)
 }
 
 
@@ -134,8 +134,8 @@ format_error_msg <- function(x, origin) {
 
   x <- gsub("\n+$", "", x)
 
-  if (grepl("^Error (in|:|: in) (fe|fixest|fun|fml_split)[^\n]+\n", x)) {
-    res <- gsub("^Error (in|:|: in) (fe|fixest|fun|fml_split)[^\n]+\n *(.+)", "\\3", x)
+  if (grepl("^Error (in|:|: in) (fe|fixest2|fun|fml_split)[^\n]+\n", x)) {
+    res <- gsub("^Error (in|:|: in) (fe|fixest2|fun|fml_split)[^\n]+\n *(.+)", "\\3", x)
   } else if (grepl("[Oo]bject '.+' not found", x) || grepl("memory|cannot allocate", x)) {
     res <- x
   } else {

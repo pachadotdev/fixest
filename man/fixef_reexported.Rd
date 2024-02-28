@@ -3,15 +3,15 @@
 \name{fixef_reexported}
 \alias{fixef_reexported}
 \alias{fixef}
-\title{Functions exported from \pkg{nlme} to implement \pkg{fixest} methods}
+\title{Functions exported from \pkg{nlme} to implement \pkg{fixest2} methods}
 \description{
-The package \pkg{fixest} uses the \code{fixef} method from \pkg{nlme}. Unfortunately,
+The package \pkg{fixest2} uses the \code{fixef} method from \pkg{nlme}. Unfortunately,
 re-exporting this method is required in order not to attach package \pkg{nlme}.
 }
 \details{
 \itemize{
 \item Here is the help from package \pkg{nlme}: \code{\link[nlme:fixed.effects]{fixef}}. The
-help from package \pkg{fixest} is here: \code{\link{fixef.fixest}}.
+help from package \pkg{fixest2} is here: \code{\link{fixef.fixest2}}.
 }
 }
 \note{

@@ -11,24 +11,24 @@
 
 
 
-#' Computes the variance/covariance of a `fixest` object
+#' Computes the variance/covariance of a `fixest2` object
 #'
 #' This function extracts the variance-covariance of estimated parameters from a model
 #' estimated with [`femlm`], [`feols`] or [`feglm`].
 #'
-#' @inheritParams summary.fixest
-#' @inheritParams nobs.fixest
+#' @inheritParams summary.fixest2
+#' @inheritParams nobs.fixest2
 #'
 #' @param attr Logical, defaults to `FALSE`. Whether to include the attributes describing how
 #' the VCOV was computed.
-#' @param ... Other arguments to be passed to [`summary.fixest`].
+#' @param ... Other arguments to be passed to [`summary.fixest2`].
 #'
-#' The computation of the VCOV matrix is first done in [`summary.fixest`].
+#' The computation of the VCOV matrix is first done in [`summary.fixest2`].
 #'
 #' @details
 #' For an explanation on how the standard-errors are computed and what is the exact meaning of
 #' the arguments, please have a look at the dedicated vignette:
-#' [On standard-errors](https://lrberge.github.io/fixest/articles/standard_errors.html).
+#' [On standard-errors](https://lrberge.github.io/fixest2/articles/standard_errors.html).
 #'
 #' @seealso
 #' You can also compute VCOVs with the following functions: [`vcov_cluster`],
@@ -45,7 +45,7 @@
 #'
 #' @seealso
 #' See also the main estimation functions [`femlm`], [`feols`] or [`feglm`].
-#' [`summary.fixest`], [`confint.fixest`], [`resid.fixest`], [`predict.fixest`], [`fixef.fixest`].
+#' [`summary.fixest2`], [`confint.fixest2`], [`resid.fixest2`], [`predict.fixest2`], [`fixef.fixest2`].
 #'
 #' @examples
 #'
@@ -199,9 +199,9 @@
 #' se(vcov(est, DK ~ period + ssc(adj = FALSE)))
 #'
 #' @export
-vcov.fixest <- function(object, vcov = NULL, se = NULL, cluster, ssc = NULL, attr = FALSE,
-                        forceCovariance = FALSE, keepBounded = FALSE,
-                        nthreads = getFixest_nthreads(), vcov_fix = TRUE, ...) {
+vcov.fixest2 <- function(object, vcov = NULL, se = NULL, cluster, ssc = NULL, attr = FALSE,
+                         forceCovariance = FALSE, keepBounded = FALSE,
+                         nthreads = getFixest_nthreads(), vcov_fix = TRUE, ...) {
   # computes the clustered vcov
 
   check_arg(attr, "logical scalar")
@@ -209,11 +209,11 @@ vcov.fixest <- function(object, vcov = NULL, se = NULL, cluster, ssc = NULL, att
 
   dots <- list(...)
 
-  # START :: SECTION used only internally in fixest_env
+  # START :: SECTION used only internally in fixest2_env
   only_varnames <- isTRUE(dots$only_varnames)
   data_names <- dots$data_names
   if (only_varnames) {
-    # Used internally in fixest_env to find out which variable to keep
+    # Used internally in fixest2_env to find out which variable to keep
     # => we need panel.id, so we can remove the NAs from it if it is implicitly deduced to be used
     # => idem for fixef_vars
     object <- list(panel.id = dots$panel.id, fixef_vars = dots$fixef_vars)
@@ -227,9 +227,9 @@ vcov.fixest <- function(object, vcov = NULL, se = NULL, cluster, ssc = NULL, att
   }
 
   if ("dof" %in% names(dots)) {
-    if (is.null(getOption("fixest_warn_dof_arg"))) {
+    if (is.null(getOption("fixest2_warn_dof_arg"))) {
       warning("The argument 'dof' is deprecated. Please use 'ssc' instead.")
-      options(fixest_warn_dof_arg = TRUE)
+      options(fixest2_warn_dof_arg = TRUE)
     }
     ssc <- dots$dof
   }
@@ -241,7 +241,7 @@ vcov.fixest <- function(object, vcov = NULL, se = NULL, cluster, ssc = NULL, att
   }
 
   # All the available VCOVs
-  all_vcov <- getOption("fixest_vcov_builtin")
+  all_vcov <- getOption("fixest2_vcov_builtin")
   all_vcov_names <- unlist(lapply(all_vcov, `[[`, "name"))
   all_vcov_names <- all_vcov_names[nchar(all_vcov_names) > 0]
 
@@ -314,7 +314,7 @@ vcov.fixest <- function(object, vcov = NULL, se = NULL, cluster, ssc = NULL, att
       }
     }
 
-    if (!ok) stop("VCOV of 'lean' fixest objects cannot be computed. Please re-estimate with 'lean = FALSE'.")
+    if (!ok) stop("VCOV of 'lean' fixest2 objects cannot be computed. Please re-estimate with 'lean = FALSE'.")
   }
 
   ####
@@ -322,10 +322,10 @@ vcov.fixest <- function(object, vcov = NULL, se = NULL, cluster, ssc = NULL, att
   ####
 
   # Checking the value of vcov
-  check_set_arg(vcov, "match | formula | function | matrix | list len(1) | class(fixest_vcov_request)", .choices = all_vcov_names)
+  check_set_arg(vcov, "match | formula | function | matrix | list len(1) | class(fixest2_vcov_request)", .choices = all_vcov_names)
 
   user_vcov_name <- NULL
-  if (is.list(vcov) && !inherits(vcov, "fixest_vcov_request")) {
+  if (is.list(vcov) && !inherits(vcov, "fixest2_vcov_request")) {
     # We already ensured it was a list of length 1
     user_vcov_name <- names(vcov)
     vcov <- vcov[[1]]
@@ -389,7 +389,7 @@ vcov.fixest <- function(object, vcov = NULL, se = NULL, cluster, ssc = NULL, att
 
   if (is.matrix(vcov)) {
     if (only_varnames) {
-      stop("A custom VCOV matrix cannot be used directly in a fixest estimation.")
+      stop("A custom VCOV matrix cannot be used directly in a fixest2 estimation.")
     }
 
     # Check that this makes sense
@@ -404,7 +404,7 @@ vcov.fixest <- function(object, vcov = NULL, se = NULL, cluster, ssc = NULL, att
   }
 
   extra_args <- NULL
-  if (inherits(vcov, "fixest_vcov_request")) {
+  if (inherits(vcov, "fixest2_vcov_request")) {
     if (!is.null(vcov$ssc)) ssc <- vcov$ssc
     var_names_all <- vcov$var_names_all
     var_values_all <- vcov$vcov_vars
@@ -1042,9 +1042,9 @@ vcov.fixest <- function(object, vcov = NULL, se = NULL, cluster, ssc = NULL, att
 
 
 
-#' Governs the small sample correction in `fixest` VCOVs
+#' Governs the small sample correction in `fixest2` VCOVs
 #'
-#' Provides how the small sample correction should be calculated in [`vcov.fixest`]/[`summary.fixest`].
+#' Provides how the small sample correction should be calculated in [`vcov.fixest2`]/[`summary.fixest2`].
 #'
 #' @param adj Logical scalar, defaults to `TRUE`. Whether to apply a small sample adjustment of
 #' the form `(n - 1) / (n - K)`, with `K` the number of estimated parameters. If `FALSE`, then
@@ -1059,7 +1059,7 @@ vcov.fixest <- function(object, vcov = NULL, se = NULL, cluster, ssc = NULL, att
 #' @param fixef.force_exact Logical, default is `FALSE`. If there are 2 or more fixed-effects,
 #' these fixed-effects they can be irregular, meaning they can provide the same information.
 #' If so, the "real" number of parameters should be lower than the total number of
-#' fixed-effects. If `fixef.force_exact = TRUE`, then [`fixef.fixest`] is first run to
+#' fixed-effects. If `fixef.force_exact = TRUE`, then [`fixef.fixest2`] is first run to
 #' determine the exact number of parameters among the fixed-effects. Mostly, panels of
 #' the type individual-firm require `fixef.force_exact = TRUE` (but it adds computational costs).
 #' @param cluster.adj Logical scalar, default is `TRUE`. How to make the small sample correction
@@ -1081,8 +1081,8 @@ vcov.fixest <- function(object, vcov = NULL, se = NULL, cluster, ssc = NULL, att
 #'
 #' @details
 #'
-#' The following vignette: [On standard-errors](https://lrberge.github.io/fixest/articles/standard_errors.html),
-#' describes in details how the standard-errors are computed in `fixest` and how you can
+#' The following vignette: [On standard-errors](https://lrberge.github.io/fixest2/articles/standard_errors.html),
+#' describes in details how the standard-errors are computed in `fixest2` and how you can
 #' replicate standard-errors from other software.
 #'
 #' @return
@@ -1092,7 +1092,7 @@ vcov.fixest <- function(object, vcov = NULL, se = NULL, cluster, ssc = NULL, att
 #' Laurent Berge
 #'
 #' @seealso
-#' [`summary.fixest`], [`vcov.fixest`]
+#' [`summary.fixest2`], [`vcov.fixest2`]
 #'
 #' @examples
 #'
@@ -1198,9 +1198,9 @@ ssc <- function(adj = TRUE, fixef.K = "nested", cluster.adj = TRUE, cluster.df =
 #' @export
 dof <- function(adj = TRUE, fixef.K = "nested", cluster.adj = TRUE, cluster.df = "min",
                 t.df = "min", fixef.force_exact = FALSE) {
-  if (is.null(getOption("fixest_warn_dof"))) {
+  if (is.null(getOption("fixest2_warn_dof"))) {
     warning("The function 'dof' is deprecated. Please use function 'ssc' instead.")
-    options(fixest_warn_dof = TRUE)
+    options(fixest2_warn_dof = TRUE)
   }
 
   ssc(
@@ -1217,11 +1217,11 @@ dof <- function(adj = TRUE, fixef.K = "nested", cluster.adj = TRUE, cluster.df =
 
 #' Clustered VCOV
 #'
-#' Computes the clustered VCOV of `fixest` objects.
+#' Computes the clustered VCOV of `fixest2` objects.
 #'
-#' @inheritParams vcov.fixest
+#' @inheritParams vcov.fixest2
 #'
-#' @param x A `fixest` object.
+#' @param x A `fixest2` object.
 #' @param cluster Either i) a character vector giving the names of the variables onto which to
 #' cluster, or ii) a formula giving those names, or iii) a vector/list/data.frame giving the hard
 #' values of the clusters. Note that in cases i) and ii) the variables are fetched directly in the
@@ -1230,13 +1230,13 @@ dof <- function(adj = TRUE, fixef.K = "nested", cluster.adj = TRUE, cluster.df =
 #' sample correction.
 #'
 #' @return
-#' If the first argument is a `fixest` object, then a VCOV is returned (i.e. a symmetric matrix).
+#' If the first argument is a `fixest2` object, then a VCOV is returned (i.e. a symmetric matrix).
 #'
-#' If the first argument is not a `fixest` object, then a) implicitly the arguments are shifted to
+#' If the first argument is not a `fixest2` object, then a) implicitly the arguments are shifted to
 #' the left (i.e. `vcov_cluster(~var1 + var2)` is equivalent to
 #' `vcov_cluster(cluster = ~var1 + var2)`) and b) a VCOV-*request* is returned and NOT a VCOV.
-#' That VCOV-request can then be used in the argument `vcov` of various `fixest`
-#' functions (e.g. [`vcov.fixest`] or even in the estimation calls).
+#' That VCOV-request can then be used in the argument `vcov` of various `fixest2`
+#' functions (e.g. [`vcov.fixest2`] or even in the estimation calls).
 #'
 #' @author
 #' Laurent Berge
@@ -1352,7 +1352,7 @@ vcov_cluster <- function(x, cluster = NULL, ssc = NULL, vcov_fix = TRUE) {
       vcov = vcov, vcov_vars = vcov_vars,
       var_names_all = var_names_all, ssc = ssc
     )
-    class(vcov_request) <- "fixest_vcov_request"
+    class(vcov_request) <- "fixest2_vcov_request"
   } else {
     # Everything can fit into a vcov formula
     vcov_request <- vcov
@@ -1378,7 +1378,7 @@ vcov_cluster <- function(x, cluster = NULL, ssc = NULL, vcov_fix = TRUE) {
 #' a panel setting (when the argument 'unit' is not missing), and Driscoll-Kraay.
 #'
 #' The functions on this page without the prefix "vcov_" do not compute VCOVs directly but
-#' are meant to be used in the argument `vcov` of `fixest` functions (e.g. in [`vcov.fixest`]
+#' are meant to be used in the argument `vcov` of `fixest2` functions (e.g. in [`vcov.fixest2`]
 #' or even in the estimation calls).
 #'
 #' Note that for Driscoll-Kraay VCOVs, to ensure its properties the number of periods should
@@ -1418,12 +1418,12 @@ vcov_cluster <- function(x, cluster = NULL, ssc = NULL, vcov_fix = TRUE) {
 #' *Journal of Statistical Software*, 82(3). doi:10.18637/jss.v082.i03.
 #'
 #' @return
-#' If the first argument is a `fixest` object, then a VCOV is returned (i.e. a symmetric matrix).
+#' If the first argument is a `fixest2` object, then a VCOV is returned (i.e. a symmetric matrix).
 #'
-#' If the first argument is not a `fixest` object, then a) implicitly the arguments are shifted to
+#' If the first argument is not a `fixest2` object, then a) implicitly the arguments are shifted to
 #' the left (i.e. `vcov_DK(~year)` is equivalent to `vcov_DK(time = ~year)`) and b) a
 #' VCOV-*request* is returned and NOT a VCOV. That VCOV-request can then be used in the argument
-#' `vcov` of various `fixest` functions (e.g. [`vcov.fixest`] or even in the estimation calls).
+#' `vcov` of various `fixest2` functions (e.g. [`vcov.fixest2`] or even in the estimation calls).
 #'
 #' @examples
 #'
@@ -1488,7 +1488,7 @@ vcov_DK <- function(x, time = NULL, lag = NULL, ssc = NULL, vcov_fix = TRUE) {
   if (!is.null(lag) || !is.null(ssc)) {
     extra_args <- list(lag = lag)
     vcov_request <- list(vcov = vcov, ssc = ssc, extra_args = extra_args)
-    class(vcov_request) <- "fixest_vcov_request"
+    class(vcov_request) <- "fixest2_vcov_request"
   } else {
     # Everything can fit into a vcov formula
     vcov_request <- vcov
@@ -1546,7 +1546,7 @@ vcov_NW <- function(x, unit = NULL, time = NULL, lag = NULL, ssc = NULL, vcov_fi
   if (!is.null(lag) || !is.null(ssc)) {
     extra_args <- list(lag = lag)
     vcov_request <- list(vcov = vcov, ssc = ssc, extra_args = extra_args)
-    class(vcov_request) <- "fixest_vcov_request"
+    class(vcov_request) <- "fixest2_vcov_request"
   } else {
     # Everything can fit into a vcov formula
     vcov_request <- vcov
@@ -1577,7 +1577,7 @@ vcov_NW <- function(x, unit = NULL, time = NULL, lag = NULL, ssc = NULL, vcov_fi
 #' by the user.
 #'
 #' The function `conley` does not compute VCOVs directly but is meant to be used in the argument
-#' `vcov` of `fixest` functions (e.g. in [`vcov.fixest`] or even in the estimation calls).
+#' `vcov` of `fixest2` functions (e.g. in [`vcov.fixest2`] or even in the estimation calls).
 #'
 #' @inheritParams vcov_cluster
 #'
@@ -1597,13 +1597,13 @@ vcov_NW <- function(x, unit = NULL, time = NULL, lag = NULL, ssc = NULL, vcov_fi
 #' precise than triangular but is a bit more intensive computationally.
 #'
 #' @return
-#' If the first argument is a `fixest` object, then a VCOV is returned (i.e. a symmetric matrix).
+#' If the first argument is a `fixest2` object, then a VCOV is returned (i.e. a symmetric matrix).
 #'
-#' If the first argument is not a `fixest` object, then a) implicitly the arguments are shifted to
+#' If the first argument is not a `fixest2` object, then a) implicitly the arguments are shifted to
 #' the left (i.e. `vcov_conley("lat", "long")` is equivalent to
 #' `vcov_conley(lat = "lat", lon = "long")`) and b) a VCOV-*request* is returned and NOT a VCOV.
-#' That VCOV-request can then be used in the argument `vcov` of various `fixest` functions
-#' (e.g. [`vcov.fixest`] or even in the estimation calls).
+#' That VCOV-request can then be used in the argument `vcov` of various `fixest2` functions
+#' (e.g. [`vcov.fixest2`] or even in the estimation calls).
 #'
 #' @references
 #' Conley TG (1999). "GMM Estimation with Cross Sectional Dependence", *Journal of Econometrics*, 92, 1-45.
@@ -1660,7 +1660,7 @@ vcov_conley <- function(x, lat = NULL, lon = NULL, cutoff = NULL, pixel = 0,
 
   # pixel
   check_value(pixel, "numeric scalar GE{0}",
-    .prefix = "In vcov.fixest, Conley VCOV cannot be computed: the argument 'pixel'"
+    .prefix = "In vcov.fixest2, Conley VCOV cannot be computed: the argument 'pixel'"
   )
 
   # distance
@@ -1671,7 +1671,7 @@ vcov_conley <- function(x, lat = NULL, lon = NULL, cutoff = NULL, pixel = 0,
 
   extra_args <- list(cutoff = cutoff, pixel = pixel, distance = distance)
   vcov_request <- list(vcov = vcov, ssc = ssc, extra_args = extra_args)
-  class(vcov_request) <- "fixest_vcov_request"
+  class(vcov_request) <- "fixest2_vcov_request"
 
   if (IS_REQUEST) {
     res <- vcov_request
@@ -1881,7 +1881,7 @@ vcov_setup <- function() {
   )
   # vcov_conley_hac_setup)
 
-  options(fixest_vcov_builtin = all_vcov)
+  options(fixest2_vcov_builtin = all_vcov)
 }
 
 
@@ -2058,7 +2058,7 @@ vcov_newey_west_internal <- function(bread, scores, vars, ssc, sandwich, nthread
     dup <- cpp_find_duplicates(unit_ro, time_ro)
 
     if (dup$n_dup > 0) {
-      stop("In vcov.fixest, Newey-West VCOV cannot be computed: there are (unit x time) duplicates. You have to sort that out first, eg by creating new units free of duplicates or dropping duplicates. Or you can use a Driscoll-Kraay VCOV for which duplicates does not matter.", call. = FALSE)
+      stop("In vcov.fixest2, Newey-West VCOV cannot be computed: there are (unit x time) duplicates. You have to sort that out first, eg by creating new units free of duplicates or dropping duplicates. Or you can use a Driscoll-Kraay VCOV for which duplicates does not matter.", call. = FALSE)
     }
 
     scores_ro <- scores[my_order, , drop = FALSE]
@@ -2071,7 +2071,7 @@ vcov_newey_west_internal <- function(bread, scores, vars, ssc, sandwich, nthread
     )
   } else {
     if (max(time) < length(time)) {
-      stop("In vcov.fixest, Newey-West VCOV cannot be computed: there are time duplicates. You may provide a panel identifier (if relevant) to sort that out. Or you can use a Driscoll-Kraay VCOV for which duplicates does not matter.", call. = FALSE)
+      stop("In vcov.fixest2, Newey-West VCOV cannot be computed: there are time duplicates. You may provide a panel identifier (if relevant) to sort that out. Or you can use a Driscoll-Kraay VCOV for which duplicates does not matter.", call. = FALSE)
     }
 
     my_order <- order(time)
@@ -2085,9 +2085,9 @@ vcov_newey_west_internal <- function(bread, scores, vars, ssc, sandwich, nthread
       # we drop the intercept (except if there's only the intercept)
       is_intercept <- (colnames(scores_ro) == "(Intercept)") & (ncol(scores_ro) > 1)
       if (any(is_intercept)) {
-        x <- structure(list(scores = scores_ro[, !is_intercept, drop = FALSE]), class = "fixest")
+        x <- structure(list(scores = scores_ro[, !is_intercept, drop = FALSE]), class = "fixest2")
       } else {
-        x <- structure(list(scores = scores_ro), class = "fixest")
+        x <- structure(list(scores = scores_ro), class = "fixest2")
       }
 
       lag <- sandwich::bwNeweyWest(x, weights = 1)
@@ -2171,7 +2171,7 @@ vcov_conley_internal <- function(bread, scores, vars, sandwich, nthreads,
   # lon
   lon_range <- range(lon)
   if (lon_range[1] < -360 || lon_range[2] > 360 || diff(lon_range) > 360) {
-    stop("In vcov.fixest, Conley VCOV cannot be computed: the longitude is outside the [-180, 180], [0, 360] or [-360, 0] range (current range is [", fsignif(lon_range[1]), ", ", fsignif(lon_range[2]), "]).", call. = FALSE)
+    stop("In vcov.fixest2, Conley VCOV cannot be computed: the longitude is outside the [-180, 180], [0, 360] or [-360, 0] range (current range is [", fsignif(lon_range[1]), ", ", fsignif(lon_range[2]), "]).", call. = FALSE)
   }
 
   # Later:
@@ -2186,7 +2186,7 @@ vcov_conley_internal <- function(bread, scores, vars, sandwich, nthreads,
   # lat
   lat_range <- range(lat)
   if (lat_range[1] < -180 || lat_range[2] > 180 || diff(lat_range) > 180) {
-    stop("In vcov.fixest, Conley VCOV cannot be computed: the latitude is outside the [-90, 90], [0, 180] or [-180, 0] range (current range is [", fsignif(lat_range[1]), ", ", fsignif(lat_range[2]), "]).", call. = FALSE)
+    stop("In vcov.fixest2, Conley VCOV cannot be computed: the latitude is outside the [-90, 90], [0, 180] or [-180, 0] range (current range is [", fsignif(lat_range[1]), ", ", fsignif(lat_range[2]), "]).", call. = FALSE)
   }
 
   if (lat_range[2] > 90) {
@@ -2205,7 +2205,7 @@ vcov_conley_internal <- function(bread, scores, vars, sandwich, nthreads,
 
   # pixel
   check_value(pixel, "numeric scalar GE{0}",
-    .prefix = "In vcov.fixest, Conley VCOV cannot be computed: the argument 'pixel'"
+    .prefix = "In vcov.fixest2, Conley VCOV cannot be computed: the argument 'pixel'"
   )
 
   # distance
@@ -2307,7 +2307,7 @@ oldargs_to_vcov <- function(se, cluster, vcov, .vcov = NULL) {
     vcov <- .vcov
     attr(vcov, "deparsed_arg") <- fetch_arg_deparse(".vcov")
   } else {
-    all_vcov <- getOption("fixest_vcov_builtin")
+    all_vcov <- getOption("fixest2_vcov_builtin")
     all_vcov_names <- unlist(lapply(all_vcov, `[[`, "name"))
     all_vcov_names <- all_vcov_names[nchar(all_vcov_names) > 0]
 
@@ -2394,7 +2394,7 @@ slide_args <- function(x, ...) {
 
   if (!"x" %in% names(sc)) {
     if (!missing(x)) {
-      if (inherits(x, "fixest")) {
+      if (inherits(x, "fixest2")) {
         # OK, regular x
       } else {
         # => implicit specification
@@ -2422,7 +2422,7 @@ slide_args <- function(x, ...) {
     if (missing(x)) {
       assign("x", NULL, parent.frame())
     } else {
-      check_arg(x, "class(fixest)", .up = 1)
+      check_arg(x, "class(fixest2)", .up = 1)
     }
   }
 }
@@ -2437,11 +2437,11 @@ check_set_cutoff <- function(cutoff) {
 
   if (is.null(cutoff)) {
     return(NULL)
-    # stop("In vcov.fixest, Conley VCOV cannot be computed: the argument 'cutoff' (the cutoff distance in km) must be provided.", call. = FALSE)
+    # stop("In vcov.fixest2, Conley VCOV cannot be computed: the argument 'cutoff' (the cutoff distance in km) must be provided.", call. = FALSE)
   }
 
   check_value(cutoff, "numeric scalar GE{0} | character scalar",
-    .message = "In vcov.fixest, Conley VCOV cannot be computed: the argument 'cutoff' must be a numeric for kilometers, or a number in character form with the 'mi' suffix for miles (ex: 100 means 100km, '100mi' means 100 miles)."
+    .message = "In vcov.fixest2, Conley VCOV cannot be computed: the argument 'cutoff' must be a numeric for kilometers, or a number in character form with the 'mi' suffix for miles (ex: 100 means 100km, '100mi' means 100 miles)."
   )
 
   metric <- attr(cutoff, "metric")
@@ -2449,7 +2449,7 @@ check_set_cutoff <- function(cutoff) {
 
   if (is.character(cutoff)) {
     if (!grepl("^[[:digit:]]+ ?((m|mi|mil|mile|miles)|(k|km))?$", cutoff)) {
-      stop("In vcov.fixest, Conley VCOV cannot be computed: the argument 'cutoff', equal to '", cutoff, "' is not valid. It must be either a numeric scalar or a number in character form with the suffix 'mi' (ex: 100 means 100km, '100mi' means 100 miles).", call. = FALSE)
+      stop("In vcov.fixest2, Conley VCOV cannot be computed: the argument 'cutoff', equal to '", cutoff, "' is not valid. It must be either a numeric scalar or a number in character form with the suffix 'mi' (ex: 100 means 100km, '100mi' means 100 miles).", call. = FALSE)
     }
 
     if (grepl("k", cutoff)) {
@@ -2472,14 +2472,14 @@ check_set_cutoff <- function(cutoff) {
 gen_vcov_aliases <- function() {
   # only for vcov functions having one or more main argument
 
-  all_vcov <- getOption("fixest_vcov_builtin")
+  all_vcov <- getOption("fixest2_vcov_builtin")
 
   fun_core <- '
 #\' @rdname __RDNAME__
 __FUN__ = function(__ARGS__){
   extra_args = list(__EXTRA__)
   vcov_request = list(vcov = "__VCOV__", extra_args = extra_args)
-  class(vcov_request) = "fixest_vcov_request"
+  class(vcov_request) = "fixest2_vcov_request"
   vcov_request
 }'
 
@@ -2598,7 +2598,7 @@ cutoff_deduce <- function(lat, lon) {
 is_function_in_it <- function(x) {
   if (is.function(x)) {
     return(TRUE)
-  } else if (is.list(x) && !inherits(x, "fixest_vcov_request") && length(x) > 0 && is.function(x[[1]])) {
+  } else if (is.list(x) && !inherits(x, "fixest2_vcov_request") && length(x) > 0 && is.function(x[[1]])) {
     return(TRUE)
   }
   return(FALSE)
@@ -2611,21 +2611,21 @@ is_function_in_it <- function(x) {
 
 
 #' @rdname ssc
-#'
 #' @param ssc.type An object of class `ssc.type` obtained with the function [`ssc`].
+#' @export
 setFixest_ssc <- function(ssc.type = ssc()) {
   if (!"ssc.type" %in% class(ssc.type)) {
     stop("The argument 'ssc' must be an object created by the function ssc().")
   }
 
-  options("fixest_ssc" = ssc.type)
+  options("fixest2_ssc" = ssc.type)
 }
 
 #' @rdname ssc
 getFixest_ssc <- function() {
-  ssc <- getOption("fixest_ssc")
+  ssc <- getOption("fixest2_ssc")
   if (!"ssc.type" %in% class(ssc)) {
-    stop("The value of getOption(\"fixest_ssc\") is currently not legal. Please use function setFixest_dict to set it to an appropriate value.")
+    stop("The value of getOption(\"fixest2_ssc\") is currently not legal. Please use function setFixest_dict to set it to an appropriate value.")
   }
 
   ssc
@@ -2635,7 +2635,7 @@ getFixest_ssc <- function() {
 #' Sets the default type of standard errors to be used
 #'
 #' This functions defines or extracts the default type of standard-errors to computed in
-#' `fixest` [`summary`][fixest::summary.fixest], and [`vcov`][fixest::vcov.fixest].
+#' `fixest2` [`summary`][fixest2::summary.fixest2], and [`vcov`][fixest2::vcov.fixest2].
 #'
 #' @param no_FE Character scalar equal to either: `"iid"` (default), or `"hetero"`. The type
 #' of standard-errors to use by default for estimations without fixed-effects.
@@ -2695,7 +2695,7 @@ setFixest_vcov <- function(no_FE = "iid", one_FE = "cluster", two_FE = "cluster"
   check_set_arg(all, "NULL match(iid, hetero)")
   check_set_arg(reset, "logical scalar")
 
-  opts <- getOption("fixest_vcov_default")
+  opts <- getOption("fixest2_vcov_default")
   if (is.null(opts) || !is.list(opts) || reset) {
     opts <- list(no_FE = "iid", one_FE = "cluster", two_FE = "cluster", panel = "cluster")
   }
@@ -2711,16 +2711,16 @@ setFixest_vcov <- function(no_FE = "iid", one_FE = "cluster", two_FE = "cluster"
     opts[[a]] <- eval(as.name(a))
   }
 
-  options(fixest_vcov_default = opts)
+  options(fixest2_vcov_default = opts)
 }
 
 #' @rdname setFixest_vcov
 getFixest_vcov <- function() {
-  vcov_default <- getOption("fixest_vcov_default")
+  vcov_default <- getOption("fixest2_vcov_default")
 
   if (is.null(vcov_default)) {
     vcov_default <- list(no_FE = "iid", one_FE = "cluster", two_FE = "cluster", panel = "cluster")
-    options(fixest_vcov_default = vcov_default)
+    options(fixest2_vcov_default = vcov_default)
     return(vcov_default)
   }
 

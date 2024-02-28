@@ -15,7 +15,7 @@ vignette: >
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-library(fixest)
+library(fixest2)
 setFixest_nthreads(1)
 ```
 

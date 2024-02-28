@@ -16,7 +16,7 @@ pvalue(object, ...)
 tstat(object, ...)
 }
 \arguments{
-\item{object}{An estimation (fitted model object), e.g. a \code{fixest} object.}
+\item{object}{An estimation (fitted model object), e.g. a \code{fixest2} object.}
 
 \item{...}{Other arguments to the methods.}
 }
@@ -33,5 +33,5 @@ coeftable(est)
 
 }
 \seealso{
-Please look at the \code{\link{coeftable.fixest}} page for more detailed information.
+Please look at the \code{\link{coeftable.fixest2}} page for more detailed information.
 }

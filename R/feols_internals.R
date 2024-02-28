@@ -164,10 +164,10 @@ feols.fit <- function(y, X, fixef_df, vcov, offset, split, fsplit, split.keep, s
   time_start <- proc.time()
 
   if (missing(env)) {
-    set_defaults("fixest_estimation")
+    set_defaults("fixest2_estimation")
     call_env <- new.env(parent = parent.frame())
 
-    env <- try(fixest_env(
+    env <- try(fixest2_env(
       y = y, X = X, fixef_df = fixef_df, vcov = vcov, offset = offset,
       split = split, fsplit = fsplit,
       split.keep = split.keep, split.drop = split.drop,
@@ -180,8 +180,8 @@ feols.fit <- function(y, X, fixef_df, vcov, offset, split, fsplit, split.keep, s
       origin = "feols.fit",
       mc_origin = match.call(), call_env = call_env, ...
     ), silent = TRUE)
-  } else if ((r <- !is.environment(env)) || !isTRUE(env$fixest_env)) {
-    stop("Argument 'env' must be an environment created by a fixest estimation. Currently it is not ", ifelse(r, "an", "a 'fixest'"), " environment.")
+  } else if ((r <- !is.environment(env)) || !isTRUE(env$fixest2_env)) {
+    stop("Argument 'env' must be an environment created by a fixest2 estimation. Currently it is not ", ifelse(r, "an", "a 'fixest2'"), " environment.")
   }
 
   if ("try-error" %in% class(env)) {
@@ -204,12 +204,12 @@ feols.fit <- function(y, X, fixef_df, vcov, offset, split, fsplit, split.keep, s
   res
 }
 
-#' Estimates a `fixest` estimation from a `fixest` environment
+#' Estimates a `fixest2` estimation from a `fixest2` environment
 #'
-#' This is a function advanced users which allows to estimate any `fixest` estimation from a
-#' `fixest` environment obtained with `only.env = TRUE` in a `fixest` estimation.
+#' This is a function advanced users which allows to estimate any `fixest2` estimation from a
+#' `fixest2` environment obtained with `only.env = TRUE` in a `fixest2` estimation.
 #'
-#' @param env An environment obtained from a `fixest` estimation with `only.env = TRUE`. This is
+#' @param env An environment obtained from a `fixest2` estimation with `only.env = TRUE`. This is
 #'  intended for advanced users so there is no error handling: any other kind of input will
 #' fail with a poor error message.
 #' @param y A vector representing the dependent variable. Should be of the same length
@@ -226,13 +226,13 @@ feols.fit <- function(y, X, fixef_df, vcov, offset, split, fsplit, split.keep, s
 #'
 #' @return
 #'
-#' It returns the results of a `fixest` estimation: the one that was summoned when
+#' It returns the results of a `fixest2` estimation: the one that was summoned when
 #' obtaining the environment.
 #'
 #' @details
 #'
 #' This function has been created for advanced users, mostly to avoid overheads
-#' when making simulations with `fixest`.
+#' when making simulations with `fixest2`.
 #'
 #' How can it help you make simulations? First make a core estimation with `only.env = TRUE`,
 #' and usually with `only.coef = TRUE` (to avoid having extra things that take time to compute).
@@ -241,7 +241,7 @@ feols.fit <- function(y, X, fixef_df, vcov, offset, split, fsplit, split.keep, s
 #' then you can make the R session crash because there is no more error-handling!
 #' Finally estimate with `est_env(env = core_env)` and store the results.
 #'
-#' Instead of `est_env`, you could use directly `fixest` estimations too, like `feols`,
+#' Instead of `est_env`, you could use directly `fixest2` estimations too, like `feols`,
 #' since they accept the `env` argument. The function `est_env` is only here to add a
 #' bit of generality to avoid the trouble to the user to write conditions
 #' (look at the source, it's just a one liner).
@@ -282,7 +282,7 @@ feols.fit <- function(y, X, fixef_df, vcov, offset, split, fsplit, split.keep, s
 #' bboot <- function(x, n_sim = 100) {
 #'   # We bootstrap on the weights
 #'   # Works with fixed-effects/IVs
-#'   #  and with any fixest function that accepts weights
+#'   #  and with any fixest2 function that accepts weights
 #'
 #'   core_env <- update(x, only.coef = TRUE, only.env = TRUE)
 #'   n_obs <- x$nobs

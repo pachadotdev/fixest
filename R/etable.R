@@ -11,12 +11,12 @@
 #' table or a `data.frame`. Note that you will need the `booktabs` package for the Latex table to
 #' render properly. See [`setFixest_etable`] to set the default values, and [`style.tex`] to customize Latex output.
 #'
-#' @inheritParams summary.fixest
+#' @inheritParams summary.fixest2
 #' @inheritParams setFixest_nthreads
 #'
-#' @param ... Used to capture different `fixest` estimation objects (obtained with [`femlm`],
+#' @param ... Used to capture different `fixest2` estimation objects (obtained with [`femlm`],
 #' [`feols`] or [`feglm`]). Note that any other type of element is discarded. Note that you can
-#' give a list of `fixest` objects.
+#' give a list of `fixest2` objects.
 #' @param digits Integer or character scalar. Default is 4 and represents the number of significant
 #' digits to be displayed for the coefficients and standard-errors. To apply rounding instead of
 #' significance use, e.g., `digits = "r3"` which will round at the first 3 decimals. If character,
@@ -205,7 +205,7 @@
 #' fit statistics section.
 #' @param reset (`setFixest_etable` only.) Logical, default is `FALSE`. If `TRUE`, this will reset
 #' all the default values that were already set by the user in previous calls.
-#' @param .vcov A function to be used to compute the standard-errors of each fixest object. You can
+#' @param .vcov A function to be used to compute the standard-errors of each fixest2 object. You can
 #' pass extra arguments to this function using the argument `.vcov_args`. See the example.
 #' @param .vcov_args A list containing arguments to be passed to the function `.vcov`.
 #' @param poly_dict Character vector, default is `c("", " square", " cube")`. When raw polynomials
@@ -345,7 +345,7 @@
 #'
 #' You can permanently change the way your table looks in Latex by using `setFixest_etable`.
 #' The following vignette gives an example as well as illustrates how to use the `style` and
-#' postprocessing functions: [Exporting estimation tables](https://lrberge.github.io/fixest/articles/exporting_tables.html).
+#' postprocessing functions: [Exporting estimation tables](https://lrberge.github.io/fixest2/articles/exporting_tables.html).
 #'
 #' When the argument `postprocess.tex` is not missing, two additional tags will be included in the
 #' character vector returned by `etable`: `"%start:tab\\n"` and `"%end:tab\\n"`. These can be used
@@ -497,8 +497,8 @@
 #' For styling the table: [`setFixest_etable`], [`style.tex`], [`style.df`].
 #'
 #' See also the main estimation functions [`femlm`], [`feols`] or [`feglm`].
-#' Use [`summary.fixest`]
-#' to see the results with the appropriate standard-errors, [`fixef.fixest`] to extract the
+#' Use [`summary.fixest2`]
+#' to see the results with the appropriate standard-errors, [`fixef.fixest2`] to extract the
 #' fixed-effects coefficients.
 #'
 #' @author
@@ -897,36 +897,36 @@ etable <- function(..., vcov = NULL, stage = 2, agg = NULL,
   #
 
   if ("subtitles" %in% names(dots)) {
-    if (is.null(getOption("fixest_etable_arg_subtitles"))) {
+    if (is.null(getOption("fixest2_etable_arg_subtitles"))) {
       warning("The argument 'subtitles' is deprecated. Please use 'headers' instead.")
-      options(fixest_etable_arg_subtitles = TRUE)
+      options(fixest2_etable_arg_subtitles = TRUE)
     }
     headers <- dots$subtitles
     dots$subtitles <- NULL
   }
 
   if ("extraline" %in% names(dots)) {
-    if (is.null(getOption("fixest_etable_arg_extraline"))) {
+    if (is.null(getOption("fixest2_etable_arg_extraline"))) {
       warning("The argument 'extraline' is deprecated. Please use 'extralines' instead (note the last 's'!).")
-      options(fixest_etable_arg_extraline = TRUE)
+      options(fixest2_etable_arg_extraline = TRUE)
     }
     extralines <- dots$extraline
     dots$extraline <- NULL
   }
 
   if ("sdBelow" %in% names(dots)) {
-    if (is.null(getOption("fixest_etable_arg_sdBelow"))) {
+    if (is.null(getOption("fixest2_etable_arg_sdBelow"))) {
       warning("The argument 'sdBelow' is deprecated. Please use 'se.below' instead.")
-      options(fixest_etable_arg_sdBelow = TRUE)
+      options(fixest2_etable_arg_sdBelow = TRUE)
     }
     se.below <- dots$sdBelow
     dots$sdBelow <- NULL
   }
 
   if ("signifCode" %in% names(dots)) {
-    if (is.null(getOption("fixest_etable_arg_signifCode"))) {
+    if (is.null(getOption("fixest2_etable_arg_signifCode"))) {
       warning("The argument 'signifCode' is deprecated. Please use 'signif.code' instead.")
-      options(fixest_etable_arg_signifCode = TRUE)
+      options(fixest2_etable_arg_signifCode = TRUE)
     }
     signif.code <- dots$signifCode
     dots$signifCode <- NULL
@@ -954,7 +954,7 @@ etable <- function(..., vcov = NULL, stage = 2, agg = NULL,
 
 
   # Arguments that can be set globally
-  opts <- getOption("fixest_etable")
+  opts <- getOption("fixest2_etable")
 
   args_global <- c("postprocess.tex", "postprocess.df", "view", "markdown", "page.width")
   for (arg in setdiff(args_global, names(mc))) {
@@ -1040,12 +1040,12 @@ etable <- function(..., vcov = NULL, stage = 2, agg = NULL,
   }
 
   for (i in seq_along(dots)) {
-    if (!is_fixest_model(dots[[i]]) && !(is.list(dots[[i]]) && is_fixest_model(dots[[i]][[1]]))) {
+    if (!is_fixest2_model(dots[[i]]) && !(is.list(dots[[i]]) && is_fixest2_model(dots[[i]][[1]]))) {
       msg <- ""
       if (!is.null(names(dots))) {
         msg <- paste0(" (named '", names(dots)[i], "')")
       }
-      stop("The ", n_th(i), " element of '...'", msg, " is not valid: it should be a fixest object or a list of fixest objects, it is neither.")
+      stop("The ", n_th(i), " element of '...'", msg, " is not valid: it should be a fixest2 object or a list of fixest2 objects, it is neither.")
     }
   }
 
@@ -1286,7 +1286,7 @@ gen_etable_aliases <- function() {
     "tex = FALSE", coll_bis, ".up = 2)\n}"
   )
 
-  esttable_rox <- "#' @describeIn etable Exports the results of multiple `fixest` estimations in a Latex table."
+  esttable_rox <- "#' @describeIn etable Exports the results of multiple `fixest2` estimations in a Latex table."
 
   #
   # esttex
@@ -1308,7 +1308,7 @@ gen_etable_aliases <- function() {
     "tex = TRUE", coll_bis, ".up = 2)\n}"
   )
 
-  esttex_rox <- "#' @describeIn etable Exports the results of multiple `fixest` estimations in a Latex table."
+  esttex_rox <- "#' @describeIn etable Exports the results of multiple `fixest2` estimations in a Latex table."
 
   # Writing the functions
   intro <- c("# Do not edit by hand\n# => aliases to the function etable")
@@ -1347,11 +1347,11 @@ results2formattedList <- function(dots, vcov = NULL, ssc = getFixest_ssc(), stag
 
   # Setting the default values (we take extra care for "style")
   if (tex) {
-    check_arg(style.tex, "NULL class(fixest_style_tex)")
+    check_arg(style.tex, "NULL class(fixest2_style_tex)")
     # The variable style will be changed via the defaults
     style_user <- style.tex
   } else {
-    check_arg(style.df, "NULL class(fixest_style_df)")
+    check_arg(style.df, "NULL class(fixest2_style_df)")
     # The variable style will be changed via the defaults
     style_user <- style.df
   }
@@ -1361,7 +1361,7 @@ results2formattedList <- function(dots, vcov = NULL, ssc = getFixest_ssc(), stag
   # Setting the default
   #
 
-  opts <- getOption("fixest_etable")
+  opts <- getOption("fixest2_etable")
   sysOrigin <- sys.parent(.up)
   if (length(opts) > 0) {
     args_usr <- setdiff(names(mc), c("style.tex", "style.df"))
@@ -1377,13 +1377,13 @@ results2formattedList <- function(dots, vcov = NULL, ssc = getFixest_ssc(), stag
   # Getting the default style values
   if (tex) {
     if (!"style.tex" %in% names(opts)) {
-      style <- fixest::style.tex(main = "base")
+      style <- fixest2::style.tex(main = "base")
     } else {
       style <- style.tex
     }
   } else if (!tex) {
     if (!"style.df" %in% names(opts)) {
-      style <- fixest::style.df(default = TRUE)
+      style <- fixest2::style.df(default = TRUE)
     } else {
       # We rename style.df into style
       style <- style.df
@@ -1824,7 +1824,7 @@ results2formattedList <- function(dots, vcov = NULL, ssc = getFixest_ssc(), stag
   for (i in 1:n_dots) {
     di <- dots[[i]]
 
-    if ("fixest" %in% class(di)) {
+    if ("fixest2" %in% class(di)) {
       all_models[[k]] <- di
       if (any(class(dots_call[[i]]) %in% c("call", "name"))) {
         model_names[[k]] <- deparse_long(dots_call[[i]])
@@ -1833,11 +1833,11 @@ results2formattedList <- function(dots, vcov = NULL, ssc = getFixest_ssc(), stag
       }
 
       k <- k + 1
-    } else if (any(c("list", "fixest_list", "fixest_multi") %in% class(di))) {
-      # we get into this list to get the fixest objects
+    } else if (any(c("list", "fixest2_list", "fixest2_multi") %in% class(di))) {
+      # we get into this list to get the fixest2 objects
       types <- sapply(di, function(x) class(x)[1])
-      qui <- which(types %in% c("fixest", "fixest_multi"))
-      is_multi <- inherits(di, "fixest_multi")
+      qui <- which(types %in% c("fixest2", "fixest2_multi"))
+      is_multi <- inherits(di, "fixest2_multi")
 
       for (m in qui) {
         mod <- di[[m]]
@@ -1862,7 +1862,7 @@ results2formattedList <- function(dots, vcov = NULL, ssc = getFixest_ssc(), stag
           }
         }
 
-        if (inherits(mod, "fixest_multi")) {
+        if (inherits(mod, "fixest2_multi")) {
           for (j in seq_along(mod)) {
             all_models[[k]] <- mod[[j]]
             model_names[[k]] <- paste0(mod_name, ".", j)
@@ -1870,7 +1870,7 @@ results2formattedList <- function(dots, vcov = NULL, ssc = getFixest_ssc(), stag
             k <- k + 1
           }
         } else {
-          # regular fixest or from fixest_list
+          # regular fixest2 or from fixest2_list
           all_models[[k]] <- mod
           model_names[[k]] <- mod_name
 
@@ -1885,7 +1885,7 @@ results2formattedList <- function(dots, vcov = NULL, ssc = getFixest_ssc(), stag
     }
   }
 
-  if (length(all_models) == 0) stop_up("Not any 'fixest' model as argument!")
+  if (length(all_models) == 0) stop_up("Not any 'fixest2' model as argument!")
 
   n_models <- length(all_models)
 
@@ -2096,7 +2096,7 @@ results2formattedList <- function(dots, vcov = NULL, ssc = getFixest_ssc(), stag
     }
 
     if (is_mult) {
-      if ("fixest_multi" %in% class(x)) {
+      if ("fixest2_multi" %in% class(x)) {
         for (i in seq_along(x)) {
           all_models_bis[[length(all_models_bis) + 1]] <- x[[i]]
         }
@@ -4671,7 +4671,7 @@ setFixest_etable <- function(digits = 4, digits.stats = 5, fitstat,
 
   check_set_arg(drop.section, "NULL multi match(fixef, slopes, stats)")
 
-  check_arg(style.tex, "NULL class(fixest_style_tex)")
+  check_arg(style.tex, "NULL class(fixest2_style_tex)")
 
   check_arg(postprocess.tex, postprocess.df, "NULL function arg(1,)")
 
@@ -4696,18 +4696,18 @@ setFixest_etable <- function(digits = 4, digits.stats = 5, fitstat,
   #
 
   # Getting the existing defaults
-  opts <- getOption("fixest_etable")
+  opts <- getOption("fixest2_etable")
 
   if (is.null(opts)) {
     # We first look at the "root" default
-    root_default <- renvir_get("fixest_etable")
+    root_default <- renvir_get("fixest2_etable")
     if (is.null(root_default)) {
       opts <- list()
     } else {
       opts <- root_default
     }
   } else if (!is.list(opts)) {
-    warning("Wrong formatting of option 'fixest_etable', all options are reset.")
+    warning("Wrong formatting of option 'fixest2_etable', all options are reset.")
     opts <- list()
   } else if (reset) {
     opts <- list()
@@ -4717,7 +4717,7 @@ setFixest_etable <- function(digits = 4, digits.stats = 5, fitstat,
   if (length(style.tex) > 0) {
     # We ensure we always have ALL components provided
     if (length(opts$style.tex) == 0) {
-      basic_style <- fixest::style.tex(main = "base")
+      basic_style <- fixest2::style.tex(main = "base")
     } else {
       basic_style <- opts$style.tex
     }
@@ -4726,11 +4726,11 @@ setFixest_etable <- function(digits = 4, digits.stats = 5, fitstat,
     style.tex <- basic_style
   }
 
-  check_arg(style.df, "NULL class(fixest_style_df)")
+  check_arg(style.df, "NULL class(fixest2_style_df)")
   if (length(style.df) > 0) {
     # We ensure we always have ALL components provided
     if (length(opts$style.df) == 0) {
-      basic_style <- fixest::style.df(default = TRUE)
+      basic_style <- fixest2::style.df(default = TRUE)
     } else {
       basic_style <- opts$style.df
     }
@@ -4748,24 +4748,24 @@ setFixest_etable <- function(digits = 4, digits.stats = 5, fitstat,
     opts[[v]] <- eval(as.name(v))
   }
 
-  options(fixest_etable = opts)
+  options(fixest2_etable = opts)
 
   # Saving at the project level if needed
   check_set_arg(save, "logical scalar | match(reset)")
   if (isTRUE(save)) {
-    renvir_update("fixest_etable", opts)
+    renvir_update("fixest2_etable", opts)
   } else if (identical(save, "reset")) {
-    renvir_update("fixest_etable", NULL)
+    renvir_update("fixest2_etable", NULL)
   }
 }
 
 #' @rdname etable
 getFixest_etable <- function() {
-  opts <- getOption("fixest_etable")
+  opts <- getOption("fixest2_etable")
   if (!is.list(opts)) {
-    warning("Wrong formatting of option 'fixest_etable', all options are reset.")
+    warning("Wrong formatting of option 'fixest2_etable', all options are reset.")
     opts <- list()
-    options(fixest_etable = opts)
+    options(fixest2_etable = opts)
   }
   opts
 }
@@ -5029,7 +5029,7 @@ style.tex <- function(main = "base", depvar.title, model.title, model.format, li
     res[[var]] <- eval(as.name(var))
   }
 
-  class(res) <- "fixest_style_tex"
+  class(res) <- "fixest2_style_tex"
 
   return(res)
 }
@@ -5093,7 +5093,7 @@ style.tex <- function(main = "base", depvar.title, model.title, model.format, li
 #' identical (since identical row names are forbidden in data.frames).
 #'
 #' @return
-#' It returns an object of class `fixest_style_df`.
+#' It returns an object of class `fixest2_style_df`.
 #'
 #' @examples
 #'
@@ -5158,7 +5158,7 @@ style.df <- function(depvar.title = "Dependent Var.:", fixef.title = "Fixed-Effe
     res[[var]] <- eval(as.name(var))
   }
 
-  class(res) <- "fixest_style_df"
+  class(res) <- "fixest2_style_df"
 
   return(res)
 }
@@ -5170,7 +5170,7 @@ style.df <- function(depvar.title = "Dependent Var.:", fixef.title = "Fixed-Effe
 #' that can be easily summoned in [`etable`].
 #'
 #' @param type A character scalar giving the type-name.
-#' @param fun A function to be applied to a `fixest` estimation. It must return a scalar.
+#' @param fun A function to be applied to a `fixest2` estimation. It must return a scalar.
 #' @param alias A character scalar. This is the alias to be used in lieu of the type name to
 #' form the row name.
 #'
@@ -5205,7 +5205,7 @@ extralines_register <- function(type, fun, alias) {
   # We check the type is not conflicting
   existing_types <- fitstat(give_types = TRUE)$types
 
-  opts <- getOption("fixest_extralines")
+  opts <- getOption("fixest2_extralines")
 
   if (type %in% setdiff(existing_types, names(opts))) {
     stop("The type name '", type, "' is the same as one of fitstat's built-in type. Please choose another one.")
@@ -5220,7 +5220,7 @@ extralines_register <- function(type, fun, alias) {
   est <- feols(y ~ x, base)
   mc <- match.call()
   fun_name <- deparse_long(mc$fun)
-  value <- error_sender(fun(est), "The function '", fun_name, "' could not evaluated on a simple fixest object. Please try to improve it.")
+  value <- error_sender(fun(est), "The function '", fun_name, "' could not evaluated on a simple fixest2 object. Please try to improve it.")
 
   if (length(value) != 1) {
     stop("The value returned by ", fun_name, " should be exactly of length 1. This is actually not the case (the result is of length ", length(value), ").")
@@ -5230,7 +5230,7 @@ extralines_register <- function(type, fun, alias) {
 
   opts[[type]] <- res
 
-  options(fixest_extralines = opts)
+  options(fixest2_extralines = opts)
 
   invisible(NULL)
 }
@@ -5306,14 +5306,14 @@ print.etable_df <- function(x, ...) {
 ####
 
 check_build_available <- function() {
-  opt <- getOption("fixest_build_available")
+  opt <- getOption("fixest2_build_available")
 
   if (!isTRUE(opt)) {
     outcome <- suppressWarnings(system2("pdflatex", "-help", FALSE, FALSE))
     if (outcome == 127 && !requireNamespace("tinytex", quietly = TRUE)) {
       warn_up("The functionality you want to use requires the package 'tinytex' which is not installed or a working pdflatex installation which wasn't found.")
 
-      options(fixest_build_available = "pdflatex")
+      options(fixest2_build_available = "pdflatex")
       return("pdflatex")
     }
 
@@ -5321,11 +5321,11 @@ check_build_available <- function() {
     if (outcome == 127 && !requireNamespace("pdftools", quietly = TRUE)) {
       warn_up("The functionality you want to use requires the package 'pdftools' which is not installed or a working imagemagick + ghostscript installation which wasn't found.")
 
-      options(fixest_build_available = "magick")
+      options(fixest2_build_available = "magick")
       return("magick")
     }
 
-    options(fixest_build_available = TRUE)
+    options(fixest2_build_available = TRUE)
   }
 
   return(TRUE)
@@ -5514,7 +5514,7 @@ build_tex_png <- function(x, view = FALSE, export = NULL, markdown = NULL,
     writeLines(doc_full, tex_file)
     close(tex_file)
 
-    options(fixest_log_dir = dir)
+    options(fixest2_log_dir = dir)
 
     # We compile the document
     draft <- if (do_rerun) "-draftmode" else ""
@@ -5805,7 +5805,7 @@ img {
 log_etable <- function(type = "pdflatex") {
   check_set_arg(type, "match(pdflatex, magick, tex, dir)")
 
-  dir <- getOption("fixest_log_dir")
+  dir <- getOption("fixest2_log_dir")
 
   if (length(dir) == 0) {
     return("No log currently exists")
@@ -5846,7 +5846,7 @@ fix_pkgwdown_path <- function() {
   # just because I use google drive... it seems pkgdown cannot convert to relative path...
 
   # This is to ensure it only works for me
-  if (!isTRUE(renvir_get("fixest_ROOT"))) {
+  if (!isTRUE(renvir_get("fixest2_ROOT"))) {
     return(NULL)
   }
   # we check we're in the right directory (otherwise there can be prblms with Rmakdown)
@@ -5869,18 +5869,18 @@ fix_pkgwdown_path <- function() {
 
       done <- FALSE
 
-      pat <- "<img.+\\.\\./.+/fixest/.+/images/"
+      pat <- "<img.+\\.\\./.+/fixest2/.+/images/"
       qui <- which(grepl(pat, text))
       for (i in qui) {
         if (!done) {
           message("Fixing pkgdown paths (", gsub(".+/", "", f), ").")
         }
-        # ex: line = "<img src = \"../../../Google drive/fixest/fixest/vignettes/images/etable/etable_tex_2021-12-02_1.05477838.png\">"
+        # ex: line = "<img src = \"../../../Google drive/fixest2/fixest2/vignettes/images/etable/etable_tex_2021-12-02_1.05477838.png\">"
         line <- text[i]
         line_split <- strsplit(line, "src *= *\"")[[1]]
         path <- gsub("\".*", "", line_split[2])
-        # ROOT is always fixest
-        path <- gsub(".+fixest/", "", path)
+        # ROOT is always fixest2
+        path <- gsub(".+fixest2/", "", path)
         path <- gsub("^articles", "vignettes", path)
 
         URI <- knitr::image_uri(path)
@@ -6791,7 +6791,7 @@ extralines_extractor <- function(x, name = NULL, tex = FALSE) {
   is_name <- !is.null(name) && nchar(name) > 0
 
   # extralines registered
-  el_default <- getOption("fixest_extralines")
+  el_default <- getOption("fixest2_extralines")
   key_registered <- names(el_default)
 
   # fitstat
@@ -6900,8 +6900,8 @@ insert <- function(x, y, i) {
 
 
 
-is_fixest_model <- function(x) {
-  any(c("fixest", "fixest_list", "fixest_multi") %in% class(x))
+is_fixest2_model <- function(x) {
+  any(c("fixest2", "fixest2_list", "fixest2_multi") %in% class(x))
 }
 
 
@@ -7022,9 +7022,9 @@ tag_gen <- function() {
   #
   # we only use letters because tex macro names only allow letters
 
-  id <- getOption("fixest_tag")
+  id <- getOption("fixest2_tag")
   if (is.null(id)) id <- 1
-  options(fixest_tag = id + 1)
+  options(fixest2_tag = id + 1)
 
   items <- letters
 
@@ -7122,7 +7122,7 @@ is_Rmarkdown <- function() {
 }
 
 path_to_relative <- function(x) {
-  # orig = "C:/Users/berge028/Google Drive/R_packages/fixest/fixest"
+  # orig = "C:/Users/berge028/Google Drive/R_packages/fixest2/fixest2"
   # dest = "C:/Users/berge028/Google Drive/R_packages/automake/automake/NAMESPACE"
 
   # I'm not sure it works perfectly well on linux...

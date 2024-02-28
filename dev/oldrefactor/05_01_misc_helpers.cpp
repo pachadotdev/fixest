@@ -18,7 +18,7 @@
     res.insert(res.size(), x_str);
   } else {
     int n = x_str.size();
-    int e = n; // e: exponent
+    int e = n;  // e: exponent
 
     while (e > 0) {
       res.push_back(x_str[n - e]);
@@ -89,8 +89,7 @@
     } else {
       // we change IDs
       if (!is_ok) {
-        if (is_pos)
-          always_treated.push_back(j);
+        if (is_pos) always_treated.push_back(j);
         cohort_ref.push_back(j);
       }
 
@@ -104,8 +103,7 @@
 
   // Last element
   if (!is_ok) {
-    if (is_pos)
-      always_treated.push_back(j);
+    if (is_pos) always_treated.push_back(j);
     cohort_ref.push_back(j);
   }
 
@@ -325,7 +323,7 @@
     }
   }
 
-  return (res);
+  return res;
 }
 
 [[cpp11::register]] bool cpp_any_na_null_(SEXP x) {
@@ -367,19 +365,18 @@
 
   // if dup: we find out the nber
   if (any_dup) {
-    obs_dup = i; // the 1 is implicitely added to make it r style
+    obs_dup = i;  // the 1 is implicitely added to make it r style
     int id_dup = id[i];
     int time_dup = time[i];
     n_dup = 2;
-    while (++i < n && id_dup == id[i] && time_dup == time[i])
-      n_dup++;
+    while (++i < n && id_dup == id[i] && time_dup == time[i]) n_dup++;
   }
 
   writable::list res;
   res.push_back({"n_dup"_nm = n_dup});
   res.push_back({"obs_dup"_nm = obs_dup});
 
-  return (res);
+  return res;
 }
 
 [[cpp11::register]] integers cpp_check_nested_(SEXP fe_list, SEXP cluster_list,
@@ -460,15 +457,11 @@
 }
 
 inline bool is_md_markup(const char *x, int i, int n) {
-  if (x[i] != '*')
-    return false;
+  if (x[i] != '*') return false;
 
-  if (i + 1 >= n || x[i + 1] != '*')
-    return true;
-  if (i + 2 >= n || x[i + 2] != '*')
-    return true;
-  if (i + 3 < n && x[i + 3] == '*')
-    return false;
+  if (i + 1 >= n || x[i + 1] != '*') return true;
+  if (i + 2 >= n || x[i + 2] != '*') return true;
+  if (i + 3 < n && x[i + 3] == '*') return false;
   return true;
 }
 
@@ -477,10 +470,8 @@ inline bool is_special_char(const char x) {
 }
 
 inline int find_id_markup(const char *x, int i, int n) {
-  if (i + 1 >= n || x[i + 1] != '*')
-    return 1;
-  if (i + 2 >= n || x[i + 2] != '*')
-    return 2;
+  if (i + 1 >= n || x[i + 1] != '*') return 1;
+  if (i + 2 >= n || x[i + 2] != '*') return 2;
   return 3;
 }
 
@@ -544,7 +535,7 @@ std::string apply_escape_markup(const char *x) {
           tmp_all[id_mkp] += '*';
           ++i;
         }
-        --i; // compensated at the end of the main while
+        --i;  // compensated at the end of the main while
       } else {
         tmp_all[id_mkp] += '\\';
       }

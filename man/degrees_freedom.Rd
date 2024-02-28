@@ -3,7 +3,7 @@
 \name{degrees_freedom}
 \alias{degrees_freedom}
 \alias{degrees_freedom_iid}
-\title{Gets the degrees of freedom of a \code{fixest} estimation}
+\title{Gets the degrees of freedom of a \code{fixest2} estimation}
 \usage{
 degrees_freedom(
   x,
@@ -19,7 +19,7 @@ degrees_freedom(
 degrees_freedom_iid(x, type)
 }
 \arguments{
-\item{x}{A \code{fixest} estimation.}
+\item{x}{A \code{fixest2} estimation.}
 
 \item{type}{Character scalar, equal to "k", "resid", "t". If "k", then the number of
 regressors is returned. If "resid", then it is the "residuals degree of freedom", i.e.
@@ -36,11 +36,11 @@ the regressors only. (Mostly for internal use.)}
 scalar equal to a VCOV type, either a formula of the form: \code{vcov_type ~ variables}. The
 VCOV types implemented are: "iid", "hetero" (or "HC1"), "cluster", "twoway",
 "NW" (or "newey_west"), "DK" (or "driscoll_kraay"), and "conley". It also accepts
-object from \code{\link{vcov_cluster}}, \code{\link[fixest:vcov_hac]{vcov_NW}}, \code{\link[fixest:vcov_hac]{NW}},
-\code{\link[fixest:vcov_hac]{vcov_DK}}, \code{\link[fixest:vcov_hac]{DK}}, \code{\link{vcov_conley}} and
-\code{\link[fixest:vcov_conley]{conley}}. It also accepts covariance matrices computed externally.
+object from \code{\link{vcov_cluster}}, \code{\link[=vcov_hac]{vcov_NW}}, \code{\link[=vcov_hac]{NW}},
+\code{\link[=vcov_hac]{vcov_DK}}, \code{\link[=vcov_hac]{DK}}, \code{\link{vcov_conley}} and
+\code{\link[=vcov_conley]{conley}}. It also accepts covariance matrices computed externally.
 Finally it accepts functions to compute the covariances. See the \code{vcov} documentation
-in the \href{https://lrberge.github.io/fixest/articles/fixest_walkthrough.html#the-vcov-argument-1}{vignette}.}
+in the \href{https://lrberge.github.io/fixest2/articles/fixest2_walkthrough.html#the-vcov-argument-1}{vignette}.}
 
 \item{se}{Character scalar. Which kind of standard error should be computed:
 \dQuote{standard}, \dQuote{hetero}, \dQuote{cluster}, \dQuote{twoway}, \dQuote{threeway}
@@ -74,11 +74,11 @@ not what we have in mind when we think of "degrees of freedom". To obtain the on
 more intuitive, please use \code{degrees_freedom_iid} instead.}
 }
 \description{
-Simple utility to extract the degrees of freedom from a \code{fixest} estimation.
+Simple utility to extract the degrees of freedom from a \code{fixest2} estimation.
 }
 \section{Functions}{
 \itemize{
-\item \code{degrees_freedom_iid()}: Gets the degrees of freedom of a \code{fixest} estimation
+\item \code{degrees_freedom_iid()}: Gets the degrees of freedom of a \code{fixest2} estimation
 
 }}
 \examples{

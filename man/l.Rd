@@ -4,7 +4,7 @@
 \alias{f}
 \alias{d}
 \alias{l}
-\title{Lags a variable in a \code{fixest} estimation}
+\title{Lags a variable in a \code{fixest2} estimation}
 \usage{
 f(x, lead = 1, fill = NA)
 
@@ -16,32 +16,32 @@ l(x, lag = 1, fill = NA)
 \item{x}{The variable.}
 
 \item{lead}{A vector of integers giving the number of leads. Negative values lead to lags.
-This argument can be a vector when using it in fixest estimations. When creating variables in
+This argument can be a vector when using it in fixest2 estimations. When creating variables in
 a \code{\link[data.table:data.table]{data.table::data.table}}, it \strong{must} be of length one.}
 
 \item{fill}{A scalar, default is \code{NA}. How to fill the missing values due to the lag/lead?
-Note that in a \code{fixest} estimation, 'fill' must be numeric (not required when
+Note that in a \code{fixest2} estimation, 'fill' must be numeric (not required when
 creating new variables).}
 
 \item{lag}{A vector of integers giving the number of lags. Negative values lead to leads.
-This argument can be a vector when using it in fixest estimations. When creating variables in
+This argument can be a vector when using it in fixest2 estimations. When creating variables in
 a \code{\link[data.table:data.table]{data.table::data.table}}, it \strong{must} be of length one.}
 }
 \value{
-These functions can only be used i) in a formula of a \code{fixest} estimation, or ii) when
-creating variables within a \code{fixest_panel} object (obtained with function \code{\link{panel}}) which
+These functions can only be used i) in a formula of a \code{fixest2} estimation, or ii) when
+creating variables within a \code{fixest2_panel} object (obtained with function \code{\link{panel}}) which
 is alaos a \code{\link[data.table:data.table]{data.table::data.table}}.
 }
 \description{
-Produce lags or leads in the formulas of \code{fixest} estimations or when creating variables in
+Produce lags or leads in the formulas of \code{fixest2} estimations or when creating variables in
 a \code{\link[data.table:data.table]{data.table::data.table}}. The data must be set as a panel beforehand (either with
 the function \code{\link{panel}} or with the argument \code{panel.id} in the estimation).
 }
 \section{Functions}{
 \itemize{
-\item \code{f()}: Forwards a variable (inverse of lagging) in a \code{fixest} estimation
+\item \code{f()}: Forwards a variable (inverse of lagging) in a \code{fixest2} estimation
 
-\item \code{d()}: Creates differences (i.e. x - lag(x)) in a \code{fixest} estimation
+\item \code{d()}: Creates differences (i.e. x - lag(x)) in a \code{fixest2} estimation
 
 }}
 \examples{

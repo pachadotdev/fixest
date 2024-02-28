@@ -194,7 +194,7 @@
   res.push_back({"iter"_nm = iter});
   res.push_back({"any_negative_poisson"_nm = any_negative_poisson});
 
-  return (res);
+  return res;
 }
 
 [[cpp11::register]] list cpp_conv_seq_gnl_(
@@ -360,7 +360,7 @@
   res.push_back({"mu_new"_nm = mu});
   res.push_back({"iter"_nm = iter});
 
-  return (res);
+  return res;
 }
 
 [[cpp11::register]] list cpp_conv_acc_poi_2_(int n_i, int n_j, int n_cells,
@@ -514,7 +514,7 @@
   res.push_back({"iter"_nm = iter});
   res.push_back({"any_negative_poisson"_nm = any_negative_poisson});
 
-  return (res);
+  return res;
 }
 
 [[cpp11::register]] list cpp_conv_seq_poi_2_(int n_i, int n_j, int n_cells,
@@ -628,7 +628,7 @@
   res.push_back({"mu_new"_nm = exp_mu});
   res.push_back({"iter"_nm = iter});
 
-  return (res);
+  return res;
 }
 
 [[cpp11::register]] list cpp_conv_acc_gau_2_(
@@ -751,7 +751,7 @@
   res.push_back({"mu_new"_nm = mu});
   res.push_back({"iter"_nm = iter});
 
-  return (res);
+  return res;
 }
 
 [[cpp11::register]] list cpp_conv_seq_gau_2_(
@@ -864,5 +864,5 @@
   res.push_back({"mu_new"_nm = mu});
   res.push_back({"iter"_nm = iter});
 
-  return (res);
+  return res;
 }

@@ -472,7 +472,7 @@ coefplot(est,
 )
 
 # Note that we used 'se', an argument that will
-#  be passed to summary.fixest
+#  be passed to summary.fixest2
 
 legend("topright",
   col = 1:2, pch = 20, lwd = 1, lty = 1:2,
@@ -595,7 +595,7 @@ coefplot(est, group = list(Sepal = "^^Sepal.", Species = "^^Species"))
 }
 \seealso{
 See \code{\link{setFixest_coefplot}} to set the default values of \code{coefplot}, and the estimation
-functions: e.g. \code{\link{feols}}, \code{\link[fixest:feglm]{fepois}}, \code{\link{feglm}}, \code{\link[fixest:femlm]{fenegbin}}.
+functions: e.g. \code{\link{feols}}, \code{\link[=feglm]{fepois}}, \code{\link{feglm}}, \code{\link[=femlm]{fenegbin}}.
 }
 \author{
 Laurent Berge

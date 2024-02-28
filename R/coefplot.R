@@ -174,7 +174,7 @@
 #'
 #' @seealso
 #' See [`setFixest_coefplot`] to set the default values of `coefplot`, and the estimation
-#' functions: e.g. [`feols`], [`fepois`][fixest::feglm], [`feglm`], [`fenegbin`][fixest::femlm].
+#' functions: e.g. [`feols`], [`fepois`][fixest2::feglm], [`feglm`], [`fenegbin`][fixest2::femlm].
 #'
 #' @section Setting custom default values:
 #' The function `coefplot` dispose of many arguments to parametrize the plots. Most
@@ -236,7 +236,7 @@
 #' )
 #'
 #' # Note that we used 'se', an argument that will
-#' #  be passed to summary.fixest
+#' #  be passed to summary.fixest2
 #'
 #' legend("topright",
 #'   col = 1:2, pch = 20, lwd = 1, lty = 1:2,
@@ -404,7 +404,7 @@ coefplot <- function(object, ..., style = NULL, sd, ci_low, ci_high, df.t = NULL
   # Setting the default values ####
   #
 
-  opts <- getOption("fixest_coefplot")
+  opts <- getOption("fixest2_coefplot")
 
   check_arg(style, "NULL character scalar")
   if (is.null(style)) {
@@ -591,7 +591,7 @@ coefplot <- function(object, ..., style = NULL, sd, ci_low, ci_high, df.t = NULL
           group_regex <- paste0("%", escape_regex(var_right), "::.+:", escape_regex(var_left))
         } else if (all(grepl("::", x_select))) {
           is_inter <- FALSE
-          # This is a fixest factor
+          # This is a fixest2 factor
           n_max <- nchar(var_left) + 2
         } else {
           # we need to find out by ourselves...
@@ -1589,7 +1589,7 @@ coefplot_prms <- function(object, ..., sd, ci_low, ci_high, x, x.shift = 0, dict
   set_up(1 + is_iplot)
 
   AXIS_AS_NUM <- FALSE
-  if (is_internal == FALSE && ((is.list(object) && class(object)[1] == "list") || "fixest_multi" %in% class(object))) {
+  if (is_internal == FALSE && ((is.list(object) && class(object)[1] == "list") || "fixest2_multi" %in% class(object))) {
     # This is a list of estimations
 
     #
@@ -1779,11 +1779,11 @@ coefplot_prms <- function(object, ..., sd, ci_low, ci_high, x, x.shift = 0, dict
 
       # We compute the CI
       check_arg(df.t, "NULL | numeric scalar GE{1}")
-      if (inherits(object, "fixest")) {
+      if (inherits(object, "fixest2")) {
         if (is.null(df.t)) {
           df.t <- degrees_freedom(object, "t")
           if (is.null(df.t)) {
-            # may for user defined functions using fixest
+            # may for user defined functions using fixest2
             df.t <- degrees_freedom(object, "resid")
             if (is.null(df.t)) {
               # let's be safe
@@ -1792,9 +1792,9 @@ coefplot_prms <- function(object, ..., sd, ci_low, ci_high, x, x.shift = 0, dict
           }
         }
 
-        nb <- fixest_CI_factor(object, ci_level, df.t = df.t)[2]
+        nb <- fixest2_CI_factor(object, ci_level, df.t = df.t)[2]
       } else {
-        # non fixest objects
+        # non fixest2 objects
         if (is.null(df.t)) {
           df.t <- tryCatch(nobs(object) - length(coef(object)),
             error = function(e) NULL
@@ -1826,13 +1826,13 @@ coefplot_prms <- function(object, ..., sd, ci_low, ci_high, x, x.shift = 0, dict
     xlab_suggest <- NULL
     if (is_iplot) {
       if (is.null(names(estimate))) {
-        stop_up("'iplot' must be used only with fixest objects containing variables created with i(). Currently it does not seem to be the case.")
+        stop_up("'iplot' must be used only with fixest2 objects containing variables created with i(). Currently it does not seem to be the case.")
       }
 
       all_vars <- names(estimate)
 
       if (!any(grepl("::", all_vars))) {
-        stop_up("'iplot' must be used only with fixest objects containing variables created with i(). Currently it does not seem to be the case.")
+        stop_up("'iplot' must be used only with fixest2 objects containing variables created with i(). Currently it does not seem to be the case.")
       }
 
       # Four cases:
@@ -2512,13 +2512,13 @@ setFixest_coefplot <- function(style, horiz = FALSE, dict = getFixest_dict(), ke
 
   if (style == "all" && reset) {
     opts <- list(default = list(), iplot = iplot_default)
-    options("fixest_coefplot" = opts)
+    options("fixest2_coefplot" = opts)
     return(invisible(NULL))
   }
 
-  opts <- getOption("fixest_coefplot")
+  opts <- getOption("fixest2_coefplot")
   if (!is.list(opts)) {
-    warning("Wrong format of getOption('fixest_coefplot'), the options of coefplot are reset.")
+    warning("Wrong format of getOption('fixest2_coefplot'), the options of coefplot are reset.")
     opts <- list(default = list(), iplot = iplot_default)
   }
 
@@ -2534,7 +2534,7 @@ setFixest_coefplot <- function(style, horiz = FALSE, dict = getFixest_dict(), ke
     if (is.null(my_opt)) {
       my_opt <- list()
     } else if (!is.list(opts)) {
-      warning("Wrong format of getOption('fixest_coefplot') for style '", style, "', the options of coefplot for this style are reset.")
+      warning("Wrong format of getOption('fixest2_coefplot') for style '", style, "', the options of coefplot for this style are reset.")
       my_opt <- list()
     }
   }
@@ -2591,10 +2591,10 @@ setFixest_coefplot <- function(style, horiz = FALSE, dict = getFixest_dict(), ke
 
   opts[[style]] <- my_opt
 
-  options("fixest_coefplot" = opts)
+  options("fixest2_coefplot" = opts)
 }
 
 #' @rdname setFixest_coefplot
 getFixest_coefplot <- function() {
-  getOption("fixest_coefplot")
+  getOption("fixest2_coefplot")
 }

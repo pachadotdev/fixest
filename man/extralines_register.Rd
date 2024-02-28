@@ -9,7 +9,7 @@ extralines_register(type, fun, alias)
 \arguments{
 \item{type}{A character scalar giving the type-name.}
 
-\item{fun}{A function to be applied to a \code{fixest} estimation. It must return a scalar.}
+\item{fun}{A function to be applied to a \code{fixest2} estimation. It must return a scalar.}
 
 \item{alias}{A character scalar. This is the alias to be used in lieu of the type name to
 form the row name.}

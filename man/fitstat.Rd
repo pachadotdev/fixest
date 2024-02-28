@@ -2,7 +2,7 @@
 % Please edit documentation in R/fitstats.R
 \name{fitstat}
 \alias{fitstat}
-\title{Computes fit statistics of fixest objects}
+\title{Computes fit statistics of fixest2 objects}
 \usage{
 fitstat(
   x,
@@ -15,7 +15,7 @@ fitstat(
 )
 }
 \arguments{
-\item{x}{A \code{fixest} estimation.}
+\item{x}{A \code{fixest2} estimation.}
 
 \item{type}{Character vector or one sided formula. The type of fit statistic to be computed.
 The classic ones are: n, rmse, r2, pr2, f, wald, ivf, ivwald. You have the full list in
@@ -26,7 +26,7 @@ with \code{\link{fitstat_register}}.}
 the selected types. If \code{simplify = TRUE} and only one type is selected, then the element
 is directly returned (ie will not be nested in a list).}
 
-\item{verbose}{Logical, default is \code{TRUE}. If \code{TRUE}, an object of class \code{fixest_fitstat}
+\item{verbose}{Logical, default is \code{TRUE}. If \code{TRUE}, an object of class \code{fixest2_fitstat}
 is returned (so its associated print method will be triggered). If \code{FALSE} a simple list
 is returned instead.}
 
@@ -41,12 +41,12 @@ the statistics (for example you can pass on arguments to compute the VCOV when u
 \code{type = "g"} or \code{type = "wald"}.).}
 }
 \value{
-By default an object of class \code{fixest_fitstat} is returned. Using \code{verbose = FALSE}
+By default an object of class \code{fixest2_fitstat} is returned. Using \code{verbose = FALSE}
 returns a simple a list. Finally, if only one type is selected, \code{simplify = TRUE}
 leads to the selected type to be returned.
 }
 \description{
-Computes various fit statistics for \code{fixest} estimations.
+Computes various fit statistics for \code{fixest2} estimations.
 }
 \section{Registering your own types}{
 

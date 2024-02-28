@@ -1,15 +1,15 @@
 #----------------------------------------------#
 # Author: Laurent Berge
 # Date creation: Sat Nov 07 09:05:26 2020
-# ~: fixest_multi
+# ~: fixest2_multi
 #----------------------------------------------#
 
 setup_multi <- function(data, values, var = NULL, tree = NULL) {
   # the incoming data is ALWAYS strongly structured
   # => they all have the same number of elements
   # data:
-  # either a list of fixest objects
-  # either a list of fixest_multi objects
+  # either a list of fixest2 objects
+  # either a list of fixest2_multi objects
   #
   # values: must be strongly and properly formatted
   # its length is the nber of objects (length(data)), with the appropriate names
@@ -40,10 +40,10 @@ setup_multi <- function(data, values, var = NULL, tree = NULL) {
     }
   }
 
-  IS_NESTED <- inherits(data[[1]], "fixest_multi")
+  IS_NESTED <- inherits(data[[1]], "fixest2_multi")
 
   if (IS_TREE) {
-    # This is an internal call from [.fixest_multi
+    # This is an internal call from [.fixest2_multi
     # data = the final data
     # values = the new tree
 
@@ -97,7 +97,7 @@ setup_multi <- function(data, values, var = NULL, tree = NULL) {
       tree_right <- do.call(rbind, tree_right)
 
       tree <- cbind(tree_left, tree_right)
-    } else if (!inherits(data[[1]], "fixest")) {
+    } else if (!inherits(data[[1]], "fixest2")) {
       stop("Internal error: the current data type is not supportded by setup_multi.")
     }
 
@@ -162,7 +162,7 @@ setup_multi <- function(data, values, var = NULL, tree = NULL) {
   # Shouldn't I remove tree_index and index_names since they can be built from the tree?
   # It seems it can be useful if they're directly computed... We'll see.
   names(res) <- model_names
-  class(res) <- "fixest_multi"
+  class(res) <- "fixest2_multi"
   attr(res, "tree") <- tree
   attr(res, "tree_index") <- tree_index
   attr(res, "index_names") <- index_names
@@ -186,7 +186,7 @@ index_from_tree <- function(tree) {
 }
 
 reshape_multi <- function(x, obs, colorder = NULL) {
-  # x: fixest_multi object
+  # x: fixest2_multi object
   # obs: indexes to keep
 
   tree <- attr(x, "tree")
@@ -215,7 +215,7 @@ reshape_multi <- function(x, obs, colorder = NULL) {
 
 
 set_index_multi <- function(x, index_names) {
-  # Function specific to [.fixest_multi => global assignments!!!
+  # Function specific to [.fixest2_multi => global assignments!!!
   arg <- deparse(substitute(x))
 
   if (!arg %in% names(index_names)) {
@@ -278,11 +278,11 @@ rep_df <- function(x, times = 1, each = 1, ...) {
 
 # USER LEVEL ----
 
-#' Extracts the models tree from a `fixest_multi` object
+#' Extracts the models tree from a `fixest2_multi` object
 #'
-#' Extracts the meta information on all the models contained in a `fixest_multi` estimation.
+#' Extracts the meta information on all the models contained in a `fixest2_multi` estimation.
 #'
-#' @inheritParams print.fixest_multi
+#' @inheritParams print.fixest2_multi
 #' @param simplify Logical, default is `FALSE`. The default behavior is to display all the meta
 #' information, even if they are identical across models. By using `simplify = TRUE`, only the
 #' information with some variation is kept.
@@ -311,7 +311,7 @@ rep_df <- function(x, times = 1, each = 1, ...) {
 #'
 #' @export
 models <- function(x, simplify = FALSE) {
-  check_arg(x, "class(fixest_multi)")
+  check_arg(x, "class(fixest2_multi)")
 
   res <- attr(x, "tree")
   if (simplify) {
@@ -331,13 +331,13 @@ models <- function(x, simplify = FALSE) {
 
 
 
-#' Gets the dimension of `fixest_multi` objects
+#' Gets the dimension of `fixest2_multi` objects
 #'
-#' Otabin the number of unique models of a `fixest_multi` object, depending on the
+#' Otabin the number of unique models of a `fixest2_multi` object, depending on the
 #' type requested.
 #'
 #'
-#' @param x A `fixest_mutli` object, obtained e.g. from [`feols`].
+#' @param x A `fixest2_mutli` object, obtained e.g. from [`feols`].
 #' @param lhs Logical scalar, default is `FALSE`. If `TRUE`, the number of different
 #' left hand sides is returned.
 #' @param rhs Logical scalar, default is `FALSE`. If `TRUE`, the number of different
@@ -371,7 +371,7 @@ models <- function(x, simplify = FALSE) {
 #' @export
 n_models <- function(x, lhs = FALSE, rhs = FALSE, sample = FALSE,
                      fixef = FALSE, iv = FALSE) {
-  check_arg(x, "class(fixest_multi) mbt")
+  check_arg(x, "class(fixest2_multi) mbt")
   check_arg("logical scalar", lhs, rhs, sample, fixef, iv)
 
   request <- c(lhs = lhs, rhs = rhs, sample = sample, fixef = fixef, iv = iv)
@@ -398,18 +398,18 @@ n_models <- function(x, lhs = FALSE, rhs = FALSE, sample = FALSE,
 
 # METHODS ----
 
-#' Summary for fixest_multi objects
+#' Summary for fixest2_multi objects
 #'
-#' Summary information for fixest_multi objects. In particular, this is used to specify the
+#' Summary information for fixest2_multi objects. In particular, this is used to specify the
 #' type of standard-errors to be computed.
 #'
-#' @method summary fixest_multi
+#' @method summary fixest2_multi
 #'
-#' @inheritParams summary.fixest
+#' @inheritParams summary.fixest2
 #'
-#' @inherit print.fixest_multi seealso
+#' @inherit print.fixest2_multi seealso
 #'
-#' @param object A `fixest_multi` object, obtained from a `fixest` estimation leading to
+#' @param object A `fixest2_multi` object, obtained from a `fixest2` estimation leading to
 #' multiple results.
 #' @param type A character either equal to `"short"`, `"long"`, `"compact"`, `"se_compact"`
 #' or `"se_long"`. If `short`, only the table of coefficients is displayed for each estimation.
@@ -422,7 +422,7 @@ n_models <- function(x, lhs = FALSE, rhs = FALSE, sample = FALSE,
 #' @param ... Not currently used.
 #'
 #' @return
-#' It returns either an object of class `fixest_multi` (if `type` equals `short` or `long`),
+#' It returns either an object of class `fixest2_multi` (if `type` equals `short` or `long`),
 #' either a `data.frame` (if type equals `compact` or `se_compact`).
 #'
 #' @examples
@@ -434,7 +434,7 @@ n_models <- function(x, lhs = FALSE, rhs = FALSE, sample = FALSE,
 #' res <- feols(y ~ csw(x1, x2, x3), base, split = ~species)
 #'
 #' # By default, the type is "short"
-#' # You can still use the arguments from summary.fixest
+#' # You can still use the arguments from summary.fixest2
 #' summary(res, se = "hetero")
 #'
 #' summary(res, type = "long")
@@ -446,7 +446,7 @@ n_models <- function(x, lhs = FALSE, rhs = FALSE, sample = FALSE,
 #' summary(res, type = "se_long")
 #'
 #' @export
-summary.fixest_multi <- function(object, type = "short", vcov = NULL, se = NULL,
+summary.fixest2_multi <- function(object, type = "short", vcov = NULL, se = NULL,
                                  cluster = NULL, ssc = NULL,
                                  .vcov = NULL, stage = 2, lean = FALSE, n = 1000, ...) {
   dots <- list(...)
@@ -475,7 +475,7 @@ summary.fixest_multi <- function(object, type = "short", vcov = NULL, se = NULL,
 
     # In IV: multiple estimations can be returned
 
-    if ("fixest_multi" %in% class(object[[1]])) {
+    if ("fixest2_multi" %in% class(object[[1]])) {
       tree <- attr(object, "tree")
       object <- setup_multi(object, tree = tree)
     }
@@ -571,21 +571,21 @@ summary.fixest_multi <- function(object, type = "short", vcov = NULL, se = NULL,
 }
 
 
-#' Print method for fixest_multi objects
+#' Print method for fixest2_multi objects
 #'
-#' Displays summary information on fixest_multi objects in the R console.
+#' Displays summary information on fixest2_multi objects in the R console.
 #'
-#' @method print fixest_multi
+#' @method print fixest2_multi
 #'
-#' @param x A `fixest_multi` object, obtained from a `fixest` estimation leading to
+#' @param x A `fixest2_multi` object, obtained from a `fixest2` estimation leading to
 #' multiple results.
-#' @param ... Other arguments to be passed to [`summary.fixest_multi`].
+#' @param ... Other arguments to be passed to [`summary.fixest2_multi`].
 #'
 #' @seealso
-#' The main fixest estimation functions: [`feols`], [`fepois`][fixest::feglm],
-#' [`fenegbin`][fixest::femlm], [`feglm`], [`feNmlm`]. Tools for mutliple fixest
-#' estimations: [`summary.fixest_multi`], [`print.fixest_multi`], [`as.list.fixest_multi`],
-#' \code{\link[fixest]{sub-sub-.fixest_multi}}, \code{\link[fixest]{sub-.fixest_multi}}.
+#' The main fixest2 estimation functions: [`feols`], [`fepois`][fixest2::feglm],
+#' [`fenegbin`][fixest2::femlm], [`feglm`], [`feNmlm`]. Tools for mutliple fixest2
+#' estimations: [`summary.fixest2_multi`], [`print.fixest2_multi`], [`as.list.fixest2_multi`],
+#' \code{\link[fixest2]{sub-sub-.fixest2_multi}}, \code{\link[fixest2]{sub-.fixest2_multi}}.
 #'
 #' @examples
 #'
@@ -599,7 +599,7 @@ summary.fixest_multi <- function(object, type = "short", vcov = NULL, se = NULL,
 #' res
 #'
 #' @export
-print.fixest_multi <- function(x, ...) {
+print.fixest2_multi <- function(x, ...) {
   if (is_user_level_call()) {
     validate_dots(valid_args = stvec("/type, vcov, se, cluster, ssc, stage, lean, agg, forceCovariance, keepBounded, n, nthreads"))
   }
@@ -677,22 +677,22 @@ print.fixest_multi <- function(x, ...) {
 
 
 ####
-#### sub-fixest_multi ####
+#### sub-fixest2_multi ####
 ####
 
 
 
-#' Extracts one element from a `fixest_multi` object
+#' Extracts one element from a `fixest2_multi` object
 #'
-#' Extracts single elements from multiple `fixest` estimations.
+#' Extracts single elements from multiple `fixest2` estimations.
 #'
-#' @inherit print.fixest_multi seealso
-#' @inheritParams print.fixest_multi
+#' @inherit print.fixest2_multi seealso
+#' @inheritParams print.fixest2_multi
 #'
 #' @param i An integer scalar. The identifier of the estimation to extract.
 #'
 #' @return
-#' A `fixest` object is returned.
+#' A `fixest2` object is returned.
 #'
 #' @examples
 #'
@@ -708,7 +708,7 @@ print.fixest_multi <- function(x, ...) {
 #' # The second one, etc
 #' res[[2]]
 #' @export
-"[[.fixest_multi" <- function(x, i) {
+"[[.fixest2_multi" <- function(x, i) {
   n <- length(x)
   check_set_arg(i, "evalset integer scalar mbt", .data = list(.N = n))
   if (i < 0 || i > length(x)) {
@@ -718,45 +718,45 @@ print.fixest_multi <- function(x, ...) {
   `[[.data.frame`(x, i)
 }
 
-#' Subsets a fixest_multi object
+#' Subsets a fixest2_multi object
 #'
-#' Subsets a fixest_multi object using different keys.
+#' Subsets a fixest2_multi object using different keys.
 #'
 #'
-#' @inherit print.fixest_multi seealso
-#' @inheritParams print.fixest_multi
+#' @inherit print.fixest2_multi seealso
+#' @inheritParams print.fixest2_multi
 #'
 #' @param sample An integer vector, a logical scalar, or a character vector. It represents
 #' the `sample` identifiers for which the results should be extracted. Only valid when the
-#' `fixest` estimation was a split sample. You can use `.N` to refer to the last element.
+#' `fixest2` estimation was a split sample. You can use `.N` to refer to the last element.
 #' If logical, all elements are selected in both cases, but `FALSE` leads `sample` to become
 #' the rightmost key (just try it out).
 #' @param lhs An integer vector, a logical scalar, or a character vector. It represents
 #' the left-hand-sides identifiers for which the results should be extracted. Only valid when
-#' the `fixest` estimation contained multiple left-hand-sides. You can use `.N` to refer to
+#' the `fixest2` estimation contained multiple left-hand-sides. You can use `.N` to refer to
 #' the last element. If logical, all elements are selected in both cases, but `FALSE`
 #' leads `lhs` to become the rightmost key (just try it out).
 #' @param rhs An integer vector or a logical scalar. It represents the right-hand-sides
-#' identifiers for which the results should be extracted. Only valid when the `fixest`
+#' identifiers for which the results should be extracted. Only valid when the `fixest2`
 #' estimation contained multiple right-hand-sides. You can use `.N` to refer to the last
 #' element. If logical, all elements are selected in both cases, but `FALSE` leads `rhs` to
 #' become the rightmost key (just try it out).
 #' @param fixef An integer vector or a logical scalar. It represents the fixed-effects
-#' identifiers for which the results should be extracted. Only valid when the `fixest`
+#' identifiers for which the results should be extracted. Only valid when the `fixest2`
 #' estimation contained fixed-effects in a stepwise fashion. You can use `.N` to refer to the
 #' last element. If logical, all elements are selected in both cases, but `FALSE` leads `fixef`
 #' to become the rightmost key (just try it out).
 #' @param iv An integer vector or a logical scalar. It represent the stages of the IV. Note
 #' that the length can be greater than 2 when there are multiple endogenous regressors (the
 #' first stage corresponding to multiple estimations). Note that the order of the stages depends
-#' on the `stage` argument from [`summary.fixest`]. If logical, all elements are selected in
+#' on the `stage` argument from [`summary.fixest2`]. If logical, all elements are selected in
 #' both cases, but `FALSE` leads `iv` to become the rightmost key (just try it out).
 #' @param i An integer vector. Represents the estimations to extract.
 #' @param I An integer vector. Represents the root element to extract.
 #' @param reorder Logical, default is `TRUE`. Indicates whether reordering of the results
 #' should be performed depending on the user input.
 #' @param drop Logical, default is `FALSE`. If the result contains only one estimation,
-#' then if `drop = TRUE` it will be transformed into a `fixest` object (instead of `fixest_multi`).
+#' then if `drop = TRUE` it will be transformed into a `fixest2` object (instead of `fixest2_multi`).
 #' Its default value can be modified with the function [`setFixest_multi`].
 #'
 #' @details
@@ -772,8 +772,8 @@ print.fixest_multi <- function(x, ...) {
 #' you keep all estimations.
 #'
 #' @return
-#' It returns a `fixest_multi` object. If there is only one estimation left in the object, then
-#' the result is simplified into a `fixest` object only with `drop = TRUE`.
+#' It returns a `fixest2_multi` object. If there is only one estimation left in the object, then
+#' the result is simplified into a `fixest2` object only with `drop = TRUE`.
 #'
 #' @examples
 #'
@@ -800,7 +800,7 @@ print.fixest_multi <- function(x, ...) {
 #' etable(est_split[i = c(1, .N)])
 #'
 #' @export
-"[.fixest_multi" <- function(x, i, sample, lhs, rhs, fixef, iv, I, reorder = TRUE, drop = FALSE) {
+"[.fixest2_multi" <- function(x, i, sample, lhs, rhs, fixef, iv, I, reorder = TRUE, drop = FALSE) {
   core_args <- c("sample", "lhs", "rhs", "fixef", "iv")
   check_arg(reorder, drop, "logical scalar")
   extra_args <- c("reorder", "drop")
@@ -1000,21 +1000,21 @@ print.fixest_multi <- function(x, ...) {
     return(x[[tree_index$obs]])
   }
 
-  # Reshaping a fixest_multi object properly
+  # Reshaping a fixest2_multi object properly
   res <- reshape_multi(x, tree_index$obs, user_order)
 
   return(res)
 }
 
 
-#' Transforms a fixest_multi object into a list
+#' Transforms a fixest2_multi object into a list
 #'
-#' Extracts the results from a `fixest_multi` object and place them into a list.
+#' Extracts the results from a `fixest2_multi` object and place them into a list.
 #'
-#' @inheritParams print.fixest_multi
-#' @inherit print.fixest_multi seealso
+#' @inheritParams print.fixest2_multi
+#' @inherit print.fixest2_multi seealso
 #'
-#' @method as.list fixest_multi
+#' @method as.list fixest2_multi
 #'
 #' @param ... Not currently used.
 #'
@@ -1033,21 +1033,21 @@ print.fixest_multi <- function(x, ...) {
 #' as.list(res)
 #'
 #' @export
-as.list.fixest_multi <- function(x, ...) {
+as.list.fixest2_multi <- function(x, ...) {
   nm <- names(x)
   attributes(x) <- NULL
   names(x) <- nm
   x
 }
 
-#' Extracts the coefficients of fixest_multi objects
+#' Extracts the coefficients of fixest2_multi objects
 #'
 #' Utility to extract the coefficients of multiple estimations and rearrange them into a matrix.
 #'
 #' @inheritParams etable
-#' @inheritParams coef.fixest
+#' @inheritParams coef.fixest2
 #'
-#' @param object A `fixest_multi` object. Obtained from a multiple estimation.
+#' @param object A `fixest2_multi` object. Obtained from a multiple estimation.
 #' @param long Logical, default is `FALSE`. Whether the results should be displayed
 #' in a long format.
 #' @param na.rm Logical, default is `TRUE`. Only applies when `long = TRUE`: whether to remove
@@ -1071,7 +1071,7 @@ as.list.fixest_multi <- function(x, ...) {
 #' coef(est, keep = "Int|x1", order = "x1")
 #'
 #'
-#' # To change the order of the model, use fixest_multi
+#' # To change the order of the model, use fixest2_multi
 #' # extraction tools:
 #' coef(est[rhs = .N:1])
 #'
@@ -1091,7 +1091,7 @@ as.list.fixest_multi <- function(x, ...) {
 #' coef(est, long = TRUE, na.rm = FALSE)
 #'
 #' @export
-coef.fixest_multi <- function(object, keep, drop, order, collin = FALSE,
+coef.fixest2_multi <- function(object, keep, drop, order, collin = FALSE,
                               long = FALSE, na.rm = TRUE, ...) {
   # row: model
   # col: coefficient
@@ -1143,25 +1143,25 @@ coef.fixest_multi <- function(object, keep, drop, order, collin = FALSE,
   res
 }
 
-#' @rdname coef.fixest_multi
+#' @rdname coef.fixest2_multi
 #' @export
-coefficients.fixest_multi <- coef.fixest_multi
+coefficients.fixest2_multi <- coef.fixest2_multi
 
-#' Extracts the coefficients tables from `fixest_multi` estimations
+#' Extracts the coefficients tables from `fixest2_multi` estimations
 #'
 #' Series of methods to extract the coefficients table or its sub-components from a
-#' `fixest_multi` objects (i.e. the outcome of multiple estimations).
+#' `fixest2_multi` objects (i.e. the outcome of multiple estimations).
 #'
 #' @inheritParams etable
 #'
-#' @param object A `fixest_multi` object, coming from a `fixest` multiple estimation.
+#' @param object A `fixest2_multi` object, coming from a `fixest2` multiple estimation.
 #' @param wide A logical scalar, default is `FALSE`. If `TRUE`, then a list is returned:
 #' the elements of the list are coef/se/tstat/pvalue. Each element of the list is a wide
 #' table with a column per coefficient.
 #' @param long Logical scalar, default is `FALSE`. If `TRUE`, then all the information
 #' is stacked, with two columns containing the information: `"param"` and `"value"`.
 #' The column `param` contains the values `coef`/`se`/`tstat`/`pvalue`.
-#' @param ... Other arguments to be passed to [`summary.fixest`].
+#' @param ... Other arguments to be passed to [`summary.fixest2`].
 #'
 #' @return
 #' It returns a `data.frame` containing the coefficients tables (or just the se/pvalue/tstat)
@@ -1194,7 +1194,7 @@ coefficients.fixest_multi <- coef.fixest_multi
 #' coeftable(est_multi, long = TRUE)
 #'
 #' @export
-coeftable.fixest_multi <- function(object, vcov = NULL, keep = NULL, drop = NULL,
+coeftable.fixest2_multi <- function(object, vcov = NULL, keep = NULL, drop = NULL,
                                    order = NULL, long = FALSE, wide = FALSE, ...) {
   check_arg(keep, drop, order, "NULL character vector no na")
   check_arg(wide, "logical scalar | charin(se, pvalue, tstat)")
@@ -1282,9 +1282,9 @@ coeftable.fixest_multi <- function(object, vcov = NULL, keep = NULL, drop = NULL
 }
 
 
-#' @describeIn coeftable.fixest_multi Extracts the standard-errors from `fixest_multi` estimations
+#' @describeIn coeftable.fixest2_multi Extracts the standard-errors from `fixest2_multi` estimations
 #' @export
-se.fixest_multi <- function(object, vcov = NULL, keep = NULL, drop = NULL,
+se.fixest2_multi <- function(object, vcov = NULL, keep = NULL, drop = NULL,
                             order = NULL, long = FALSE, ...) {
   # Default is wide format => same as with coef
 
@@ -1311,9 +1311,9 @@ se.fixest_multi <- function(object, vcov = NULL, keep = NULL, drop = NULL,
   res
 }
 
-#' @describeIn coeftable.fixest_multi Extracts the t-stats from `fixest_multi` estimations
+#' @describeIn coeftable.fixest2_multi Extracts the t-stats from `fixest2_multi` estimations
 #' @export
-tstat.fixest_multi <- function(object, vcov = NULL, keep = NULL, drop = NULL,
+tstat.fixest2_multi <- function(object, vcov = NULL, keep = NULL, drop = NULL,
                                order = NULL, long = FALSE, ...) {
   # Default is wide format => same as with coef
 
@@ -1340,9 +1340,9 @@ tstat.fixest_multi <- function(object, vcov = NULL, keep = NULL, drop = NULL,
   res
 }
 
-#' @describeIn coeftable.fixest_multi Extracts the p-values from `fixest_multi` estimations
+#' @describeIn coeftable.fixest2_multi Extracts the p-values from `fixest2_multi` estimations
 #' @export
-pvalue.fixest_multi <- function(object, vcov = NULL, keep = NULL, drop = NULL,
+pvalue.fixest2_multi <- function(object, vcov = NULL, keep = NULL, drop = NULL,
                                 order = NULL, long = FALSE, ...) {
   # Default is wide format => same as with coef
 
@@ -1370,12 +1370,12 @@ pvalue.fixest_multi <- function(object, vcov = NULL, keep = NULL, drop = NULL,
 }
 
 
-#' Extracts the residuals from a `fixest_multi` object
+#' Extracts the residuals from a `fixest2_multi` object
 #'
-#' Utility to extract the residuals from multiple `fixest` estimations. If possible,
+#' Utility to extract the residuals from multiple `fixest2` estimations. If possible,
 #' all the residuals are coerced into a matrix.
 #'
-#' @inheritParams resid.fixest
+#' @inheritParams resid.fixest2
 #'
 #' @param object A `fixes_multi` object.
 #' @param na.rm Logical, default is `FALSE`. Should the NAs be kept? If `TRUE`, they are removed.
@@ -1396,11 +1396,11 @@ pvalue.fixest_multi <- function(object, vcov = NULL, keep = NULL, drop = NULL,
 #' # each column is a model
 #' head(resid(est))
 #'
-#' # We can select/order the model using fixest_multi extraction
+#' # We can select/order the model using fixest2_multi extraction
 #' head(resid(est[rhs = .N:1]))
 #'
 #' @export
-resid.fixest_multi <- function(object, type = c("response", "deviance", "pearson", "working"),
+resid.fixest2_multi <- function(object, type = c("response", "deviance", "pearson", "working"),
                                na.rm = FALSE, ...) {
   # Je fais un prototype pour le moment, je l'ameliorerai apres (07-04-2021)
 
@@ -1424,21 +1424,21 @@ resid.fixest_multi <- function(object, type = c("response", "deviance", "pearson
 }
 
 
-#' @rdname resid.fixest_multi
+#' @rdname resid.fixest2_multi
 #' @export
-residuals.fixest_multi <- resid.fixest_multi
+residuals.fixest2_multi <- resid.fixest2_multi
 
 
 
 
-#' Confidence intervals for `fixest_multi` objects
+#' Confidence intervals for `fixest2_multi` objects
 #'
-#' Computes the confidence intervals of parameter estimates for `fixest`'s multiple
-#' estimation objects (aka `fixest_multi`).
+#' Computes the confidence intervals of parameter estimates for `fixest2`'s multiple
+#' estimation objects (aka `fixest2_multi`).
 #'
-#' @inheritParams confint.fixest
+#' @inheritParams confint.fixest2
 #'
-#' @param object A `fixest_multi` object obtained from a multiple estimation in `fixest`.
+#' @param object A `fixest2_multi` object obtained from a multiple estimation in `fixest2`.
 #'
 #' @return
 #' It returns a data frame whose first columns indicate which model has been estimated.
@@ -1459,7 +1459,7 @@ residuals.fixest_multi <- resid.fixest_multi
 #' est[c(3, 6)]
 #'
 #' @export
-confint.fixest_multi <- function(object, parm, level = 0.95, vcov = NULL, se = NULL,
+confint.fixest2_multi <- function(object, parm, level = 0.95, vcov = NULL, se = NULL,
                                  cluster = NULL, ssc = NULL, ...) {
   n <- length(object)
   confint_all <- vector("list", n)

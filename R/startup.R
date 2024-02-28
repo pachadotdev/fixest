@@ -6,25 +6,25 @@
 
 
 
-#' Permanently removes the fixest package startup message
+#' Permanently removes the fixest2 package startup message
 #'
 #' Package startup messages can be very annoying, although sometimes they can be necessary.
-#' Use this function to prevent `fixest`'s package startup message from popping when loading.
+#' Use this function to prevent `fixest2`'s package startup message from popping when loading.
 #' This will be specific to your current project.
 #'
 #' @param x Logical, no default. If `FALSE`, the package startup message is removed.
 #'
 #' @details
-#' Note that this function is introduced to cope with the first `fixest` startup message
+#' Note that this function is introduced to cope with the first `fixest2` startup message
 #' (in version 0.9.0).
 #'
 #' This function works only with R >= 4.0.0. There are no startup messages for R < 4.0.0.
 #'
 #' @export
-fixest_startup_msg <- function(x) {
+fixest2_startup_msg <- function(x) {
   check_arg(x, "logical scalar mbt")
 
-  config_update("fixest_startup_msg", x)
+  config_update("fixest2_startup_msg", x)
 }
 
 initialize_startup_msg <- function(startup_msg) {
@@ -32,7 +32,7 @@ initialize_startup_msg <- function(startup_msg) {
   # we need to keep track of the versions for which this default has been set
 
   # NOTA:
-  # - the variable fixest_version is written when the user uses fixest_startup_msg()
+  # - the variable fixest2_version is written when the user uses fixest2_startup_msg()
   # - if this function returns TRUE, then it forces the msg to pop
 
   # NOTA:
@@ -41,18 +41,18 @@ initialize_startup_msg <- function(startup_msg) {
   # - this means that when one creates a new project, the message will necessarily pop!
   # - so I MUST turn off the message for newly created projects.
   # otherwise it would be so annoying.
-  # - still => this is a problem if the person uses fixest for the first time
-  # -> the project can be deemed old, while in fact fixest was never used
+  # - still => this is a problem if the person uses fixest2 for the first time
+  # -> the project can be deemed old, while in fact fixest2 was never used
   # so startup messages weren't necessary (bc it would break nothing in the existing code)
-  # -> new way: I look at the R files to check whether fixest is used:
+  # -> new way: I look at the R files to check whether fixest2 is used:
   # - if TRUE: startup message
   # - if FALSE: nothing
   # - that's quite costly, but should happen only the very first time the package is attached
 
-  # Note that we must return the value of 'fixest_startup_msg' since these are
+  # Note that we must return the value of 'fixest2_startup_msg' since these are
   # updated only at session restart (and hence are not directly accessible)
 
-  # message("fixest_startup_msg")
+  # message("fixest2_startup_msg")
 
   if (getRversion() < "4.0.0") {
     # No startup message for version < 4.0
@@ -71,7 +71,7 @@ initialize_startup_msg <- function(startup_msg) {
 
   # message("getting version")
 
-  previous_version <- config_get("fixest_version")
+  previous_version <- config_get("fixest2_version")
   is_corrupt_version <- !is.null(previous_version) && !is_pkg_version(previous_version)
 
   # message("version is ", previous_version)
@@ -79,10 +79,10 @@ initialize_startup_msg <- function(startup_msg) {
   if (is.null(previous_version)) {
     # compatibility with previous versions
     # message("trying to get version from renviron")
-    previous_version <- renvir_get("fixest_version")
+    previous_version <- renvir_get("fixest2_version")
   }
 
-  current_version <- fixest_version()
+  current_version <- fixest2_version()
 
   if (!is_pkg_version(current_version)) {
     # If we're here, it's a bug: this should NEVER happen
@@ -92,22 +92,22 @@ initialize_startup_msg <- function(startup_msg) {
   if (!is_pkg_version(previous_version)) {
     # We first update the version
     # message("updating the version")
-    config_update("fixest_version", current_version)
+    config_update("fixest2_version", current_version)
 
-    # message("Is fixest used? ", is_fixest_used())
+    # message("Is fixest2 used? ", is_fixest2_used())
 
-    # Is it a new project? Or was fixest simply never used before?
-    if (!is_corrupt_version && is_fixest_used()) {
+    # Is it a new project? Or was fixest2 simply never used before?
+    if (!is_corrupt_version && is_fixest2_used()) {
       # => message
       # Since I register versions since 0.9.0, this means that the
-      # version of fixest used was anterior => all msgs should pop
+      # version of fixest2 used was anterior => all msgs should pop
 
-      config_update("fixest_startup_msg", TRUE)
+      config_update("fixest2_startup_msg", TRUE)
       return(TRUE)
     } else {
-      # fixest was never used or the version was corrupt
+      # fixest2 was never used or the version was corrupt
       # => we don't show any message since it will not break any existing code
-      config_update("fixest_startup_msg", FALSE)
+      config_update("fixest2_startup_msg", FALSE)
       return(FALSE)
     }
 
@@ -117,13 +117,13 @@ initialize_startup_msg <- function(startup_msg) {
       # Can happen in projects shared in the cloud
       # In that case, we don't touch the startup message
 
-      msg <- paste0("The current project used 'fixest' version ", previous_version, ", but the current version is only ", current_version, ". Maybe update the package?")
+      msg <- paste0("The current project used 'fixest2' version ", previous_version, ", but the current version is only ", current_version, ". Maybe update the package?")
       packageStartupMessage(fit_screen(msg, 1))
     } else {
       # A) we update the version
-      config_update("fixest_version", current_version)
+      config_update("fixest2_version", current_version)
 
-      # B) we reset the value of fixest_startup_msg
+      # B) we reset the value of fixest2_startup_msg
       #    only if the previous_version is anterior to the version that introduced the
       #    message (means the message SHOULD pop since it would be the first time)
 
@@ -133,29 +133,29 @@ initialize_startup_msg <- function(startup_msg) {
         # You force a startup message even if it was turned off in a previous version
 
         # use case:
-        # - v0.9.0: startup message, user uses fixest_startup_msg(FALSE)
+        # - v0.9.0: startup message, user uses fixest2_startup_msg(FALSE)
         # - v0.10.0: new breaking changes, you want to inform the user even if he had set
-        # fixest_startup_msg(FALSE) in v0.9.0
+        # fixest2_startup_msg(FALSE) in v0.9.0
         #
 
-        config_update("fixest_startup_msg", previous_version)
+        config_update("fixest2_startup_msg", previous_version)
         return(previous_version)
       } else {
         # The previous version is already posterior to the last message
         # => no startup message any more
 
-        config_update("fixest_startup_msg", FALSE)
+        config_update("fixest2_startup_msg", FALSE)
         return(FALSE)
       }
     }
   }
 
-  # If null, we'll get the value thanks to renvir_get("fixest_startup_msg")
+  # If null, we'll get the value thanks to renvir_get("fixest2_startup_msg")
   # but in some instances, it may be corrupt, so we fix it
-  res <- config_get("fixest_startup_msg")
+  res <- config_get("fixest2_startup_msg")
   if (is.null(res)) {
     # corrupt situation (can occur in dev)
-    config_update("fixest_startup_msg", FALSE)
+    config_update("fixest2_startup_msg", FALSE)
     return(FALSE)
   }
 
@@ -166,20 +166,20 @@ version2num <- function(x) {
   sum(as.numeric(strsplit(x, "\\.")[[1]]) * c(1e6, 1e3, 1))
 }
 
-fixest_version <- function() {
-  as.character(packageVersion("fixest"))
+fixest2_version <- function() {
+  as.character(packageVersion("fixest2"))
 }
 
 is_pkg_version <- function(x) {
   length(x) == 1 && is.character(x) && length(strsplit(x, "\\.")[[1]]) == 3
 }
 
-is_fixest_used <- function() {
+is_fixest2_used <- function() {
   # To return TRUE:
-  # - fixest in the files
+  # - fixest2 in the files
   # - + file saved > 7 days
   #
-  # - if fixest but file saved < 7 days, very likely a new project
+  # - if fixest2 but file saved < 7 days, very likely a new project
 
   # Only level 1 recursivity
   files <- list.files(pattern = "\\.(r|R)$")
@@ -196,17 +196,17 @@ is_fixest_used <- function() {
 
   big_text <- lapply(files, readLines, warn = FALSE)
 
-  # we get the files that have fixest in them
-  id_fixest <- which(sapply(big_text, function(x) any(grepl("fixest", x, fixed = TRUE))))
+  # we get the files that have fixest2 in them
+  id_fixest2 <- which(sapply(big_text, function(x) any(grepl("fixest2", x, fixed = TRUE))))
 
-  fixest_files <- files[id_fixest]
-  if (length(fixest_files) == 0) {
+  fixest2_files <- files[id_fixest2]
+  if (length(fixest2_files) == 0) {
     return(FALSE)
   }
 
   now <- Sys.time()
 
-  for (f in fixest_files) {
+  for (f in fixest2_files) {
     f_created <- file.mtime(f)
     if ("POSIXt" %in% class(f_created)) {
       d <- as.numeric(difftime(now, f_created, units = "days"))
@@ -314,7 +314,7 @@ renvir_update <- function(key, value) {
     return(NULL)
   }
 
-  message("To save the settings at the project level 'fixest' needs to update the '.Renviron' file, currently located at:\n\n ", renv_path, "\n\n If the path indeed leads to your current project, do you give persmission? ")
+  message("To save the settings at the project level 'fixest2' needs to update the '.Renviron' file, currently located at:\n\n ", renv_path, "\n\n If the path indeed leads to your current project, do you give persmission? ")
 
   consent <- readline("ok/y/yes to consent:")
   consent <- tolower(trimws(consent))
@@ -369,7 +369,7 @@ find_config_path <- function() {
     return(NULL)
   }
 
-  dir <- tools::R_user_dir("fixest", "config")
+  dir <- tools::R_user_dir("fixest2", "config")
 
   # We create the directory if needed
   if (!dir.exists(dir)) {
@@ -378,7 +378,7 @@ find_config_path <- function() {
 
   dir <- normalizePath(dir, "/")
 
-  file.path(dir, "fixest_config.csv")
+  file.path(dir, "fixest2_config.csv")
 }
 
 
@@ -393,7 +393,7 @@ config_update <- function(key, value) {
   if (file.exists(path)) {
     data <- read.csv(path)
   } else {
-    data <- data.frame(proj = proj, fixest_version = fixest_version(), stringsAsFactors = FALSE)
+    data <- data.frame(proj = proj, fixest2_version = fixest2_version(), stringsAsFactors = FALSE)
   }
 
   if (!key %in% names(data)) {
@@ -409,7 +409,7 @@ config_update <- function(key, value) {
 
   i <- which(data$proj %in% proj)
 
-  data[["fixest_version"]][i] <- fixest_version()
+  data[["fixest2_version"]][i] <- fixest2_version()
 
   if (is.null(value)) value <- "NULL"
   data[[key]][i] <- as.character(value)

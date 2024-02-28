@@ -2,7 +2,7 @@
 % Please edit documentation in R/fixest_multi.R
 \name{n_models}
 \alias{n_models}
-\title{Gets the dimension of \code{fixest_multi} objects}
+\title{Gets the dimension of \code{fixest2_multi} objects}
 \usage{
 n_models(
   x,
@@ -14,7 +14,7 @@ n_models(
 )
 }
 \arguments{
-\item{x}{A \code{fixest_mutli} object, obtained e.g. from \code{\link{feols}}.}
+\item{x}{A \code{fixest2_mutli} object, obtained e.g. from \code{\link{feols}}.}
 
 \item{lhs}{Logical scalar, default is \code{FALSE}. If \code{TRUE}, the number of different
 left hand sides is returned.}
@@ -36,7 +36,7 @@ It returns an integer scalar. If no argument is provided, the total number of
 models is returned.
 }
 \description{
-Otabin the number of unique models of a \code{fixest_multi} object, depending on the
+Otabin the number of unique models of a \code{fixest2_multi} object, depending on the
 type requested.
 }
 \examples{

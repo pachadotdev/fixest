@@ -89,7 +89,7 @@ By default, the DSB operator expands vectors into sums. You can add a comma, lik
 to expand with commas--the content can then be used within functions. For instance:
 \code{c(x.[, 1:2])} will create \code{c(x1, x2)} (and \emph{not} \code{c(x1 + x2)}).
 
-In all \code{fixest} estimations, this special parsing is enabled, so you don't need to use \code{xpd}.
+In all \code{fixest2} estimations, this special parsing is enabled, so you don't need to use \code{xpd}.
 
 One-sided formulas can be expanded with the DSB operator: let \code{x = ~sepal + petal}, then
 \code{xpd(y ~ .[x])} leads to \code{color ~ sepal + petal}.
@@ -110,7 +110,7 @@ replaced with a neutral element, namely \code{1}. For example, \verb{x = "" ; xp
 You can catch several variable names at once by using regular expressions. To use regular
 expressions, you need to enclose it in the dot-dot or the regex function: \code{..("regex")} or
 \code{regex("regex")}. For example, \code{regex("Sepal")} will catch both the variables \code{Sepal.Length} and
-\code{Sepal.Width} from the \code{iris} data set. In a \code{fixest} estimation, the variables names from which
+\code{Sepal.Width} from the \code{iris} data set. In a \code{fixest2} estimation, the variables names from which
 the regex will be applied come from the data set. If you use \code{xpd}, you need to provide either a
 data set or a vector of names in the argument \code{data}.
 
@@ -139,7 +139,7 @@ setFixest_fml(
 lm(xpd(Ozone ~ Wind + ..ctrl), airquality)
 lm(xpd(Ozone ~ Wind + ..ctrl_long), airquality)
 
-# You can use the macros without xpd() in fixest estimations
+# You can use the macros without xpd() in fixest2 estimations
 a <- feols(Ozone ~ Wind + ..ctrl, airquality)
 b <- feols(Ozone ~ Wind + ..ctrl_long, airquality)
 etable(a, b, keep = "Int|Win")
@@ -164,7 +164,7 @@ feols(y ~ x.[2:3] + .[z], base)
 base <- setNames(iris, c("y", "x1", "x2", "x3", "species"))
 xpd(y ~ x.., data = base)
 
-# In fixest estimations, this is automatically taken care of
+# In fixest2 estimations, this is automatically taken care of
 feols(y ~ x.., data = base)
 
 
@@ -172,7 +172,7 @@ feols(y ~ x.., data = base)
 # You can use xpd for stepwise estimations
 #
 
-# Note that for stepwise estimations in fixest, you can use
+# Note that for stepwise estimations in fixest2, you can use
 # the stepwise functions: sw, sw0, csw, csw0
 # -> see help in feols or in the dedicated vignette
 
@@ -208,7 +208,7 @@ feols(Armed.Forces ~ Population + ..many_vars, longley)
 
 feols(Armed.Forces ~ Population + ..("GNP|ployed"), longley)
 
-# Example 3: same as Ex.2 but without using a fixest estimation
+# Example 3: same as Ex.2 but without using a fixest2 estimation
 
 # Here we need to use xpd():
 lm(xpd(Armed.Forces ~ Population + regex("GNP|ployed"), data = longley), longley)
@@ -315,10 +315,10 @@ etable(res_compact)
 
 
 #
-# In non-fixest functions: guessing the data allows to use regex
+# In non-fixest2 functions: guessing the data allows to use regex
 #
 
-# When used in non-fixest functions, the algorithm tries to "guess" the data
+# When used in non-fixest2 functions, the algorithm tries to "guess" the data
 # so that ..("regex") can be directly evaluated without passing the argument 'data'
 data(longley)
 lm(xpd(Armed.Forces ~ Population + ..("GNP|ployed")), longley)

@@ -9,13 +9,13 @@ fitstat_register(type, fun, alias = NULL, subtypes = NULL)
 \arguments{
 \item{type}{A character scalar giving the type-name.}
 
-\item{fun}{A function to be applied to a \code{fixest} estimation. It must return either a scalar,
+\item{fun}{A function to be applied to a \code{fixest2} estimation. It must return either a scalar,
 or a list of unitary elements. If the number of elements returned is greater than 1,
 then each element must be named! If the fit statistic is not valid for a given estimation,
 a plain \code{NA} value should be returned.}
 
 \item{alias}{A (named) character vector. An alias to be used in lieu of the type name in
-the display methods (ie when used in \code{\link{print.fixest_fitstat}} or \code{\link{etable}}).
+the display methods (ie when used in \code{\link{print.fixest2_fitstat}} or \code{\link{etable}}).
 If the function returns several values, i.e. sub-types, you can give an alias to
 these sub-types. The syntax is \code{c("type" = "alias", "subtype_i" = "alias_i")},
 with "type" (resp. "subtype") the value of the argument \code{type} resp. (\code{subtypes}).

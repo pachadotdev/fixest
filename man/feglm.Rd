@@ -147,11 +147,11 @@ See \code{\link{family}} for details of family functions.}
 scalar equal to a VCOV type, either a formula of the form: \code{vcov_type ~ variables}. The
 VCOV types implemented are: "iid", "hetero" (or "HC1"), "cluster", "twoway",
 "NW" (or "newey_west"), "DK" (or "driscoll_kraay"), and "conley". It also accepts
-object from \code{\link{vcov_cluster}}, \code{\link[fixest:vcov_hac]{vcov_NW}}, \code{\link[fixest:vcov_hac]{NW}},
-\code{\link[fixest:vcov_hac]{vcov_DK}}, \code{\link[fixest:vcov_hac]{DK}}, \code{\link{vcov_conley}} and
-\code{\link[fixest:vcov_conley]{conley}}. It also accepts covariance matrices computed externally.
+object from \code{\link{vcov_cluster}}, \code{\link[=vcov_hac]{vcov_NW}}, \code{\link[=vcov_hac]{NW}},
+\code{\link[=vcov_hac]{vcov_DK}}, \code{\link[=vcov_hac]{DK}}, \code{\link{vcov_conley}} and
+\code{\link[=vcov_conley]{conley}}. It also accepts covariance matrices computed externally.
 Finally it accepts functions to compute the covariances. See the \code{vcov} documentation
-in the \href{https://lrberge.github.io/fixest/articles/fixest_walkthrough.html#the-vcov-argument-1}{vignette}.}
+in the \href{https://lrberge.github.io/fixest2/articles/fixest2_walkthrough.html#the-vcov-argument-1}{vignette}.}
 
 \item{offset}{A formula or a numeric vector. An offset can be added to the estimation.
 If equal to a formula, it should be of the form (for example) \code{~0.5*x**2}. This
@@ -333,23 +333,23 @@ code to avoid memory issues.}
 \item{only.env}{(Advanced users.) Logical, default is \code{FALSE}. If \code{TRUE}, then only
 the environment used to make the estimation is returned.}
 
-\item{env}{(Advanced users.) A \code{fixest} environment created by a \code{fixest} estimation
+\item{env}{(Advanced users.) A \code{fixest2} environment created by a \code{fixest2} estimation
 with \code{only.env = TRUE}. Default is missing. If provided, the data from this environment
 will be used to perform the estimation.}
 
 \item{...}{Not currently used.}
 
 \item{y}{Numeric vector/matrix/data.frame of the dependent variable(s). Multiple dependent
-variables will return a \code{fixest_multi} object.}
+variables will return a \code{fixest2_multi} object.}
 
 \item{X}{Numeric matrix of the regressors.}
 
 \item{fixef_df}{Matrix/data.frame of the fixed-effects.}
 }
 \value{
-A \code{fixest} object. Note that \code{fixest} objects contain many elements and most of them
+A \code{fixest2} object. Note that \code{fixest2} objects contain many elements and most of them
 are for internal use, they are presented here only for information. To access them,
-it is safer to use the user-level methods (e.g. \code{\link{vcov.fixest}}, \code{\link{resid.fixest}},
+it is safer to use the user-level methods (e.g. \code{\link{vcov.fixest2}}, \code{\link{resid.fixest2}},
 etc) or functions (like for instance \code{\link{fitstat}} to access any fit statistic).
 
 \item{nobs}{The number of observations.}
@@ -425,7 +425,7 @@ Thus, the internal algorithm uses a numerical trick which is fast, but the drawb
 that the identity of each observation is lost (i.e. they are now equal to a meaningless
 number instead of being equal to \code{paste0(fe_1, "_", fe_2)}). These \dQuote{identities}
 are useful only if you're interested in the value of the fixed-effects (that you can
-extract with \code{\link{fixef.fixest}}). If you're only interested in coefficients of the variables,
+extract with \code{\link{fixef.fixest2}}). If you're only interested in coefficients of the variables,
 it doesn't matter. Anyway, you can use \code{combine.quick = FALSE} to tell the internal
 algorithm to use \code{paste} instead of the numerical trick. By default, the numerical
 trick is performed only for large data sets.
@@ -456,7 +456,7 @@ avoid using only the variable with varying slope (i.e. use single square bracket
 
 To use leads/lags of variables in the estimation, you can: i) either provide the argument
 \code{panel.id}, ii) either set your data set as a panel with the function
-\code{\link{panel}}, \code{\link[fixest:l]{f}} and \code{\link[fixest:l]{d}}.
+\code{\link{panel}}, \code{\link[=l]{f}} and \code{\link[=l]{d}}.
 
 You can provide several leads/lags/differences at once: e.g. if your formula is equal to
 \code{f(y) ~ l(x, -1:1)}, it means that the dependent variable is equal to the lead of \code{y},
@@ -487,13 +487,13 @@ The function \code{\link{i}} has in fact more arguments, please see details in i
 
 
 Standard-errors can be computed in different ways, you can use the arguments \code{se} and \code{ssc}
-in \code{\link{summary.fixest}} to define how to compute them. By default, in the presence
+in \code{\link{summary.fixest2}} to define how to compute them. By default, in the presence
 of fixed-effects, standard-errors are automatically clustered.
 
-The following vignette: \href{https://lrberge.github.io/fixest/articles/standard_errors.html}{On standard-errors} describes in details how the standard-errors are computed in
-\code{fixest} and how you can replicate standard-errors from other software.
+The following vignette: \href{https://lrberge.github.io/fixest2/articles/standard_errors.html}{On standard-errors} describes in details how the standard-errors are computed in
+\code{fixest2} and how you can replicate standard-errors from other software.
 
-You can use the functions \code{\link{setFixest_vcov}} and \code{\link[fixest:ssc]{setFixest_ssc}} to
+You can use the functions \code{\link{setFixest_vcov}} and \code{\link[=ssc]{setFixest_ssc}} to
 permanently set the way the standard-errors are computed.
 }
 
@@ -501,10 +501,10 @@ permanently set the way the standard-errors are computed.
 
 
 Multiple estimations can be performed at once, they just have to be specified in the formula.
-Multiple estimations yield a \code{fixest_multi} object which is \sQuote{kind of} a list of
+Multiple estimations yield a \code{fixest2_multi} object which is \sQuote{kind of} a list of
 all the results but includes specific methods to access the results in a handy way.
 Please have a look at the dedicated vignette:
-\href{https://lrberge.github.io/fixest/articles/multiple_estimations.html}{Multiple estimations}.
+\href{https://lrberge.github.io/fixest2/articles/multiple_estimations.html}{Multiple estimations}.
 
 To include multiple dependent variables, wrap them in \code{c()} (\code{list()} also works).
 For instance \code{fml = c(y1, y2) ~ x1} would estimate the model \code{fml = y1 ~ x1} and
@@ -567,21 +567,21 @@ estimation functions. For example, with R >= 4.1, \code{mtcars |> feols(mpg ~ cy
 \section{Tricks to estimate multiple LHS}{
 
 
-To use multiple dependent variables in \code{fixest} estimations, you need to include them
+To use multiple dependent variables in \code{fixest2} estimations, you need to include them
 in a vector: like in \code{c(y1, y2, y3)}.
 
 First, if names are stored in a vector, they can readily be inserted in a formula to
 perform multiple estimations using the dot square bracket operator. For instance if
-\code{my_lhs = c("y1", "y2")}, calling \code{fixest} with, say \code{feols(.[my_lhs] ~ x1, etc)} is
+\code{my_lhs = c("y1", "y2")}, calling \code{fixest2} with, say \code{feols(.[my_lhs] ~ x1, etc)} is
 equivalent to using \code{feols(c(y1, y2) ~ x1, etc)}. Beware that this is a special feature
-unique to the \emph{left-hand-side} of \code{fixest} estimations (the default behavior of the DSB
+unique to the \emph{left-hand-side} of \code{fixest2} estimations (the default behavior of the DSB
 operator is to aggregate with sums, see \code{\link{xpd}}).
 
 Second, you can use a regular expression to grep the left-hand-sides on the fly. When the
 \code{..("regex")} feature is used naked on the LHS, the variables grepped are inserted into
 \code{c()}. For example \verb{..("Pe") ~ Sepal.Length, iris} is equivalent to
 \verb{c(Petal.Length, Petal.Width) ~ Sepal.Length, iris}. Beware that this is a
-special feature unique to the \emph{left-hand-side} of \code{fixest} estimations
+special feature unique to the \emph{left-hand-side} of \code{fixest2} estimations
 (the default behavior of \code{..("regex")} is to aggregate with sums, see \code{\link{xpd}}).
 }
 
@@ -611,7 +611,7 @@ By default, the DSB operator expands vectors into sums. You can add a comma, lik
 to expand with commas--the content can then be used within functions. For instance:
 \code{c(x.[, 1:2])} will create \code{c(x1, x2)} (and \emph{not} \code{c(x1 + x2)}).
 
-In all \code{fixest} estimations, this special parsing is enabled, so you don't need to use \code{xpd}.
+In all \code{fixest2} estimations, this special parsing is enabled, so you don't need to use \code{xpd}.
 
 One-sided formulas can be expanded with the DSB operator: let \code{x = ~sepal + petal}, then
 \code{xpd(y ~ .[x])} leads to \code{color ~ sepal + petal}.
@@ -678,7 +678,7 @@ est_split[sample = 1:2, lhs = 1, rhs = 1]
 \references{
 Berge, Laurent, 2018, "Efficient estimation of maximum likelihood models with
 multiple fixed-effects: the R package FENmlm." CREA Discussion Papers,
-13 (\href{https://github.com/lrberge/fixest/blob/master/_DOCS/FENmlm_paper.pdf}{}).
+13 (\href{https://github.com/lrberge/fixest2/blob/master/_DOCS/FENmlm_paper.pdf}{}).
 
 For models with multiple fixed-effects:
 
@@ -686,8 +686,8 @@ Gaure, Simen, 2013, "OLS with multiple high dimensional category variables",
 Computational Statistics & Data Analysis 66 pp. 8--18
 }
 \seealso{
-See also \code{\link{summary.fixest}} to see the results with the appropriate standard-errors,
-\code{\link{fixef.fixest}} to extract the fixed-effects coefficients, and the function \code{\link{etable}}
+See also \code{\link{summary.fixest2}} to see the results with the appropriate standard-errors,
+\code{\link{fixef.fixest2}} to extract the fixed-effects coefficients, and the function \code{\link{etable}}
 to visualize the results of multiple estimations.
 And other estimation methods: \code{\link{feols}}, \code{\link{femlm}}, \code{\link{fenegbin}}, \code{\link{feNmlm}}.
 }

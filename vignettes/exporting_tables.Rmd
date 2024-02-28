@@ -18,7 +18,7 @@ knitr::opts_chunk$set(echo = TRUE, comment = "#>")
 is_pander <- requireNamespace("pander", quietly = TRUE)
 if (is_pander) library(pander)
 
-library(fixest)
+library(fixest2)
 setFixest_notes(FALSE)
 setFixest_etable(digits = 3)
 ```
@@ -40,7 +40,7 @@ This document applies to `fixest` version 0.10.2 or higher.
 Throughout this document, we will use data from the *airquality* data base. We also set a dictionary that will be used to rename the variables used in `etable`. This dictionary is set once and for all.
 
 ```{r, eval = TRUE, results = "hide"}
-library(fixest)
+library(fixest2)
 data(airquality)
 
 # Setting a dictionary

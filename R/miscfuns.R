@@ -6,7 +6,7 @@
 
 
 
-#' Collinearity diagnostics for `fixest` objects
+#' Collinearity diagnostics for `fixest2` objects
 #'
 #' In some occasions, the optimization algorithm of [`femlm`] may fail to converge, or
 #' the variance-covariance matrix may not be available. The most common reason of why
@@ -14,7 +14,7 @@
 #' set of variables is problematic.
 #'
 #'
-#' @param x A `fixest` object obtained from, e.g. functions [`femlm`], [`feols`] or [`feglm`].
+#' @param x A `fixest2` object obtained from, e.g. functions [`femlm`], [`feols`] or [`feglm`].
 #' @param verbose An integer. If higher than or equal to 1, then a note is prompted at
 #' each step of the algorithm. By default `verbose = 0` for small problems
 #' and to 1 for large problems.
@@ -66,7 +66,7 @@
 #'
 #' @export
 collinearity <- function(x, verbose) {
-  # x: fixest estimation
+  # x: fixest2 estimation
 
   # todo:
   # - input: fomrula + data to check collinearity in any kind of setup
@@ -75,8 +75,8 @@ collinearity <- function(x, verbose) {
   # - arg: focus: to focus on a single variable
   # - arg: collin.tol
 
-  if (!inherits(x, "fixest")) {
-    stop("Argument `x` must be a fixest object.")
+  if (!inherits(x, "fixest2")) {
+    stop("Argument `x` must be a fixest2 object.")
   }
 
   # I) (linear) collinearity with fixed-effects
@@ -126,7 +126,7 @@ collinearity <- function(x, verbose) {
   panel__meta__info <- set_panel_meta_info(x, data)
 
   if (isLinear || isFixef || "(Intercept)" %in% names(coef)) {
-    linear.matrix <- fixest_model_matrix(rhs_fml, data)
+    linear.matrix <- fixest2_model_matrix(rhs_fml, data)
   }
 
   for (i in seq_along(x$obs_selection)) {
@@ -1148,7 +1148,7 @@ did_means <- function(fml, base, treat_var, post_var, tex = FALSE, treat_dict,
 #' Laurent Berge
 #'
 #' @seealso
-#' [`iplot`][fixest::coefplot] to plot interactions or factors created with `i()`, [`feols`] for
+#' [`iplot`][fixest2::coefplot] to plot interactions or factors created with `i()`, [`feols`] for
 #' OLS estimation with multiple fixed-effects.
 #'
 #' See the function [`bin`] for binning variables.
@@ -1183,7 +1183,7 @@ did_means <- function(fml, base, treat_var, post_var, tex = FALSE, treat_dict,
 #' data.frame(x, i(x, bin = .(ab = "@a|b")))
 #'
 #' #
-#' # In fixest estimations
+#' # In fixest2 estimations
 #' #
 #'
 #' data(base_did)
@@ -1246,8 +1246,8 @@ i <- function(factor_var, var, ref, keep, bin, ref2, keep2, bin2, ...) {
 
   mc <- match.call()
 
-  # Finding if it's a call from fixest
-  FROM_FIXEST <- is_fixest_call()
+  # Finding if it's a call from fixest2
+  FROM_FIXEST <- is_fixest2_call()
 
   # General checks
   check_arg(factor_var, "mbt vector")
@@ -1384,7 +1384,7 @@ i <- function(factor_var, var, ref, keep, bin, ref2, keep2, bin2, ...) {
   check_arg(ref2, keep, keep2, "vector no na")
 
   NO_ERROR <- FALSE
-  if (is_calling_fun("fixest_model_matrix_extra", full_search = TRUE, full_name = TRUE)) {
+  if (is_calling_fun("fixest2_model_matrix_extra", full_search = TRUE, full_name = TRUE)) {
     NO_ERROR <- TRUE
   }
 
@@ -1501,8 +1501,8 @@ i <- function(factor_var, var, ref, keep, bin, ref2, keep2, bin2, ...) {
   if (FROM_FIXEST) {
     is_GLOBAL <- FALSE
     for (where in 1:min(8, sys.nframe())) {
-      if (exists("GLOBAL_fixest_mm_info", parent.frame(where))) {
-        GLOBAL_fixest_mm_info <- get("GLOBAL_fixest_mm_info", parent.frame(where))
+      if (exists("GLOBAL_fixest2_mm_info", parent.frame(where))) {
+        GLOBAL_fixest2_mm_info <- get("GLOBAL_fixest2_mm_info", parent.frame(where))
         is_GLOBAL <- TRUE
         break
       }
@@ -1527,9 +1527,9 @@ i <- function(factor_var, var, ref, keep, bin, ref2, keep2, bin2, ...) {
       }
       info$is_inter_fact <- IS_INTER_FACTOR
 
-      GLOBAL_fixest_mm_info[[length(GLOBAL_fixest_mm_info) + 1]] <- info
+      GLOBAL_fixest2_mm_info[[length(GLOBAL_fixest2_mm_info) + 1]] <- info
       # re assignment
-      assign("GLOBAL_fixest_mm_info", GLOBAL_fixest_mm_info, parent.frame(where))
+      assign("GLOBAL_fixest2_mm_info", GLOBAL_fixest2_mm_info, parent.frame(where))
     }
   }
 
@@ -1635,7 +1635,7 @@ i_noref <- function(factor_var, var, ref, bin, keep, ref2, keep2, bin2) {
 #' to expand with commas--the content can then be used within functions. For instance:
 #' `c(x.[, 1:2])` will create `c(x1, x2)` (and *not* `c(x1 + x2)`).
 #'
-#' In all `fixest` estimations, this special parsing is enabled, so you don't need to use `xpd`.
+#' In all `fixest2` estimations, this special parsing is enabled, so you don't need to use `xpd`.
 #'
 #' One-sided formulas can be expanded with the DSB operator: let `x = ~sepal + petal`, then
 #' `xpd(y ~ .[x])` leads to `color ~ sepal + petal`.
@@ -1654,7 +1654,7 @@ i_noref <- function(factor_var, var, ref, bin, keep, ref2, keep2, bin2) {
 #' You can catch several variable names at once by using regular expressions. To use regular
 #' expressions, you need to enclose it in the dot-dot or the regex function: `..("regex")` or
 #' `regex("regex")`. For example, `regex("Sepal")` will catch both the variables `Sepal.Length` and
-#' `Sepal.Width` from the `iris` data set. In a `fixest` estimation, the variables names from which
+#' `Sepal.Width` from the `iris` data set. In a `fixest2` estimation, the variables names from which
 #' the regex will be applied come from the data set. If you use `xpd`, you need to provide either a
 #' data set or a vector of names in the argument `data`.
 #'
@@ -1693,7 +1693,7 @@ i_noref <- function(factor_var, var, ref, bin, keep, ref2, keep2, bin2) {
 #' lm(xpd(Ozone ~ Wind + ..ctrl), airquality)
 #' lm(xpd(Ozone ~ Wind + ..ctrl_long), airquality)
 #'
-#' # You can use the macros without xpd() in fixest estimations
+#' # You can use the macros without xpd() in fixest2 estimations
 #' a <- feols(Ozone ~ Wind + ..ctrl, airquality)
 #' b <- feols(Ozone ~ Wind + ..ctrl_long, airquality)
 #' etable(a, b, keep = "Int|Win")
@@ -1718,7 +1718,7 @@ i_noref <- function(factor_var, var, ref, bin, keep, ref2, keep2, bin2) {
 #' base <- setNames(iris, c("y", "x1", "x2", "x3", "species"))
 #' xpd(y ~ x.., data = base)
 #'
-#' # In fixest estimations, this is automatically taken care of
+#' # In fixest2 estimations, this is automatically taken care of
 #' feols(y ~ x.., data = base)
 #'
 #'
@@ -1726,7 +1726,7 @@ i_noref <- function(factor_var, var, ref, bin, keep, ref2, keep2, bin2) {
 #' # You can use xpd for stepwise estimations
 #' #
 #'
-#' # Note that for stepwise estimations in fixest, you can use
+#' # Note that for stepwise estimations in fixest2, you can use
 #' # the stepwise functions: sw, sw0, csw, csw0
 #' # -> see help in feols or in the dedicated vignette
 #'
@@ -1762,7 +1762,7 @@ i_noref <- function(factor_var, var, ref, bin, keep, ref2, keep2, bin2) {
 #'
 #' feols(Armed.Forces ~ Population + ..("GNP|ployed"), longley)
 #'
-#' # Example 3: same as Ex.2 but without using a fixest estimation
+#' # Example 3: same as Ex.2 but without using a fixest2 estimation
 #'
 #' # Here we need to use xpd():
 #' lm(xpd(Armed.Forces ~ Population + regex("GNP|ployed"), data = longley), longley)
@@ -1869,10 +1869,10 @@ i_noref <- function(factor_var, var, ref, bin, keep, ref2, keep2, bin2) {
 #'
 #'
 #' #
-#' # In non-fixest functions: guessing the data allows to use regex
+#' # In non-fixest2 functions: guessing the data allows to use regex
 #' #
 #'
-#' # When used in non-fixest functions, the algorithm tries to "guess" the data
+#' # When used in non-fixest2 functions, the algorithm tries to "guess" the data
 #' # so that ..("regex") can be directly evaluated without passing the argument 'data'
 #' data(longley)
 #' lm(xpd(Armed.Forces ~ Population + ..("GNP|ployed")), longley)
@@ -2150,7 +2150,7 @@ xpd <- function(fml, ..., add = NULL, lhs, rhs, data = NULL, frame = parent.fram
 
 #' Centers a set of variables around a set of factors
 #'
-#' User-level access to internal demeaning algorithm of `fixest`.
+#' User-level access to internal demeaning algorithm of `fixest2`.
 #'
 #' @inheritParams feols
 #' @inheritSection feols Varying slopes
@@ -2306,8 +2306,8 @@ demean <- function(X, f, slope.vars, slope.flag, data, weights,
 
   # LB: next line is needed if input data is matrix and as.matrix is set to FALSE
   clx <- NULL
-  is_fixest <- inherits(X, "fixest")
-  if (lX <- is.list(X) && !is_fixest) {
+  is_fixest2 <- inherits(X, "fixest2")
+  if (lX <- is.list(X) && !is_fixest2) {
     clx <- oldClass(X)
     # SK: oldClass is faster and returns NULL when the list is plain. class returns the implicit class "list".
     # This is the key to fast R code -> all data.frame methods are super slow and should duly be avoided in internal code.
@@ -2323,7 +2323,7 @@ demean <- function(X, f, slope.vars, slope.flag, data, weights,
 
   # Step 1: formatting the input
   if (!im_confident) {
-    check_arg(X, "numeric vmatrix | list | formula | class(fixest) mbt")
+    check_arg(X, "numeric vmatrix | list | formula | class(fixest2) mbt")
     check_arg(iter, "integer scalar GE{1}")
     check_arg(tol, "numeric scalar GT{0}")
     check_arg(notes, "logical scalar")
@@ -2334,7 +2334,7 @@ demean <- function(X, f, slope.vars, slope.flag, data, weights,
     fe_info <- isTRUE(dots$fe_info)
 
     data_mbt <- TRUE
-    if (inherits(X, "fixest")) {
+    if (inherits(X, "fixest2")) {
       data_mbt <- FALSE
       if (!identical(X$method, "feols")) {
         stop("This function only works for 'feols' estimations (not for ", X$method, ").")
@@ -2403,7 +2403,7 @@ demean <- function(X, f, slope.vars, slope.flag, data, weights,
       # Extracting the information
       terms_fixef <- fixef_terms(.xpd(rhs = X[[3L]]))
       # We add the intercept only for only slope models, otherwise this would be void since the result would be always 0
-      X <- fixest_model_matrix(.xpd(lhs = quote(y), rhs = X[[2L]]), data,
+      X <- fixest2_model_matrix(.xpd(lhs = quote(y), rhs = X[[2L]]), data,
         fake_intercept = any(terms_fixef$slope_flag >= 0)
       )
       var_names <- dimnames(X)[[2]]
@@ -2781,9 +2781,9 @@ demean <- function(X, f, slope.vars, slope.flag, data, weights,
 
 #' Extracts the observations used for the estimation
 #'
-#' This function extracts the observations used in `fixest` estimation.
+#' This function extracts the observations used in `fixest2` estimation.
 #'
-#' @param x A `fixest` object.
+#' @param x A `fixest2` object.
 #'
 #' @return
 #' It returns a simple vector of integers.
@@ -2805,7 +2805,7 @@ demean <- function(X, f, slope.vars, slope.flag, data, weights,
 #'
 #' @export
 obs <- function(x) {
-  check_arg(x, "class(fixest)")
+  check_arg(x, "class(fixest2)")
 
   if (isTRUE(x$lean)) {
     stop("obs() does not work with models estimated with 'lean = TRUE'.")
@@ -2860,7 +2860,7 @@ obs <- function(x) {
 #'
 #' @export
 check_conv_feols <- function(x) {
-  check_arg(x, "class(fixest) mbt")
+  check_arg(x, "class(fixest2) mbt")
   if (!identical(x$method, "feols")) {
     stop("This function only works for 'feols' estimations (not for ", x$method, ").")
   }
@@ -2905,14 +2905,14 @@ check_conv_feols <- function(x) {
 
   names(res) <- info$varnames
 
-  class(res) <- "fixest_check_conv"
+  class(res) <- "fixest2_check_conv"
 
   res
 }
 
 #' @rdname check_conv_feols
 #' @export
-summary.fixest_check_conv <- function(object, type = "short", ...) {
+summary.fixest2_check_conv <- function(object, type = "short", ...) {
   check_set_arg(type, "match(short, detail)")
   if (is_user_level_call()) {
     validate_dots(suggest_args = "type")
@@ -2984,12 +2984,12 @@ summary.fixest_check_conv <- function(object, type = "short", ...) {
 
 
 
-#' Replicates `fixest` objects
+#' Replicates `fixest2` objects
 #'
-#' Simple function that replicates `fixest` objects while (optionally) computing different
+#' Simple function that replicates `fixest2` objects while (optionally) computing different
 #' standard-errors. Useful mostly in combination with [`etable`] or [`coefplot`].
 #'
-#' @param x Either a `fixest` object, either a list of `fixest` objects created with `.l()`.
+#' @param x Either a `fixest2` object, either a list of `fixest2` objects created with `.l()`.
 #' @param times Integer vector giving the number of repetitions of the vector of elements. By
 #' default `times = 1`. It must be either of length 1, either of the same length as the argument
 #' `x`.
@@ -2998,15 +2998,15 @@ summary.fixest_check_conv <- function(object, type = "short", ...) {
 #' not missing, it must be of the same length as `times`, `each`, or the final vector. Note that if
 #' the arguments `times` and `each` are missing, then `times` becomes equal to the length of
 #' `vcov`. To see how to summon a VCOV, see the dedicated section in the
-#' [vignette](https://lrberge.github.io/fixest/articles/fixest_walkthrough.html#the-vcov-argument-1).
-#' @param ... In `.l()`: `fixest` objects. In `rep()`: not currently used.
+#' [vignette](https://lrberge.github.io/fixest2/articles/fixest2_walkthrough.html#the-vcov-argument-1).
+#' @param ... In `.l()`: `fixest2` objects. In `rep()`: not currently used.
 #'
 #' @details
-#' To apply `rep.fixest` on a list of `fixest` objects, it is absolutely necessary to use
+#' To apply `rep.fixest2` on a list of `fixest2` objects, it is absolutely necessary to use
 #' `.l()` and not `list()`.
 #'
 #' @return
-#' Returns a list of the appropriate length. Each element of the list is a `fixest` object.
+#' Returns a list of the appropriate length. Each element of the list is a `fixest2` object.
 #'
 #' @examples
 #'
@@ -3032,11 +3032,11 @@ summary.fixest_check_conv <- function(object, type = "short", ...) {
 #' etable(rep(.l(est, est_bis), each = 3, vcov = my_vcov))
 #'
 #' @export
-rep.fixest <- function(x, times = 1, each = 1, vcov, ...) {
+rep.fixest2 <- function(x, times = 1, each = 1, vcov, ...) {
   # each is applied first, then times
-  # x can be either a list of fixest objects, either a fixest object
+  # x can be either a list of fixest2 objects, either a fixest2 object
 
-  check_arg(x, "class(fixest, fixest_list) mbt")
+  check_arg(x, "class(fixest2, fixest2_list) mbt")
   check_arg(times, "integer scalar GE{1} | integer vector no na GE{0}")
   check_arg(each, "integer scalar GE{1} | logical scalar")
   check_arg(vcov, "class(list)")
@@ -3047,7 +3047,7 @@ rep.fixest <- function(x, times = 1, each = 1, vcov, ...) {
 
   # Checking the arguments
   IS_LIST <- FALSE
-  if ("fixest_list" %in% class(x)) {
+  if ("fixest2_list" %in% class(x)) {
     IS_LIST <- TRUE
     class(x) <- "list"
 
@@ -3126,53 +3126,53 @@ rep.fixest <- function(x, times = 1, each = 1, vcov, ...) {
   res
 }
 
-#' @rdname rep.fixest
+#' @rdname rep.fixest2
 #' @export
-rep.fixest_list <- function(x, times = 1, each = 1, vcov, ...) {
-  rep.fixest(x, times = times, each = each, vcov = vcov, ...)
+rep.fixest2_list <- function(x, times = 1, each = 1, vcov, ...) {
+  rep.fixest2(x, times = times, each = each, vcov = vcov, ...)
 }
 
-#' @rdname rep.fixest
+#' @rdname rep.fixest2
 #' @export
 .l <- function(...) {
-  check_arg(..., "mbt class(fixest) | list")
+  check_arg(..., "mbt class(fixest2) | list")
 
   dots <- list(...)
-  if (all(sapply(dots, function(x) "fixest" %in% class(x)))) {
-    class(dots) <- "fixest_list"
+  if (all(sapply(dots, function(x) "fixest2" %in% class(x)))) {
+    class(dots) <- "fixest2_list"
 
     return(dots)
   }
 
   if (length(dots) == 1) {
-    if ("fixest_multi" %in% class(dots[[1]])) {
+    if ("fixest2_multi" %in% class(dots[[1]])) {
       res <- dots[[1]]
-      class(res) <- "fixest_list"
+      class(res) <- "fixest2_list"
       return(res)
     }
 
-    if (all(sapply(dots[[1]], function(x) "fixest" %in% class(x)))) {
+    if (all(sapply(dots[[1]], function(x) "fixest2" %in% class(x)))) {
       res <- dots[[1]]
-      class(res) <- "fixest_list"
+      class(res) <- "fixest2_list"
       return(res)
     }
   }
 
   res <- list()
   for (i in seq_along(dots)) {
-    if ("fixest" %in% class(dots[[i]])) {
+    if ("fixest2" %in% class(dots[[i]])) {
       res[[length(res) + 1]] <- dots[[i]]
     } else {
       obj <- dots[[i]]
 
-      if ("fixest_multi" %in% class(obj)) {
+      if ("fixest2_multi" %in% class(obj)) {
         for (j in seq_along(obj)) {
           res[[length(res) + 1]] <- obj[[j]]
         }
       } else {
         for (j in seq_along(obj)) {
-          if (!"fixest" %in% class(obj[[j]])) {
-            stop("In .l(...), each argument must be either a fixest object, or a list of fixest objects. Problem: The ", n_th(j), " element of the ", n_th(i), " argument (the latter being a list) is not a fixest object.")
+          if (!"fixest2" %in% class(obj[[j]])) {
+            stop("In .l(...), each argument must be either a fixest2 object, or a list of fixest2 objects. Problem: The ", n_th(j), " element of the ", n_th(i), " argument (the latter being a list) is not a fixest2 object.")
           }
 
           res[[length(res) + 1]] <- obj[[j]]
@@ -3181,18 +3181,18 @@ rep.fixest_list <- function(x, times = 1, each = 1, vcov, ...) {
     }
   }
 
-  class(res) <- "fixest_list"
+  class(res) <- "fixest2_list"
   res
 }
 
 
 
-#' Retrieves the data set used for a `fixest` estimation
+#' Retrieves the data set used for a `fixest2` estimation
 #'
-#' Retrieves the original data set used to estimate a `fixest` or `fixest_multi` model.
+#' Retrieves the original data set used to estimate a `fixest2` or `fixest2_multi` model.
 #' Note that this is the original data set and not the data used for the estimation (i.e. it can have more rows).
 #'
-#' @param x An object of class `fixest` or `fixest_multi`. For example obtained from [`feols`] or [`feglm`].
+#' @param x An object of class `fixest2` or `fixest2_multi`. For example obtained from [`feols`] or [`feglm`].
 #' @param sample Either "original" (default) or "estimation". If equal to "original",
 #' it matches the original data set. If equal to "estimation", the rows of the data set
 #' returned matches the observations used for the estimation.
@@ -3202,7 +3202,7 @@ rep.fixest_list <- function(x, times = 1, each = 1, vcov, ...) {
 #'
 #' If `sample = "estimation"`, only the lines used for the estimation are returned.
 #'
-#' In case of a `fixest_multi` object, it returns the data set of the first estimation object.
+#' In case of a `fixest2_multi` object, it returns the data set of the first estimation object.
 #' So in that case it does not make sense to use `sample = "estimation"` since
 #' the samples may be inconsistent across the different estimations.
 #'
@@ -3214,20 +3214,20 @@ rep.fixest_list <- function(x, times = 1, each = 1, vcov, ...) {
 #' est <- feols(y ~ x1 + x2, base)
 #'
 #' # the original data set
-#' head(fixest_data(est))
+#' head(fixest2_data(est))
 #'
 #' # the data set, with only the lines used for the estimation
-#' head(fixest_data(est, sample = "est"))
+#' head(fixest2_data(est, sample = "est"))
 #'
-fixest_data <- function(x, sample = "original") {
-  check_arg(x, "class(fixest, fixest_multi) mbt")
+fixest2_data <- function(x, sample = "original") {
+  check_arg(x, "class(fixest2, fixest2_multi) mbt")
   check_set_arg(sample, "match(original, estimation)")
 
-  if (inherits(x, "fixest_multi")) {
+  if (inherits(x, "fixest2_multi")) {
     x <- x[[1]]
   }
 
-  res <- fetch_data(x, prefix = "In `fixest_data()`, ")
+  res <- fetch_data(x, prefix = "In `fixest2_data()`, ")
 
   if (sample == "estimation") {
     res <- res[obs(x), , drop = FALSE]
@@ -3362,13 +3362,13 @@ parse_macros <- function(..., reset = FALSE, from_xpd = FALSE, check = TRUE, fra
   }
 
   # Original macros
-  fml_macro <- getOption("fixest_fml_macro")
+  fml_macro <- getOption("fixest2_fml_macro")
   if (reset || is.null(fml_macro)) {
     fml_macro <- list()
   } else if (!is.list(fml_macro)) {
-    warn_up("The value of getOption(\"fixest_fml_macro\") wasn't legal, it has been reset.")
+    warn_up("The value of getOption(\"fixest2_fml_macro\") wasn't legal, it has been reset.")
     fml_macro <- list()
-    options(fixest_fml_macro = list())
+    options(fixest2_fml_macro = list())
   }
 
   # We check the names
@@ -3924,7 +3924,7 @@ prepare_matrix <- function(fml, base, fake_intercept = FALSE) {
 }
 
 
-fixest_model_matrix <- function(fml, data, fake_intercept = FALSE, i_noref = FALSE, mf = NULL) {
+fixest2_model_matrix <- function(fml, data, fake_intercept = FALSE, i_noref = FALSE, mf = NULL) {
   # This functions takes in the formula of the linear part and the
   # data
   # It reformulates the formula (ie with lags and interactions)
@@ -4059,10 +4059,10 @@ fixest_model_matrix <- function(fml, data, fake_intercept = FALSE, i_noref = FAL
 }
 
 
-fixest_model_matrix_extra <- function(object, newdata, original_data, fml,
+fixest2_model_matrix_extra <- function(object, newdata, original_data, fml,
                                       fake_intercept = FALSE, i_noref = FALSE, subset = FALSE) {
   # Only used within model.matrix and predict
-  # Overlay of fixest_model_matrix to take care of special things, eg:
+  # Overlay of fixest2_model_matrix to take care of special things, eg:
   # - poly
   # - subset
   # - ?
@@ -4140,7 +4140,7 @@ fixest_model_matrix_extra <- function(object, newdata, original_data, fml,
     if (length(fml) == 3) fml <- fml[c(1, 3)]
 
     # We apply model.frame to the original data
-    data <- fetch_data(object, "To apply `model.matrix.fixest`, ")
+    data <- fetch_data(object, "To apply `model.matrix.fixest2`, ")
 
     panel__meta__info <- set_panel_meta_info(object, data)
 
@@ -4158,14 +4158,14 @@ fixest_model_matrix_extra <- function(object, newdata, original_data, fml,
     }
   }
 
-  GLOBAL_fixest_mm_info <- list()
+  GLOBAL_fixest2_mm_info <- list()
 
   I_IGNORE_ERRORS <- TRUE
 
-  new_matrix <- fixest_model_matrix(fml, newdata, fake_intercept, i_noref, mf = mf)
+  new_matrix <- fixest2_model_matrix(fml, newdata, fake_intercept, i_noref, mf = mf)
 
-  if (length(GLOBAL_fixest_mm_info) > 0) {
-    attr(new_matrix, "model_matrix_info") <- GLOBAL_fixest_mm_info
+  if (length(GLOBAL_fixest2_mm_info) > 0) {
+    attr(new_matrix, "model_matrix_info") <- GLOBAL_fixest2_mm_info
   }
 
   new_matrix
@@ -4773,11 +4773,11 @@ set_defaults <- function(opts_name) {
 }
 
 fetch_data <- function(x, prefix = "", suffix = "") {
-  # x: fixest estimation
+  # x: fixest2 estimation
   # We try different strategies:
   # 0) the data has been saved at estimation time with `data.save = TRUE`
   # 1) using the environment where the estimation was done
-  # 2) the "parent.frame()" defined as the frame on top of ALL fixest functions
+  # 2) the "parent.frame()" defined as the frame on top of ALL fixest2 functions
   # 3) the global environment, if it wasn't in 1)
 
   # Maybe I should keep only 1) => is there a reason to add the others?
@@ -4786,7 +4786,7 @@ fetch_data <- function(x, prefix = "", suffix = "") {
   # 2) less safe but OK => note ???
   # 3) kind of dangerous => warning() ???
 
-  # 0) Data is within the fixest object
+  # 0) Data is within the fixest2 object
 
   if (!is.null(x$data)) {
     return(x$data)
@@ -4805,13 +4805,13 @@ fetch_data <- function(x, prefix = "", suffix = "") {
     return(data)
   }
 
-  # 2) First non fixest frame
+  # 2) First non fixest2 frame
 
-  fixest_funs <- ls(getNamespace("fixest"))
+  fixest2_funs <- ls(getNamespace("fixest2"))
 
   i <- 2
   sysOrigin <- sys.parent(i)
-  while (sysOrigin != 0 && as.character(sys.call(sysOrigin)[[1]]) %in% fixest_funs) {
+  while (sysOrigin != 0 && as.character(sys.call(sysOrigin)[[1]]) %in% fixest2_funs) {
     i <- i + 1
     sysOrigin <- sys.parent(i)
   }
@@ -5550,12 +5550,12 @@ cut_vector <- function(x, bin) {
 }
 
 
-fixest_pvalue <- function(x, zvalue, vcov) {
-  # compute the pvalue for a fixest estimation
+fixest2_pvalue <- function(x, zvalue, vcov) {
+  # compute the pvalue for a fixest2 estimation
 
   if (use_t_distr(x)) {
     if (missing(vcov)) {
-      stop("Internal error (=bug): the argument `vcov` should not be missing in fixest_pvalue().")
+      stop("Internal error (=bug): the argument `vcov` should not be missing in fixest2_pvalue().")
     } else if (is.null(attr(vcov, "dof.K"))) {
       stop("Internal error (=bug): the attribute `dof.K` from `vcov` should not be NULL.")
     }
@@ -5574,7 +5574,7 @@ fixest_pvalue <- function(x, zvalue, vcov) {
   pvalue
 }
 
-fixest_CI_factor <- function(x, level, vcov = NULL, df.t = NULL) {
+fixest2_CI_factor <- function(x, level, vcov = NULL, df.t = NULL) {
   val <- (1 - level) / 2
   val <- c(val, 1 - val)
 
@@ -5582,7 +5582,7 @@ fixest_CI_factor <- function(x, level, vcov = NULL, df.t = NULL) {
     if (missing(vcov) && missing(df.t)) {
       stop(
         "Internal error (=bug): the arguments `vcov` and `df.t` ",
-        "should not be both missing in fixest_CI_factor()."
+        "should not be both missing in fixest2_CI_factor()."
       )
     }
 
@@ -5590,7 +5590,7 @@ fixest_CI_factor <- function(x, level, vcov = NULL, df.t = NULL) {
       if (!is.numeric(df.t) && !length(df.t) == 1) {
         stop(
           "Internal error (=bug): the arguments `df.t` ",
-          "should be numeric in fixest_CI_factor()."
+          "should be numeric in fixest2_CI_factor()."
         )
       }
     } else {
@@ -6458,7 +6458,7 @@ merge_fml <- function(fml_linear, fml_fixef = NULL, fml_iv = NULL) {
 }
 
 
-fixest_fml_rewriter <- function(fml) {
+fixest2_fml_rewriter <- function(fml) {
   # Currently performs the following
   # - expands lags
   # - protects powers: x^3 => I(x^3)
@@ -6604,8 +6604,8 @@ fixest_fml_rewriter <- function(fml) {
         fml_endo <- .xpd(lhs = ~y, rhs = fml_iv[[2]])
         fml_inst <- .xpd(lhs = ~y, rhs = fml_iv[[3]])
 
-        endo_lag_expand <- fixest_fml_rewriter(fml_endo)$fml
-        inst_lag_expand <- fixest_fml_rewriter(fml_inst)$fml
+        endo_lag_expand <- fixest2_fml_rewriter(fml_endo)$fml
+        inst_lag_expand <- fixest2_fml_rewriter(fml_inst)$fml
 
         fml_iv <- .xpd(lhs = endo_lag_expand[[3]], rhs = inst_lag_expand[[3]])
       }
@@ -6725,7 +6725,7 @@ mat_posdef_fix <- function(X, tol = 1e-10) {
 }
 
 
-is_fixest_call <- function() {
+is_fixest2_call <- function() {
   nf <- sys.nframe()
 
   if (nf < 5) {
@@ -6734,7 +6734,7 @@ is_fixest_call <- function() {
 
   last_calls <- sapply(tail(sys.calls(), 13), function(x) deparse(x)[1])
 
-  any(grepl("fixest", last_calls[-length(last_calls)]))
+  any(grepl("fixest2", last_calls[-length(last_calls)]))
 }
 
 all_vars_with_i_prefix <- function(fml) {
@@ -6872,7 +6872,7 @@ all_missing <- function(x1, x2, x3, x4, x5, x6) {
 
 use_t_distr <- function(x) {
   # whether to use the t-distribution or the normal
-  # x: fixest estimation
+  # x: fixest2 estimation
   x$method %in% "feols" || (x$method %in% "feglm" && !x$family$family %in% c("poisson", "binomial"))
 }
 
@@ -7068,7 +7068,7 @@ is_calling_fun <- function(pattern, full_search = FALSE, full_name = FALSE) {
 
       res <- any(grepl(pattern, fun_all))
     } else {
-      if (grepl(".fixest", sc_all[[n_sc - 1]][[1]], fixed = TRUE)) {
+      if (grepl(".fixest2", sc_all[[n_sc - 1]][[1]], fixed = TRUE)) {
         if (n_sc == 3) {
           return(FALSE)
         }
@@ -7138,14 +7138,14 @@ char_to_vars <- function(x) {
 not_too_many_messages <- function(key) {
   # we don't proc in less than 2 seconds
   # avoid ugly looping issues
-  all_times <- getOption("fixest_all_timings")
+  all_times <- getOption("fixest2_all_timings")
   old_time <- all_times[[key]]
   if (is.null(old_time) || as.numeric(Sys.time() - old_time) > 2) {
     if (is.null(all_times)) {
       all_times <- list()
     }
     all_times[[key]] <- Sys.time()
-    options(fixest_all_timings = all_times)
+    options(fixest2_all_timings = all_times)
     return(TRUE)
   }
 
@@ -7159,9 +7159,9 @@ not_too_many_messages <- function(key) {
 
 
 
-#' Sets/gets whether to display notes in `fixest` estimation functions
+#' Sets/gets whether to display notes in `fixest2` estimation functions
 #'
-#' Sets/gets the default values of whether notes (informing for NA and observations removed) should be displayed in `fixest` estimation functions.
+#' Sets/gets the default values of whether notes (informing for NA and observations removed) should be displayed in `fixest2` estimation functions.
 #'
 #' @param x A logical. If `FALSE`, then notes are permanently removed.
 #'
@@ -7182,23 +7182,23 @@ not_too_many_messages <- function(key) {
 setFixest_notes <- function(x) {
   check_arg(x, "mbt logical scalar")
 
-  options("fixest_notes" = x)
+  options("fixest2_notes" = x)
 }
 
 #' @rdname setFixest_notes
 #' @export
 getFixest_notes <- function() {
-  x <- getOption("fixest_notes")
+  x <- getOption("fixest2_notes")
   if (length(x) != 1 || !is.logical(x) || is.na(x)) {
-    stop("The value of getOption(\"fixest_notes\") is currently not legal. Please use function setFixest_notes to set it to an appropriate value. ")
+    stop("The value of getOption(\"fixest2_notes\") is currently not legal. Please use function setFixest_notes to set it to an appropriate value. ")
   }
 
   x
 }
 
-#' Sets/gets the number of threads to use in `fixest` functions
+#' Sets/gets the number of threads to use in `fixest2` functions
 #'
-#' Sets/gets the default number of threads to used in `fixest` estimation functions. The default is the maximum number of threads minus two.
+#' Sets/gets the default number of threads to used in `fixest2` estimation functions. The default is the maximum number of threads minus two.
 #'
 #'
 #'
@@ -7250,12 +7250,12 @@ setFixest_nthreads <- function(nthreads, save = FALSE) {
 
     # 0.5 => 50% of all available threads (usually equiv to the nber of procs)
 
-    nthreads_default <- renvir_get("fixest_nthreads")
+    nthreads_default <- renvir_get("fixest2_nthreads")
 
     if (!do_reset && !is.null(nthreads_default)) {
       if (!isScalar(nthreads_default) || nthreads_default < 0) {
         warning("The variable setting the number of threads in the .Renviron file is corrupted. It's value has been reset.")
-        renvir_update("fixest_nthreads", NULL)
+        renvir_update("fixest2_nthreads", NULL)
         nthreads_default <- 0.5
       }
     } else {
@@ -7268,12 +7268,12 @@ setFixest_nthreads <- function(nthreads, save = FALSE) {
   nthreads <- check_set_nthreads(nthreads)
 
   if (do_reset) {
-    renvir_update("fixest_nthreads", NULL)
+    renvir_update("fixest2_nthreads", NULL)
   } else if (save) {
-    renvir_update("fixest_nthreads", nthreads)
+    renvir_update("fixest2_nthreads", nthreads)
   }
 
-  options("fixest_nthreads" = nthreads)
+  options("fixest2_nthreads" = nthreads)
 
   invisible()
 }
@@ -7281,9 +7281,9 @@ setFixest_nthreads <- function(nthreads, save = FALSE) {
 #' @rdname setFixest_nthreads
 #' @export
 getFixest_nthreads <- function() {
-  x <- getOption("fixest_nthreads")
+  x <- getOption("fixest2_nthreads")
   if (length(x) != 1 || !is.numeric(x) || is.na(x) || x %% 1 != 0 || x < 0) {
-    stop("The value of getOption(\"fixest_nthreads\") is currently not legal. Please use function setFixest_nthreads to set it to an appropriate value. ")
+    stop("The value of getOption(\"fixest2_nthreads\") is currently not legal. Please use function setFixest_nthreads to set it to an appropriate value. ")
   }
 
   x
@@ -7438,22 +7438,22 @@ setFixest_dict <- function(dict = NULL, ..., reset = FALSE) {
   if (reset) {
     core_dict <- list("(Intercept)" = "Constant")
   } else {
-    core_dict <- getOption("fixest_dict")
+    core_dict <- getOption("fixest2_dict")
     if (is.null(core_dict)) core_dict <- list()
   }
 
   core_dict[names(dict)] <- dict
 
-  options("fixest_dict" = unlist(core_dict))
+  options("fixest2_dict" = unlist(core_dict))
 }
 
 #' @rdname setFixest_dict
 #' @export
 getFixest_dict <- function() {
-  x <- getOption("fixest_dict")
+  x <- getOption("fixest2_dict")
   if (length(x) > 0) {
     if (!is.character(x) || !isVector(x) || anyNA(x)) {
-      stop("The value of getOption(\"fixest_dict\") is currently not legal. Please use function setFixest_dict to set it to an appropriate value. ")
+      stop("The value of getOption(\"fixest2_dict\") is currently not legal. Please use function setFixest_dict to set it to an appropriate value. ")
     }
   }
 
@@ -7461,7 +7461,7 @@ getFixest_dict <- function() {
 }
 
 
-#' @rdname print.fixest
+#' @rdname print.fixest2
 #' @export
 setFixest_print <- function(type = "table", fitstat = NULL) {
   check_set_arg(type, "match(coef, table)")
@@ -7471,12 +7471,12 @@ setFixest_print <- function(type = "table", fitstat = NULL) {
   }
 
   # Getting the existing defaults
-  opts <- getOption("fixest_print")
+  opts <- getOption("fixest2_print")
 
   if (is.null(opts)) {
     opts <- list()
   } else if (!is.list(opts)) {
-    warning("Wrong formatting of option 'fixest_print', all options are reset.")
+    warning("Wrong formatting of option 'fixest2_print', all options are reset.")
     opts <- list()
   }
 
@@ -7489,16 +7489,16 @@ setFixest_print <- function(type = "table", fitstat = NULL) {
     opts[[v]] <- eval(as.name(v))
   }
 
-  options(fixest_print = opts)
+  options(fixest2_print = opts)
 }
 
 
-#' @rdname print.fixest
+#' @rdname print.fixest2
 #' @export
 getFixest_print <- function() {
-  x <- getOption("fixest_print")
+  x <- getOption("fixest2_print")
   if (!(is.null(x) || is.list(x))) {
-    stop("The value of getOption(\"fixest_print\") is currently not legal. Please use function setFixest_print to set it to an appropriate value. ")
+    stop("The value of getOption(\"fixest2_print\") is currently not legal. Please use function setFixest_print to set it to an appropriate value. ")
   }
 
   x
@@ -7508,7 +7508,7 @@ getFixest_print <- function() {
 
 #' Sets/gets formula macros
 #'
-#' You can set formula macros globally with `setFixest_fml`. These macros can then be used in `fixest` estimations or when using the function [`xpd`][fixest::setFixest_fml].
+#' You can set formula macros globally with `setFixest_fml`. These macros can then be used in `fixest2` estimations or when using the function [`xpd`][fixest2::setFixest_fml].
 #'
 #' @inherit xpd examples
 #'
@@ -7549,19 +7549,19 @@ setFixest_fml <- function(..., reset = FALSE) {
 
   fml_macro <- parse_macros(..., reset = reset, frame = parent.frame())
 
-  options("fixest_fml_macro" = fml_macro)
+  options("fixest2_fml_macro" = fml_macro)
 }
 
 #' @rdname setFixest_fml
 #' @export
 getFixest_fml <- function() {
-  fml_macro <- getOption("fixest_fml_macro")
+  fml_macro <- getOption("fixest2_fml_macro")
   if (is.null(fml_macro)) {
-    options("fixest_fml_macro" = list())
+    options("fixest2_fml_macro" = list())
     fml_macro <- list()
   } else if (!is.list(fml_macro)) {
-    options("fixest_fml_macro" = list())
-    warning("The value of getOption(\"fixest_fml_macro\") is not legal, it has been reset. Please use only 'setFixest_fml' to set formula macro variables.")
+    options("fixest2_fml_macro" = list())
+    warning("The value of getOption(\"fixest2_fml_macro\") is not legal, it has been reset. Please use only 'setFixest_fml' to set formula macro variables.")
     fml_macro <- list()
   }
 
@@ -7570,9 +7570,9 @@ getFixest_fml <- function() {
 
 
 
-#' Default arguments for fixest estimations
+#' Default arguments for fixest2 estimations
 #'
-#' This function sets globally the default arguments of fixest estimations.
+#' This function sets globally the default arguments of fixest2 estimations.
 #'
 #' @inheritParams feols
 #' @inheritParams feNmlm
@@ -7632,12 +7632,12 @@ setFixest_estimation <- function(data = NULL, panel.id = NULL, fixef.rm = "perfe
   }
 
   # Getting the existing defaults
-  opts <- getOption("fixest_estimation")
+  opts <- getOption("fixest2_estimation")
 
   if (reset || is.null(opts)) {
     opts <- list()
   } else if (!is.list(opts)) {
-    warning("Wrong formatting of option 'fixest_estimation', all options are reset.")
+    warning("Wrong formatting of option 'fixest2_estimation', all options are reset.")
     opts <- list()
   }
 
@@ -7650,22 +7650,22 @@ setFixest_estimation <- function(data = NULL, panel.id = NULL, fixef.rm = "perfe
     opts[[v]] <- eval(as.name(v))
   }
 
-  options(fixest_estimation = opts)
+  options(fixest2_estimation = opts)
 }
 
 #' @rdname setFixest_estimation
 #' @export
 getFixest_estimation <- function() {
-  getOption("fixest_estimation")
+  getOption("fixest2_estimation")
 }
 
 
-#' Sets properties of `fixest_multi` objects
+#' Sets properties of `fixest2_multi` objects
 #'
-#' Use this function to change the default behavior of `fixest_multi` objects.
+#' Use this function to change the default behavior of `fixest2_multi` objects.
 #'
 #' @param drop Logical scalar, default is `FALSE`. Provides the default value of the argument
-#' `drop` when subsetting `fixest_multi` objects.
+#' `drop` when subsetting `fixest2_multi` objects.
 #'
 #'
 #' @return
@@ -7677,10 +7677,10 @@ getFixest_estimation <- function() {
 #' base <- setNames(iris, c("y", "x1", "x2", "x3", "species"))
 #' est <- feols(y ~ csw(x1, x2, x3), base)
 #'
-#' # 2) let's pick a single estimation => by default we have a `fixest_multi` object
+#' # 2) let's pick a single estimation => by default we have a `fixest2_multi` object
 #' class(est[rhs = 2])
 #'
-#' # `drop = TRUE` would have led to a `fixest` object
+#' # `drop = TRUE` would have led to a `fixest2` object
 #' class(est[rhs = 2, drop = TRUE])
 #'
 #' # 3) change the default behavior
@@ -7691,20 +7691,20 @@ setFixest_multi <- function(drop = FALSE) {
   check_arg(drop, "logical scalar")
 
   opts <- list(drop = drop)
-  options(fixest_multi_opts = opts)
+  options(fixest2_multi_opts = opts)
 }
 
 #' @rdname setFixest_multi
 getFixest_multi <- function() {
-  x <- getOption("fixest_multi_opts")
+  x <- getOption("fixest2_multi_opts")
 
   if (is.null(x)) {
     setFixest_multi()
-    x <- getOption("fixest_multi_opts")
+    x <- getOption("fixest2_multi_opts")
   }
 
   if (!(is.null(x) || is.list(x))) {
-    stop("The value of getOption(\"fixest_multi_opts\") is currently not legal. Please use function `setFixest_multi` to set it to an appropriate value. ")
+    stop("The value of getOption(\"fixest2_multi_opts\") is currently not legal. Please use function `setFixest_multi` to set it to an appropriate value. ")
   }
 
   x

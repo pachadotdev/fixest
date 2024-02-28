@@ -2,12 +2,12 @@
 % Please edit documentation in R/fitstats.R
 \name{r2}
 \alias{r2}
-\title{R2s of \code{fixest} models}
+\title{R2s of \code{fixest2} models}
 \usage{
 r2(x, type = "all", full_names = FALSE)
 }
 \arguments{
-\item{x}{A \code{fixest} object, e.g. obtained with function \code{\link{feglm}} or \code{\link{feols}}.}
+\item{x}{A \code{fixest2} object, e.g. obtained with function \code{\link{feglm}} or \code{\link{feols}}.}
 
 \item{type}{A character vector representing the R2 to compute. The R2 codes are of the form:
 "wapr2" with letters "w" (within), "a" (adjusted) and "p" (pseudo) possibly missing.
@@ -23,7 +23,7 @@ instead of \code{cor2}, etc).}
 Returns a named vector.
 }
 \description{
-Reports different R2s for \code{fixest} estimations (e.g. \code{\link{feglm}} or \code{\link{feols}}).
+Reports different R2s for \code{fixest2} estimations (e.g. \code{\link{feglm}} or \code{\link{feols}}).
 }
 \details{
 The pseudo R2s are the McFaddens R2s, that is the ratio of log-likelihoods.

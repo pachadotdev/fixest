@@ -28,7 +28,7 @@
     res[k] = val;
   }
 
-  return (res);
+  return res;
 }
 
 [[cpp11::register]] doubles cpp_xbeta_(doubles_matrix<> X, doubles beta,
@@ -48,11 +48,12 @@
     res[i] = val;
   }
 
-  return (res);
+  return res;
 }
 
-[[cpp11::register]] doubles_matrix<>
-cpp_matprod_(doubles_matrix<> x, doubles_matrix<> y, int nthreads) {
+[[cpp11::register]] doubles_matrix<> cpp_matprod_(doubles_matrix<> x,
+                                                  doubles_matrix<> y,
+                                                  int nthreads) {
   // => simply x %*% y
 
   int N = x.nrow();

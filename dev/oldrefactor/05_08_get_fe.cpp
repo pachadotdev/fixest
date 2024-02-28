@@ -239,5 +239,5 @@ void updateClusterValues(int obs, int Q, writable::integers_matrix<> &mat_done,
   }
   res[Q] = nb_ref;
 
-  return (res);
+  return res;
 }

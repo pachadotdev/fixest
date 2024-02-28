@@ -180,8 +180,7 @@ void demean_acc_2(int v, int iterMax, PARAM_DEMEAN *args) {
 
     // X ; update of the fixed-effects coefficients
     numconv = update_X_IronsTuck(n_a, X, GX, GGX, delta_GX, delta2_X);
-    if (numconv)
-      break;
+    if (numconv) break;
 
     // GX -- origin: X, destination: GX
     FE_info.compute_fe_coef_2(p_X, p_GX, p_coef_beta, p_sum_in_out);
@@ -347,8 +346,7 @@ bool demean_acc_gnl(int v, int iterMax, PARAM_DEMEAN *args) {
 
     // X ; update of the cluster coefficient
     numconv = update_X_IronsTuck(nb_coef_no_Q, X, GX, GGX, delta_GX, delta2_X);
-    if (numconv)
-      break;
+    if (numconv) break;
 
     // GX -- origin: X, destination: GX
     compute_fe_gnl(p_X, p_GX, p_sum_other_means, p_sum_in_out, args);
@@ -452,11 +450,13 @@ void demean_single_gnl(int v, PARAM_DEMEAN *args) {
 }
 
 // Loop over demean_single
-[[cpp11::register]] list
-cpp_demean_(SEXP y, SEXP X_raw, SEXP r_weights, int iterMax, double diffMax,
-            SEXP r_nb_id_Q, SEXP fe_id_list, SEXP table_id_I, SEXP slope_flag_Q,
-            SEXP slope_vars_list, SEXP r_init, int nthreads = 1,
-            bool save_fixef = false) {
+[[cpp11::register]] list cpp_demean_(SEXP y, SEXP X_raw, SEXP r_weights,
+                                     int iterMax, double diffMax,
+                                     SEXP r_nb_id_Q, SEXP fe_id_list,
+                                     SEXP table_id_I, SEXP slope_flag_Q,
+                                     SEXP slope_vars_list, SEXP r_init,
+                                     int nthreads = 1,
+                                     bool save_fixef = false) {
   // main fun that calls demean_single
   // preformats all the information needed on the fixed-effects
   // y: the dependent variable
@@ -598,7 +598,7 @@ cpp_demean_(SEXP y, SEXP X_raw, SEXP r_weights, int iterMax, double diffMax,
 
   // save
 
-  writable::list res; // a vector and a matrix
+  writable::list res;  // a vector and a matrix
 
   int nrow = useX ? n_obs : 1;
   int ncol = useX ? n_vars_X : 1;
@@ -681,5 +681,5 @@ cpp_demean_(SEXP y, SEXP X_raw, SEXP r_weights, int iterMax, double diffMax,
 
   UNPROTECT(1);
 
-  return (res);
+  return res;
 }

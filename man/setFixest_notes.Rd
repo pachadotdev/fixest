@@ -3,7 +3,7 @@
 \name{setFixest_notes}
 \alias{setFixest_notes}
 \alias{getFixest_notes}
-\title{Sets/gets whether to display notes in \code{fixest} estimation functions}
+\title{Sets/gets whether to display notes in \code{fixest2} estimation functions}
 \usage{
 setFixest_notes(x)
 
@@ -13,7 +13,7 @@ getFixest_notes()
 \item{x}{A logical. If \code{FALSE}, then notes are permanently removed.}
 }
 \description{
-Sets/gets the default values of whether notes (informing for NA and observations removed) should be displayed in \code{fixest} estimation functions.
+Sets/gets the default values of whether notes (informing for NA and observations removed) should be displayed in \code{fixest2} estimation functions.
 }
 \examples{
 

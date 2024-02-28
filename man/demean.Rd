@@ -104,7 +104,7 @@ an output of the same number of observations as the input (filled with NAs where
 A matrix can be returned if \code{as.matrix = TRUE}.
 }
 \description{
-User-level access to internal demeaning algorithm of \code{fixest}.
+User-level access to internal demeaning algorithm of \code{fixest2}.
 }
 \section{Varying slopes}{
 

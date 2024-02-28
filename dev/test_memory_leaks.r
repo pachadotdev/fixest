@@ -1,16 +1,6 @@
 if (!require("devtools")) install.packages("devtools")
 devtools::load_all()
 
-#----------------------------------------------#
-# Author: Laurent Berge
-# Date creation: Fri Jul 10 09:03:06 2020
-# ~: package sniff tests
-#----------------------------------------------#
-
-# Not everything is currently covered, but I'll improve it over time
-
-# Some functions are not trivial to test properly though
-
 test <- fixest2:::test
 chunk <- fixest2:::chunk
 vcovClust <- fixest2:::vcovClust
@@ -18,17 +8,22 @@ stvec <- stringmagic::string_vec_alias()
 
 setFixest_notes(FALSE)
 
-if (fixest2:::is_r_check()) {
+if (fixest:::is_r_check()) {
   if (requireNamespace("data.table", quietly = TRUE)) {
     library(data.table)
     data.table::setDTthreads(1)
   }
-  setFixest_nthreads(4)
+  setFixest_nthreads(1)
 }
 
-# ESTIMATIONS ----
+####
+#### ESTIMATIONS ####
+####
 
-## Main ----
+####
+#### ... Main ####
+####
+
 
 chunk("ESTIMATION")
 
@@ -229,10 +224,7 @@ for (i in 1:2) {
 
 # Removing the intercept!!!
 
-debug(prepare_matrix)
 res <- feols(y ~ -1 + x1 + i(fe1), base)
-undebug(prepare_matrix)
-
 test("(Intercept)" %in% names(res$coefficients), FALSE)
 
 res <- feols(y ~ -1 + x1 + factor(fe1), base)
@@ -2366,7 +2358,7 @@ test(nrow(et2), 16)
 
 
 # Latex escaping
-cpp_escape_markup <- fixest2:::cpp_escape_markup
+cpp_escape_markup <- fixest:::cpp_escape_markup
 
 # MD markup
 test(

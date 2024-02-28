@@ -49,9 +49,9 @@
 #' case in a ML setup.
 #'
 #' @return
-#' A `fixest` object. Note that `fixest` objects contain many elements and most of them
+#' A `fixest2` object. Note that `fixest2` objects contain many elements and most of them
 #' are for internal use, they are presented here only for information. To access them,
-#' it is safer to use the user-level methods (e.g. [`vcov.fixest`], [`resid.fixest`],
+#' it is safer to use the user-level methods (e.g. [`vcov.fixest2`], [`resid.fixest2`],
 #' etc) or functions (like for instance [`fitstat`] to access any fit statistic).
 #'
 #' \item{nobs}{The number of observations.}
@@ -110,8 +110,8 @@
 #'
 #'
 #' @seealso
-#' See also [`summary.fixest`] to see the results with the appropriate standard-errors,
-#' [`fixef.fixest`] to extract the fixed-effects coefficients, and the function [`etable`]
+#' See also [`summary.fixest2`] to see the results with the appropriate standard-errors,
+#' [`fixef.fixest2`] to extract the fixed-effects coefficients, and the function [`etable`]
 #' to visualize the results of multiple estimations.
 #' And other estimation methods: [`feols`], [`femlm`], [`fenegbin`], [`feNmlm`].
 #'
@@ -122,7 +122,7 @@
 #'
 #' Berge, Laurent, 2018, "Efficient estimation of maximum likelihood models with
 #' multiple fixed-effects: the R package FENmlm." CREA Discussion Papers,
-#' 13 ([](https://github.com/lrberge/fixest/blob/master/_DOCS/FENmlm_paper.pdf)).
+#' 13 ([](https://github.com/lrberge/fixest2/blob/master/_DOCS/FENmlm_paper.pdf)).
 #'
 #' For models with multiple fixed-effects:
 #'
@@ -193,10 +193,10 @@ feglm <- function(fml, data, family = "gaussian", vcov, offset, weights, subset,
   time_start <- proc.time()
 
   if (missing(env)) {
-    set_defaults("fixest_estimation")
+    set_defaults("fixest2_estimation")
     call_env <- new.env(parent = parent.frame())
 
-    env <- try(fixest_env(
+    env <- try(fixest2_env(
       fml = fml, data = data, family = family,
       offset = offset, weights = weights, subset = subset,
       split = split, fsplit = fsplit,
@@ -215,8 +215,8 @@ feglm <- function(fml, data, family = "gaussian", vcov, offset, weights, subset,
       origin = "feglm",
       mc_origin = match.call(), call_env = call_env, ...
     ), silent = TRUE)
-  } else if ((r <- !is.environment(env)) || !isTRUE(env$fixest_env)) {
-    stop("Argument 'env' must be an environment created by a fixest estimation. Currently it is not ", ifelse(r, "an", "a 'fixest'"), " environment.")
+  } else if ((r <- !is.environment(env)) || !isTRUE(env$fixest2_env)) {
+    stop("Argument 'env' must be an environment created by a fixest2 estimation. Currently it is not ", ifelse(r, "an", "a 'fixest2'"), " environment.")
   }
 
   if ("try-error" %in% class(env)) {
@@ -259,8 +259,8 @@ feglm.fit <- function(y, X, fixef_df, family = "gaussian", vcov, offset, split,
     # no need to further check the arguments
     # we extract them from the env
 
-    if ((r <- !is.environment(env)) || !isTRUE(env$fixest_env)) {
-      stop("Argument 'env' must be an environment created by a fixest estimation. Currently it is not {&r ; an ; a `fixest`} environment.")
+    if ((r <- !is.environment(env)) || !isTRUE(env$fixest2_env)) {
+      stop("Argument 'env' must be an environment created by a fixest2 estimation. Currently it is not {&r ; an ; a `fixest2`} environment.")
     }
 
     # main variables
@@ -303,10 +303,10 @@ feglm.fit <- function(y, X, fixef_df, family = "gaussian", vcov, offset, split,
 
     time_start <- proc.time()
 
-    set_defaults("fixest_estimation")
+    set_defaults("fixest2_estimation")
     call_env <- new.env(parent = parent.frame())
 
-    env <- try(fixest_env(
+    env <- try(fixest2_env(
       y = y, X = X, fixef_df = fixef_df, family = family,
       nthreads = nthreads, lean = lean, offset = offset,
       weights = weights, subset = subset, split = split,
@@ -865,7 +865,7 @@ feglm.fit <- function(y, X, fixef_df, family = "gaussian", vcov, offset, split,
     if (any(diag(res$hessian) < 0)) {
       # This should not occur, but I prefer to be safe
       # In fact it's the opposite of the Hessian
-      stop("Negative values in the diagonal of the Hessian found after the weighted-OLS stage. (If possible, could you send a replicable example to fixest's author? He's curious about when that actually happens, since in theory it should never happen.)")
+      stop("Negative values in the diagonal of the Hessian found after the weighted-OLS stage. (If possible, could you send a replicable example to fixest2's author? He's curious about when that actually happens, since in theory it should never happen.)")
     }
 
     # I put tol = 0, otherwise we may remove everything mistakenly
@@ -875,7 +875,7 @@ feglm.fit <- function(y, X, fixef_df, family = "gaussian", vcov, offset, split,
 
     if (!is.null(info_inv$all_removed)) {
       # This should not occur, but I prefer to be safe
-      stop("Not a single variable with a minimum of explanatory power found after the weighted-OLS stage. (If possible, could you send a replicable example to fixest's author? He's curious about when that actually happens, since in theory it should never happen.)")
+      stop("Not a single variable with a minimum of explanatory power found after the weighted-OLS stage. (If possible, could you send a replicable example to fixest2's author? He's curious about when that actually happens, since in theory it should never happen.)")
     }
 
     var <- info_inv$XtX_inv
@@ -883,7 +883,7 @@ feglm.fit <- function(y, X, fixef_df, family = "gaussian", vcov, offset, split,
 
     if (any(is_excluded)) {
       # There should be no remaining collinearity
-      warning_msg <- paste(warning_msg, "Residual collinearity was found after the weighted-OLS stage. The covariance is not defined. (This should not happen. If possible, could you send a replicable example to fixest's author? He's curious about when that actually happens.)")
+      warning_msg <- paste(warning_msg, "Residual collinearity was found after the weighted-OLS stage. The covariance is not defined. (This should not happen. If possible, could you send a replicable example to fixest2's author? He's curious about when that actually happens.)")
       var <- matrix(NA, length(is_excluded), length(is_excluded))
     }
     res$cov.iid <- var
@@ -924,7 +924,7 @@ feglm.fit <- function(y, X, fixef_df, family = "gaussian", vcov, offset, split,
         stack_multi_notes(warning_msg)
       } else {
         warning(warning_msg, call. = FALSE)
-        options("fixest_last_warning" = proc.time())
+        options("fixest2_last_warning" = proc.time())
       }
     }
   }
@@ -1003,7 +1003,7 @@ feglm.fit <- function(y, X, fixef_df, family = "gaussian", vcov, offset, split,
 
   # other
   res$iterations <- iter
-  class(res) <- "fixest"
+  class(res) <- "fixest2"
 
   do_summary <- get("do_summary", env)
   if (do_summary) {

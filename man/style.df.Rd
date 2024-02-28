@@ -85,7 +85,7 @@ have the Species factor from the iris data set, by default the display of the va
 are set to their default.}
 }
 \value{
-It returns an object of class \code{fixest_style_df}.
+It returns an object of class \code{fixest2_style_df}.
 }
 \description{
 This function describes the style of data.frames created with the function \code{\link{etable}}.

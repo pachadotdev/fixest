@@ -3,7 +3,7 @@
 \name{setFixest_nthreads}
 \alias{setFixest_nthreads}
 \alias{getFixest_nthreads}
-\title{Sets/gets the number of threads to use in \code{fixest} functions}
+\title{Sets/gets the number of threads to use in \code{fixest2} functions}
 \usage{
 setFixest_nthreads(nthreads, save = FALSE)
 
@@ -23,7 +23,7 @@ only works with Rstudio. If equal to "reset", the default at the project level i
 there is writing in a file involved, permission is asked to the user.}
 }
 \description{
-Sets/gets the default number of threads to used in \code{fixest} estimation functions. The default is the maximum number of threads minus two.
+Sets/gets the default number of threads to used in \code{fixest2} estimation functions. The default is the maximum number of threads minus two.
 }
 \examples{
 

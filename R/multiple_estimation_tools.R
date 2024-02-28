@@ -142,7 +142,7 @@ multi_LHS_RHS <- function(env, fun) {
     }
   }
 
-  # Meta information for fixest_multi
+  # Meta information for fixest2_multi
   values <- list(
     lhs = rep(lhs_names, each = n_rhs),
     rhs = rep(rhs_names, n_lhs)

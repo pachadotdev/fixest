@@ -15,7 +15,7 @@ fenegbin <- function(fml, data, vcov, theta.init, start = 0, fixef, fixef.rm = "
   }
 
   # This is just an alias
-  set_defaults("fixest_estimation")
+  set_defaults("fixest2_estimation")
   call_env_bis <- new.env(parent = parent.frame())
 
   res <- try(feNmlm(
@@ -58,7 +58,7 @@ fepois <- function(fml, data, vcov, offset, weights, subset, split, fsplit,
   }
 
   # This is just an alias
-  set_defaults("fixest_estimation")
+  set_defaults("fixest2_estimation")
   call_env_bis <- new.env(parent = parent.frame())
 
   res <- try(feglm(

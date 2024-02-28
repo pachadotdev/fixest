@@ -15,7 +15,7 @@
     res[q]++;
   }
 
-  return (res);
+  return res;
 }
 
 [[cpp11::register]] double cpp_ssr_null_(doubles y, doubles w) {
@@ -54,7 +54,7 @@
     }
   }
 
-  return (res);
+  return res;
 }
 
 [[cpp11::register]] double cpp_ssq_(doubles x, doubles w) {

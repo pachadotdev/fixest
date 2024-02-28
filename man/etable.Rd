@@ -132,24 +132,24 @@ getFixest_etable()
 log_etable(type = "pdflatex")
 }
 \arguments{
-\item{...}{Used to capture different \code{fixest} estimation objects (obtained with \code{\link{femlm}},
+\item{...}{Used to capture different \code{fixest2} estimation objects (obtained with \code{\link{femlm}},
 \code{\link{feols}} or \code{\link{feglm}}). Note that any other type of element is discarded. Note that you can
-give a list of \code{fixest} objects.}
+give a list of \code{fixest2} objects.}
 
 \item{vcov}{Versatile argument to specify the VCOV. In general, it is either a character
 scalar equal to a VCOV type, either a formula of the form: \code{vcov_type ~ variables}. The
 VCOV types implemented are: "iid", "hetero" (or "HC1"), "cluster", "twoway",
 "NW" (or "newey_west"), "DK" (or "driscoll_kraay"), and "conley". It also accepts
-object from \code{\link{vcov_cluster}}, \code{\link[fixest:vcov_hac]{vcov_NW}}, \code{\link[fixest:vcov_hac]{NW}},
-\code{\link[fixest:vcov_hac]{vcov_DK}}, \code{\link[fixest:vcov_hac]{DK}}, \code{\link{vcov_conley}} and
-\code{\link[fixest:vcov_conley]{conley}}. It also accepts covariance matrices computed externally.
+object from \code{\link{vcov_cluster}}, \code{\link[=vcov_hac]{vcov_NW}}, \code{\link[=vcov_hac]{NW}},
+\code{\link[=vcov_hac]{vcov_DK}}, \code{\link[=vcov_hac]{DK}}, \code{\link{vcov_conley}} and
+\code{\link[=vcov_conley]{conley}}. It also accepts covariance matrices computed externally.
 Finally it accepts functions to compute the covariances. See the \code{vcov} documentation
-in the \href{https://lrberge.github.io/fixest/articles/fixest_walkthrough.html#the-vcov-argument-1}{vignette}.}
+in the \href{https://lrberge.github.io/fixest2/articles/fixest2_walkthrough.html#the-vcov-argument-1}{vignette}.}
 
 \item{stage}{Can be equal to \code{2} (default), \code{1}, \code{1:2} or \code{2:1}. Only used if the object
 is an IV estimation: defines the stage to which \code{summary} should be applied. If \code{stage = 1}
 and there are multiple endogenous regressors or if \code{stage} is of length 2, then an
-object of class \code{fixest_multi} is returned.}
+object of class \code{fixest2_multi} is returned.}
 
 \item{agg}{A character scalar describing the variable names to be aggregated,
 it is pattern-based. For \code{\link{sunab}} estimations, the following keywords work: "att",
@@ -184,7 +184,7 @@ blank with \code{vcov = "twoway"} (assuming \code{var1} [resp. \code{var2}] was
 the 1st [resp. 2nd] fixed-effect). You can interact two variables using \code{^} with
 the following syntax: \code{cluster = ~var1^var2} or \code{cluster = "var1^var2"}.}
 
-\item{.vcov}{A function to be used to compute the standard-errors of each fixest object. You can
+\item{.vcov}{A function to be used to compute the standard-errors of each fixest2 object. You can
 pass extra arguments to this function using the argument \code{.vcov_args}. See the example.}
 
 \item{.vcov_args}{A list containing arguments to be passed to the function \code{.vcov}.}
@@ -597,7 +597,7 @@ the \verb{\\\\toprule}, \verb{\\\\midrule} and \verb{\\\\bottomrule} commands.
 
 You can permanently change the way your table looks in Latex by using \code{setFixest_etable}.
 The following vignette gives an example as well as illustrates how to use the \code{style} and
-postprocessing functions: \href{https://lrberge.github.io/fixest/articles/exporting_tables.html}{Exporting estimation tables}.
+postprocessing functions: \href{https://lrberge.github.io/fixest2/articles/exporting_tables.html}{Exporting estimation tables}.
 
 When the argument \code{postprocess.tex} is not missing, two additional tags will be included in the
 character vector returned by \code{etable}: \code{"\%start:tab\\\\n"} and \code{"\%end:tab\\\\n"}. These can be used
@@ -1059,8 +1059,8 @@ etable(est, dict = dict, tex = TRUE, notes = c("note 1", "source 1"))
 For styling the table: \code{\link{setFixest_etable}}, \code{\link{style.tex}}, \code{\link{style.df}}.
 
 See also the main estimation functions \code{\link{femlm}}, \code{\link{feols}} or \code{\link{feglm}}.
-Use \code{\link{summary.fixest}}
-to see the results with the appropriate standard-errors, \code{\link{fixef.fixest}} to extract the
+Use \code{\link{summary.fixest2}}
+to see the results with the appropriate standard-errors, \code{\link{fixef.fixest2}} to extract the
 fixed-effects coefficients.
 }
 \author{

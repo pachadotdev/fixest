@@ -90,7 +90,7 @@ bool dm_update_X_IronsTuck(int nb_coef_no_Q, std::vector<double> &X,
     }
   }
 
-  return (res);
+  return res;
 }
 
 void demean_single_1(int v, PARAM_DEMEAN *args) {
@@ -685,5 +685,5 @@ void demean_single_gnl(int v, PARAM_DEMEAN *args) {
 
   UNPROTECT(1);
 
-  return (res);
+  return res;
 }

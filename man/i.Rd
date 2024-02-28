@@ -114,7 +114,7 @@ data.frame(x, i(x, bin = list(ab = c("a", "b"))))
 data.frame(x, i(x, bin = .(ab = "@a|b")))
 
 #
-# In fixest estimations
+# In fixest2 estimations
 #
 
 data(base_did)
@@ -163,7 +163,7 @@ feols(Ozone ~ i(Month, bin = list(summer = 7:9)), airquality)
 
 }
 \seealso{
-\code{\link[fixest:coefplot]{iplot}} to plot interactions or factors created with \code{i()}, \code{\link{feols}} for
+\code{\link[=coefplot]{iplot}} to plot interactions or factors created with \code{i()}, \code{\link{feols}} for
 OLS estimation with multiple fixed-effects.
 
 See the function \code{\link{bin}} for binning variables.

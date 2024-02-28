@@ -311,7 +311,7 @@
     }
   }
 
-  return (res);
+  return res;
 }
 
 [[cpp11::register]] bool cpp_any_na_null_(SEXP x) {

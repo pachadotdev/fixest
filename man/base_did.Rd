@@ -26,7 +26,7 @@ data(base_did)
 }
 \description{
 This data has been generated to illustrate the use of difference in difference functions in
-package \pkg{fixest}. This is a balanced panel of 104 individuals and 10 periods.
+package \pkg{fixest2}. This is a balanced panel of 104 individuals and 10 periods.
 About half the individuals are treated, the treatment having a positive effect on
 the dependent variable \code{y} after the 5th period. The effect of the treatment on \code{y} is gradual.
 }

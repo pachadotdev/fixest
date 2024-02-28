@@ -11,7 +11,7 @@
 
 
 
-#' Print method for fit statistics of fixest estimations
+#' Print method for fit statistics of fixest2 estimations
 #'
 #' Displays a brief summary of selected fit statistics from the function [`fitstat`].
 #'
@@ -23,7 +23,7 @@
 #' @param ... Not currently used.
 #'
 #' @export
-print.fixest_fitstat <- function(x, na.rm = FALSE, ...) {
+print.fixest2_fitstat <- function(x, na.rm = FALSE, ...) {
   dots <- list(...)
 
   # below now replaced with sma
@@ -162,7 +162,7 @@ print.fixest_fitstat <- function(x, na.rm = FALSE, ...) {
     } else if (type %in% all_types$user_types) {
       # we can have extra values for user defined functions
 
-      opts <- getOption("fixest_fitstat_user")
+      opts <- getOption("fixest2_fitstat_user")
       alias_subtypes <- opts[[type]]$alias_subtypes
 
       arg_list <- list()
@@ -226,12 +226,12 @@ print.fixest_fitstat <- function(x, na.rm = FALSE, ...) {
 #' @inherit fitstat seealso
 #'
 #' @param type A character scalar giving the type-name.
-#' @param fun A function to be applied to a `fixest` estimation. It must return either a scalar,
+#' @param fun A function to be applied to a `fixest2` estimation. It must return either a scalar,
 #' or a list of unitary elements. If the number of elements returned is greater than 1,
 #' then each element must be named! If the fit statistic is not valid for a given estimation,
 #' a plain `NA` value should be returned.
 #' @param alias A (named) character vector. An alias to be used in lieu of the type name in
-#' the display methods (ie when used in [`print.fixest_fitstat`] or [`etable`]).
+#' the display methods (ie when used in [`print.fixest2_fitstat`] or [`etable`]).
 #' If the function returns several values, i.e. sub-types, you can give an alias to
 #' these sub-types. The syntax is `c("type" = "alias", "subtype_i" = "alias_i")`,
 #' with "type" (resp. "subtype") the value of the argument `type` resp. (`subtypes`).
@@ -305,7 +305,7 @@ fitstat_register <- function(type, fun, alias = NULL, subtypes = NULL) {
   # We check the type is not conflicting
   existing_types <- fitstat(give_types = TRUE)$types
 
-  opts <- getOption("fixest_fitstat_user")
+  opts <- getOption("fixest2_fitstat_user")
 
   if (type %in% setdiff(existing_types, names(opts))) {
     stopi("The type name {bq?type} is the same as one built-in type. Please choose another one.")
@@ -426,16 +426,16 @@ fitstat_register <- function(type, fun, alias = NULL, subtypes = NULL) {
 
   opts[[type]] <- res
 
-  options(fixest_fitstat_user = opts)
+  options(fixest2_fitstat_user = opts)
 
   invisible(NULL)
 }
 
-#' Computes fit statistics of fixest objects
+#' Computes fit statistics of fixest2 objects
 #'
-#' Computes various fit statistics for `fixest` estimations.
+#' Computes various fit statistics for `fixest2` estimations.
 #'
-#' @param x A `fixest` estimation.
+#' @param x A `fixest2` estimation.
 #' @param type Character vector or one sided formula. The type of fit statistic to be computed.
 #' The classic ones are: n, rmse, r2, pr2, f, wald, ivf, ivwald. You have the full list in
 #' the details section or use `show_types = TRUE`. Further, you can register your own types
@@ -443,7 +443,7 @@ fitstat_register <- function(type, fun, alias = NULL, subtypes = NULL) {
 #' @param simplify Logical, default is `FALSE`. By default a list is returned whose names are
 #' the selected types. If `simplify = TRUE` and only one type is selected, then the element
 #' is directly returned (ie will not be nested in a list).
-#' @param verbose Logical, default is `TRUE`. If `TRUE`, an object of class `fixest_fitstat`
+#' @param verbose Logical, default is `TRUE`. If `TRUE`, an object of class `fixest2_fitstat`
 #' is returned (so its associated print method will be triggered). If `FALSE` a simple list
 #' is returned instead.
 #' @param show_types Logical, default is `FALSE`. If `TRUE`, only prompts all available types.
@@ -524,7 +524,7 @@ fitstat_register <- function(type, fun, alias = NULL, subtypes = NULL) {
 #'
 #'
 #' @return
-#' By default an object of class `fixest_fitstat` is returned. Using `verbose = FALSE`
+#' By default an object of class `fixest2_fitstat` is returned. Using `verbose = FALSE`
 #' returns a simple a list. Finally, if only one type is selected, `simplify = TRUE`
 #' leads to the selected type to be returned.
 #'
@@ -571,7 +571,7 @@ fitstat <- function(x, type, simplify = FALSE, verbose = TRUE, show_types = FALS
     "apwr2", "pawr2", "pwar2"
   )
 
-  opts <- getOption("fixest_fitstat_user")
+  opts <- getOption("fixest2_fitstat_user")
   user_types <- names(opts)
 
   dots <- list(...)
@@ -662,7 +662,7 @@ fitstat <- function(x, type, simplify = FALSE, verbose = TRUE, show_types = FALS
     return(res)
   }
 
-  check_arg(x, "class(fixest) mbt")
+  check_arg(x, "class(fixest2) mbt")
   check_set_arg(type, "character vector no na | os formula")
   check_arg(simplify, verbose, "logical scalar")
 
@@ -1041,7 +1041,7 @@ fitstat <- function(x, type, simplify = FALSE, verbose = TRUE, show_types = FALS
   }
 
   if (verbose) {
-    class(res_all) <- "fixest_fitstat"
+    class(res_all) <- "fixest2_fitstat"
   }
 
   if (length(type_all) == 1 && simplify) {
@@ -1056,14 +1056,14 @@ fitstat <- function(x, type, simplify = FALSE, verbose = TRUE, show_types = FALS
 #'
 #' Wald test used to test the joint nullity of a set of coefficients.
 #'
-#' @inheritParams print.fixest
-#' @inheritParams summary.fixest
+#' @inheritParams print.fixest2
+#' @inheritParams summary.fixest2
 #' @inheritParams etable
 #'
 #' @param print Logical, default is `TRUE`. If `TRUE`, then a verbose description of the test
 #' is prompted on the R console. Otherwise only a named vector containing the test statistics
 #' is returned.
-#' @param ... Any other element to be passed to [`summary.fixest`].
+#' @param ... Any other element to be passed to [`summary.fixest2`].
 #'
 #' @details
 #' The type of VCOV matrix plays a crucial role in this test. Use the arguments `se` and
@@ -1116,7 +1116,7 @@ wald <- function(x, keep = NULL, drop = NULL, print = TRUE, vcov, se, cluster, .
   #   * list("fit_" = 1, "x5$")
   #   * regex = restriction. No "=" => 0
 
-  check_arg(x, "class(fixest)")
+  check_arg(x, "class(fixest2)")
   check_arg(keep, drop, "NULL character vector no na")
 
   if (isTRUE(x$onlyFixef)) {
@@ -1204,11 +1204,11 @@ fitstat_validate <- function(x, vector = FALSE) {
 }
 
 
-#' R2s of `fixest` models
+#' R2s of `fixest2` models
 #'
-#' Reports different R2s for `fixest` estimations (e.g. [`feglm`] or [`feols`]).
+#' Reports different R2s for `fixest2` estimations (e.g. [`feglm`] or [`feols`]).
 #'
-#' @param x A `fixest` object, e.g. obtained with function [`feglm`] or [`feols`].
+#' @param x A `fixest2` object, e.g. obtained with function [`feglm`] or [`feols`].
 #' @param type A character vector representing the R2 to compute. The R2 codes are of the form:
 #' "wapr2" with letters "w" (within), "a" (adjusted) and "p" (pseudo) possibly missing.
 #' E.g. to get the regular R2: use `type = "r2"`, the within adjusted R2: use `type = "war2"`,
@@ -1274,8 +1274,8 @@ r2 <- function(x, type = "all", full_names = FALSE) {
 
   check_arg(full_names, "logical scalar")
 
-  if (!"fixest" %in% class(x)) {
-    stop("Only 'fixest' objects are supported.")
+  if (!"fixest2" %in% class(x)) {
+    stop("Only 'fixest2' objects are supported.")
   }
 
   check_arg(type, "character vector no na",
@@ -1346,7 +1346,7 @@ r2 <- function(x, type = "all", full_names = FALSE) {
         # 2019-11-26: now self contained call (no need for outer frame evaluation)
 
         if (isTRUE(x$lean)) {
-          stop("Within R2s are not available for 'lean' fixest objects. Please reestimate with 'lean = FALSE'.")
+          stop("Within R2s are not available for 'lean' fixest2 objects. Please reestimate with 'lean = FALSE'.")
         }
 
         # constructing the data
@@ -1412,13 +1412,13 @@ r2 <- function(x, type = "all", full_names = FALSE) {
 }
 
 
-#' Gets the degrees of freedom of a `fixest` estimation
+#' Gets the degrees of freedom of a `fixest2` estimation
 #'
-#' Simple utility to extract the degrees of freedom from a `fixest` estimation.
+#' Simple utility to extract the degrees of freedom from a `fixest2` estimation.
 #'
-#' @inheritParams vcov.fixest
+#' @inheritParams vcov.fixest2
 #'
-#' @param x A `fixest` estimation.
+#' @param x A `fixest2` estimation.
 #' @param type Character scalar, equal to "k", "resid", "t". If "k", then the number of
 #' regressors is returned. If "resid", then it is the "residuals degree of freedom", i.e.
 #' the number of observations minus the number of regressors. If "t", it is the degrees of
@@ -1463,7 +1463,7 @@ r2 <- function(x, type = "all", full_names = FALSE) {
 #'
 #' @export
 degrees_freedom <- function(x, type, vars = NULL, vcov = NULL, se = NULL, cluster = NULL, ssc = NULL, stage = 2) {
-  check_arg(x, "class(fixest) mbt")
+  check_arg(x, "class(fixest2) mbt")
   check_set_arg(type, "match(k, resid, t)")
   check_arg(stage, "integer scalar GE{1} LE{2}")
   check_arg(vars, "character vector no na")
@@ -1510,7 +1510,7 @@ degrees_freedom <- function(x, type, vars = NULL, vcov = NULL, se = NULL, cluste
 }
 
 
-#' @describeIn degrees_freedom Gets the degrees of freedom of a `fixest` estimation
+#' @describeIn degrees_freedom Gets the degrees of freedom of a `fixest2` estimation
 degrees_freedom_iid <- function(x, type) {
   degrees_freedom(x, type, vcov = "iid")
 }
@@ -1520,14 +1520,14 @@ degrees_freedom_iid <- function(x, type) {
 ####
 
 .wald <- function(x, var) {
-  # x: fixest estimation
+  # x: fixest2 estimation
 
   coef <- x$coefficients
 
   vcov <- x$cov.scaled
   if (is.null(vcov)) {
     # => INTERNAL ERROR
-    stop("INTERNAL ERROR: .wald should be applied only to objects with a VCOV already computed. Could you report the error to the maintainer of fixest?")
+    stop("INTERNAL ERROR: .wald should be applied only to objects with a VCOV already computed. Could you report the error to the maintainer of fixest2?")
   }
 
   var_keep <- intersect(var, names(coef))
@@ -1563,7 +1563,7 @@ degrees_freedom_iid <- function(x, type) {
 
 
 kp_stat <- function(x) {
-  # internal function => x must be a fixest object
+  # internal function => x must be a fixest2 object
   #
   # The code here is a translation of the ranktest.jl function from the Vcov.jl package
   # from @matthieugomez (see https://github.com/matthieugomez/Vcov.jl)
@@ -1679,7 +1679,7 @@ kp_stat <- function(x) {
 
 cd_stat <- function(x) {
   # internal function
-  # x: fixest object
+  # x: fixest2 object
   #
 
   if (!isTRUE(x$iv) || !x$iv_stage == 2) {
@@ -1767,7 +1767,7 @@ proj_on_U <- function(x, Z) {
   # Projects some variables (either the endo or the inst) on the
   # exogenous variables (U)
   #
-  # x: a fixest IV estimation
+  # x: a fixest2 IV estimation
   #
   # I write Z in the arguments, but it can be any matrix (like X)
   #

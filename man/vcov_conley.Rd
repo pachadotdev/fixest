@@ -19,7 +19,7 @@ vcov_conley(
 conley(cutoff = NULL, pixel = NULL, distance = NULL)
 }
 \arguments{
-\item{x}{A \code{fixest} object.}
+\item{x}{A \code{fixest2} object.}
 
 \item{lat}{A character scalar or a one sided formula giving the name of the variable
 representing the latitude. The latitude must lie in [-90, 90], [0, 180] or [-180, 0].}
@@ -48,13 +48,13 @@ positive definite, whether to "fix" it using an eigenvalue decomposition
 (a la Cameron, Gelbach & Miller 2011).}
 }
 \value{
-If the first argument is a \code{fixest} object, then a VCOV is returned (i.e. a symmetric matrix).
+If the first argument is a \code{fixest2} object, then a VCOV is returned (i.e. a symmetric matrix).
 
-If the first argument is not a \code{fixest} object, then a) implicitly the arguments are shifted to
+If the first argument is not a \code{fixest2} object, then a) implicitly the arguments are shifted to
 the left (i.e. \code{vcov_conley("lat", "long")} is equivalent to
 \code{vcov_conley(lat = "lat", lon = "long")}) and b) a VCOV-\emph{request} is returned and NOT a VCOV.
-That VCOV-request can then be used in the argument \code{vcov} of various \code{fixest} functions
-(e.g. \code{\link{vcov.fixest}} or even in the estimation calls).
+That VCOV-request can then be used in the argument \code{vcov} of various \code{fixest2} functions
+(e.g. \code{\link{vcov.fixest2}} or even in the estimation calls).
 }
 \description{
 Compute VCOVs robust to spatial correlation, a la Conley (1999).
@@ -71,7 +71,7 @@ convenience, the most appropriate cutoff shall depend on the application and sha
 by the user.
 
 The function \code{conley} does not compute VCOVs directly but is meant to be used in the argument
-\code{vcov} of \code{fixest} functions (e.g. in \code{\link{vcov.fixest}} or even in the estimation calls).
+\code{vcov} of \code{fixest2} functions (e.g. in \code{\link{vcov.fixest2}} or even in the estimation calls).
 }
 \examples{
 

@@ -7,13 +7,13 @@
 obs(x)
 }
 \arguments{
-\item{x}{A \code{fixest} object.}
+\item{x}{A \code{fixest2} object.}
 }
 \value{
 It returns a simple vector of integers.
 }
 \description{
-This function extracts the observations used in \code{fixest} estimation.
+This function extracts the observations used in \code{fixest2} estimation.
 }
 \examples{
 

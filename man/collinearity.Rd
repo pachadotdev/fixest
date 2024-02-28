@@ -2,12 +2,12 @@
 % Please edit documentation in R/miscfuns.R
 \name{collinearity}
 \alias{collinearity}
-\title{Collinearity diagnostics for \code{fixest} objects}
+\title{Collinearity diagnostics for \code{fixest2} objects}
 \usage{
 collinearity(x, verbose)
 }
 \arguments{
-\item{x}{A \code{fixest} object obtained from, e.g. functions \code{\link{femlm}}, \code{\link{feols}} or \code{\link{feglm}}.}
+\item{x}{A \code{fixest2} object obtained from, e.g. functions \code{\link{femlm}}, \code{\link{feols}} or \code{\link{feglm}}.}
 
 \item{verbose}{An integer. If higher than or equal to 1, then a note is prompted at
 each step of the algorithm. By default \code{verbose = 0} for small problems

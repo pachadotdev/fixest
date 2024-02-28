@@ -10,7 +10,7 @@
     res[i] = lgamma(x[i]);
   }
 
-  return (res);
+  return res;
 }
 
 [[cpp11::register]] doubles cpp_log_a_exp_(double a, doubles mu,
@@ -28,5 +28,5 @@
     }
   }
 
-  return (res);
+  return res;
 }

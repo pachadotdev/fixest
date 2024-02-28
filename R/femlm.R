@@ -36,10 +36,10 @@
 #' optimization (so the two can really have different convergence rates).
 #'
 #' @return
-#' A `fixest` object. Note that `fixest` objects contain many elements and most of
+#' A `fixest2` object. Note that `fixest2` objects contain many elements and most of
 #' them are for internal use, they are presented here only for information.
 #' To access them, it is safer to use the user-level methods
-#' (e.g. [`vcov.fixest`], [`resid.fixest`], etc) or functions (like for instance
+#' (e.g. [`vcov.fixest2`], [`resid.fixest2`], etc) or functions (like for instance
 #' [`fitstat`] to access any fit statistic).
 #' \item{nobs}{The number of observations.}
 #' \item{fml}{The linear formula of the call.}
@@ -90,8 +90,8 @@
 #'
 #'
 #' @seealso
-#' See also [`summary.fixest`] to see the results with the appropriate standard-errors,
-#' [`fixef.fixest`] to extract the fixed-effects coefficients, and the function
+#' See also [`summary.fixest2`] to see the results with the appropriate standard-errors,
+#' [`fixef.fixest2`] to extract the fixed-effects coefficients, and the function
 #' [`etable`] to visualize the results of multiple estimations.
 #' And other estimation methods: [`feols`], [`feglm`], [`fepois`], [`feNmlm`].
 #'
@@ -102,7 +102,7 @@
 #'
 #' Berge, Laurent, 2018, "Efficient estimation of maximum likelihood models with
 #' multiple fixed-effects: the R package FENmlm." CREA Discussion Papers,
-#' 13 ([](https://github.com/lrberge/fixest/blob/master/_DOCS/FENmlm_paper.pdf)).
+#' 13 ([](https://github.com/lrberge/fixest2/blob/master/_DOCS/FENmlm_paper.pdf)).
 #'
 #' For models with multiple fixed-effects:
 #'
@@ -182,7 +182,7 @@ femlm <- function(fml, data, family = c("poisson", "negbin", "logit", "gaussian"
                   only.env = FALSE, only.coef = FALSE, data.save = FALSE, env, ...) {
   # This is just an alias
 
-  set_defaults("fixest_estimation")
+  set_defaults("fixest2_estimation")
   call_env_bis <- new.env(parent = parent.frame())
 
   res <- try(feNmlm(

@@ -42,7 +42,7 @@ estimations i) without, ii) with one, or iii) with two or more fixed-effects.
 }
 \description{
 This functions defines or extracts the default type of standard-errors to computed in
-\code{fixest} \code{\link[fixest:summary.fixest]{summary}}, and \code{\link[fixest:vcov.fixest]{vcov}}.
+\code{fixest2} \code{\link[=summary.fixest2]{summary}}, and \code{\link[=vcov.fixest2]{vcov}}.
 }
 \examples{
 
