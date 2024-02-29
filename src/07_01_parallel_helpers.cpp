@@ -57,7 +57,11 @@ std::vector<int> set_parallel_scheme_bis(int N, int nthreads) {
   }
 
   // object to return: is_na_inf
-  writable::logicals is_na_inf(anyNAInf ? nobs : 1);
+  writable::logicals is_na_inf(nobs);
+
+  for (int i = 0; i < nobs; ++i) {
+    is_na_inf[i] = anyNAInf;
+  }
 
   if (anyNAInf) {
 // again: no need to care about race conditions
