@@ -538,17 +538,17 @@ extern "C" SEXP _fixest2_cpp_newey_west_(SEXP S, SEXP w, SEXP nthreads) {
   END_CPP11
 }
 // 09_02_vcov_dwdk.cpp
-doubles_matrix<> cpp_newey_west_panel_(doubles_matrix<> S, doubles w, integers unit, int G, integers time, int T, int nthreads);
-extern "C" SEXP _fixest2_cpp_newey_west_panel_(SEXP S, SEXP w, SEXP unit, SEXP G, SEXP time, SEXP T, SEXP nthreads) {
+doubles_matrix<> cpp_newey_west_panel_(doubles_matrix<> S, doubles w, integers unit, int G, integers time, int time_len, int nthreads);
+extern "C" SEXP _fixest2_cpp_newey_west_panel_(SEXP S, SEXP w, SEXP unit, SEXP G, SEXP time, SEXP time_len, SEXP nthreads) {
   BEGIN_CPP11
-    return cpp11::as_sexp(cpp_newey_west_panel_(cpp11::as_cpp<cpp11::decay_t<doubles_matrix<>>>(S), cpp11::as_cpp<cpp11::decay_t<doubles>>(w), cpp11::as_cpp<cpp11::decay_t<integers>>(unit), cpp11::as_cpp<cpp11::decay_t<int>>(G), cpp11::as_cpp<cpp11::decay_t<integers>>(time), cpp11::as_cpp<cpp11::decay_t<int>>(T), cpp11::as_cpp<cpp11::decay_t<int>>(nthreads)));
+    return cpp11::as_sexp(cpp_newey_west_panel_(cpp11::as_cpp<cpp11::decay_t<doubles_matrix<>>>(S), cpp11::as_cpp<cpp11::decay_t<doubles>>(w), cpp11::as_cpp<cpp11::decay_t<integers>>(unit), cpp11::as_cpp<cpp11::decay_t<int>>(G), cpp11::as_cpp<cpp11::decay_t<integers>>(time), cpp11::as_cpp<cpp11::decay_t<int>>(time_len), cpp11::as_cpp<cpp11::decay_t<int>>(nthreads)));
   END_CPP11
 }
 // 09_02_vcov_dwdk.cpp
-doubles_matrix<> cpp_driscoll_kraay_(doubles_matrix<> S, doubles w, integers time, int T, int nthreads);
-extern "C" SEXP _fixest2_cpp_driscoll_kraay_(SEXP S, SEXP w, SEXP time, SEXP T, SEXP nthreads) {
+doubles_matrix<> cpp_driscoll_kraay_(doubles_matrix<> S, doubles w, integers time, int time_len, int nthreads);
+extern "C" SEXP _fixest2_cpp_driscoll_kraay_(SEXP S, SEXP w, SEXP time, SEXP time_len, SEXP nthreads) {
   BEGIN_CPP11
-    return cpp11::as_sexp(cpp_driscoll_kraay_(cpp11::as_cpp<cpp11::decay_t<doubles_matrix<>>>(S), cpp11::as_cpp<cpp11::decay_t<doubles>>(w), cpp11::as_cpp<cpp11::decay_t<integers>>(time), cpp11::as_cpp<cpp11::decay_t<int>>(T), cpp11::as_cpp<cpp11::decay_t<int>>(nthreads)));
+    return cpp11::as_sexp(cpp_driscoll_kraay_(cpp11::as_cpp<cpp11::decay_t<doubles_matrix<>>>(S), cpp11::as_cpp<cpp11::decay_t<doubles>>(w), cpp11::as_cpp<cpp11::decay_t<integers>>(time), cpp11::as_cpp<cpp11::decay_t<int>>(time_len), cpp11::as_cpp<cpp11::decay_t<int>>(nthreads)));
   END_CPP11
 }
 // 09_03_vcov_conley.cpp
