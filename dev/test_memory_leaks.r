@@ -1,12 +1,22 @@
 if (!require("devtools")) install.packages("devtools")
 devtools::load_all()
 
-library(pander)
-
-setFixest_notes(FALSE)
-setFixest_etable(digits = 3)
-
 data(airquality)
+
+# On multiple estimations: see the dedicated vignette
+est <- feols(
+  Ozone ~ Solar.R,
+  airquality
+)
+est <- feols(Ozone ~ Solar.R,
+  airquality,
+  cluster = ~Day
+)
+
+est <- feols(Ozone ~ Solar.R + sw0(Wind + Temp) | csw(Month, Day),
+  airquality,
+  cluster = ~Day
+)
 
 # Setting a dictionary
 setFixest_dict(c(
@@ -14,11 +24,10 @@ setFixest_dict(c(
   Wind = "Wind Speed (mph)", Temp = "Temperature"
 ))
 
-# On multiple estimations: see the dedicated vignette
-est <- feols(Ozone ~ Solar.R + sw0(Wind + Temp) | csw(Month, Day),
-  airquality,
-  cluster = ~Day
-)
+library(pander)
+
+setFixest_notes(FALSE)
+setFixest_etable(digits = 3)
 
 etable(est)
 
@@ -27,11 +36,11 @@ etable(est, style.df = style.df(
   fixef.suffix = " fixed effect", yesNo = "yes"
 ))
 
-# NOTE:
-# The evaluation of the code of this section requires the
-#   package 'pander' which is not installed.
-# The code output is not reported.
-etable(est, postprocess.df = pandoc.table.return, style = "rmarkdown")
+# # NOTE:
+# # The evaluation of the code of this section requires the
+# #   package 'pander' which is not installed.
+# # The code output is not reported.
+# etable(est, postprocess.df = pandoc.table.return, style = "rmarkdown")
 
 my_style <- style.df(
   depvar.title = "", fixef.title = "",

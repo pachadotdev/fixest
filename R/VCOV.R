@@ -2681,6 +2681,7 @@ getFixest_ssc <- function() {
 #' # Resetting the defaults
 #' setFixest_vcov(reset = TRUE)
 #'
+#' @export
 setFixest_vcov <- function(no_FE = "iid", one_FE = "cluster", two_FE = "cluster",
                            panel = "cluster", all = NULL, reset = FALSE) {
   # NOTE:
