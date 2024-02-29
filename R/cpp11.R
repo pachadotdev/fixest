@@ -304,12 +304,12 @@ cpp_newey_west_ <- function(S, w, nthreads) {
   .Call(`_fixest2_cpp_newey_west_`, S, w, nthreads)
 }
 
-cpp_newey_west_panel_ <- function(S, w, unit, G, time, T, nthreads) {
-  .Call(`_fixest2_cpp_newey_west_panel_`, S, w, unit, G, time, T, nthreads)
+cpp_newey_west_panel_ <- function(S, w, unit, G, time, time_len, nthreads) {
+  .Call(`_fixest2_cpp_newey_west_panel_`, S, w, unit, G, time, time_len, nthreads)
 }
 
-cpp_driscoll_kraay_ <- function(S, w, time, T, nthreads) {
-  .Call(`_fixest2_cpp_driscoll_kraay_`, S, w, time, T, nthreads)
+cpp_driscoll_kraay_ <- function(S, w, time, time_len, nthreads) {
+  .Call(`_fixest2_cpp_driscoll_kraay_`, S, w, time, time_len, nthreads)
 }
 
 cpp_vcov_conley_ <- function(S, lon_rad, lat_rad, distance, cutoff, nthreads) {

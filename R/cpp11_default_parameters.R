@@ -304,12 +304,12 @@ cpp_newey_west <- function(S, w, nthreads = 1L) {
   cpp_newey_west_(S, w, parse_int(nthreads))
 }
 
-cpp_newey_west_panel <- function(S, w, unit, G, time, T, nthreads = 1L) {
-  cpp_newey_west_panel_(S, w, parse_int(unit), parse_int(G), parse_int(time), parse_int(T), parse_int(nthreads))
+cpp_newey_west_panel <- function(S, w, unit, G, time, time_len, nthreads = 1L) {
+  cpp_newey_west_panel_(S, w, parse_int(unit), parse_int(G), parse_int(time), parse_int(time_len), parse_int(nthreads))
 }
 
-cpp_driscoll_kraay <- function(S, w, time, T, nthreads = 1L) {
-  cpp_driscoll_kraay_(S, w, parse_int(time), parse_int(T), parse_int(nthreads))
+cpp_driscoll_kraay <- function(S, w, time, time_len, nthreads = 1L) {
+  cpp_driscoll_kraay_(S, w, parse_int(time), parse_int(time_len), parse_int(nthreads))
 }
 
 cpp_vcov_conley <- function(S, lon_rad, lat_rad, distance, cutoff, nthreads = 1L) {

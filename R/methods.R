@@ -509,9 +509,9 @@ print.fixest2 <- function(x, n, type = "table", fitstat = NULL, ...) {
 #'
 #' @export
 summary.fixest2 <- function(object, vcov = NULL, cluster = NULL, ssc = NULL, .vcov = NULL,
-                           stage = NULL, lean = FALSE, agg = NULL, forceCovariance = FALSE,
-                           se = NULL, keepBounded = FALSE, n = 1000, vcov_fix = TRUE,
-                           nthreads = getFixest_nthreads(), ...) {
+                            stage = NULL, lean = FALSE, agg = NULL, forceCovariance = FALSE,
+                            se = NULL, keepBounded = FALSE, n = 1000, vcov_fix = TRUE,
+                            nthreads = getFixest_nthreads(), ...) {
   # computes the clustered SEs and returns the modified vcov and coeftable
   # NOTA: if the object is already a summary
 
@@ -758,7 +758,7 @@ summary.fixest2 <- function(object, vcov = NULL, cluster = NULL, ssc = NULL, .vc
 #' @rdname summary.fixest2
 #' @export
 summary.fixest2_list <- function(object, se, cluster, ssc = getFixest_ssc(), .vcov,
-                                stage = 2, lean = FALSE, n, ...) {
+                                 stage = 2, lean = FALSE, n, ...) {
   dots <- list(...)
 
   res <- list()
@@ -914,10 +914,7 @@ summary.fixest2.fixef <- function(object, n = 5, ...) {
   }
 }
 
-####
-#### fixef ####
-####
-
+# fixef ----
 
 #' Extract the Fixed-Effects from a `fixest2` estimation.
 #'
@@ -977,8 +974,8 @@ summary.fixest2.fixef <- function(object, n = 5, ...) {
 #'
 #' @export
 fixef.fixest2 <- function(object, notes = getFixest_notes(), sorted = TRUE,
-                         nthreads = getFixest_nthreads(),
-                         fixef.tol = 1e-5, fixef.iter = 10000, ...) {
+                          nthreads = getFixest_nthreads(),
+                          fixef.tol = 1e-5, fixef.iter = 10000, ...) {
   # object is a fixest2 object
   # This function retrieves the dummies
 
@@ -1295,6 +1292,11 @@ fixef.fixest2 <- function(object, notes = getFixest_notes(), sorted = TRUE,
   return(all_clust)
 }
 
+#' @export
+fixef <- function(object, ...) {
+  UseMethod("fixef")
+}
+
 #' Functions exported from \pkg{nlme} to implement \pkg{fixest2} methods
 #'
 #' The package \pkg{fixest2} uses the `fixef` method from \pkg{nlme}. Unfortunately,
@@ -1389,13 +1391,7 @@ plot.fixest2.fixef <- function(x, n = 5, ...) {
   }
 }
 
-
-
-####
-#### fixest2 own methods ####
-####
-
-
+# fixest2 own methods ----
 
 #' Extracts the coefficients table from an estimation
 #'
@@ -1724,7 +1720,7 @@ se.matrix <- function(object, keep, drop, order, ...) {
 #'
 #' @export
 coeftable.fixest2 <- function(object, vcov = NULL, ssc = NULL, cluster = NULL,
-                             keep = NULL, drop = NULL, order = NULL, list = FALSE, ...) {
+                              keep = NULL, drop = NULL, order = NULL, list = FALSE, ...) {
   # We don't explicitly refer to the other arguments
 
   check_arg(keep, drop, order, "NULL character vector no na")
@@ -1769,7 +1765,7 @@ coeftable.fixest2 <- function(object, vcov = NULL, ssc = NULL, cluster = NULL,
 #' @describeIn coeftable.fixest2 Extracts the standard-error of an estimation
 #' @export
 se.fixest2 <- function(object, vcov = NULL, ssc = NULL, cluster = NULL,
-                      keep = NULL, drop = NULL, order = NULL, ...) {
+                       keep = NULL, drop = NULL, order = NULL, ...) {
   check_arg(keep, drop, order, "NULL character vector no na")
 
   mat <- coeftable(object,
@@ -1790,7 +1786,7 @@ se.fixest2 <- function(object, vcov = NULL, ssc = NULL, cluster = NULL,
 #' @describeIn coeftable.fixest2 Extracts the t-statistics of an estimation
 #' @export
 tstat.fixest2 <- function(object, vcov = NULL, ssc = NULL, cluster = NULL,
-                         keep = NULL, drop = NULL, order = NULL, ...) {
+                          keep = NULL, drop = NULL, order = NULL, ...) {
   check_arg(keep, drop, order, "NULL character vector no na")
 
   mat <- coeftable(object,
@@ -1811,7 +1807,7 @@ tstat.fixest2 <- function(object, vcov = NULL, ssc = NULL, cluster = NULL,
 #' @describeIn coeftable.fixest2 Extracts the p-value of an estimation
 #' @export
 pvalue.fixest2 <- function(object, vcov = NULL, ssc = NULL, cluster = NULL,
-                          keep = NULL, drop = NULL, order = NULL, ...) {
+                           keep = NULL, drop = NULL, order = NULL, ...) {
   check_arg(keep, drop, order, "NULL character vector no na")
 
   mat <- coeftable(object,
@@ -2073,7 +2069,7 @@ logLik.fixest2 <- function(object, ...) {
 #'
 #' @export
 coef.fixest2 <- function(object, keep, drop, order,
-                        collin = FALSE, agg = TRUE, ...) {
+                         collin = FALSE, agg = TRUE, ...) {
   check_arg(keep, drop, order, "NULL character vector no na")
   check_arg(collin, agg, "logical scalar")
 
@@ -2189,7 +2185,7 @@ coefficients.fixest2 <- coef.fixest2
 #'
 #' @export
 fitted.fixest2 <- function(object, type = c("response", "link"),
-                          na.rm = TRUE, ...) {
+                           na.rm = TRUE, ...) {
   # Checking the arguments
   if (is_user_level_call()) {
     validate_dots(suggest_args = "type")
@@ -2268,7 +2264,7 @@ fitted.values.fixest2 <- fitted.fixest2
 #'
 #' @export
 resid.fixest2 <- function(object, type = c("response", "deviance", "pearson", "working"),
-                         na.rm = TRUE, ...) {
+                          na.rm = TRUE, ...) {
   check_set_arg(type, "match")
   check_set_arg(na.rm, "logical scalar")
 
@@ -2485,9 +2481,9 @@ residuals.fixest2 <- resid.fixest2
 #'
 #' @export
 predict.fixest2 <- function(object, newdata, type = c("response", "link"), se.fit = FALSE,
-                           interval = "none", level = 0.95, fixef = FALSE,
-                           vs.coef = FALSE, sample = c("estimation", "original"),
-                           vcov = NULL, ssc = NULL, ...) {
+                            interval = "none", level = 0.95, fixef = FALSE,
+                            vs.coef = FALSE, sample = c("estimation", "original"),
+                            vcov = NULL, ssc = NULL, ...) {
   # Checking the arguments
   if (is_user_level_call()) {
     validate_dots(suggest_args = c("newdata", "type"))
@@ -2957,7 +2953,7 @@ predict.fixest2 <- function(object, newdata, type = c("response", "link"), se.fi
 #'
 #' @export
 confint.fixest2 <- function(object, parm, level = 0.95, vcov, se, cluster,
-                           ssc = NULL, coef.col = FALSE, ...) {
+                            ssc = NULL, coef.col = FALSE, ...) {
   # Checking the arguments
   if (is_user_level_call()) {
     validate_dots(
@@ -3406,7 +3402,7 @@ formula.fixest2 <- function(x, type = c("full", "linear", "iv", "NL"), ...) {
 #'
 #' @export
 model.matrix.fixest2 <- function(object, data, type = "rhs", na.rm = TRUE, subset = FALSE,
-                                as.matrix = FALSE, as.df = FALSE, collin.rm = TRUE, ...) {
+                                 as.matrix = FALSE, as.df = FALSE, collin.rm = TRUE, ...) {
   # We evaluate the formula with the past call
   # type: lhs, rhs, fixef, iv.endo, iv.inst, iv.rhs1, iv.rhs2
   # if fixef => return a DF

@@ -12,10 +12,8 @@
   int K = S.ncol();
 
   int L = w.size();
-  if (w[L - 1] == 0)
-    L -= 1;
-  if (L > N - 1)
-    L = N - 1;
+  if (w[L - 1] == 0) L -= 1;
+  if (L > N - 1) L = N - 1;
 
   // We set the parallel scheme depending on the data
   bool par_on_col = K >= L || nthreads == 1;
@@ -99,8 +97,7 @@
       // updating counters
       L_start += step_size;
       L_end += step_size;
-      if (L_end > L)
-        L_end = L;
+      if (L_end > L) L_end = L;
     }
   }
 
@@ -116,9 +113,9 @@
   return meat;
 }
 
-[[cpp11::register]] doubles_matrix<>
-cpp_newey_west_panel_(doubles_matrix<> S, doubles w, integers unit, int G,
-                      integers time, int T, int nthreads) {
+[[cpp11::register]] doubles_matrix<> cpp_newey_west_panel_(
+    doubles_matrix<> S, doubles w, integers unit, int G, integers time,
+    int time_len, int nthreads) {
   // Newey West,  but for panels
   // S: scores
   // w: weights
@@ -131,23 +128,21 @@ cpp_newey_west_panel_(doubles_matrix<> S, doubles w, integers unit, int G,
   int K = S.ncol();
 
   int L = w.size();
-  if (w[L - 1] == 0)
-    L -= 1;
-  if (L > T - 1)
-    L = T - 1;
+  if (w[L - 1] == 0) L -= 1;
+  if (L > time_len - 1) L = time_len - 1;
 
   writable::doubles_matrix<> meat(K, K);
 
   // utilities
-  writable::doubles time_table(T);
+  writable::doubles time_table(time_len);
   for (int i = 0; i < N; ++i) {
     ++time_table[time[i] - 1];
   }
 
-  writable::doubles time_start(T);
-  writable::doubles time_end(T);
+  writable::doubles time_start(time_len);
+  writable::doubles time_end(time_len);
   time_end[0] += time_table[0];
-  for (int t = 1; t < T; ++t) {
+  for (int t = 1; t < time_len; ++t) {
     time_start[t] = time_start[t - 1] + time_table[t - 1];
     time_end[t] = time_end[t - 1] + time_table[t];
   }
@@ -198,8 +193,7 @@ cpp_newey_west_panel_(doubles_matrix<> S, doubles w, integers unit, int G,
     int k1 = all_k1[index];
     int k2 = all_k2[index];
 
-    if (k1 > k2)
-      continue;
+    if (k1 > k2) continue;
 
     double tmp = 0;
     for (int i = 0; i < N; ++i) {
@@ -207,8 +201,7 @@ cpp_newey_west_panel_(doubles_matrix<> S, doubles w, integers unit, int G,
     }
 
     meat(k1, k2) = w[0] * tmp;
-    if (k1 != k2)
-      meat(k2, k1) = w[0] * tmp;
+    if (k1 != k2) meat(k2, k1) = w[0] * tmp;
   }
 
   if (balanced) {
@@ -219,7 +212,7 @@ cpp_newey_west_panel_(doubles_matrix<> S, doubles w, integers unit, int G,
       int s2 = time_start[0];
 
       int nmax = 0;
-      for (int t = l; t < T; ++t) {
+      for (int t = l; t < time_len; ++t) {
         nmax += time_table[t];
       }
 
@@ -250,7 +243,7 @@ cpp_newey_west_panel_(doubles_matrix<> S, doubles w, integers unit, int G,
 
         double tmp = 0;
 
-        for (int t = l; t < T; ++t) {
+        for (int t = l; t < time_len; ++t) {
           // we only make the product of matching units
 
           int obs_left = time_start[t];
@@ -291,10 +284,8 @@ cpp_newey_west_panel_(doubles_matrix<> S, doubles w, integers unit, int G,
   return meat;
 }
 
-[[cpp11::register]] doubles_matrix<> cpp_driscoll_kraay_(doubles_matrix<> S,
-                                                         doubles w,
-                                                         integers time, int T,
-                                                         int nthreads) {
+[[cpp11::register]] doubles_matrix<> cpp_driscoll_kraay_(
+    doubles_matrix<> S, doubles w, integers time, int time_len, int nthreads) {
   // Driscoll and Kraay
   // S: scores
   // w: weights
@@ -306,15 +297,13 @@ cpp_newey_west_panel_(doubles_matrix<> S, doubles w, integers unit, int G,
   int K = S.ncol();
 
   int L = w.size();
-  if (w[L - 1] == 0)
-    L -= 1;
-  if (L > T - 1)
-    L = T - 1;
+  if (w[L - 1] == 0) L -= 1;
+  if (L > time_len - 1) L = time_len - 1;
 
   writable::doubles_matrix<> meat(K, K);
 
   // Scores
-  writable::doubles_matrix<> time_scores(T, K);
+  writable::doubles_matrix<> time_scores(time_len, K);
 
 // we sum the scores by period
 #pragma omp parallel for num_threads(nthreads)
@@ -340,17 +329,15 @@ cpp_newey_west_panel_(doubles_matrix<> S, doubles w, integers unit, int G,
       int k1 = all_k1[index];
       int k2 = all_k2[index];
 
-      if (l == 0 && k1 > k2)
-        continue;
+      if (l == 0 && k1 > k2) continue;
 
       double tmp = 0;
-      for (int t = 0; t < T - l; ++t) {
+      for (int t = 0; t < time_len - l; ++t) {
         tmp += time_scores(t, k1) * time_scores(t + l, k2);
       }
 
       meat(k1, k2) += w[l] * tmp;
-      if (l == 0 && k1 != k2)
-        meat(k2, k1) += w[l] * tmp;
+      if (l == 0 && k1 != k2) meat(k2, k1) += w[l] * tmp;
     }
   }
 

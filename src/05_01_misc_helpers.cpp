@@ -5,7 +5,7 @@
   // but about 40-100 times faster for whole numbers => no trailing digits does
   // not accept vectors, although super easy to expand to vectors
 
-  double xr = round(x * pow(10, r)) / pow(10, r);
+  double xr = round(x * std::pow(10, r)) / std::pow(10, r);
 
   std::string x_str = std::to_string(static_cast<int>(abs(xr)));
   std::string res;

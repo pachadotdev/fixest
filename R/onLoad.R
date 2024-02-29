@@ -24,9 +24,6 @@
   # Setup of builtin VCOVs
   vcov_setup()
 
-  # To circumvent a peculiar behavior from pkgdown
-  fix_pkgwdown_path()
-
   invisible()
 }
 
