@@ -59,8 +59,9 @@ std::vector<int> set_parallel_scheme_bis(int N, int nthreads) {
   // object to return: is_na_inf
   writable::logicals is_na_inf(nobs);
 
+#pragma omp parallel for num_threads(nthreads)
   for (int i = 0; i < nobs; ++i) {
-    is_na_inf[i] = anyNAInf;
+    is_na_inf[i] = false;
   }
 
   if (anyNAInf) {
@@ -128,7 +129,12 @@ std::vector<int> set_parallel_scheme_bis(int N, int nthreads) {
   }
 
   // object to return: is_na_inf
-  writable::logicals is_na_inf(anyNAInf ? nobs : 1);
+  writable::logicals is_na_inf(nobs);
+
+#pragma omp parallel for num_threads(nthreads)
+  for (int i = 0; i < nobs; ++i) {
+    is_na_inf[i] = false;
+  }
 
   if (anyNAInf) {
 #pragma omp parallel for num_threads(nthreads)
@@ -203,7 +209,12 @@ std::vector<int> set_parallel_scheme_bis(int N, int nthreads) {
   }
 
   // object to return: is_na_inf
-  writable::logicals is_na_inf(anyNAInf ? nobs : 1);
+  writable::logicals is_na_inf(nobs);
+
+#pragma omp parallel for num_threads(nthreads)
+  for (int i = 0; i < nobs; ++i) {
+    is_na_inf[i] = false;
+  }
 
   if (anyNAInf) {
 #pragma omp parallel for num_threads(nthreads)
