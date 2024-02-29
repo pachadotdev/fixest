@@ -135,12 +135,21 @@
 
   // utilities
   writable::doubles time_table(time_len);
+  for (int t = 0; t < time_len; ++t) {
+    time_table[t] = 0;
+  }
   for (int i = 0; i < N; ++i) {
     ++time_table[time[i] - 1];
   }
 
   writable::doubles time_start(time_len);
   writable::doubles time_end(time_len);
+
+  for (int t = 0; t < time_len; ++t) {
+    time_start[t] = 0.0;
+    time_end[t] = 0.0;
+  }
+
   time_end[0] += time_table[0];
   for (int t = 1; t < time_len; ++t) {
     time_start[t] = time_start[t - 1] + time_table[t - 1];
