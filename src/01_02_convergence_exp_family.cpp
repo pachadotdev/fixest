@@ -305,10 +305,9 @@ void CCC_logit(int nthreads, int nb_cluster, double diffMax_NR,
 
       if (iter == iterMax) {
         keepGoing = false;
-        Rprintf(
-            "[Getting cluster coefficients nber %i] max iterations reached "
-            "(%i).\n",
-            m, iterMax);
+        Rprintf("[Getting cluster coefficients nber %i] max iterations reached "
+                "(%i).\n",
+                m, iterMax);
         Rprintf("Value Sum Deriv (NR) = %f. Difference = %f.\n", value,
                 fabs(x0 - x1));
       }

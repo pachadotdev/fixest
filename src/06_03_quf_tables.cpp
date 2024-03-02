@@ -52,8 +52,10 @@ void quf_table_sum_single(void *px_in, std::string &x_type, int n, int q,
   if (compute_sum_y || !do_refactor) {
     for (int i = 0; i < n; ++i) {
       obs = x_quf[i] - 1;
-      if (!do_refactor) ++x_table[obs];
-      if (compute_sum_y) sum_y[obs] += py[i];
+      if (!do_refactor)
+        ++x_table[obs];
+      if (compute_sum_y)
+        sum_y[obs] += py[i];
     }
   }
 

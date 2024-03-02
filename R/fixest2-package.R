@@ -62,7 +62,7 @@ NULL
 #' @export
 NULL
 
-#' @importFrom stringmagic string_magic_alias cat_magic_alias message_magic_alias string_any
+#' @importFrom stringmagic string_magic_alias cat_magic_alias message_magic_alias string_any string_vec_alias
 NULL
 
 #' Trade data sample

@@ -18,7 +18,7 @@ integers calculateTableCluster(const integers_matrix<> &dumMat,
 
   for (int i = 0; i < N; i++) {
     int k = dumMat(i, q);
-    tableCluster[k] += 1;  // the number of obs per case
+    tableCluster[k] += 1; // the number of obs per case
   }
   return tableCluster;
 }
@@ -70,7 +70,7 @@ void updateId2do(int nb2do, writable::integers &id2do,
 
   // Creation of the indices to put all the cluster values into a single vector
   int nb_coef = std::accumulate(cluster_sizes.begin(), cluster_sizes.end(), 0);
-  writable::integers nb_ref(Q);  // nb_ref takes the nb of elements set as ref
+  writable::integers nb_ref(Q); // nb_ref takes the nb of elements set as ref
   for (int q = 0; q < Q; q++) {
     nb_ref[q] = 0;
   }
@@ -126,7 +126,7 @@ void updateId2do(int nb2do, writable::integers &id2do,
 
   // Other indices and variables
   int qui_max, obs;
-  int rs, rs_max;  // rs: row sum
+  int rs, rs_max; // rs: row sum
   int id_cluster;
   double other_value;
   bool first;
@@ -259,7 +259,8 @@ void updateId2do(int nb2do, writable::integers &id2do,
         }
       }
 
-      if (nb2do_next == nb2do) break;
+      if (nb2do_next == nb2do)
+        break;
     }
 
     // out of this loop:
@@ -273,7 +274,8 @@ void updateId2do(int nb2do, writable::integers &id2do,
     }
 
     // if no more obs to be covered
-    if (nb2do_next == 0) break;
+    if (nb2do_next == 0)
+      break;
   }
 
   if (iter == iterMax) {

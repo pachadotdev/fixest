@@ -24,11 +24,9 @@ double simple_vec_double::operator[](int i) {
   }
 }
 
-[[cpp11::register]] doubles_matrix<> cpp_factor_matrix_(integers fact,
-                                                        logicals is_na_all,
-                                                        integers who_is_dropped,
-                                                        SEXP var,
-                                                        strings col_names) {
+[[cpp11::register]] doubles_matrix<>
+cpp_factor_matrix_(integers fact, logicals is_na_all, integers who_is_dropped,
+                   SEXP var, strings col_names) {
   // fact: integer vector from 1 (!) to K, can contain NAs
   // Checking Na is cheap as opposed to populating the matrix, but having an
   // argument avoids creating a new object

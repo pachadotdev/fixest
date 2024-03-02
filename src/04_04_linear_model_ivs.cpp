@@ -150,9 +150,10 @@
   return res;
 }
 
-[[cpp11::register]] list cpp_iv_product_completion_(
-    doubles_matrix<> XtX, doubles Xty, doubles_matrix<> X, doubles y,
-    doubles_matrix<> U, doubles w, int nthreads) {
+[[cpp11::register]] list
+cpp_iv_product_completion_(doubles_matrix<> XtX, doubles Xty,
+                           doubles_matrix<> X, doubles y, doubles_matrix<> U,
+                           doubles w, int nthreads) {
   // We compute the following
   // - (UX)'(UX)
   // - (UX)'y
@@ -227,11 +228,12 @@
 
   if (K == 1) {
     double *p_r = REAL(VECTOR_ELT(resid_1st, 0));
+    double coef_0 = coef[0 + is_int];
 
 #pragma omp parallel for num_threads(nthreads)
     for (int t = 0; t < nthreads; ++t) {
       for (int i = bounds[t]; i < bounds[t + 1]; ++i) {
-        iv_resid[i] -= coef[0 + is_int] * p_r[i];
+        iv_resid[i] -= coef_0 * p_r[i];
       }
     }
   } else {
@@ -244,8 +246,9 @@
     for (int t = 0; t < nthreads; ++t) {
       for (int k = 0; k < K; ++k) {
         double *p_r = p_p_r[k];
+        double coef_k = coef[k + is_int];
         for (int i = bounds[t]; i < bounds[t + 1]; ++i) {
-          iv_resid[i] -= coef[k + is_int] * p_r[i];
+          iv_resid[i] -= coef_k * p_r[i];
         }
       }
     }

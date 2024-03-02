@@ -24,7 +24,7 @@ class simple_vec_double {
   int n;
   bool is_real;
 
- public:
+public:
   simple_vec_double(SEXP x);
   double operator[](int);
 };

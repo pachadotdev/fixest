@@ -12,8 +12,10 @@
   int K = S.ncol();
 
   int L = w.size();
-  if (w[L - 1] == 0) L -= 1;
-  if (L > N - 1) L = N - 1;
+  if (w[L - 1] == 0)
+    L -= 1;
+  if (L > N - 1)
+    L = N - 1;
 
   // We set the parallel scheme depending on the data
   bool par_on_col = K >= L || nthreads == 1;
@@ -97,7 +99,8 @@
       // updating counters
       L_start += step_size;
       L_end += step_size;
-      if (L_end > L) L_end = L;
+      if (L_end > L)
+        L_end = L;
     }
   }
 
@@ -113,9 +116,9 @@
   return meat;
 }
 
-[[cpp11::register]] doubles_matrix<> cpp_newey_west_panel_(
-    doubles_matrix<> S, doubles w, integers unit, int G, integers time,
-    int time_len, int nthreads) {
+[[cpp11::register]] doubles_matrix<>
+cpp_newey_west_panel_(doubles_matrix<> S, doubles w, integers unit, int G,
+                      integers time, int time_len, int nthreads) {
   // Newey West,  but for panels
   // S: scores
   // w: weights
@@ -128,8 +131,10 @@
   int K = S.ncol();
 
   int L = w.size();
-  if (w[L - 1] == 0) L -= 1;
-  if (L > time_len - 1) L = time_len - 1;
+  if (w[L - 1] == 0)
+    L -= 1;
+  if (L > time_len - 1)
+    L = time_len - 1;
 
   writable::doubles_matrix<> meat(K, K);
 
@@ -202,7 +207,8 @@
     int k1 = all_k1[index];
     int k2 = all_k2[index];
 
-    if (k1 > k2) continue;
+    if (k1 > k2)
+      continue;
 
     double tmp = 0;
     for (int i = 0; i < N; ++i) {
@@ -210,7 +216,8 @@
     }
 
     meat(k1, k2) = w[0] * tmp;
-    if (k1 != k2) meat(k2, k1) = w[0] * tmp;
+    if (k1 != k2)
+      meat(k2, k1) = w[0] * tmp;
   }
 
   if (balanced) {
@@ -293,8 +300,9 @@
   return meat;
 }
 
-[[cpp11::register]] doubles_matrix<> cpp_driscoll_kraay_(
-    doubles_matrix<> S, doubles w, integers time, int time_len, int nthreads) {
+[[cpp11::register]] doubles_matrix<>
+cpp_driscoll_kraay_(doubles_matrix<> S, doubles w, integers time, int time_len,
+                    int nthreads) {
   // Driscoll and Kraay
   // S: scores
   // w: weights
@@ -306,8 +314,10 @@
   int K = S.ncol();
 
   int L = w.size();
-  if (w[L - 1] == 0) L -= 1;
-  if (L > time_len - 1) L = time_len - 1;
+  if (w[L - 1] == 0)
+    L -= 1;
+  if (L > time_len - 1)
+    L = time_len - 1;
 
   writable::doubles_matrix<> meat(K, K);
 
@@ -338,7 +348,8 @@
       int k1 = all_k1[index];
       int k2 = all_k2[index];
 
-      if (l == 0 && k1 > k2) continue;
+      if (l == 0 && k1 > k2)
+        continue;
 
       double tmp = 0;
       for (int t = 0; t < time_len - l; ++t) {
@@ -346,7 +357,8 @@
       }
 
       meat(k1, k2) += w[l] * tmp;
-      if (l == 0 && k1 != k2) meat(k2, k1) += w[l] * tmp;
+      if (l == 0 && k1 != k2)
+        meat(k2, k1) += w[l] * tmp;
     }
   }
 

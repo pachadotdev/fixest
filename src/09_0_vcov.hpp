@@ -18,7 +18,7 @@ class mat_row_scheme {
   int64_t N = 0;
   int64_t n_total = 0;
 
- public:
+public:
   std::vector<double> mat;
 
   mat_row_scheme() = delete;

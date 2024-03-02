@@ -6,8 +6,9 @@
 #include <math.h>
 #include <stdint.h>
 
+#include <algorithm>
 #include <cpp11.hpp>
-#include <iostream>
+// #include <iostream>
 #include <numeric>
 #include <vector>
 

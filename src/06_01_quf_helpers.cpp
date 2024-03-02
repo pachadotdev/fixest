@@ -72,7 +72,7 @@ void quf_double(int n, int *x_uf, void *px, std::vector<double> &x_unik,
   // 3) Sorting
   unsigned long long *x_read = px_ulong;
   unsigned long long *x_write = x_tmp.data();
-  unsigned long long *p_tmp;  // used for swapping
+  unsigned long long *p_tmp; // used for swapping
 
   std::vector<int> x_order(n), x_unclass(n);
   int *o_read = x_unclass.data();
@@ -80,7 +80,8 @@ void quf_double(int n, int *x_uf, void *px, std::vector<double> &x_unik,
   int *o_tmp;
 
   int k = 0;
-  for (auto &p : x_unclass) p = k++;
+  for (auto &p : x_unclass)
+    p = k++;
 
   for (int b = 0; b < 8; ++b) {
     if (skip_flag[b] == false) {
@@ -179,7 +180,7 @@ void quf_int_gnl(int n, int *x_uf, void *px, std::vector<double> &x_unik,
   // 3) Sorting
   int *x_read = x_uint.data();
   int *x_write = x_tmp.data();
-  int *p_tmp;  // used for swapping
+  int *p_tmp; // used for swapping
 
   std::vector<int> x_order(n), x_unclass(n);
   int *o_read = x_unclass.data();
@@ -187,7 +188,8 @@ void quf_int_gnl(int n, int *x_uf, void *px, std::vector<double> &x_unik,
   int *o_tmp;
 
   int k = 0;
-  for (auto &p : x_unclass) p = k++;
+  for (auto &p : x_unclass)
+    p = k++;
 
   for (int b = 0; b < 4; ++b) {
     if (skip_flag[b] == false) {
@@ -250,7 +252,7 @@ void quf_int(int n, int *x_uf, void *px, std::vector<double> &x_unik, int x_min,
   int *px_int = (int *)px;
   double *px_dble = (double *)px;
 
-  int n_unik = 0;  // nber of uniques minus one
+  int n_unik = 0; // nber of uniques minus one
 
   // radix array
   std::vector<int> x_lookup(max_value + 1, 0);
@@ -313,7 +315,7 @@ void quf_int(int n, int *x_uf, void *px, std::vector<double> &x_unik, int x_min,
       }
     }
 
-    is_int_in_double = IS_INT;  // true: only if x is REAL + INT test OK
+    is_int_in_double = IS_INT; // true: only if x is REAL + INT test OK
   } else if (TYPEOF(x) == STRSXP) {
     IS_STR = true;
     std::uintptr_t xi_uintptr;
@@ -340,8 +342,10 @@ void quf_int(int n, int *x_uf, void *px, std::vector<double> &x_unik, int x_min,
       double x_min = px[0], x_max = px[0], x_tmp;
       for (int i = 1; i < n; ++i) {
         x_tmp = px[i];
-        if (x_tmp > x_max) x_max = x_tmp;
-        if (x_tmp < x_min) x_min = x_tmp;
+        if (x_tmp > x_max)
+          x_max = x_tmp;
+        if (x_tmp < x_min)
+          x_min = x_tmp;
       }
       X_MIN = static_cast<int>(x_min);
       max_value = x_max - x_min;
@@ -351,8 +355,10 @@ void quf_int(int n, int *x_uf, void *px, std::vector<double> &x_unik, int x_min,
       int x_min = px[0], x_max = px[0], x_tmp;
       for (int i = 1; i < n; ++i) {
         x_tmp = px[i];
-        if (x_tmp > x_max) x_max = x_tmp;
-        if (x_tmp < x_min) x_min = x_tmp;
+        if (x_tmp > x_max)
+          x_max = x_tmp;
+        if (x_tmp < x_min)
+          x_min = x_tmp;
       }
       X_MIN = x_min;
       max_value = x_max - x_min;
@@ -379,7 +385,8 @@ void quf_int(int n, int *x_uf, void *px, std::vector<double> &x_unik, int x_min,
         // we need to create a vector of double, otherwise: pointer issue
         std::vector<double> x_dble(n);
         int *px = INTEGER(x);
-        for (int i = 0; i < n; ++i) x_dble[i] = static_cast<double>(px[i]);
+        for (int i = 0; i < n; ++i)
+          x_dble[i] = static_cast<double>(px[i]);
         quf_double(n, x_uf, x_dble.data(), x_unik);
       }
     }

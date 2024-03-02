@@ -4,7 +4,7 @@ void mp_sparse_XtX(writable::doubles_matrix<> &XtX, const std::vector<int> &n_j,
                    const std::vector<int> &start_j,
                    const std::vector<int> &all_i, const std::vector<double> &x,
                    const doubles_matrix<> &X, int nthreads) {
-  int K = X.ncol();
+  const int K = X.ncol();
 
 #pragma omp parallel for num_threads(nthreads) schedule(static, 1)
   for (int j1 = 0; j1 < K; ++j1) {
@@ -24,13 +24,15 @@ void mp_sparse_XtX(writable::doubles_matrix<> &XtX, const std::vector<int> &n_j,
 
       double value = 0;
       for (int index = start; index < end; ++index) {
-        value += X(all_i[index], k) * x[index];
+        const double X_val = X(all_i[index], k);
+        const double x_val = x[index];
+        value += X_val * x_val;
       }
 
-      if (value == 0) continue;
-
-      XtX(j1, j2) = value;
-      XtX(j2, j1) = value;
+      if (value != 0) {
+        XtX(j1, j2) = value;
+        XtX(j2, j1) = value;
+      }
     }
   }
 }
@@ -50,7 +52,8 @@ void mp_sparse_Xty(writable::doubles &Xty, const std::vector<int> &start_j,
       value += y[all_i[index]] * x[index];
     }
 
-    if (value == 0) continue;
+    if (value == 0)
+      continue;
 
     Xty[j] = value;
   }
@@ -85,6 +88,8 @@ void mp_XtX(writable::doubles_matrix<> &XtX, const doubles_matrix<> &X,
     // We use this trick to even out the load on the threads
     int nValues = K * (K + 1) / 2;
     std::vector<int> all_i, all_j;
+    all_i.reserve(nValues);
+    all_j.reserve(nValues);
     for (int i = 0; i < K; ++i) {
       for (int j = i; j < K; ++j) {
         all_i.push_back(i);
@@ -99,7 +104,9 @@ void mp_XtX(writable::doubles_matrix<> &XtX, const doubles_matrix<> &X,
 
       double val = 0;
       for (int i = 0; i < N; ++i) {
-        val += X(i, k_row) * wX(i, k_col);
+        double X_val = X(i, k_row);
+        double wX_val = wX(i, k_col);
+        val += X_val * wX_val;
       }
 
       XtX(k_row, k_col) = val;
@@ -121,7 +128,9 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y,
     for (int t = 0; t < nthreads; ++t) {
       double val = 0;
       for (int i = bounds[t]; i < bounds[t + 1]; ++i) {
-        val += X(i, 0) * y[i];
+        double xi = X(i, 0);
+        double yi = y[i];
+        val += xi * yi;
       }
       all_values[t] = val;
     }
@@ -137,7 +146,9 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y,
     for (int j = 0; j < K; ++j) {
       double val = 0;
       for (int i = 0; i < N; ++i) {
-        val += X(i, j) * y[i];
+        double xij = X(i, j);
+        double yi = y[i];
+        val += xij * yi;
       }
 
       Xty[j] = val;
@@ -165,17 +176,16 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y,
     writable::doubles_matrix<> wX(N, K);
 
     // Always copy X to wX
-    for (int i = 0; i < N; ++i) {
-      for (int k = 0; k < K; ++k) {
-        wX(i, k) = X(i, k);
-      }
-    }
+    memcpy(wX.data(), X.data(), N * K * sizeof(double));
 
     // If isWeight is true, multiply wX by w
     if (isWeight) {
+#pragma omp parallel for num_threads(nthreads)
       for (int k = 0; k < K; ++k) {
         for (int i = 0; i < N; ++i) {
-          wX(i, k) *= w[i];
+          if (w[i] != 1.0) {
+            wX(i, k) *= w[i];
+          }
         }
       }
     }
@@ -211,6 +221,9 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y,
   std::vector<int> start_j(K + 1, 0);
   std::vector<int> all_i;
   std::vector<double> x;
+
+  all_i.reserve(N);
+  x.reserve(N);
 
   set_sparse(n_j, start_j, all_i, x, X, w);
 
@@ -263,6 +276,7 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y,
 
       writable::doubles_matrix<> wX(N, K);
 
+#pragma omp parallel for num_threads(nthreads)
       for (int k = 0; k < K; ++k) {
         for (int i = 0; i < N; ++i) {
           wX(i, k) = X(i, k) * w[i];
@@ -305,12 +319,20 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y,
 
   int n_col_excl = 0;
   for (int j = 0; j < K_small; ++j) {
-    while (id_excl[j + n_col_excl]) ++n_col_excl;
+    bool is_excluded_col = id_excl[j + n_col_excl];
+    while (is_excluded_col) {
+      ++n_col_excl;
+      is_excluded_col = id_excl[j + n_col_excl];
+    }
 
     int col = j + n_col_excl;
     int n_row_excl = 0;
     for (int i = 0; i < K_small; ++i) {
-      while (id_excl[i + n_row_excl]) ++n_row_excl;
+      bool is_excluded_row = id_excl[i + n_row_excl];
+      while (is_excluded_row) {
+        ++n_row_excl;
+        is_excluded_row = id_excl[i + n_row_excl];
+      }
       res(i + n_row_excl, col) += X(i, j);
     }
   }
@@ -321,11 +343,11 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y,
 void mp_ZXtZX(writable::doubles_matrix<> &ZXtZX, const doubles_matrix<> &XtX,
               const doubles_matrix<> &X, const doubles_matrix<> &Z,
               const doubles_matrix<> &wZ, int nthreads) {
-  int N = Z.nrow();
-  int K1 = Z.ncol();
+  const int N = Z.nrow();
+  const int K1 = Z.ncol();
 
-  bool isX = X.nrow() > 1;
-  int K2 = isX ? X.ncol() : 0;
+  const bool isX = X.nrow() > 1;
+  const int K2 = isX ? X.ncol() : 0;
 
   // First: we copy XtX
   for (int k = 0; k < K2; ++k) {
@@ -341,8 +363,10 @@ void mp_ZXtZX(writable::doubles_matrix<> &ZXtZX, const doubles_matrix<> &XtX,
   // l: index of Z
   // k: index of X
 
-  int nValues = K2 * K1;
+  const int nValues = K2 * K1;
   std::vector<int> all_l, all_k;
+  all_l.reserve(nValues);
+  all_k.reserve(nValues);
   for (int l = 0; l < K1; ++l) {
     for (int k = 0; k < K2; ++k) {
       all_l.push_back(l);
@@ -352,8 +376,8 @@ void mp_ZXtZX(writable::doubles_matrix<> &ZXtZX, const doubles_matrix<> &XtX,
 
 #pragma omp parallel for num_threads(nthreads)
   for (int index = 0; index < nValues; ++index) {
-    int l = all_l[index];
-    int k = all_k[index];
+    const int l = all_l[index];
+    const int k = all_k[index];
 
     double val = 0;
     for (int i = 0; i < N; ++i) {
@@ -369,9 +393,11 @@ void mp_ZXtZX(writable::doubles_matrix<> &ZXtZX, const doubles_matrix<> &XtX,
   //
 
   // k, l: indexes of Z
-  nValues = K1 * (K1 + 1) / 2;
+  const int nValues2 = K1 * (K1 + 1) / 2;
   all_l.clear();
   all_k.clear();
+  all_l.reserve(nValues2);
+  all_k.reserve(nValues2);
   for (int l = 0; l < K1; ++l) {
     for (int k = l; k < K1; ++k) {
       all_l.push_back(l);
@@ -380,9 +406,9 @@ void mp_ZXtZX(writable::doubles_matrix<> &ZXtZX, const doubles_matrix<> &XtX,
   }
 
 #pragma omp parallel for num_threads(nthreads)
-  for (int index = 0; index < nValues; ++index) {
-    int l = all_l[index];
-    int k = all_k[index];
+  for (int index = 0; index < nValues2; ++index) {
+    const int l = all_l[index];
+    const int k = all_k[index];
 
     double val = 0;
     for (int i = 0; i < N; ++i) {
@@ -493,22 +519,26 @@ void mp_sparse_ZXtu(writable::doubles &ZXtu, const std::vector<int> &start_j,
   bool isX = X.nrow() > 1;
   int K2 = isX ? X.ncol() : 0;
 
+  ZXtu.reserve(K2 + K1);
+
 #pragma omp parallel for num_threads(nthreads)
-  for (int k = 0; k < (K2 + K1); ++k) {
+  for (int k = 0; k < K1; ++k) {
     double value = 0;
-    if (k < K1) {
-      for (int i = 0; i < N; ++i) {
-        value += u[i] * wZ(i, k);
-      }
-    } else {
-      int start = start_j[k - K1];
-      int end = start_j[k - K1 + 1];
-
-      for (int index = start; index < end; ++index) {
-        value += u[all_i[index]] * x[index];
-      }
+    for (int i = 0; i < N; ++i) {
+      value += u[i] * wZ(i, k);
     }
+    ZXtu[k] = value;
+  }
 
+#pragma omp parallel for num_threads(nthreads)
+  for (int k = K1; k < (K2 + K1); ++k) {
+    double value = 0;
+    int start = start_j[k - K1];
+    int end = start_j[k - K1 + 1];
+
+    for (int index = start; index < end; ++index) {
+      value += u[all_i[index]] * x[index];
+    }
     ZXtu[k] = value;
   }
 }

@@ -39,7 +39,8 @@ std::string colon_to_star_single(const char *str) {
       }
     }
 
-    if (i == n) stop("Error in the index.");
+    if (i == n)
+      stop("Error in the index.");
 
     res += str[i++];
   }

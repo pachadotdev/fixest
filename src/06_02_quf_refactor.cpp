@@ -18,7 +18,7 @@ void quf_single(void *px_in, std::string &x_type, int n, int *x_uf,
       }
     }
 
-    is_int_in_double = IS_INT;  // true: only if x is REAL + INT test OK
+    is_int_in_double = IS_INT; // true: only if x is REAL + INT test OK
 
   } else if (x_type == "int") {
     IS_INT = true;
@@ -36,8 +36,10 @@ void quf_single(void *px_in, std::string &x_type, int n, int *x_uf,
       double x_min = px[0], x_max = px[0], x_tmp;
       for (int i = 1; i < n; ++i) {
         x_tmp = px[i];
-        if (x_tmp > x_max) x_max = x_tmp;
-        if (x_tmp < x_min) x_min = x_tmp;
+        if (x_tmp > x_max)
+          x_max = x_tmp;
+        if (x_tmp < x_min)
+          x_min = x_tmp;
       }
       X_MIN = static_cast<int>(x_min);
       max_value = x_max - x_min;
@@ -47,8 +49,10 @@ void quf_single(void *px_in, std::string &x_type, int n, int *x_uf,
       int x_min = px[0], x_max = px[0], x_tmp;
       for (int i = 1; i < n; ++i) {
         x_tmp = px[i];
-        if (x_tmp > x_max) x_max = x_tmp;
-        if (x_tmp < x_min) x_min = x_tmp;
+        if (x_tmp > x_max)
+          x_max = x_tmp;
+        if (x_tmp < x_min)
+          x_min = x_tmp;
       }
       X_MIN = x_min;
       max_value = x_max - x_min;
@@ -75,7 +79,8 @@ void quf_single(void *px_in, std::string &x_type, int n, int *x_uf,
         // we need to create a vector of double, otherwise: pointer issue
         std::vector<double> x_dble(n);
         int *px = (int *)px_in;
-        for (int i = 0; i < n; ++i) x_dble[i] = static_cast<double>(px[i]);
+        for (int i = 0; i < n; ++i)
+          x_dble[i] = static_cast<double>(px[i]);
         quf_double(n, x_uf, x_dble.data(), x_unik, false);
       }
     }
@@ -181,15 +186,18 @@ void quf_refactor_table_sum_single(
     for (int i = 0; i < n; ++i) {
       if (!obs_removed[i]) {
         id = quf_old[i] - 1;
-        if (!id_still_exists[id]) id_still_exists[id] = true;
+        if (!id_still_exists[id])
+          id_still_exists[id] = true;
         ++x_table[id];
-        if (do_sum_y) sum_y[id] += py[i];
+        if (do_sum_y)
+          sum_y[id] += py[i];
       }
     }
 
     // recreating id_pblm
-    id_pblm.resize(D);  // we resize because we could have had length = 0
-    for (int d = 0; d < D; ++d) id_pblm[d] = !id_still_exists[d];
+    id_pblm.resize(D); // we resize because we could have had length = 0
+    for (int d = 0; d < D; ++d)
+      id_pblm[d] = !id_still_exists[d];
 
     // Loop finding out the problems
     std::vector<bool> id_pblm_check(D, false);
@@ -260,7 +268,8 @@ void quf_refactor_table_sum_single(
       if (!obs_removed[i]) {
         id = any_pblm ? id_new[quf_old[i] - 1] : quf_old[i];
         ++x_table[id - 1];
-        if (do_sum_y) sum_y[id - 1] += py[i];
+        if (do_sum_y)
+          sum_y[id - 1] += py[i];
         quf_new[i_new++] = id;
       }
     }

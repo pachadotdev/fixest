@@ -11,7 +11,7 @@
   int i, q;
 
   for (i = 0; i < N; i++) {
-    q = dum[i] - 1;  // we take 1 off => different indexation in C
+    q = dum[i] - 1; // we take 1 off => different indexation in C
     res[q]++;
   }
 

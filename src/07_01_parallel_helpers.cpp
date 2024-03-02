@@ -33,8 +33,8 @@ std::vector<int> set_parallel_scheme_bis(int N, int nthreads) {
   int nobs = Rf_length(x);
   double *px = REAL(x);
   bool anyNAInf = false;
-  bool any_na = false;   // return value
-  bool any_inf = false;  // return value
+  bool any_na = false;  // return value
+  bool any_inf = false; // return value
 
   /*
     we make parallel the anyNAInf loop
@@ -102,8 +102,8 @@ std::vector<int> set_parallel_scheme_bis(int N, int nthreads) {
   int nobs = mat.nrow();
   int K = mat.ncol();
   bool anyNAInf = false;
-  bool any_na = false;   // return value
-  bool any_inf = false;  // return value
+  bool any_na = false;  // return value
+  bool any_inf = false; // return value
 
   /*
     we make parallel the anyNAInf loop
@@ -176,8 +176,8 @@ std::vector<int> set_parallel_scheme_bis(int N, int nthreads) {
   int K = Rf_length(df);
   int nobs = Rf_length(VECTOR_ELT(df, 0));
   bool anyNAInf = false;
-  bool any_na = false;   // return value
-  bool any_inf = false;  // return value
+  bool any_na = false;  // return value
+  bool any_inf = false; // return value
 
   // The Mapping of the data
   std::vector<double *> df_data(K);

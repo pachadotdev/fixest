@@ -55,8 +55,8 @@ std::vector<int> set_parallel_scheme_ter(int N, int nthreads) {
   int nobs = mat.nrow();
   int K = mat.ncol();
   bool anyNAInf = false;
-  bool any_na = false;   // return value
-  bool any_inf = false;  // return value
+  bool any_na = false;  // return value
+  bool any_inf = false; // return value
 
   /*
    we make parallel the anyNAInf loop
