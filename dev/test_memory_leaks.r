@@ -1,114 +1,64 @@
 if (!require("devtools")) install.packages("devtools")
 devtools::load_all()
 
-data(airquality)
+data(base_did)
 
-# On multiple estimations: see the dedicated vignette
-est <- feols(
-  Ozone ~ Solar.R,
-  airquality
-)
-est <- feols(Ozone ~ Solar.R,
-  airquality,
-  cluster = ~Day
-)
+# est_panel <- feols(y ~ x1, base_did, panel.id = ~ id + period)
+# summary(est_panel, "newey_west")
 
-est <- feols(Ozone ~ Solar.R + sw0(Wind + Temp) | csw(Month, Day),
-  airquality,
-  cluster = ~Day
-)
+base <- iris
+names(base) <- c("y", "x1", "x_endo_1", "x_inst_1", "fe")
+set.seed(2)
+base$x_inst_2 <- 0.2 * base$y + 0.2 * base$x_endo_1 + rnorm(150, sd = 0.5)
+base$x_endo_2 <- 0.2 * base$y - 0.2 * base$x_inst_1 + rnorm(150, sd = 0.5)
 
-# Setting a dictionary
-setFixest_dict(c(
-  Ozone = "Ozone (ppb)", Solar.R = "Solar Radiation (Langleys)",
-  Wind = "Wind Speed (mph)", Temp = "Temperature"
-))
+est_iv <- feols(y ~ x1 | x_endo_1 + x_endo_2 ~ x_inst_1 + x_inst_2, base)
 
-library(pander)
+# fixest 2
+# > est_iv <- feols(y ~ x1 | x_endo_1 + x_endo_2 ~ x_inst_1 + x_inst_2, base)
+# Error: Invalid input type, expected 'double' actual 'NULL'
+# > est_iv
+# Error: object 'est_iv' not found
+# > est_iv <- feols(y ~ x1 | x_endo_1 + x_endo_2 ~ x_inst_1 + x_inst_2, base)
+# Error: in feols(env = current_env, xwx = ZXtZX, xwy = ZXtu[...:
+# All variables, '(Intercept)', 'x_inst_1' and 2 others, are virtually
+# constant and equal to 0. Without doubt, your model is misspecified.
+# > est_iv <- feols(y ~ x1 | x_endo_1 + x_endo_2 ~ x_inst_1 + x_inst_2, base)
+# > est_iv
+# TSLS estimation - Dep. Var.: y
+#                   Endo.    : x_endo_1, x_endo_2
+#                   Instr.   : x_inst_1, x_inst_2
+# Second stage: Dep. Var.: y
+# Observations: 150
+# Standard-errors: NA (not-available)
+#              Estimate Std. Error t value Pr(>|t|)
+# (Intercept)       NaN        NaN     NaN       NA
+# fit_x_endo_1      NaN        NaN     NaN       NA
+# fit_x_endo_2      NaN        NaN     NaN       NA
+# x1                NaN        NaN     NaN       NA
+# ---
+# Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-setFixest_notes(FALSE)
-setFixest_etable(digits = 3)
+# F-test (1st stage), x_endo_1: stat = NA, p = NA, on 2 and 146 DoF.
+# F-test (1st stage), x_endo_2: stat = NA, p = NA, on 2 and 146 DoF.
+#                   Wu-Hausman: stat = NA, p = NA, on 2 and 144 DoF.
 
-etable(est)
-
-etable(est, style.df = style.df(
-  depvar.title = "", fixef.title = "",
-  fixef.suffix = " fixed effect", yesNo = "yes"
-))
-
-# # NOTE:
-# # The evaluation of the code of this section requires the
-# #   package 'pander' which is not installed.
-# # The code output is not reported.
-# etable(est, postprocess.df = pandoc.table.return, style = "rmarkdown")
-
-my_style <- style.df(
-  depvar.title = "", fixef.title = "",
-  fixef.suffix = " fixed effect", yesNo = "yes"
-)
-setFixest_etable(style.df = my_style, postprocess.df = pandoc.table.return)
-
-etable(est[rhs = 2], style = "rmarkdown", caption = "New default values")
-
-est_slopes <- feols(Ozone ~ Solar.R + Wind | Day + Month[Temp], airquality)
-
-etable(est, est_slopes, tex = TRUE)
-
-etable(est, est_slopes,
-  style.tex = style.tex("aer"),
-  signif.code = NA, fitstat = ~ r2 + n, tex = TRUE
-)
-
-set_rules <- function(x, heavy, light) {
-  # x: the character vector returned by etable
-
-  tex2add <- ""
-  if (!missing(heavy)) {
-    tex2add <- paste0("\\setlength\\heavyrulewidth{", heavy, "}\n")
-  }
-  if (!missing(light)) {
-    tex2add <- paste0(tex2add, "\\setlength\\lightrulewidth{", light, "}\n")
-  }
-
-  if (nchar(tex2add) > 0) {
-    x[x == "%start:tab\n"] <- tex2add
-  }
-
-  x
-}
-
-etable(est, est_slopes, postprocess.tex = set_rules, heavy = "0.14em", tex = TRUE)
-
-setFixest_etable(
-  style.tex = style.tex("aer", signif.code = NA), postprocess.tex = set_rules,
-  fitstat = ~ r2 + n
-)
-
-etable(est, heavy = "0.14em", tex = TRUE)
-
-fitstat_register(
-  type = "p_s", alias = "pvalue (standard)",
-  fun = function(x) pvalue(x, vcov = "iid")["Solar.R"]
-)
-
-fitstat_register(
-  type = "p_h", alias = "pvalue (Heterosk.)",
-  fun = function(x) pvalue(x, vcov = "hetero")["Solar.R"]
-)
-
-fitstat_register(
-  type = "p_day", alias = "pvalue (Day)",
-  fun = function(x) pvalue(x, vcov = ~Day)["Solar.R"]
-)
-
-fitstat_register(
-  type = "p_month", alias = "pvalue (Month)",
-  fun = function(x) pvalue(x, vcov = ~Month)["Solar.R"]
-)
-
-# We first reset the default values set in the previous sections
-setFixest_etable(reset = TRUE)
-# Now we display the results with the new fit statistics
-etable(est, fitstat = ~ . + p_s + p_h + p_day + p_month)
-
-summary(.l(est, est_slopes), cluster = ~Month)
+est_iv <- fixest::feols(y ~ x1 | x_endo_1 + x_endo_2 ~ x_inst_1 + x_inst_2, base)
+# > est_iv
+# TSLS estimation - Dep. Var.: y
+#                   Endo.    : x_endo_1, x_endo_2
+#                   Instr.   : x_inst_1, x_inst_2
+# Second stage: Dep. Var.: y
+# Observations: 150
+# Standard-errors: IID
+#              Estimate Std. Error  t value   Pr(>|t|)
+# (Intercept)  1.831380   0.411435  4.45121 1.6844e-05 ***
+# fit_x_endo_1 0.444982   0.022086 20.14744  < 2.2e-16 ***
+# fit_x_endo_2 0.639916   0.307376  2.08186 3.9100e-02 *
+# x1           0.565095   0.084715  6.67051 4.9180e-10 ***
+# ---
+# Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+# RMSE: 0.398842   Adj. R2: 0.761653
+# F-test (1st stage), x_endo_1: stat = 903.2    , p < 2.2e-16 , on 2 and 146 DoF.
+# F-test (1st stage), x_endo_2: stat =   3.25828, p = 0.041268, on 2 and 146 DoF.
+#                   Wu-Hausman: stat =   6.79183, p = 0.001518, on 2 and 144 DoF.
