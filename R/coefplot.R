@@ -1650,7 +1650,7 @@ coefplot_prms <- function(object, ..., sd, ci_low, ci_high, x, x.shift = 0, dict
 
     # We respect the order provided by the user
     my_names_order <- unique(all_estimates$estimate_names)
-    my_order <- 1:length(my_names_order)
+    my_order <- seq_along(my_names_order)
     names(my_order) <- my_names_order
     all_estimates$id_order <- my_order[as.character(all_estimates$estimate_names)]
     all_estimates <- all_estimates[base::order(all_estimates$id_order, all_estimates$est_nb), ]
@@ -2017,7 +2017,7 @@ coefplot_prms <- function(object, ..., sd, ci_low, ci_high, x, x.shift = 0, dict
       prms$estimate_names_raw <- names(estimate)
     } else {
       NO_NAMES <- TRUE
-      prms$estimate_names <- paste0("c", 1:nrow(prms))
+      prms$estimate_names <- paste0("c", seq_len(nrow(prms)))
       prms$estimate_names_raw <- prms$estimate_names
     }
 
@@ -2147,7 +2147,7 @@ coefplot_prms <- function(object, ..., sd, ci_low, ci_high, x, x.shift = 0, dict
       if (!missing(order) && length(order) > 0) {
         all_vars <- order_apply(all_vars, order)
 
-        my_order <- 1:length(all_vars)
+        my_order <- seq_along(all_vars)
         names(my_order) <- all_vars
         prms$id_order <- my_order[prms$estimate_names]
 
@@ -2171,7 +2171,7 @@ coefplot_prms <- function(object, ..., sd, ci_low, ci_high, x, x.shift = 0, dict
   # id: used for colors/lty etc
   if (!multiple_est) {
     if (as.multiple) {
-      prms$id <- 1:nrow(prms)
+      prms$id <- seq_len(nrow(prms))
     } else {
       prms$id <- 1
     }
@@ -2188,7 +2188,7 @@ coefplot_prms <- function(object, ..., sd, ci_low, ci_high, x, x.shift = 0, dict
 
     x_labels <- quoi$estimate_names
     x_labels_raw <- quoi$estimate_names_raw
-    x_at <- 1:length(x_labels)
+    x_at <- seq_along(x_labels)
   } else if (!missing(x) && is.numeric(x)) {
     my_xlim <- range(c(x + x.shift, x - x.shift))
 
@@ -2272,7 +2272,7 @@ replace_and_make_callable <- function(text, varlist, text_as_expr = FALSE) {
       qui <- which(lengths(varlist[my_variables]) > 1)[1]
       n_val <- lengths(varlist[my_variables])[qui]
       warning("The special variable __", my_variables[qui], "__ takes ", n_val, " values, only the first is used.", call. = FALSE)
-      my_variables_values <- sapply(my_variables_values, function(x) x[1])
+      my_variables_values <- vapply(my_variables_values, function(x) x[1], FUN.VALUE = numeric(1))
     } else {
       my_variables_values <- unlist(my_variables_values)
     }
@@ -2304,7 +2304,7 @@ replace_and_make_callable <- function(text, varlist, text_as_expr = FALSE) {
         res
       }
 
-      my_vars <- sapply(my_variables_values, expr_drop)
+      my_vars <- vapply(my_variables_values, expr_drop, FUN.VALUE = character(1))
 
       if (text_as_expr) {
         text_new[is_var][is_expr] <- my_vars[is_expr]
@@ -2378,7 +2378,7 @@ gen_iplot <- function() {
   coefplot_args <- formals(coefplot)
 
   arg_name <- names(coefplot_args)
-  arg_default <- sapply(coefplot_args, deparse_long)
+  arg_default <- vapply(coefplot_args, deparse_long, FUN.VALUE = character(1))
 
   #
   # iplot
@@ -2482,15 +2482,10 @@ setFixest_coefplot <- function(style, horiz = FALSE, dict = getFixest_dict(), ke
                                ylab = NULL, xlab = NULL, sub = NULL, reset = FALSE) {
   fm_cp <- formals(coefplot)
   arg_list <- names(fm_cp)
-  # arg_no_default = c("object", "sd", "ci_low", "ci_high", "drop", "order", "ref", "add", "only.params", "as.multiple", "...", "x", "x.shift")
-  # m = fm_cp[!names(fm_cp) %in% arg_no_default]
-  # cat(gsub(" = ,", ",", paste0(names(m), " = ", sapply(m, deparse), collapse = ", ")))
 
   iplot_default <- list()
 
-  #
-  # Controls
-  #
+  # Controls ----
 
   check_arg(style, "character scalar")
   check_arg(ci.width, "scalar(numeric, character) GE{0}")
@@ -2547,7 +2542,7 @@ setFixest_coefplot <- function(style, horiz = FALSE, dict = getFixest_dict(), ke
   # now we find which args for which we delay evaluation
   arg_var_default <- lapply(fm_cp[!names(fm_cp) %in% all_args], all.vars)
   arg_var_default <- arg_var_default[lengths(arg_var_default) > 0]
-  default.eval <- sapply(arg_var_default, function(x) any(x %in% all_args))
+  default.eval <- vapply(arg_var_default, function(x) any(x %in% all_args), FUN.VALUE = logical(1))
   if (any(default.eval)) {
     default.arg <- names(default.eval)[default.eval]
     mc[default.arg] <- fm_cp[default.arg]

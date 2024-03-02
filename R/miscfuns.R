@@ -4060,7 +4060,7 @@ fixest2_model_matrix <- function(fml, data, fake_intercept = FALSE, i_noref = FA
 
 
 fixest2_model_matrix_extra <- function(object, newdata, original_data, fml,
-                                      fake_intercept = FALSE, i_noref = FALSE, subset = FALSE) {
+                                       fake_intercept = FALSE, i_noref = FALSE, subset = FALSE) {
   # Only used within model.matrix and predict
   # Overlay of fixest2_model_matrix to take care of special things, eg:
   # - poly
@@ -5629,7 +5629,7 @@ catma <- cat_magic_alias(.check = FALSE)
 
 mema <- message_magic_alias(.check = FALSE, .last = "'min(100, .sw)'width")
 
-stvec <- stringmagic::string_vec_alias()
+stvec <- string_vec_alias()
 
 
 escape_regex <- function(x) {

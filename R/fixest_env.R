@@ -7,22 +7,22 @@
 
 
 fixest2_env <- function(fml, data, family = c("poisson", "negbin", "logit", "gaussian"),
-                       NL.fml = NULL,
-                       fixef, NL.start, lower, upper, NL.start.init, offset = NULL,
-                       subset = NULL, split = NULL, fsplit = NULL,
-                       split.keep = NULL, split.drop = NULL,
-                       linear.start = 0, data.save = FALSE,
-                       jacobian.method = "simple", useHessian = TRUE, hessian.args = NULL,
-                       opt.control = list(), vcov = NULL, cluster, se, ssc, y, X, fixef_df,
-                       panel.id, fixef.rm = "perfect", nthreads = getFixest_nthreads(),
-                       lean = FALSE, verbose = 0, theta.init, fixef.tol = 1e-5,
-                       fixef.iter = 10000, collin.tol = 1e-14, deriv.iter = 5000,
-                       deriv.tol = 1e-4, glm.iter = 25, glm.tol = 1e-8, etastart, mustart,
-                       fixef.algo = NULL,
-                       warn = TRUE, notes = getFixest_notes(), combine.quick, demeaned = FALSE,
-                       origin_bis, origin = "feNmlm", mc_origin, mc_origin_bis, mc_origin_ter,
-                       computeModel0 = FALSE, weights = NULL, only.coef = FALSE,
-                       debug = FALSE, mem.clean = FALSE, call_env = NULL, call_env_bis, ...) {
+                        NL.fml = NULL,
+                        fixef, NL.start, lower, upper, NL.start.init, offset = NULL,
+                        subset = NULL, split = NULL, fsplit = NULL,
+                        split.keep = NULL, split.drop = NULL,
+                        linear.start = 0, data.save = FALSE,
+                        jacobian.method = "simple", useHessian = TRUE, hessian.args = NULL,
+                        opt.control = list(), vcov = NULL, cluster, se, ssc, y, X, fixef_df,
+                        panel.id, fixef.rm = "perfect", nthreads = getFixest_nthreads(),
+                        lean = FALSE, verbose = 0, theta.init, fixef.tol = 1e-5,
+                        fixef.iter = 10000, collin.tol = 1e-14, deriv.iter = 5000,
+                        deriv.tol = 1e-4, glm.iter = 25, glm.tol = 1e-8, etastart, mustart,
+                        fixef.algo = NULL,
+                        warn = TRUE, notes = getFixest_notes(), combine.quick, demeaned = FALSE,
+                        origin_bis, origin = "feNmlm", mc_origin, mc_origin_bis, mc_origin_ter,
+                        computeModel0 = FALSE, weights = NULL, only.coef = FALSE,
+                        debug = FALSE, mem.clean = FALSE, call_env = NULL, call_env_bis, ...) {
   # INTERNAL function:
   # the estimation functions need input data in the exact format without any mistake
   # possible (bc of c++)

@@ -11,6 +11,10 @@ ols_fit <- function(y, X, w, correct_0w = FALSE, collin.tol, nthreads, xwx = NUL
   }
 
   multicol <- FALSE
+
+  out <- list(xwx = xwx, xwy = xwy, multicol = multicol)
+  saveRDS(out, "dev/ols_fit.rds")
+
   info_inv <- cpp_cholesky(xwx, collin.tol, nthreads)
 
   if (!is.null(info_inv$all_removed)) {

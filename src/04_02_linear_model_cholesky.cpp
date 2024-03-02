@@ -119,7 +119,7 @@ void tproduct_tri(writable::doubles_matrix<> &RRt,
       if (id_excl[k] == true) {
         continue;
       }
-      R_jj -= std::pow(R(k, j), 2);
+      R_jj -= R(k, j) * R(k, j);
     }
 
     if (R_jj < tol) {

@@ -80,7 +80,7 @@ cpp_paste_conditional <- function(x, id, n) {
   cpp_paste_conditional_(x, parse_int(id), parse_int(n))
 }
 
-cpp_cholesky <- function(X, tol = 1e-10, nthreads = 1L) {
+cpp_cholesky <- function(X, tol = 1.0 / 100000.0, nthreads = 1L) {
   cpp_cholesky_(X, tol, parse_int(nthreads))
 }
 

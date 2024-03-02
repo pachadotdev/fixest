@@ -447,8 +447,8 @@ n_models <- function(x, lhs = FALSE, rhs = FALSE, sample = FALSE,
 #'
 #' @export
 summary.fixest2_multi <- function(object, type = "short", vcov = NULL, se = NULL,
-                                 cluster = NULL, ssc = NULL,
-                                 .vcov = NULL, stage = 2, lean = FALSE, n = 1000, ...) {
+                                  cluster = NULL, ssc = NULL,
+                                  .vcov = NULL, stage = 2, lean = FALSE, n = 1000, ...) {
   dots <- list(...)
 
   check_set_arg(type, "match(short, long, compact, se_compact, se_long)")
@@ -1092,7 +1092,7 @@ as.list.fixest2_multi <- function(x, ...) {
 #'
 #' @export
 coef.fixest2_multi <- function(object, keep, drop, order, collin = FALSE,
-                              long = FALSE, na.rm = TRUE, ...) {
+                               long = FALSE, na.rm = TRUE, ...) {
   # row: model
   # col: coefficient
 
@@ -1195,7 +1195,7 @@ coefficients.fixest2_multi <- coef.fixest2_multi
 #'
 #' @export
 coeftable.fixest2_multi <- function(object, vcov = NULL, keep = NULL, drop = NULL,
-                                   order = NULL, long = FALSE, wide = FALSE, ...) {
+                                    order = NULL, long = FALSE, wide = FALSE, ...) {
   check_arg(keep, drop, order, "NULL character vector no na")
   check_arg(wide, "logical scalar | charin(se, pvalue, tstat)")
   check_arg(long, "logical scalar")
@@ -1285,7 +1285,7 @@ coeftable.fixest2_multi <- function(object, vcov = NULL, keep = NULL, drop = NUL
 #' @describeIn coeftable.fixest2_multi Extracts the standard-errors from `fixest2_multi` estimations
 #' @export
 se.fixest2_multi <- function(object, vcov = NULL, keep = NULL, drop = NULL,
-                            order = NULL, long = FALSE, ...) {
+                             order = NULL, long = FALSE, ...) {
   # Default is wide format => same as with coef
 
   check_arg(keep, drop, order, "NULL character vector no na")
@@ -1314,7 +1314,7 @@ se.fixest2_multi <- function(object, vcov = NULL, keep = NULL, drop = NULL,
 #' @describeIn coeftable.fixest2_multi Extracts the t-stats from `fixest2_multi` estimations
 #' @export
 tstat.fixest2_multi <- function(object, vcov = NULL, keep = NULL, drop = NULL,
-                               order = NULL, long = FALSE, ...) {
+                                order = NULL, long = FALSE, ...) {
   # Default is wide format => same as with coef
 
   check_arg(keep, drop, order, "NULL character vector no na")
@@ -1343,7 +1343,7 @@ tstat.fixest2_multi <- function(object, vcov = NULL, keep = NULL, drop = NULL,
 #' @describeIn coeftable.fixest2_multi Extracts the p-values from `fixest2_multi` estimations
 #' @export
 pvalue.fixest2_multi <- function(object, vcov = NULL, keep = NULL, drop = NULL,
-                                order = NULL, long = FALSE, ...) {
+                                 order = NULL, long = FALSE, ...) {
   # Default is wide format => same as with coef
 
   check_arg(keep, drop, order, "NULL character vector no na")
@@ -1401,7 +1401,7 @@ pvalue.fixest2_multi <- function(object, vcov = NULL, keep = NULL, drop = NULL,
 #'
 #' @export
 resid.fixest2_multi <- function(object, type = c("response", "deviance", "pearson", "working"),
-                               na.rm = FALSE, ...) {
+                                na.rm = FALSE, ...) {
   # Je fais un prototype pour le moment, je l'ameliorerai apres (07-04-2021)
 
   check_set_arg(type, "match")
@@ -1460,7 +1460,7 @@ residuals.fixest2_multi <- resid.fixest2_multi
 #'
 #' @export
 confint.fixest2_multi <- function(object, parm, level = 0.95, vcov = NULL, se = NULL,
-                                 cluster = NULL, ssc = NULL, ...) {
+                                  cluster = NULL, ssc = NULL, ...) {
   n <- length(object)
   confint_all <- vector("list", n)
   for (i in 1:n) {

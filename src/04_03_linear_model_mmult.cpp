@@ -52,8 +52,7 @@ void mp_sparse_Xty(writable::doubles &Xty, const std::vector<int> &start_j,
       value += y[all_i[index]] * x[index];
     }
 
-    if (value == 0)
-      continue;
+    if (value == 0) continue;
 
     Xty[j] = value;
   }
@@ -175,7 +174,7 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y,
 
     writable::doubles_matrix<> wX(N, K);
 
-    // Always copy X to wX
+    // copy X to wX
     memcpy(wX.data(), X.data(), N * K * sizeof(double));
 
     // If isWeight is true, multiply wX by w
@@ -287,7 +286,6 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y,
       mp_XtX(XtX, X, wX, nthreads);
     } else {
       // Identical, but no need to make a copy of X or y which can be expensive
-
       // XtX
       mp_XtX(XtX, X, X, nthreads);
     }

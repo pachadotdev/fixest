@@ -43,7 +43,7 @@ est_iv <- feols(y ~ x1 | x_endo_1 + x_endo_2 ~ x_inst_1 + x_inst_2, base)
 # F-test (1st stage), x_endo_2: stat = NA, p = NA, on 2 and 146 DoF.
 #                   Wu-Hausman: stat = NA, p = NA, on 2 and 144 DoF.
 
-est_iv <- fixest::feols(y ~ x1 | x_endo_1 + x_endo_2 ~ x_inst_1 + x_inst_2, base)
+# est_iv <- fixest::feols(y ~ x1 | x_endo_1 + x_endo_2 ~ x_inst_1 + x_inst_2, base)
 # > est_iv
 # TSLS estimation - Dep. Var.: y
 #                   Endo.    : x_endo_1, x_endo_2
