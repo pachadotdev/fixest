@@ -1,16 +1,19 @@
 #include "04_0_linear_model.hpp"
 
-void invert_tri(writable::doubles_matrix<> &R, int K, int nthreads = 1) {
-  // Strategy: we invert by bands (b) => better for parallelization
-
-  // initialization of R prime
+void swap_elements(writable::doubles_matrix<> &R, int K) {
   for (int i = 0; i < K; ++i) {
     for (int j = i + 1; j < K; ++j) {
-      // std::swap(R(i, j), R(j, i));
       double temp = R(i, j);
       R(j, i) = temp;
     }
   }
+}
+
+void invert_tri(writable::doubles_matrix<> &R, int K, int nthreads = 1) {
+  // Strategy: we invert by bands (b) => better for parallelization
+
+  // initialization of R prime
+  swap_elements(R, K);
 
   // b0
   for (int i = 0; i < K; ++i) {
@@ -45,17 +48,13 @@ void tproduct_tri(writable::doubles_matrix<> &RRt,
   const int K = RRt.ncol();
 
   // initialization of R prime
-  for (int i = 0; i < K; ++i) {
-    for (int j = i + 1; j < K; ++j) {
-      double temp = R(i, j);
-      R(j, i) = temp;
-    }
-  }
+  swap_elements(R, K);
 
   // Check for interrupts
   // we do the same as for the invert_tri
-  double flop = (K + 1) * (K + 1) / 2.0;
-  int iterSecond = ceil(2000000000 / flop / 5); // nber iter per 1/5 second
+  const double flop = (K + 1) * (K + 1) / 2.0;
+  const int iterSecond =
+      ceil(2000000000 / flop / 5); // nber iter per 1/5 second
   int n_iter_main = 0;
 
 #pragma omp parallel for num_threads(nthreads) schedule(static, 1)
@@ -77,8 +76,8 @@ void tproduct_tri(writable::doubles_matrix<> &RRt,
   }
 }
 
-[[cpp11::register]] list cpp_cholesky_(doubles_matrix<> X, double tol,
-                                       int nthreads) {
+[[cpp11::register]] list cpp_cholesky_(const doubles_matrix<> X,
+                                       const double tol, const int nthreads) {
   // X is symmetric and semi-definite positive
   // rank-revealing on-the-fly
 
@@ -89,7 +88,7 @@ void tproduct_tri(writable::doubles_matrix<> &RRt,
   writable::doubles_matrix<> R(K, K);
   for (int i = 0; i < K; ++i) {
     for (int j = 0; j < K; ++j) {
-      R(i, j) = 0;
+      R(i, j) = 0.0;
     }
   }
 
@@ -103,7 +102,7 @@ void tproduct_tri(writable::doubles_matrix<> &RRt,
   // we check for interrupt every 1s when it's the most computationally
   // intensive at each iteration we have K * (j+1) - j**2 - 2*j - 1
   // multiplications max => K**2/4
-  double flop = K * K / 4.0;
+  const double flop = K * K / 4.0;
   int iterSecond = ceil(2000000000 / flop / 5); // nber iter per 1/5 second
   double min_norm = X(0, 0);
 
@@ -115,11 +114,10 @@ void tproduct_tri(writable::doubles_matrix<> &RRt,
     // implicit pivoting (it's like 0-rank variables are stacked in the end)
 
     double R_jj = X(j, j);
+
     for (int k = 0; k < j; ++k) {
-      if (id_excl[k] == true) {
-        continue;
-      }
-      R_jj -= R(k, j) * R(k, j);
+      if (id_excl[k] == false)
+        R_jj -= R(k, j) * R(k, j);
     }
 
     if (R_jj < tol) {

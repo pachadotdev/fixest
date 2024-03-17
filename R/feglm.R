@@ -871,7 +871,7 @@ feglm.fit <- function(y, X, fixef_df, family = "gaussian", vcov, offset, split,
     # I put tol = 0, otherwise we may remove everything mistakenly
     # when VAR(Y) >>> VAR(X) // that is especially TRUE for missspecified
     # Poisson models
-    info_inv <- cpp_cholesky(res$hessian, tol = 0, nthreads = nthreads)
+    info_inv <- cpp_cholesky(res$hessian, tol = 0.0, nthreads = nthreads)
 
     if (!is.null(info_inv$all_removed)) {
       # This should not occur, but I prefer to be safe

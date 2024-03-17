@@ -52,7 +52,8 @@ void mp_sparse_Xty(writable::doubles &Xty, const std::vector<int> &start_j,
       value += y[all_i[index]] * x[index];
     }
 
-    if (value == 0) continue;
+    if (value == 0)
+      continue;
 
     Xty[j] = value;
   }
@@ -200,6 +201,7 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y,
 
       for (int v = 0; v < n_vars_y; ++v) {
         writable::doubles Xty_tmp(K);
+
         mp_Xty(Xty_tmp, wX, REAL(VECTOR_ELT(y, v)), nthreads);
         Xty[v] = Xty_tmp;
       }
@@ -207,6 +209,7 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y,
       res.push_back({"Xty"_nm = Xty});
     } else {
       writable::doubles Xty(K);
+
       mp_Xty(Xty, wX, REAL(y), nthreads);
       res.push_back({"Xty"_nm = Xty});
     }
@@ -239,6 +242,7 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y,
 
     for (int v = 0; v < n_vars_y; ++v) {
       writable::doubles Xty_tmp(K);
+
       mp_sparse_Xty(Xty_tmp, start_j, all_i, x, REAL(VECTOR_ELT(y, v)),
                     nthreads);
       Xty[v] = Xty_tmp;
@@ -247,6 +251,7 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y,
     res.push_back({"Xty"_nm = Xty});
   } else {
     writable::doubles Xty(K);
+
     mp_sparse_Xty(Xty, start_j, all_i, x, REAL(y), nthreads);
     res.push_back({"Xty"_nm = Xty});
   }

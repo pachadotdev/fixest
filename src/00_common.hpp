@@ -1,13 +1,13 @@
-// #include <cstring>
-// #include <functional>
-// #include <algorithm>
+#pragma once
+
 #include <Rmath.h>
-#include <float.h>
-#include <math.h>
-#include <stdint.h>
 
 #include <algorithm>
+#include <cfloat>
+#include <cmath>
 #include <cpp11.hpp>
+#include <cstdint>
+#include <iostream>
 #include <numeric>
 #include <vector>
 

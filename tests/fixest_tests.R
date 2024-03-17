@@ -8,6 +8,8 @@
 
 # Some functions are not trivial to test properly though
 
+# Setup ----
+
 library(fixest2)
 
 test <- fixest2:::test
@@ -25,14 +27,9 @@ if (fixest:::is_r_check()) {
   setFixest_nthreads(1)
 }
 
-####
-#### ESTIMATIONS ####
-####
+# ESTIMATIONS ----
 
-####
-#### ... Main ####
-####
-
+## Main ----
 
 chunk("ESTIMATION")
 
@@ -171,12 +168,9 @@ for (model in c("ols", "pois", "logit", "negbin", "Gamma")) {
   cat("\n")
 }
 
-####
-#### ... Corner cases ####
-####
+# Corner cases ----
 
 chunk("Corner cases")
-
 
 # We test the absence of bugs
 
@@ -206,9 +200,7 @@ res <- feols(c(y, x1) ~ 1 | fe1 | x2 ~ x3, base)
 
 res <- feols(y ~ x1 | fe1[x2] + fe2[x2], base)
 
-#
-# NA models (ie all variables are collinear with the FEs)
-#
+## NA models (ie all variables are collinear with the FEs) ----
 
 # Should work when warn = FALSE or multiple est
 for (i in 1:2) {
@@ -230,8 +222,7 @@ for (i in 1:2) {
   etable(res) # => no error
 }
 
-
-# Removing the intercept!!!
+## Removing the intercept ----
 
 res <- feols(y ~ -1 + x1 + i(fe1), base)
 test("(Intercept)" %in% names(res$coefficients), FALSE)
@@ -243,42 +234,47 @@ res <- feols(y ~ -1 + x1 + i(fe1) + i(fe2), base)
 test("(Intercept)" %in% names(res$coefficients), FALSE)
 test(is.null(res$collin.var), TRUE)
 
+## IV + interacted FEs ----
 
-# IV + interacted FEs
 res <- feols(y ~ x1 | fe1^fe2 | x2 ~ x3, base)
 
-# IVs no exo var
+## IVs no exo var ----
+
 res <- feols(y ~ 0 | x2 ~ x3, base)
-# Same in stepwise
+
+## Same in stepwise ----
+
 res <- feols(y ~ 0 | sw0(fe1) | x2 ~ x3, base)
 
-# IVs + lags
+## IVs + lags ----
 res <- feols(y ~ x1 | fe1^fe2 | l(x2, -1:1) ~ l(x3, -1:1), base, panel.id = ~ fe1 + period)
 
-# functions in interactions
+## functions in interactions ----
+
 res <- feols(y ~ x1 | factor(fe1)^factor(fe2), base)
 res <- feols(y ~ x1 | round(x2^2), base)
 test(feols(y ~ x1 | factor(fe1^fe2), base), "err")
 
 res <- feols(y ~ x1 | bin(x2, "bin::1")^fe1 + fe1^fe2, base)
 
-# 1 obs (after FE removal) estimation
+## 1 obs (after FE removal) estimation ----
+
 base_1obs <- data.frame(y = c(1, 0), fe = c(1, 2), x = c(1, 0))
 test(fepois(y ~ x | fe, base_1obs), "err")
-# no error
+
+## no error ----
+
 res <- fepois(y ~ 1 | fe, base_1obs)
 
-# warning when demeaning algo reaches max iterations
+## warning when demeaning algo reaches max iterations ----
+
 data(trade)
 test(feols(Euros ~ log(dist_km) | Destination + Origin + Product,
   trade,
   fixef.iter = 1
 ), "warn")
 
-
-####
-#### ... Fit methods ####
-####
+# Fit methods ----
 
 chunk("Fit methods")
 
@@ -299,8 +295,6 @@ res <- feglm.fit(base$y_log, base[, 2:4])
 res_bis <- feglm(y_log ~ -1 + x1 + x2 + x3, base)
 test(coef(res), coef(res_bis))
 
-
-
 res <- feglm.fit(base$y, base[, 2:4], family = "poisson")
 res_bis <- feglm(y ~ -1 + x1 + x2 + x3, base, family = "poisson")
 test(coef(res), coef(res_bis))
@@ -313,9 +307,7 @@ res <- feglm.fit(base$y_log, base[, 2:4], family = "poisson")
 res_bis <- feglm(y_log ~ -1 + x1 + x2 + x3, base, family = "poisson")
 test(coef(res), coef(res_bis))
 
-####
-#### global variables ####
-####
+# global variables ----
 
 chunk("globals")
 
@@ -331,11 +323,7 @@ base <- setNames(iris, c("y", "x1", "x2", "x3", "species"))
 z <- base$x1
 test(feols(y ~ z, base), "err")
 
-
-
-####
-#### ... Collinearity ####
-####
+# Collinearity ----
 
 chunk("COLLINEARITY")
 
@@ -381,10 +369,7 @@ for (useWeights in c(FALSE, TRUE)) {
 }
 cat("\n")
 
-
-####
-#### ... Non linear tests ####
-####
+# Non linear tests ----
 
 chunk("NON LINEAR")
 
@@ -406,9 +391,7 @@ est_lin <- feols(y ~ x1 + var_spec + I(var_spec^2), base)
 
 test(coef(est_nl), coef(est_lin)[c(3, 4, 1, 2)], "~")
 
-####
-#### ... Lagging ####
-####
+# Lagging ----
 
 # Different types of lag
 # 1) check no error in wide variety of situations
@@ -430,7 +413,8 @@ base$period_date <- as.Date(ten_dates, "%Y-%m-%d")[base$period]
 base$y_0 <- base$y**2
 base$y_0[base$id == 1] <- 0
 
-# We compute the lags "by hand"
+## We compute the lags "by hand" ----
+
 base <- base[order(base$id, base$period), ]
 base$x1_lag <- c(NA, base$x1[-n])
 base$x1_lag[base$period == 1] <- NA
@@ -438,7 +422,8 @@ base$x1_lead <- c(base$x1[-1], NA)
 base$x1_lead[base$period == 10] <- NA
 base$x1_diff <- base$x1 - base$x1_lag
 
-# we create holes
+## we create holes ----
+
 base$period_bis <- base$period
 base$period_bis[base$period_bis == 5] <- 50
 base$x1_lag_hole <- base$x1_lag
@@ -446,14 +431,13 @@ base$x1_lag_hole[base$period %in% c(5, 6)] <- NA
 base$x1_lead_hole <- base$x1_lead
 base$x1_lead_hole[base$period %in% c(4, 5)] <- NA
 
-# we reshuffle the base
+## we reshuffle the base ----
+
 base <- base[sample(n), ]
 
-#
-# Checks consistency
-#
+# Checks consistency ----
 
-cat("consistentcy...")
+cat("consistency...")
 
 test(lag(x1 ~ id + period, data = base), base$x1_lag)
 test(lag(x1 ~ id + period, -1, data = base), base$x1_lead)
@@ -469,11 +453,9 @@ test(lag(x1 ~ id + period_date, -1, data = base), base$x1_lead)
 
 cat("done.\nEstimations...")
 
-#
-# Estimations
-#
+## Estimations ----
 
-# Poisson
+### Poisson ----
 
 for (depvar in c("y", "y_na", "y_0")) {
   for (p in c("period", "period_txt", "period_date")) {
@@ -515,11 +497,9 @@ for (depvar in c("y", "y_na", "y_0")) {
 
 cat("done.\n\n")
 
-#
-# Data table
-#
+# Data table ----
 
-cat("data.table...")
+chunk("data.table...")
 # We just check there is no bug (consistency should be OK)
 
 library(data.table)
@@ -547,14 +527,14 @@ base_bis[, x_d := d(x)]
 
 cat("done.\n\n")
 
-#
-# Panel
-#
+# Panel ----
 
-# We ensure we get the right SEs whether we use the panel() or the panel.id method
+## We ensure we get the right SEs whether we use the panel() or the panel.id method ----
+
 data(base_did)
 
-# Setting a data set as a panel...
+## Setting a data set as a panel ----
+
 pdat <- panel(base_did, ~ id + period)
 pdat$fe <- sample(15, nrow(pdat), replace = TRUE)
 
@@ -568,9 +548,7 @@ test(
   attr(vcov(est_panel, attr = TRUE), "type")
 )
 
-####
-#### ... subset ####
-####
+# Subset ----
 
 chunk("SUBSET")
 
@@ -583,13 +561,15 @@ base$x1[sample(150, 5)] <- NA
 
 fml <- y ~ x1 + x2
 
-# Errors
+## Errors ----
+
 test(feols(fml, base, subset = ~species), "err")
 test(feols(fml, base, subset = -1:15), "err")
 test(feols(fml, base, subset = integer(0)), "err")
 test(feols(fml, base, subset = c(TRUE, TRUE, FALSE)), "err")
 
-# Valid use
+## Valid use ----
+
 for (id_fun in 1:6) {
   estfun <- switch(as.character(id_fun),
     "1" = feols,
@@ -634,16 +614,14 @@ for (id_fun in 1:6) {
 }
 cat("\n")
 
-
-####
-#### ... split ####
-####
+# Split ----
 
 chunk("split")
 
 base <- setNames(iris, c("y", "x1", "x2", "x3", "species"))
 
-# simple: formula
+## simple: formula ----
+
 est <- feols(y ~ x.[1:3], base, split = ~ species %keep% "@^v")
 test(length(est), 2)
 
@@ -653,7 +631,8 @@ test(length(est), 3)
 est <- feols(y ~ x.[1:3], base, split = ~ species %drop% "set")
 test(length(est), 2)
 
-# simple: vector
+## simple: vector ----
+
 est <- feols(y ~ x.[1:3], base, split = base$species %keep% "@^v")
 test(length(est), 2)
 
@@ -663,7 +642,8 @@ test(length(est), 2)
 est <- feols(y ~ x.[1:3], base, split = base$species %drop% "set")
 test(length(est), 2)
 
-# with bin
+## with bin ----
+
 est <- feols(y ~ x.[1:2], base,
   split = ~ bin(x3, c(
     "cut::5", "saint emilion", "pessac leognan",
@@ -677,7 +657,8 @@ est <- feols(y ~ x.[1:2], base,
 )
 test(length(est), 2)
 
-# with argument
+## with argument ----
+
 est <- feols(y ~ x.[1:3], base, split = ~species, split.keep = "@^v")
 test(length(est), 2)
 
@@ -687,10 +668,7 @@ test(length(est), 3)
 est <- feols(y ~ x.[1:3], base, split = ~species, split.drop = "set")
 test(length(est), 2)
 
-
-####
-#### ... Multiple estimations ####
-####
+# Multiple estimations ----
 
 chunk("Multiple")
 
@@ -707,7 +685,6 @@ base$x3[6] <- NA
 base$x5 <- rnorm(150)
 base$x6 <- rnorm(150) + base$y1 * 0.25
 base$fe3 <- rep(letters[1:10], 15)
-
 
 for (id_fun in 1:5) {
   estfun <- switch(as.character(id_fun),
@@ -765,16 +742,17 @@ for (id_fun in 1:5) {
 }
 cat("\n")
 
+## No error tests ----
 
-# No error tests
-# We test with IV + possible corner cases
+### We test with IV + possible corner cases ----
 
 base$left <- rnorm(150)
 base$right <- rnorm(150)
 
 est_multi <- feols(c(y1, y2) ~ sw0(x1) | sw0(species) | x2 ~ x3, base)
 
-# We check a few
+### We check a few ----
+
 est_a <- feols(y1 ~ 1 | x2 ~ x3, base)
 est_b <- feols(y1 ~ x1 | species | x2 ~ x3, base)
 est_c <- feols(y2 ~ 1 | x2 ~ x3, base)
@@ -783,7 +761,8 @@ test(coef(est_multi[lhs = "y1", rhs = "^1", fixef = "1", drop = TRUE]), coef(est
 test(coef(est_multi[lhs = "y1", rhs = "x1", fixef = "spe", drop = TRUE]), coef(est_b))
 test(coef(est_multi[lhs = "y2", rhs = "^1", fixef = "1", drop = TRUE]), coef(est_c))
 
-# with fixed covariates
+### with fixed covariates ----
+
 est_multi_LR <- feols(c(y1, y2) ~ left + sw0(x1 * x4) + right | sw0(species) | x2 ~ x3, base)
 
 est_a <- feols(y1 ~ left + right | x2 ~ x3, base)
@@ -796,8 +775,7 @@ test(names(coef(est_multi_LR[lhs = "y1", rhs = "x1", fixef = "spe", drop = TRUE]
 test(coef(est_multi_LR[lhs = "y1", rhs = "x1", fixef = "spe", drop = TRUE]), coef(est_b)[user_name])
 test(coef(est_multi_LR[lhs = "y2", rhs = "!x1", fixef = "1", drop = TRUE]), coef(est_c))
 
-
-# mvsw
+### mvsw ----
 
 est_mvsw <- feols(y1 ~ mvsw(x1, x2), base)
 est_mvsw_fe <- feols(y1 ~ mvsw(x1, x2) | mvsw(species, fe2), base)
@@ -807,17 +785,20 @@ test(length(est_mvsw), 4)
 test(length(as.list(est_mvsw_fe)), 16)
 test(length(as.list(est_mvsw_fe_iv)), 16)
 
-# Summary of multiple endo vars
+### Summary of multiple endo vars ----
+
 est_multi_iv <- feols(c(y1, y2) ~ sw0(x1) | sw0(species) | x3 + x4 ~ x5 + x6, base)
 test(length(est_multi_iv), 8)
 test(length(summary(est_multi_iv, stage = 1)), 16)
 
-# IV without exo var:
+### IV without exo var ----
+
 est_mult_no_exo <- feols(c(y1, y2) ~ 0 | x3 + x4 ~ x5 + x6, base)
 est_no_exo_y2 <- feols(y2 ~ 0 | x3 + x4 ~ x5 + x6, base)
 test(coef(est_mult_no_exo[[2]]), coef(est_no_exo_y2))
 
-# proper ordering
+### proper ordering ----
+
 est_multi <- feols(c(y1, y2) ~ sw0(x1) | sw0(fe2), base, split = ~species)
 test(
   names(models(est_multi[fixef = TRUE, sample = FALSE])),
@@ -834,7 +815,8 @@ test(
   stvec("id, sample.var, sample, fixef, lhs, rhs")
 )
 
-# NA models
+### NA models ----
+
 base$y_0 <- base$x1**2 + rnorm(150)
 base$y_0[base$species == "setosa"] <- 0
 
@@ -843,7 +825,8 @@ est_pois <- fepois(y_0 ~ csw(x.[, 1:4]), base, split = ~species)
 base$x1_bis <- base$x1
 est_pois <- fepois(y_0 ~ x.[1:3] + x1_bis | sw0(species), base)
 
-# Different ways .[]
+### Different ways .[] ----
+
 base <- setNames(iris, c("y", "x1", "x2", "x3", "species"))
 
 dep_all <- list(stvec("y, x1, x2"), ~ y + x1 + x2)
@@ -858,7 +841,7 @@ for (dep in dep_all) {
   test(length(m), 3)
 }
 
-# offset in multiple outcomes // no error test
+### offset in multiple outcomes // no error test ----
 
 offset_single_ols <- feols(am ~ hp, offset = ~ log(qsec), data = mtcars)
 offset_mult_ols <- feols(c(mpg, am) ~ hp, offset = ~ log(qsec), data = mtcars)
@@ -870,7 +853,7 @@ offset_mult_glm <- feglm(c(mpg, am) ~ hp, offset = ~ log(qsec), data = mtcars)
 
 test(coef(offset_mult_glm[[2]]), coef(offset_single_glm))
 
-# LHS expansion with IVs
+### LHS expansion with IVs ----
 
 lhs <- c("mpg", "wt")
 est_lhs <- feols(.[lhs] ~ disp | hp ~ qsec, data = mtcars)
@@ -879,10 +862,7 @@ test(length(est_lhs), 2)
 est_lhs <- feols(..("mpg|wt") ~ disp | hp ~ qsec, data = mtcars)
 test(length(est_lhs), 2)
 
-
-####
-#### ... IV ####
-####
+# IV ----
 
 chunk("IV")
 
@@ -892,7 +872,7 @@ set.seed(2)
 base$x_inst_2 <- 0.2 * base$y + 0.2 * base$x_endo_1 + rnorm(150, sd = 0.5)
 base$x_endo_2 <- 0.2 * base$y - 0.2 * base$x_inst_1 + rnorm(150, sd = 0.5)
 
-# Checking a basic estimation
+## Checking a basic estimation ----
 
 setFixest_vcov(all = "iid")
 
@@ -906,14 +886,18 @@ base$fit_x_endo_2 <- predict(res_f2)
 
 res_2nd <- feols(y ~ fit_x_endo_1 + fit_x_endo_2 + x1, base)
 
-# the coef
+## the coef ----
+
 test(coef(est_iv), coef(res_2nd))
 
-# the SE
+## the SE ----
+
 resid_iv <- base$y - predict(res_2nd, data.frame(x1 = base$x1, fit_x_endo_1 = base$x_endo_1, fit_x_endo_2 = base$x_endo_2))
 sigma2_iv <- sum(resid_iv**2) / (res_2nd$nobs - res_2nd$nparams)
 
 sum_2nd <- summary(res_2nd, .vcov = res_2nd$cov.iid / res_2nd$sigma2 * sigma2_iv)
+
+## Windows ----
 
 # We only check that on Windows => avoids super odd bug in fedora devel
 # The worst is that I just can't debug it.... so that's the way it's done.
@@ -921,7 +905,8 @@ if (Sys.info()["sysname"] == "Windows") {
   test(se(sum_2nd), se(est_iv))
 }
 
-# check no bug when all exogenous vars are removed bc of collinearity
+## check no bug when all exogenous vars are removed bc of collinearity ----
+
 df <- data.frame(
   x = rnorm(8), y = rnorm(8),
   z = rnorm(8), fe = rep(0:1, each = 4)
@@ -930,14 +915,13 @@ df <- data.frame(
 est_iv <- feols(y ~ fe | fe | x ~ z, df)
 est_iv <- feols(y ~ sw(fe, fe) | fe | x ~ z, df)
 
-# check no bug
+## check no bug ----
+
 etable(summary(est_iv, stage = 1:2))
 
 setFixest_vcov(reset = TRUE)
 
-####
-#### ... VCOV at estimation ####
-####
+# VCOV at estimation ----
 
 chunk("vcov at estimation")
 
@@ -948,7 +932,8 @@ base$clu[1:5] <- NA
 
 est <- feols(y ~ x1 | species, base, cluster = ~clu, ssc = ssc(adj = FALSE))
 
-# The three should be identical
+## The three should be identical ----
+
 v1 <- est$cov.scaled
 v1b <- vcov(est)
 v1c <- summary(est)$cov.scaled
@@ -956,14 +941,16 @@ v1c <- summary(est)$cov.scaled
 test(v1, v1b)
 test(v1, v1c)
 
-# Only ssc change
+## Only ssc change ----
+
 v2 <- summary(est, ssc = ssc())$cov.scaled
 v2b <- vcov(est, ssc = ssc())
 
 test(v2, v2b)
 test(max(abs(v1 - v2)) == 0, FALSE)
 
-# vcov change only
+## vcov change only ----
+
 v3 <- summary(est, se = "hetero")$cov.scaled
 v3b <- vcov(est, se = "hetero")
 
@@ -971,7 +958,7 @@ test(v3, v3b)
 test(max(abs(v1 - v3)) == 0, FALSE)
 test(max(abs(v2 - v3)) == 0, FALSE)
 
-# feols.fit
+## feols.fit ----
 
 ymat <- base$y
 xmat <- base[, 2:3]
@@ -999,12 +986,7 @@ for (use_fe in c(TRUE, FALSE)) {
   }
 }
 
-
-
-
-####
-#### ... Argument sliding ####
-####
+# Argument sliding ----
 
 chunk("argument sliding")
 
@@ -1017,22 +999,22 @@ slided <- feols(y ~ x1 + x2, ~species)
 
 test(coef(raw), coef(slided))
 
-# Error, with error msg relative to 'data'
+## Error, with error msg relative to 'data' ----
+
 test(feols(y ~ x1 + x2, 1:5), "err")
 
-# should be another estimation
+## should be another estimation ----
+
 other_est <- feols(y ~ x1 + x2, head(base, 50))
 test(nobs(other_est), 50)
 
 setFixest_estimation(reset = TRUE)
 
-####
-#### ... Offset ####
-####
+# Offset ----
 
 chunk("offset")
 
-# we test the different ways to set an offset
+## we test the different ways to set an offset ----
 
 base <- setNames(iris, c("y", "x1", "x2", "x3", "species"))
 
@@ -1045,16 +1027,13 @@ test(
   predict(o2, newdata = head(base))
 )
 
-# error
+## error ----
+
 test(feols(y ~ x1 + offset(x2), base, offset = ~x3), "err")
 
-
-####
-#### ... Only Coef ####
-####
+# Only Coef ----
 
 chunk("only.coef")
-
 
 base <- setNames(iris, c("y", "x1", "x2", "x3", "species"))
 base$x4 <- base$x1 + 5
@@ -1073,18 +1052,14 @@ test(sum(is.na(m)), 0)
 
 test(feols(y ~ sw(x1, x2), base, only.coef = TRUE), "err")
 
-
-####
-#### Standard-errors ####
-####
+# Standard-errors ----
 
 chunk("STANDARD ERRORS")
 
-#
-# Fixed-effects corrections
-#
+## Fixed-effects corrections ----
 
-# We create "irregular" FEs
+### We create "irregular" FEs ----
+
 set.seed(0)
 base <- data.frame(x = rnorm(20))
 base$y <- base$x + rnorm(20)
@@ -1095,9 +1070,7 @@ est <- feols(y ~ x | fe1 + fe2, base)
 # fe1: 3 FEs
 # fe2: 5 FEs
 
-#
-# Clustered standard-errors: by fe1
-#
+### Clustered standard-errors: by fe1 ----
 
 # Default: fixef.K = "nested"
 #  => adjustment K = 1 + 5 (i.e. x + fe2)
@@ -1115,14 +1088,13 @@ test(attr(vcov(est, ssc = ssc(fixef.K = "full"), attr = TRUE), "dof.K"), 8)
 #  => adjustment K = 1 + 3 + 5 - 2 (i.e. x + fe1 + fe2 - 2 restrictions)
 test(attr(vcov(est, ssc = ssc(fixef.K = "full", fixef.force_exact = TRUE), attr = TRUE), "dof.K"), 7)
 
-#
-# Manual checks of the SEs
-#
+### Manual checks of the SEs ----
 
 n <- est$nobs
 VCOV_raw <- est$cov.iid / ((n - 1) / (n - est$nparams))
 
-# standard
+##### standard ----
+
 for (k_val in c("none", "nested", "full")) {
   for (adj in c(FALSE, TRUE)) {
     K <- switch(k_val,
@@ -1138,7 +1110,8 @@ for (k_val in c("none", "nested", "full")) {
   }
 }
 
-# Clustered, fe1
+#### Clustered, fe1 ----
+
 VCOV_raw <- est$cov.iid / est$sigma2
 H <- vcovClust(est$fixef_id$fe1, VCOV_raw, scores = est$scores, adj = FALSE)
 n <- nobs(est)
@@ -1171,8 +1144,8 @@ for (tdf in c("conventional", "min")) {
   }
 }
 
+#### 2-way Clustered, fe1 fe2 ----
 
-# 2-way Clustered, fe1 fe2
 VCOV_raw <- est$cov.iid / est$sigma2
 M_i <- vcovClust(est$fixef_id$fe1, VCOV_raw, scores = est$scores, adj = FALSE)
 M_t <- vcovClust(est$fixef_id$fe2, VCOV_raw, scores = est$scores, adj = FALSE)
@@ -1225,45 +1198,40 @@ for (cdf in c("conventional", "min")) {
   }
 }
 
-
-#
-# Comparison with sandwich and plm
-#
+# Comparison with sandwich and plm ----
 
 library(sandwich)
 
-# Data generation
+## Data generation ----
+
 set.seed(0)
 N <- 20
 G <- N / 5
 T <- N / G
 d <- data.frame(y = rnorm(N), x = rnorm(N), grp = rep(1:G, T), tm = rep(1:T, each = G))
 
-# Estimations
+## Estimations ----
+
 est_lm <- lm(y ~ x + as.factor(grp) + as.factor(tm), data = d)
 est_feols <- feols(y ~ x | grp + tm, data = d)
 
-#
-# Standard
-#
+## Standard ----
 
 test(se(est_feols, se = "st")["x"], se(est_lm)["x"])
 
-#
-# Clustered
-#
+## Clustered ----
 
-# Clustered by grp
+### Clustered by grp ----
+
 se_CL_grp_lm_HC1 <- sqrt(vcovCL(est_lm, cluster = d$grp, type = "HC1")["x", "x"])
 se_CL_grp_lm_HC0 <- sqrt(vcovCL(est_lm, cluster = d$grp, type = "HC0")["x", "x"])
 
-# How to get the lm
+### How to get the lm ----
+
 test(se(est_feols, ssc = ssc(fixef.K = "full")), se_CL_grp_lm_HC1)
 test(se(est_feols, ssc = ssc(adj = FALSE, fixef.K = "full")), se_CL_grp_lm_HC0)
 
-#
-# Heteroskedasticity-robust
-#
+### Heteroskedasticity-robust ----
 
 se_white_lm_HC1 <- sqrt(vcovHC(est_lm, type = "HC1")["x", "x"])
 se_white_lm_HC0 <- sqrt(vcovHC(est_lm, type = "HC0")["x", "x"])
@@ -1271,19 +1239,16 @@ se_white_lm_HC0 <- sqrt(vcovHC(est_lm, type = "HC0")["x", "x"])
 test(se(est_feols, se = "hetero"), se_white_lm_HC1)
 test(se(est_feols, se = "hetero", ssc = ssc(adj = FALSE, cluster.adj = FALSE)), se_white_lm_HC0)
 
-#
-# Two way
-#
+## Two way ----
 
-# Clustered by grp & tm
+### Clustered by grp & tm ----
+
 se_CL_2w_lm <- sqrt(vcovCL(est_lm, cluster = ~ grp + tm, type = "HC1")["x", "x"])
 se_CL_2w_feols <- se(est_feols, se = "twoway")
 
 test(se(est_feols, se = "twoway", ssc = ssc(fixef.K = "full", cluster.df = "conv")), se_CL_2w_lm)
 
-#
-# Checking the calls work properly
-#
+## Checking the calls work properly ----
 
 data(trade)
 
@@ -1305,7 +1270,8 @@ se_two_comb <- se(est_pois, cluster = c("Origin^Destination", "Product"))
 test(se_two_comb, se(est_pois, cluster = list(paste(trade$Origin, trade$Destination), trade$Product)))
 test(se_two_comb, se(est_pois, cluster = ~ Origin^Destination + Product))
 
-# With cluster removed
+## With cluster removed ----
+
 base <- trade
 base$Euros[base$Origin == "FR"] <- 0
 est_pois <- femlm(Euros ~ log(dist_km) | Origin + Destination, base)
@@ -1326,7 +1292,8 @@ se_two_comb <- se(est_pois, cluster = c("Origin^Destination", "Product"))
 test(se_two_comb, se(est_pois, cluster = list(paste(base$Origin, base$Destination), base$Product)))
 test(se_two_comb, se(est_pois, cluster = ~ Origin^Destination + Product))
 
-# With cluster removed and NAs
+## With cluster removed and NAs ----
+
 base <- trade
 base$Euros[base$Origin == "FR"] <- 0
 base$Euros_na <- base$Euros
@@ -1356,11 +1323,10 @@ se_two_comb <- se(est_pois, cluster = c("Origin^Destination", "Product"))
 test(se_two_comb, se(est_pois, cluster = list(paste(base$Origin, base$Destination), base$Product)))
 test(se_two_comb, se(est_pois, cluster = ~ Origin^Destination + Product))
 
-#
-# Checking errors
-#
+# Checking errors ----
 
-# Should report error
+## Should report error ----
+
 test(se(est_pois, cluster = "Origin_na"), "err")
 test(se(est_pois, cluster = base$Origin_na), "err")
 test(se(est_pois, cluster = list(base$Origin_na)), "err")
@@ -1368,9 +1334,7 @@ test(se(est_pois, cluster = ~ Origin_na^Destination), "err")
 
 test(se(est_pois, se = "cluster", cluster = ~ Origin_na^not_there), "err")
 
-#
-# Checking that the aliases work fine
-#
+## Checking that the aliases work fine ----
 
 se_hetero <- se(est_pois, se = "hetero")
 se_hc1 <- se(est_pois, se = "hc1")
@@ -1379,9 +1343,7 @@ se_white <- se(est_pois, se = "white")
 test(se_hetero, se_hc1)
 test(se_hetero, se_white)
 
-#
-# New argument vcov
-#
+## New argument vcov ----
 
 # We mostly check the absence of errors
 data(base_did)

@@ -306,6 +306,7 @@
   int n = x.size();
   bool res = true;
   double value = x[0];
+
   for (int i = 1; i < n; i++) {
     if (x[i] != value) {
       res = false;
