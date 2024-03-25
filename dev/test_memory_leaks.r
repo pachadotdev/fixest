@@ -1,5 +1,7 @@
-if (!require("devtools")) install.packages("devtools")
-devtools::load_all()
+# if (!require("devtools")) install.packages("devtools")
+# devtools::load_all()
+
+library(fixest2)
 
 data(base_did)
 
