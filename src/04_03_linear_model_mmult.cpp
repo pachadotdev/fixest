@@ -52,8 +52,9 @@ void mp_sparse_Xty(writable::doubles &Xty, const std::vector<int> &start_j,
       value += y[all_i[index]] * x[index];
     }
 
-    if (value == 0)
+    if (value == 0) {
       continue;
+    }
 
     Xty[j] = value;
   }
@@ -176,7 +177,11 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y,
     writable::doubles_matrix<> wX(N, K);
 
     // copy X to wX
-    memcpy(wX.data(), X.data(), N * K * sizeof(double));
+    for (int i = 0; i < N; ++i) {
+      for (int k = 0; k < K; ++k) {
+        wX(i, k) = X(i, k);
+      }
+    }
 
     // If isWeight is true, multiply wX by w
     if (isWeight) {

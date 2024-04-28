@@ -33,6 +33,12 @@
         wZ(i, k) = Z(i, k) * w[i];
       }
     }
+  } else {
+    for (int i = 0; i < N; ++i) {
+      for (int k = 0; k < K1; ++k) {
+        wZ(i, k) = Z(i, k);
+      }
+    }
   }
 
   if (sparse_check(X) == false) {
@@ -44,6 +50,12 @@
       for (int i = 0; i < N; ++i) {
         for (int k = 0; k < K2; ++k) {
           wX(i, k) = X(i, k) * w[i];
+        }
+      }
+    } else {
+      for (int i = 0; i < N; ++i) {
+        for (int k = 0; k < K2; ++k) {
+          wX(i, k) = X(i, k);
         }
       }
     }
@@ -174,6 +186,12 @@ cpp_iv_product_completion_(doubles_matrix<> XtX, doubles Xty,
     for (int i = 0; i < N; ++i) {
       for (int k = 0; k < K1; ++k) {
         wU(i, k) = U(i, k) * w[i];
+      }
+    }
+  } else {
+    for (int i = 0; i < N; ++i) {
+      for (int k = 0; k < K1; ++k) {
+        wU(i, k) = U(i, k);
       }
     }
   }
