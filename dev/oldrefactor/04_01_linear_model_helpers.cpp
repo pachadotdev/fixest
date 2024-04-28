@@ -7,10 +7,12 @@ bool sparse_check(const doubles_matrix<> &X) {
   int N = X.nrow();
   int K = X.ncol();
 
-  if (K < 5) return false;
-  if (N < 1000 && K < 100) return false;
+  if (K < 5)
+    return false;
+  if (N < 1000 && K < 100)
+    return false;
   if (N < 100)
-    return false;  // avoids corner cases where you have more vars than obs
+    return false; // avoids corner cases where you have more vars than obs
 
   // Let's look at some rows
   // If there are factors, there should be 0s

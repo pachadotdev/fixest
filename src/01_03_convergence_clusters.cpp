@@ -108,8 +108,9 @@ void computeClusterCoef(std::vector<double *> &pcluster_origin,
       memcpy(mu_with_coef, mu_init, n_obs * sizeof(double));
 
       for (int h = 0; h < K; h++) {
-        if (h == k - 1)
+        if (h == k - 1) {
           continue;
+        }
 
         double *my_cluster_coef =
             (h < k - 1) ? pcluster_origin[h] : pcluster_destination[h];

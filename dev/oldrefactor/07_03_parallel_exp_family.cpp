@@ -136,9 +136,8 @@ inline double logit_mueta(double x) {
   return res;
 }
 
-[[cpp11::register]] doubles cpppar_logit_devresids_(doubles y, doubles mu,
-                                                    doubles wt,
-                                                    int nthreads = 1) {
+[[cpp11::register]] doubles
+cpppar_logit_devresids_(doubles y, doubles mu, doubles wt, int nthreads = 1) {
   int n = mu.size();
   writable::doubles res(n);
   bool isWeight = wt.size() != 1;

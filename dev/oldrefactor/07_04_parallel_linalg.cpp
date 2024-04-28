@@ -51,9 +51,8 @@
   return res;
 }
 
-[[cpp11::register]] doubles_matrix<> cpppar_matprod_(doubles_matrix<> x,
-                                                     doubles_matrix<> y,
-                                                     int nthreads = 1) {
+[[cpp11::register]] doubles_matrix<>
+cpppar_matprod_(doubles_matrix<> x, doubles_matrix<> y, int nthreads = 1) {
   // => simply x %*% y
 
   int N = x.nrow();

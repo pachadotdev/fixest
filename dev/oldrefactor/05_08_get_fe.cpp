@@ -18,7 +18,7 @@ integers calculateTableCluster(const integers_matrix<> &dumMat,
 
   for (int i = 0; i < N; i++) {
     int k = dumMat(i, q);
-    tableCluster[k] += 1;  // the number of obs per case
+    tableCluster[k] += 1; // the number of obs per case
   }
   return tableCluster;
 }
@@ -165,7 +165,7 @@ void updateClusterValues(int obs, int Q, writable::integers_matrix<> &mat_done,
   iota(id2do_next.begin(), id2do_next.end(), 0);
 
   int qui_max, obs;
-  int rs;  // rs: row sum
+  int rs; // rs: row sum
   int id_cluster;
   bool first;
   while (iter < iterMax) {
@@ -217,12 +217,14 @@ void updateClusterValues(int obs, int Q, writable::integers_matrix<> &mat_done,
                               obsCluster, rowsums, sumFE);
         }
       }
-      if (nb2do_next == nb2do) break;
+      if (nb2do_next == nb2do)
+        break;
     }
     if (iter_loop == iterMax_loop) {
       Rprintf("Problem getting FE");
     }
-    if (nb2do_next == 0) break;
+    if (nb2do_next == 0)
+      break;
   }
   if (iter == iterMax) {
     Rprintf("Problem getting FE");

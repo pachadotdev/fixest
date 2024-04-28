@@ -27,7 +27,8 @@ void mp_sparse_XtX(writable::doubles_matrix<> &XtX, const vector<int> &n_j,
         value += X(all_i[index], k) * x[index];
       }
 
-      if (value == 0) continue;
+      if (value == 0)
+        continue;
 
       XtX(j1, j2) = value;
       XtX(j2, j1) = value;
@@ -50,7 +51,8 @@ void mp_sparse_Xty(writable::doubles &Xty, const vector<int> &start_j,
       value += y[all_i[index]] * x[index];
     }
 
-    if (value == 0) continue;
+    if (value == 0)
+      continue;
 
     Xty[j] = value;
   }
@@ -242,9 +244,8 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y,
   return res;
 }
 
-[[cpp11::register]] doubles_matrix<> cpppar_crossprod_(doubles_matrix<> X,
-                                                       doubles w,
-                                                       int nthreads) {
+[[cpp11::register]] doubles_matrix<>
+cpppar_crossprod_(doubles_matrix<> X, doubles w, int nthreads) {
   int N = X.nrow();
   int K = X.ncol();
 
@@ -299,8 +300,8 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y,
   return XtX;
 }
 
-[[cpp11::register]] doubles_matrix<> cpp_mat_reconstruct_(
-    writable::doubles_matrix<> X, logicals id_excl) {
+[[cpp11::register]] doubles_matrix<>
+cpp_mat_reconstruct_(writable::doubles_matrix<> X, logicals id_excl) {
   int K = id_excl.size();
   int K_small = X.ncol();
 
@@ -308,12 +309,14 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y,
 
   int n_col_excl = 0;
   for (int j = 0; j < K_small; ++j) {
-    while (id_excl[j + n_col_excl]) ++n_col_excl;
+    while (id_excl[j + n_col_excl])
+      ++n_col_excl;
 
     int col = j + n_col_excl;
     int n_row_excl = 0;
     for (int i = 0; i < K_small; ++i) {
-      while (id_excl[i + n_row_excl]) ++n_row_excl;
+      while (id_excl[i + n_row_excl])
+        ++n_row_excl;
       res(i + n_row_excl, col) += X(i, j);
     }
   }

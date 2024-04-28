@@ -83,7 +83,7 @@ class sVec {
   double *p_dble = nullptr;
   int *p_int = nullptr;
 
- public:
+public:
   bool is_int = false;
 
   sVec(){};
@@ -93,7 +93,8 @@ class sVec {
   sVec(std::nullptr_t){};
 
   double operator[](int i) {
-    if (is_int) return static_cast<double>(p_int[i]);
+    if (is_int)
+      return static_cast<double>(p_int[i]);
     return p_dble[i];
   }
 };
@@ -105,7 +106,7 @@ class sMat {
 
   sMat() = delete;
 
- public:
+public:
   sMat(SEXP, bool);
 
   int nrow() { return n; };
@@ -153,13 +154,13 @@ class FEClass {
   void compute_fe_coef_2_internal(double *, double *, double *, bool);
   void add_wfe_coef_to_mu_internal(int, double *, double *, bool);
 
- public:
+public:
   // Utility class: Facilitates the access to the VS variables
   class simple_mat_of_vs_vars {
     int K_fe;
     vector<sVec> pvars;
 
-   public:
+  public:
     simple_mat_of_vs_vars(const FEClass *, int);
     double operator()(int, int);
   };
@@ -210,18 +211,12 @@ class simple_mat_with_id {
   double *px_current;
   int nrow, ncol, n_total, id_current = 0;
 
- public:
+public:
   simple_mat_with_id(double *px_in, int nrow_in)
-      : px0(px_in),
-        px_current(px_in),
-        nrow(nrow_in),
-        ncol(nrow_in),
+      : px0(px_in), px_current(px_in), nrow(nrow_in), ncol(nrow_in),
         n_total(nrow * ncol){};
   simple_mat_with_id(double *px_in, int nrow_in, int ncol_in)
-      : px0(px_in),
-        px_current(px_in),
-        nrow(nrow_in),
-        ncol(ncol_in),
+      : px0(px_in), px_current(px_in), nrow(nrow_in), ncol(ncol_in),
         n_total(nrow * ncol){};
   double &operator()(int id, int i, int j);
   double &operator()(int id, int i);

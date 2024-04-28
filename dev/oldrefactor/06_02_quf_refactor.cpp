@@ -93,15 +93,18 @@ void quf_refactor_table_sum_single(
     for (int i = 0; i < n; ++i) {
       if (!obs_removed[i]) {
         id = quf_old[i] - 1;
-        if (!id_still_exists[id]) id_still_exists[id] = true;
+        if (!id_still_exists[id])
+          id_still_exists[id] = true;
         ++x_table[id];
-        if (do_sum_y) sum_y[id] += py[i];
+        if (do_sum_y)
+          sum_y[id] += py[i];
       }
     }
 
     // recreating id_pblm
-    id_pblm.resize(D);  // we resize because we could have had length = 0
-    for (int d = 0; d < D; ++d) id_pblm[d] = !id_still_exists[d];
+    id_pblm.resize(D); // we resize because we could have had length = 0
+    for (int d = 0; d < D; ++d)
+      id_pblm[d] = !id_still_exists[d];
 
     // Loop finding out the problems
     vector<bool> id_pblm_check(D, false);
@@ -173,7 +176,8 @@ void quf_refactor_table_sum_single(
       if (!obs_removed[i]) {
         id = any_pblm ? id_new[quf_old[i] - 1] : quf_old[i];
         ++x_table[id - 1];
-        if (do_sum_y) sum_y[id - 1] += py[i];
+        if (do_sum_y)
+          sum_y[id - 1] += py[i];
         quf_new[i_new++] = id;
       }
     }

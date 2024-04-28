@@ -1,9 +1,9 @@
 #include "05_0_misc.hpp"
 
-[[cpp11::register]] doubles cpp_partialDerivative_other_(
-    int iterMax, int Q, int N, double epsDeriv, doubles ll_d2,
-    doubles dx_dother, doubles init, integers_matrix<> dumMat,
-    integers nbCluster) {
+[[cpp11::register]] doubles
+cpp_partialDerivative_other_(int iterMax, int Q, int N, double epsDeriv,
+                             doubles ll_d2, doubles dx_dother, doubles init,
+                             integers_matrix<> dumMat, integers nbCluster) {
   // takes in:
   // dumMat: the matrix of dummies (n X c) each obs => cluster // must be in cpp
   // index!!! init: the initialisation of the sum of derivatives vector ll_d2:

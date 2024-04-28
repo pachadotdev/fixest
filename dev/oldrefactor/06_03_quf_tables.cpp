@@ -54,8 +54,10 @@ void quf_table_sum_single(void *px_in, string &x_type, int n, int q, int *x_quf,
   if (compute_sum_y || !do_refactor) {
     for (int i = 0; i < n; ++i) {
       obs = x_quf[i] - 1;
-      if (!do_refactor) ++x_table[obs];
-      if (compute_sum_y) sum_y[obs] += py[i];
+      if (!do_refactor)
+        ++x_table[obs];
+      if (compute_sum_y)
+        sum_y[obs] += py[i];
     }
   }
 
@@ -95,10 +97,11 @@ void quf_table_sum_single(void *px_in, string &x_type, int n, int q, int *x_quf,
   // Rcout << "\n";
 }
 
-[[cpp11::register]] writable::list cpppar_quf_table_sum_(
-    SEXP x, SEXP y, bool do_sum_y, bool rm_0, bool rm_1, bool rm_single,
-    writable::logicals only_slope, int nthreads, bool do_refactor,
-    SEXP r_x_sizes, writable::integers obs2keep) {
+[[cpp11::register]] writable::list
+cpppar_quf_table_sum_(SEXP x, SEXP y, bool do_sum_y, bool rm_0, bool rm_1,
+                      bool rm_single, writable::logicals only_slope,
+                      int nthreads, bool do_refactor, SEXP r_x_sizes,
+                      writable::integers obs2keep) {
   // x: List of vectors of IDs (type int/num or char only)
   // y: dependent variable
   // rm_0: remove FEs where dep var is only 0

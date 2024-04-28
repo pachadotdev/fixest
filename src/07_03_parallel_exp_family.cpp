@@ -152,8 +152,9 @@ inline double logit_mueta(double x) {
                     (1 - y[i]) * log((1 - y[i]) / (1 - mu[i])));
     }
 
-    if (isWeight)
+    if (isWeight) {
       res[i] *= wt[i];
+    }
   }
 
   return res;
