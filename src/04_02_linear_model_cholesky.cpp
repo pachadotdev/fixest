@@ -24,7 +24,7 @@ void invert_tri(writable::doubles_matrix<> &R, int K, int nthreads = 1) {
   // number of computations is (K - b) * (b + 1) => max is (K + 1)**2 / 2
   const double flop = (K + 1) * (K + 1) / 2.0;
   const int iterSecond =
-      ceil(2000000000 / flop / 5); // nber iter per 1/5 second
+      ceil(2000000000 / flop / 5);  // nber iter per 1/5 second
 
   for (int b = 1; b < K; ++b) {
     if (b % iterSecond == 0) {
@@ -54,7 +54,7 @@ void tproduct_tri(writable::doubles_matrix<> &RRt,
   // we do the same as for the invert_tri
   const double flop = (K + 1) * (K + 1) / 2.0;
   const int iterSecond =
-      ceil(2000000000 / flop / 5); // nber iter per 1/5 second
+      ceil(2000000000 / flop / 5);  // nber iter per 1/5 second
   int n_iter_main = 0;
 
 #pragma omp parallel for num_threads(nthreads) schedule(static, 1)
@@ -103,7 +103,7 @@ void tproduct_tri(writable::doubles_matrix<> &RRt,
   // intensive at each iteration we have K * (j+1) - j**2 - 2*j - 1
   // multiplications max => K**2/4
   const double flop = K * K / 4.0;
-  int iterSecond = ceil(2000000000 / flop / 5); // nber iter per 1/5 second
+  int iterSecond = ceil(2000000000 / flop / 5);  // nber iter per 1/5 second
   double min_norm = X(0, 0);
 
   for (int j = 0; j < K; ++j) {
@@ -116,8 +116,7 @@ void tproduct_tri(writable::doubles_matrix<> &RRt,
     double R_jj = X(j, j);
 
     for (int k = 0; k < j; ++k) {
-      if (id_excl[k] == false)
-        R_jj -= R(k, j) * R(k, j);
+      if (id_excl[k] == false) R_jj -= R(k, j) * R(k, j);
     }
 
     if (R_jj < tol) {
@@ -164,21 +163,24 @@ void tproduct_tri(writable::doubles_matrix<> &RRt,
     // The first chunk of the matrix is identical
     // we find when it starts being different
     int j_start = 0;
-    for (; id_excl[j_start] == false; ++j_start) {
-      for (int j = j_start; j < K; ++j) {
-        if (id_excl[j] == true) {
-          ++n_j_excl;
+
+    while (j_start < id_excl.size() && id_excl[j_start] == false) {
+      ++j_start;
+    }
+
+    for (int j = j_start; j < K; ++j) {
+      if (id_excl[j] == true) {
+        ++n_j_excl;
+        continue;
+      }
+
+      int n_i_excl = 0;
+      for (int i = 0; i <= j; ++i) {
+        if (id_excl[i] == true) {
+          ++n_i_excl;
           continue;
         }
-
-        int n_i_excl = 0;
-        for (int i = 0; i <= j; ++i) {
-          if (id_excl[i] == true) {
-            ++n_i_excl;
-            continue;
-          }
-          R(i - n_i_excl, j - n_j_excl) += R(i, j);
-        }
+        R(i - n_i_excl, j - n_j_excl) += R(i, j);
       }
     }
 
