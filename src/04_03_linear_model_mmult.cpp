@@ -177,6 +177,7 @@ void mp_Xty(writable::doubles &Xty, const doubles_matrix<> &X, const double *y,
     writable::doubles_matrix<> wX(N, K);
 
     // copy X to wX
+#pragma omp parallel for num_threads(nthreads)
     for (int i = 0; i < N; ++i) {
       for (int k = 0; k < K; ++k) {
         wX(i, k) = X(i, k);

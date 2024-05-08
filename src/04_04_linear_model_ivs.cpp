@@ -28,12 +28,14 @@
 
   writable::doubles_matrix<> wZ(N, K1);
   if (isWeight) {
+#pragma omp parallel for num_threads(nthreads)
     for (int i = 0; i < N; ++i) {
       for (int k = 0; k < K1; ++k) {
         wZ(i, k) = Z(i, k) * w[i];
       }
     }
   } else {
+#pragma omp parallel for num_threads(nthreads)
     for (int i = 0; i < N; ++i) {
       for (int k = 0; k < K1; ++k) {
         wZ(i, k) = Z(i, k);
@@ -162,10 +164,9 @@
   return res;
 }
 
-[[cpp11::register]] list
-cpp_iv_product_completion_(doubles_matrix<> XtX, doubles Xty,
-                           doubles_matrix<> X, doubles y, doubles_matrix<> U,
-                           doubles w, int nthreads) {
+[[cpp11::register]] list cpp_iv_product_completion_(
+    doubles_matrix<> XtX, doubles Xty, doubles_matrix<> X, doubles y,
+    doubles_matrix<> U, doubles w, int nthreads) {
   // We compute the following
   // - (UX)'(UX)
   // - (UX)'y
