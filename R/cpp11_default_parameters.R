@@ -125,7 +125,7 @@ cpp_combine_clusters <- function(cluster_list, index) {
 }
 
 cpp_cut <- function(x_sorted, cut_points, is_included) {
-  cpp_cut_(x_sorted, cut_points, is_included)
+  cpp_cut_(x_sorted, cut_points, parse_int(is_included))
 }
 
 cpp_is_int <- function(x) {
