@@ -86,8 +86,9 @@ std::vector<int> set_parallel_scheme_ter(int N, int nthreads) {
   }
 
   // object to return: is_na_inf
-  writable::logicals is_na_inf(anyNAInf ? nobs : 1);
-  for (int i = 0; i < nobs; ++i) {
+  int is_na_inf_size = anyNAInf ? nobs : 1;
+  writable::logicals is_na_inf(is_na_inf_size);
+  for (int i = 0; i < is_na_inf_size; ++i) {
     is_na_inf[i] = false;
   }
 
