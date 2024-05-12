@@ -612,12 +612,6 @@ cpp_demean_(SEXP y, SEXP X_raw, SEXP r_weights, int iterMax, double diffMax,
   int nrow = useX ? n_obs : 1;
   int ncol = useX ? n_vars_X : 1;
   writable::doubles_matrix<> X_demean(nrow, ncol);
-  // TODO: check if I really need to fill with 0s
-  for (int i = 0; i < nrow; ++i) {
-    for (int j = 0; j < ncol; ++j) {
-      X_demean(i, j) = 0;
-    }
-  }
 
   sVec p_input_tmp;
   double *p_output_tmp;
