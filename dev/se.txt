@@ -1,0 +1,591 @@
+==52939== Memcheck, a memory error detector
+==52939== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==52939== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==52939== Command: /usr/lib/R/bin/exec/R --vanilla -f dev/se.R
+==52939== 
+
+R version 4.4.0 (2024-04-24) -- "Puppy Cup"
+Copyright (C) 2024 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(fixest2)
+> 
+> lhs = 'y1'
+> rhs = 'x3'
+> all_rhs = c('', 'x2', 'x3')
+> n_rhs = 1
+> k = 1
+> 
+> base = readRDS("dev/base.rds")
+> 
+> # try to create a memory leak by repetition
+> for (i in 1:10) {
++   est_multi <- feols(c(y1, y2) ~ x1 + csw0(x2, x3) + x4 | species + fe2, base, fsplit = ~species)
++ }
+NOTE: 2 observations removed because of NA values (Fixed-effects: 2).
+      |-> this msg only concerns the variables common to all estimations
+NOTE: 2 observations removed because of NA values (Fixed-effects: 2).
+      |-> this msg only concerns the variables common to all estimations
+NOTE: 2 observations removed because of NA values (Fixed-effects: 2).
+      |-> this msg only concerns the variables common to all estimations
+NOTE: 2 observations removed because of NA values (Fixed-effects: 2).
+      |-> this msg only concerns the variables common to all estimations
+NOTE: 2 observations removed because of NA values (Fixed-effects: 2).
+      |-> this msg only concerns the variables common to all estimations
+NOTE: 2 observations removed because of NA values (Fixed-effects: 2).
+      |-> this msg only concerns the variables common to all estimations
+NOTE: 2 observations removed because of NA values (Fixed-effects: 2).
+      |-> this msg only concerns the variables common to all estimations
+NOTE: 2 observations removed because of NA values (Fixed-effects: 2).
+      |-> this msg only concerns the variables common to all estimations
+NOTE: 2 observations removed because of NA values (Fixed-effects: 2).
+      |-> this msg only concerns the variables common to all estimations
+NOTE: 2 observations removed because of NA values (Fixed-effects: 2).
+      |-> this msg only concerns the variables common to all estimations
+> # ok
+> 
+> # try to create a memory leak by repetition
+> for (i in 1:10) {
++   mat <- coeftable(object = est_multi[[1]],
++       vcov = NULL, ssc = NULL, cluster = "fe3",
++       keep = NULL, drop = NULL, order = NULL)
++ 
++   mat[, 2]
++ }
+==52939== Conditional jump or move depends on uninitialised value(s)
+==52939==    at 0x4A36F25: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x4A3891B: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x4998EF9: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF50A: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B16DE: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B24C6: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B2EEC: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8553: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8C20: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8FA1: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x499401E: ??? (in /usr/lib/R/lib/libR.so)
+==52939==  Uninitialised value was created by a heap allocation
+==52939==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==52939==    by 0x49F0E14: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F286B: Rf_allocVector3 (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x4A87D0C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49941FF: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7468: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7968: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF935: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E5CE9: Rf_ReplIteration (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E607F: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E613F: run_Rmainloop (in /usr/lib/R/lib/libR.so)
+==52939== 
+==52939== Conditional jump or move depends on uninitialised value(s)
+==52939==    at 0x4A7ED35: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x4A7F689: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49941FF: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF50A: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B16DE: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B24C6: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B2EEC: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8553: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8C20: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8FA1: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x499401E: ??? (in /usr/lib/R/lib/libR.so)
+==52939==  Uninitialised value was created by a heap allocation
+==52939==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==52939==    by 0x49F0E14: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F286B: Rf_allocVector3 (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x4A87D0C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49941FF: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7468: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7968: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF935: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E5CE9: Rf_ReplIteration (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E607F: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E613F: run_Rmainloop (in /usr/lib/R/lib/libR.so)
+==52939== 
+==52939== Conditional jump or move depends on uninitialised value(s)
+==52939==    at 0x4A80705: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49941FF: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF50A: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B16DE: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B24C6: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B2EEC: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8553: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8C20: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8FA1: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x499401E: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==  Uninitialised value was created by a heap allocation
+==52939==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==52939==    by 0x49F0E14: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F286B: Rf_allocVector3 (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x4A87D0C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49941FF: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7468: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7968: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF935: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E5CE9: Rf_ReplIteration (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E607F: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E613F: run_Rmainloop (in /usr/lib/R/lib/libR.so)
+==52939== 
+==52939== Conditional jump or move depends on uninitialised value(s)
+==52939==    at 0x4A8072A: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49941FF: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF50A: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B16DE: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B24C6: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B2EEC: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8553: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8C20: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8FA1: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x499401E: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==  Uninitialised value was created by a heap allocation
+==52939==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==52939==    by 0x49F0E14: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F286B: Rf_allocVector3 (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x4A87D0C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49941FF: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7468: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7968: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF935: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E5CE9: Rf_ReplIteration (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E607F: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E613F: run_Rmainloop (in /usr/lib/R/lib/libR.so)
+==52939== 
+==52939== Conditional jump or move depends on uninitialised value(s)
+==52939==    at 0x4A8073C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49941FF: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF50A: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B16DE: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B24C6: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B2EEC: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8553: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8C20: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8FA1: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x499401E: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==  Uninitialised value was created by a heap allocation
+==52939==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==52939==    by 0x49F0E14: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F286B: Rf_allocVector3 (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x4A87D0C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49941FF: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7468: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7968: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF935: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E5CE9: Rf_ReplIteration (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E607F: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E613F: run_Rmainloop (in /usr/lib/R/lib/libR.so)
+==52939== 
+==52939== Conditional jump or move depends on uninitialised value(s)
+==52939==    at 0x4A8074A: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49941FF: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF50A: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B16DE: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B24C6: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B2EEC: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8553: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8C20: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8FA1: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x499401E: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==  Uninitialised value was created by a heap allocation
+==52939==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==52939==    by 0x49F0E14: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F286B: Rf_allocVector3 (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x4A87D0C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49941FF: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7468: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7968: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF935: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E5CE9: Rf_ReplIteration (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E607F: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E613F: run_Rmainloop (in /usr/lib/R/lib/libR.so)
+==52939== 
+==52939== Conditional jump or move depends on uninitialised value(s)
+==52939==    at 0x4998DBC: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF50A: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B16DE: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B24C6: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B2EEC: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8553: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8C20: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8FA1: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x499401E: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF50A: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==  Uninitialised value was created by a heap allocation
+==52939==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==52939==    by 0x49F0E14: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F286B: Rf_allocVector3 (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x4A87D0C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49941FF: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7468: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7968: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF935: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E5CE9: Rf_ReplIteration (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E607F: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E613F: run_Rmainloop (in /usr/lib/R/lib/libR.so)
+==52939== 
+==52939== Conditional jump or move depends on uninitialised value(s)
+==52939==    at 0x4997B9F: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF50A: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B16DE: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B24C6: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B2EEC: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8553: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8C20: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8FA1: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x499401E: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF50A: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==  Uninitialised value was created by a heap allocation
+==52939==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==52939==    by 0x49F0E14: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F286B: Rf_allocVector3 (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x4A87D0C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49941FF: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7468: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7968: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF935: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E5CE9: Rf_ReplIteration (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E607F: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E613F: run_Rmainloop (in /usr/lib/R/lib/libR.so)
+==52939== 
+==52939== Conditional jump or move depends on uninitialised value(s)
+==52939==    at 0x4A72A52: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x4A797D2: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49899DB: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49974BE: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF50A: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B16DE: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B24C6: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B2EEC: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8553: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8C20: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8FA1: ??? (in /usr/lib/R/lib/libR.so)
+==52939==  Uninitialised value was created by a heap allocation
+==52939==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==52939==    by 0x49F0E14: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F286B: Rf_allocVector3 (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x4A87D0C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49941FF: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7468: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7968: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF935: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E5CE9: Rf_ReplIteration (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E607F: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E613F: run_Rmainloop (in /usr/lib/R/lib/libR.so)
+==52939== 
+> # problem
+> 
+==52939== 
+==52939== HEAP SUMMARY:
+==52939==     in use at exit: 113,720,872 bytes in 20,932 blocks
+==52939==   total heap usage: 106,890 allocs, 85,958 frees, 199,244,580 bytes allocated
+==52939== 
+==52939== LEAK SUMMARY:
+==52939==    definitely lost: 0 bytes in 0 blocks
+==52939==    indirectly lost: 0 bytes in 0 blocks
+==52939==      possibly lost: 1,008 bytes in 3 blocks
+==52939==    still reachable: 113,719,864 bytes in 20,929 blocks
+==52939==                       of which reachable via heuristic:
+==52939==                         newarray           : 4,264 bytes in 1 blocks
+==52939==         suppressed: 0 bytes in 0 blocks
+==52939== Rerun with --leak-check=full to see details of leaked memory
+==52939== 
+==52939== ERROR SUMMARY: 20 errors from 9 contexts (suppressed: 0 from 0)
+==52939== 
+==52939== 2 errors in context 1 of 9:
+==52939== Conditional jump or move depends on uninitialised value(s)
+==52939==    at 0x4997B9F: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF50A: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B16DE: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B24C6: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B2EEC: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8553: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8C20: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8FA1: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x499401E: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF50A: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==  Uninitialised value was created by a heap allocation
+==52939==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==52939==    by 0x49F0E14: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F286B: Rf_allocVector3 (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x4A87D0C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49941FF: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7468: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7968: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF935: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E5CE9: Rf_ReplIteration (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E607F: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E613F: run_Rmainloop (in /usr/lib/R/lib/libR.so)
+==52939== 
+==52939== 
+==52939== 2 errors in context 2 of 9:
+==52939== Conditional jump or move depends on uninitialised value(s)
+==52939==    at 0x4998DBC: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF50A: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B16DE: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B24C6: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B2EEC: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8553: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8C20: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8FA1: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x499401E: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF50A: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==  Uninitialised value was created by a heap allocation
+==52939==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==52939==    by 0x49F0E14: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F286B: Rf_allocVector3 (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x4A87D0C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49941FF: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7468: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7968: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF935: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E5CE9: Rf_ReplIteration (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E607F: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E613F: run_Rmainloop (in /usr/lib/R/lib/libR.so)
+==52939== 
+==52939== 
+==52939== 2 errors in context 3 of 9:
+==52939== Conditional jump or move depends on uninitialised value(s)
+==52939==    at 0x4A8074A: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49941FF: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF50A: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B16DE: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B24C6: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B2EEC: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8553: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8C20: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8FA1: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x499401E: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==  Uninitialised value was created by a heap allocation
+==52939==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==52939==    by 0x49F0E14: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F286B: Rf_allocVector3 (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x4A87D0C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49941FF: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7468: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7968: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF935: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E5CE9: Rf_ReplIteration (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E607F: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E613F: run_Rmainloop (in /usr/lib/R/lib/libR.so)
+==52939== 
+==52939== 
+==52939== 2 errors in context 4 of 9:
+==52939== Conditional jump or move depends on uninitialised value(s)
+==52939==    at 0x4A8073C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49941FF: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF50A: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B16DE: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B24C6: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B2EEC: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8553: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8C20: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8FA1: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x499401E: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==  Uninitialised value was created by a heap allocation
+==52939==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==52939==    by 0x49F0E14: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F286B: Rf_allocVector3 (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x4A87D0C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49941FF: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7468: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7968: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF935: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E5CE9: Rf_ReplIteration (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E607F: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E613F: run_Rmainloop (in /usr/lib/R/lib/libR.so)
+==52939== 
+==52939== 
+==52939== 2 errors in context 5 of 9:
+==52939== Conditional jump or move depends on uninitialised value(s)
+==52939==    at 0x4A8072A: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49941FF: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF50A: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B16DE: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B24C6: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B2EEC: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8553: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8C20: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8FA1: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x499401E: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==  Uninitialised value was created by a heap allocation
+==52939==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==52939==    by 0x49F0E14: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F286B: Rf_allocVector3 (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x4A87D0C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49941FF: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7468: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7968: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF935: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E5CE9: Rf_ReplIteration (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E607F: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E613F: run_Rmainloop (in /usr/lib/R/lib/libR.so)
+==52939== 
+==52939== 
+==52939== 2 errors in context 6 of 9:
+==52939== Conditional jump or move depends on uninitialised value(s)
+==52939==    at 0x4A80705: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49941FF: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF50A: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B16DE: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B24C6: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B2EEC: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8553: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8C20: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8FA1: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x499401E: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==  Uninitialised value was created by a heap allocation
+==52939==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==52939==    by 0x49F0E14: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F286B: Rf_allocVector3 (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x4A87D0C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49941FF: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7468: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7968: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF935: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E5CE9: Rf_ReplIteration (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E607F: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E613F: run_Rmainloop (in /usr/lib/R/lib/libR.so)
+==52939== 
+==52939== 
+==52939== 2 errors in context 7 of 9:
+==52939== Conditional jump or move depends on uninitialised value(s)
+==52939==    at 0x4A7ED35: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x4A7F689: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49941FF: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF50A: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B16DE: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B24C6: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B2EEC: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8553: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8C20: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8FA1: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x499401E: ??? (in /usr/lib/R/lib/libR.so)
+==52939==  Uninitialised value was created by a heap allocation
+==52939==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==52939==    by 0x49F0E14: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F286B: Rf_allocVector3 (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x4A87D0C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49941FF: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7468: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7968: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF935: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E5CE9: Rf_ReplIteration (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E607F: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E613F: run_Rmainloop (in /usr/lib/R/lib/libR.so)
+==52939== 
+==52939== 
+==52939== 2 errors in context 8 of 9:
+==52939== Conditional jump or move depends on uninitialised value(s)
+==52939==    at 0x4A36F25: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x4A3891B: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x4998EF9: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF50A: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B16DE: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B24C6: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B2EEC: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8553: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8C20: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8FA1: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x499401E: ??? (in /usr/lib/R/lib/libR.so)
+==52939==  Uninitialised value was created by a heap allocation
+==52939==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==52939==    by 0x49F0E14: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F286B: Rf_allocVector3 (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x4A87D0C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49941FF: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7468: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7968: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF935: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E5CE9: Rf_ReplIteration (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E607F: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E613F: run_Rmainloop (in /usr/lib/R/lib/libR.so)
+==52939== 
+==52939== 
+==52939== 4 errors in context 9 of 9:
+==52939== Conditional jump or move depends on uninitialised value(s)
+==52939==    at 0x4A72A52: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x4A797D2: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49899DB: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49974BE: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF50A: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B16DE: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B24C6: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B2EEC: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8553: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8C20: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F8FA1: ??? (in /usr/lib/R/lib/libR.so)
+==52939==  Uninitialised value was created by a heap allocation
+==52939==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==52939==    by 0x49F0E14: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49F286B: Rf_allocVector3 (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x4A87D0C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49941FF: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF19C: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7468: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49B7968: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49AF935: Rf_eval (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E5CE9: Rf_ReplIteration (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E607F: ??? (in /usr/lib/R/lib/libR.so)
+==52939==    by 0x49E613F: run_Rmainloop (in /usr/lib/R/lib/libR.so)
+==52939== 
+==52939== ERROR SUMMARY: 20 errors from 9 contexts (suppressed: 0 from 0)

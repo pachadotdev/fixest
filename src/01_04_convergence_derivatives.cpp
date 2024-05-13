@@ -136,13 +136,6 @@
 
   writable::doubles_matrix<> dxi_dbeta(n_obs, n_vars);
 
-  // fill with 0s
-  // for (int i = 0; i < n_obs; ++i) {
-  //   for (int v = 0; v < n_vars; ++v) {
-  //     dxi_dbeta(i, v) = 0.0;
-  //   }
-  // }
-
   for (int v = 0; v < n_vars; ++v) {
     double *my_deriv = pderiv[v];
     for (int i = 0; i < n_obs; ++i) {
@@ -374,13 +367,6 @@ void computeDerivCoef(std::vector<double *> &pcoef_origin,
 
   writable::doubles_matrix<> dxi_dbeta(n_obs, n_vars);
 
-  // fill with 0s
-  // for (int i = 0; i < n_obs; ++i) {
-  //   for (int v = 0; v < n_vars; ++v) {
-  //     dxi_dbeta(i, v) = 0.0;
-  //   }
-  // }
-
   bool keepGoing = true;
   int iter = 0, iter_all_max = 0;
 
@@ -609,13 +595,6 @@ cpp_derivconv_acc_2_(int iterMax, double diffMax, int n_vars,
 
   writable::doubles_matrix<> dxi_dbeta(n_obs, n_vars);
 
-  // fill with 0s
-  // for (int i = 0; i < n_obs; ++i) {
-  //   for (int v = 0; v < n_vars; ++v) {
-  //     dxi_dbeta(i, v) = 0.0;
-  //   }
-  // }
-
   bool keepGoing = true;
   int iter = 0, iter_all_max = 0;
 
@@ -843,13 +822,6 @@ cpp_derivconv_seq_2_(int iterMax, double diffMax, int n_vars,
 
   writable::doubles_matrix<> dxi_dbeta(n_obs, n_vars);
 
-  // fill with 0s
-  // for (int i = 0; i < n_obs; ++i) {
-  //   for (int v = 0; v < n_vars; ++v) {
-  //     dxi_dbeta(i, v) = 0.0;
-  //   }
-  // }
-
   bool keepGoing = true;
   int iter = 0, iter_all_max = 0;
 
@@ -986,13 +958,6 @@ update_deriv_single_(int n_vars, int nb_coef, SEXP r_ll_d2, SEXP r_jacob_vector,
 
   // the result
   writable::doubles_matrix<> res(n_obs, n_vars); // init at 0
-
-  // fill with 0s
-  // for (int i = 0; i < n_obs; ++i) {
-  //   for (int v = 0; v < n_vars; ++v) {
-  //     res(i, v) = 0.0;
-  //   }
-  // }
 
   for (int v = 0; v < n_vars; ++v) {
     double *my_jac = pjac[v];
